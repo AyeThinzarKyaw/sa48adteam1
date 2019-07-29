@@ -19,7 +19,7 @@ namespace LUSSIS.Services
         }
 
 
-        public IEnumerable<Stationery> getStationariesBySupplierAndYear(Supplier supplier, int year)
+        public IEnumerable<Stationery> GetStationeriesBySupplierAndYear(Supplier supplier, int year)
         {
             return stationeryRepo.GetStationeriesBySupplierAndYear(supplier, year);
         }

@@ -218,9 +218,13 @@
     <Compile Include="Repositories\GenericRepo.cs" />
     <Compile Include="Repositories\Interfaces\IGenericRepo.cs" />
     <Compile Include="Repositories\Interfaces\IStationeryRepo.cs" />
+    <Compile Include="Repositories\Interfaces\ISupplierTenderRepo.cs" />
     <Compile Include="Repositories\StationeryRepo.cs" />
+    <Compile Include="Repositories\SupplierTenderRepo.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
+    <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
     <Compile Include="Services\StationeryService.cs" />
+    <Compile Include="Services\SupplierTenderService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
