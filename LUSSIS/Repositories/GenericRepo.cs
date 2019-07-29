@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace LUSSIS.Repositories
@@ -31,7 +32,12 @@ namespace LUSSIS.Repositories
         public T FindById(ID id)
         {
             return context.Set<T>().Find(id);
-            
+           
+        }
+
+        public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
+        {
+            return context.Set<T>().Where(predicate).ToList();
         }
 
         public void Save()
