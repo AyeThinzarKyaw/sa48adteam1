@@ -9,5 +9,13 @@ namespace LUSSIS.Services.Interfaces
     public interface IStationeryService
     {
         IEnumerable<Stationery> GetStationeriesBySupplierAndYear(Supplier supplier, int year);
+
+        IEnumerable<Stationery> GetAllStationeries();
+
+        Stationery GetStationeryById(int id);
+
+        void CreateStationery(Stationery stationery);
+
+        void UpdateStationery(Stationery stationery);
     }
 }
