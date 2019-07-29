@@ -25,6 +25,7 @@ namespace LUSSIS.Models
         public Nullable<int> ReceivedEmployeeId { get; set; }
         public bool AdHoc { get; set; }
         public Nullable<System.DateTime> DeliveryDateTime { get; set; }
+        public string CollectionPoint { get; set; }
         public byte[] Signature { get; set; }
     
         public virtual Employee Employee { get; set; }
