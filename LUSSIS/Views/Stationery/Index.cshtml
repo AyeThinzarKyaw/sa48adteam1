@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<section class="content-header">
+    <h1>
+        Manage Catalogue
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="box-tools pull-right" style="position: relative;">
+                        <a href="catalogue-create.html" class="btn btn-success right">
+                            Create New
+                        </a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item Number</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Unit of Measure</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P100</td>
+                                <td>Scissors</td>
+                                <td>Scissor</td>
+                                <td>Each</td>
+                                <td>
+                                    <a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="catalogue-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P037</td>
+                                <td>Pen</td>
+                                <td>Pen Transparency Soluble</td>
+                                <td>Packet</td>
+                                <td>
+                                    <a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="catalogue-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P038</td>
+                                <td>Pen</td>
+                                <td>Pen Whiteboard Marker Black</td>
+                                <td>Box</td>
+                                <td>
+                                    <a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="catalogue-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P039</td>
+                                <td>Pen</td>
+                                <td>Pen Whiteboard Marker Blue</td>
+                                <td>Box</td>
+                                <td>
+                                    <a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="catalogue-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P002</td>
+                                <td>Ruler</td>
+                                <td>Ruler 12'</td>
+                                <td>Dozen</td>
+                                <td>
+                                    <a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="catalogue-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 4 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+}
