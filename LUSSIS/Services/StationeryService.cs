@@ -5,22 +5,23 @@ using System.Web;
 using LUSSIS.Services.Interfaces;
 using LUSSIS.Models;
 using LUSSIS.Repositories;
+using LUSSIS.Repositories.Interfaces;
 
 namespace LUSSIS.Services
 {
-    public class StationeryService:IStationeryService
+    public class StationeryService : IStationeryService
     {
-        private StationeryService() { }
+        private IStationeryRepo stationeryRepo;
 
-        private static StationeryService instance = new StationeryService();
-        public static IStationeryService Instance
+        public StationeryService(IStationeryRepo stationeryRepo)
         {
-            get { return instance; }
+            this.stationeryRepo = stationeryRepo;
         }
 
-        public IEnumerable<Stationery> getStationairesBySupplierAndYear(int supplierId, int year)
+
+        public IEnumerable<Stationery> getStationariesBySupplierAndYear(Supplier supplier, int year)
         {
-            return StationeryRepo.Instance.getStationairesBySupplierAndYear(supplierId, year);
+            return stationeryRepo.GetStationeriesBySupplierAndYear(supplier, year);
         }
     }
 }

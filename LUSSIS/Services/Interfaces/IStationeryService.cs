@@ -8,6 +8,6 @@ namespace LUSSIS.Services.Interfaces
 {
     public interface IStationeryService
     {
-        IEnumerable<Stationery> getStationairesBySupplierAndYear(int supplierId, int year);
+        IEnumerable<Stationery> getStationariesBySupplierAndYear(Supplier supplier, int year);
     }
 }

@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using LUSSIS.Models;
+using LUSSIS.Repositories.Interfaces;
 
 namespace LUSSIS.Repositories
 {
-    public class StationeryRepo
+    public class StationeryRepo : GenericRepo<Stationery, int>, IStationeryRepo
     {
-        private LUSSISContext db = new LUSSISContext();
 
-        private StationeryRepo() { }
-
-        private static StationeryRepo instance = new StationeryRepo();
-        public static StationeryRepo Instance
+        IEnumerable<Stationery> IStationeryRepo.GetStationeriesBySupplierAndYear(Supplier supplier, int year)
         {
-            get { return instance; }
+            return Context.Stationeries.Where(s => s.Id == s.SupplierTenders.Single(t => t.SupplierId == supplier.Id && t.Year == year).StationeryId).Distinct().ToList();
         }
 
-        public IEnumerable<Stationery> getStationairesBySupplierAndYear(int supplierId, int year)
-        {
-            return db.Stationeries.Where(s => s.Id == s.SupplierTenders.Single(t => t.SupplierId == supplierId && t.Year == year).StationeryId).Distinct().ToList();
 
-        }
     }
 }
