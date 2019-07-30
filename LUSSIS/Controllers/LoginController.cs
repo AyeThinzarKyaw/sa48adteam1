@@ -11,6 +11,7 @@ namespace LUSSIS.Controllers
     public class LoginController : Controller
     {
         ILoginService loginService;
+        
 
         public LoginController(ILoginService loginService)
         {
@@ -33,7 +34,9 @@ namespace LUSSIS.Controllers
             }
             else
             {
-                //return dashboard view
+                //check for role
+                //if department staff check for any existing cart items
+                //call Requisition Catalogue Service
                 return View(loginDTO);
             }
 

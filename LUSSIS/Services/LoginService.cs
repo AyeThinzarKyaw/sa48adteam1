@@ -13,13 +13,11 @@ namespace LUSSIS.Services
     {
         private IEmployeeRepo employeeRepo;
         private ISessionRepo sessionRepo;
-        private ICartDetailRepo cartDetailRepo;
 
-        public LoginService(IEmployeeRepo employeeRepo, ISessionRepo sessionRepo, ICartDetailRepo cartDetailRepo)
+        public LoginService(IEmployeeRepo employeeRepo, ISessionRepo sessionRepo)
         {
             this.employeeRepo = employeeRepo;
             this.sessionRepo = sessionRepo;
-            this.cartDetailRepo = cartDetailRepo;
         }
 
         public LoginDTO GetEmployeeLoginByUsernameAndPassword(string username, string password)
@@ -37,11 +35,6 @@ namespace LUSSIS.Services
                 Session newSession = new Session();
                 sessionRepo.Create(newSession);
                 //set attributes
-                List<CartDetail> existingCartDetails = cartDetailRepo.FindBy(x => x.Employee.Equals(e)).ToList();
-                if(existingCartDetails != null)
-                {
-                    //add list to DTO
-                }
 
                 return logignDTO;
             }

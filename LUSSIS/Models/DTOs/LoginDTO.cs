@@ -9,11 +9,9 @@ namespace LUSSIS.Models.DTOs
     {
         public int EmployeeId { get; set; }
 
-        public Role EmployeeRole { get; set; }
+        public string EmployeeRoleName { get; set; }
 
         public int SessionId { get; set; }
-
-        public List<CartDetail> CartDetails { get; set; }
 
     }
 }
