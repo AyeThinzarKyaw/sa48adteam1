@@ -9,6 +9,14 @@ namespace LUSSIS.Repositories
 {
     public class PurchaseOrderRepo : GenericRepo<PurchaseOrder, int>, IPurchaseOrderRepo
     {
+        private PurchaseOrderRepo() { }
+
+        private static PurchaseOrderRepo instance = new PurchaseOrderRepo();
+        public static IPurchaseOrderRepo Instance
+        {
+            get { return instance; }
+        }
+
         public IEnumerable<PurchaseOrder> GetPurchaseOrderByStationeryId(int stationeryId)
         {
            var result = from po in Context.PurchaseOrders

@@ -9,6 +9,14 @@ namespace LUSSIS.Repositories
 {
     public class DisbursementRepo : GenericRepo<Disbursement, int>, IDisbursementRepo
     {
+        private DisbursementRepo() { }
+
+        private static DisbursementRepo instance = new DisbursementRepo();
+        public static IDisbursementRepo Instance
+        {
+            get { return instance; }
+        }
+
         public IEnumerable<Disbursement> GetDisbursementsByDepartmentId(int depId)
         {
             var result = from d in Context.Disbursements

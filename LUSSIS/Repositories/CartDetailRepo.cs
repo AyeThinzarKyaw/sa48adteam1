@@ -9,6 +9,12 @@ namespace LUSSIS.Repositories
 {
     public class CartDetailRepo : GenericRepo<CartDetail, int>, ICartDetailRepo
     {
+        private CartDetailRepo() { }
 
+        private static CartDetailRepo instance = new CartDetailRepo();
+        public static ICartDetailRepo Instance
+        {
+            get { return instance; }
+        }
     }
 }

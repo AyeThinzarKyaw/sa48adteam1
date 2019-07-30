@@ -10,6 +10,13 @@ namespace LUSSIS.Repositories
 {
     public class PurchaseOrderDetailRepo : GenericRepo<PurchaseOrderDetail, int>, IPurchaseOrderDetailRepo
     {
-    
+        private PurchaseOrderDetailRepo() { }
+
+        private static PurchaseOrderDetailRepo instance = new PurchaseOrderDetailRepo();
+        public static IPurchaseOrderDetailRepo Instance
+        {
+            get { return instance; }
+        }
+
     }
 }

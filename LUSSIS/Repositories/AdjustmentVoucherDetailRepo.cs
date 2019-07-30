@@ -9,6 +9,12 @@ namespace LUSSIS.Repositories
 {
     public class AdjustmentVoucherDetailRepo : GenericRepo<AdjustmentVoucherDetail, int>, IAdjustmentVoucherDetailRepo
     {
-        
+        private AdjustmentVoucherDetailRepo() { }
+
+        private static AdjustmentVoucherDetailRepo instance = new AdjustmentVoucherDetailRepo();
+        public static IAdjustmentVoucherDetailRepo Instance
+        {
+            get { return instance; }
+        }
     }
 }

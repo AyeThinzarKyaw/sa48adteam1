@@ -9,6 +9,14 @@ namespace LUSSIS.Repositories
 {
     public class DepartmentCoverEmployeeRepo : GenericRepo<DepartmentCoverEmployee, int>, IDepartmentCoverEmployeeRepo
     {
+        private DepartmentCoverEmployeeRepo() { }
+
+        private static DepartmentCoverEmployeeRepo instance = new DepartmentCoverEmployeeRepo();
+        public static IDepartmentCoverEmployeeRepo Instance
+        {
+            get { return instance; }
+        }
+
         public DepartmentCoverEmployee GetDepartmentCoverEmployeeByDepartmentIdAndDate(int departmentId, DateTime date)
         {
             var result = from d in Context.DepartmentCoverEmployees

@@ -11,37 +11,37 @@ namespace LUSSIS.Services
 {
     public class StationeryService : IStationeryService
     {
-        private IStationeryRepo stationeryRepo;
+        private StationeryService() { }
 
-        public StationeryService(IStationeryRepo stationeryRepo)
+        private static StationeryService instance = new StationeryService();
+        public static IStationeryService Instance
         {
-            this.stationeryRepo = stationeryRepo;
+            get { return instance; }
         }
 
-
-        public IEnumerable<Stationery> GetStationeriesBySupplierAndYear(int supplierId, int year)
+        public IEnumerable<Stationery> GetStationeriesBySupplierIdAndYear(int supplierId, int year)
         {
-            return stationeryRepo.GetStationeriesBySupplierAndYear(supplierId, year);
+            return StationeryRepo.Instance.GetStationeriesBySupplierIdAndYear(supplierId, year);
         }
 
         public IEnumerable<Stationery> GetAllStationeries()
         {
-            return stationeryRepo.FindAll();
+            return StationeryRepo.Instance.FindAll();
         }
 
         public Stationery GetStationeryById(int id)
         {
-            return stationeryRepo.FindById(id);
+            return StationeryRepo.Instance.FindById(id);
         }
 
         public void CreateStationery(Stationery stationery)
         {
-            stationeryRepo.Create(stationery);
+            StationeryRepo.Instance.Create(stationery);
         }
 
         public void UpdateStationery(Stationery stationery)
         {
-            stationeryRepo.Update(stationery);
+            StationeryRepo.Instance.Update(stationery);
         }
     }
 }

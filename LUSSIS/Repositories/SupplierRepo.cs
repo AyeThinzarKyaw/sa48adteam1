@@ -9,6 +9,12 @@ namespace LUSSIS.Repositories
 {
     public class SupplierRepo : GenericRepo<Supplier, int>, ISupplierRepo
     {
+        private SupplierRepo() { }
 
+        private static SupplierRepo instance = new SupplierRepo();
+        public static ISupplierRepo Instance
+        {
+            get { return instance; }
+        }
     }
 }

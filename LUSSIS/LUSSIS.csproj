@@ -231,7 +231,7 @@
     <Compile Include="Repositories\AdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\AdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\CartDetailRepo.cs" />
-    <Compile Include="Repositories\CollectionPoint.cs" />
+    <Compile Include="Repositories\CollectionPointRepo.cs" />
     <Compile Include="Repositories\DepartmentCoverEmployeeRepo.cs" />
     <Compile Include="Repositories\DepartmentRepo.cs" />
     <Compile Include="Repositories\DisbursementRepo.cs" />
