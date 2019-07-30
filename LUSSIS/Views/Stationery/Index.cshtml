@@ -56,9 +56,20 @@
                                 </td>
                                 
                                 <td>
-                                    <a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    @Html.ActionLink("Detail", "Detail", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                    @Html.ActionLink("Update", "Update", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-warning", @role = "button" })
+                                    @*@if (stationery.Status == 0)
+                                    {
+                                        @Html.ActionLink("Make Active", "ChangeStatus", new { id = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
+                                    }
+                                    else
+                                    {*@
+                                        @Html.ActionLink("Change Status", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
+                                    @*}*@
+
+                                    @*<a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
                                     <a href="catalogue-update.html" class="btn btn-sm btn-warning">Update</a>
-                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Delete</a>
+                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Change Status</a>*@
                                 </td>
                             </tr>
                             }

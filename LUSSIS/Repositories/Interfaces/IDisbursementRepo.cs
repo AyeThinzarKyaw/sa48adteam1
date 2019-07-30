@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace LUSSIS.Repositories.Interfaces
 {
-    public interface IStationeryRepo: IGenericRepo<Stationery, int>
+    public interface IDisbursementRepo : IGenericRepo<Disbursement, int>
     {
-        IEnumerable<Stationery> GetStationeriesBySupplierIdAndYear(int supplierId, int year);
+        IEnumerable<Disbursement> GetDisbursementsByDepartmentId(int depId);
+
     }
 }

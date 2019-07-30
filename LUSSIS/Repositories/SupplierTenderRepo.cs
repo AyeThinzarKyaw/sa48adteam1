@@ -10,6 +10,15 @@ namespace LUSSIS.Repositories
 {
     public class SupplierTenderRepo : GenericRepo<SupplierTender, int>, ISupplierTenderRepo
     {
+
+        private SupplierTenderRepo() { }
+
+        private static SupplierTenderRepo instance = new SupplierTenderRepo();
+        public static ISupplierTenderRepo Instance
+        {
+            get { return instance; }
+        }
+
         public IEnumerable<SupplierTender> GetSupplierTendersOfCurrentYearByStationeryId(int stationeryId)
         {
             return Context.SupplierTenders.Where(s => s.StationeryId == stationeryId && s.Year == DateTime.Now.Year).ToList();
