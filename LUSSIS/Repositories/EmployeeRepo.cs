@@ -10,7 +10,7 @@ namespace LUSSIS.Repositories
 {
     public class EmployeeRepo : GenericRepo<Employee, int>, IEmployeeRepo
     {
-        private PurchaseOrderDetailRepo() { }
+        private EmployeeRepo() { }
 
         private static EmployeeRepo instance = new EmployeeRepo();
         public static IEmployeeRepo Instance
