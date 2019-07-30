@@ -14,6 +14,7 @@ namespace LUSSIS.Models
     
     public partial class SupplierTender
     {
+        public int Id { get; set; }
         public int StationeryId { get; set; }
         public int Rank { get; set; }
         public int Year { get; set; }

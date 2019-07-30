@@ -365,8 +365,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\LUSSISContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LUSSISContext.Context.cs</LastGenOutput>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
+      <LastGenOutput>LUSSISContext.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\LUSSISContext.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -375,13 +375,6 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\LUSSISContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>LUSSISContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\LUSSISContext.edmx.diagram">
-      <DependentUpon>LUSSISContext.edmx</DependentUpon>
-    </Content>
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\fontawesome-webfont.woff" />
@@ -389,6 +382,13 @@
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="admin-lte\css\adminlte.min.css.map" />
     <Content Include="admin-lte\css\adminlte.css.map" />
+    <EntityDeploy Include="Models\LUSSISContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LUSSISContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\LUSSISContext.edmx.diagram">
+      <DependentUpon>LUSSISContext.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

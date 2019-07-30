@@ -14,6 +14,7 @@ namespace LUSSIS.Models
     
     public partial class PurchaseOrderDetail
     {
+        public int Id { get; set; }
         public int PurchaseOrderId { get; set; }
         public int StationeryId { get; set; }
         public int QuantityOrdered { get; set; }

@@ -11,12 +11,14 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="AdjustmentVoucherDetail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AdjustmentVoucherId" Type="int" Nullable="false" />
           <Property Name="StationeyId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="nchar" MaxLength="10" Nullable="false" />
@@ -26,11 +28,11 @@
         <EntityType Name="CartDetail">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="StationeryId" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
           <Property Name="StationeryId" Type="int" Nullable="false" />
-          <Property Name="Quantity" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="DateTime" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
@@ -52,7 +54,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DepartmentCode" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DepartmentName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ContactName" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -68,23 +70,25 @@
           <Property Name="EmployeeId" Type="int" Nullable="false" />
           <Property Name="FromDate" Type="date" Nullable="false" />
           <Property Name="ToDate" Type="date" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Disbursement">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DeliveredEmployeeId" Type="int" Nullable="false" />
           <Property Name="ReceivedEmployeeId" Type="int" />
           <Property Name="AdHoc" Type="bit" Nullable="false" />
           <Property Name="DeliveryDateTime" Type="datetime" />
+          <Property Name="CollectionPoint" Type="nvarchar" MaxLength="50" />
           <Property Name="Signature" Type="image" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -98,7 +102,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeId" Type="int" Nullable="false" />
           <Property Name="Meassage" Type="nvarchar" MaxLength="1000" />
         </EntityType>
@@ -119,9 +123,9 @@
         </EntityType>
         <EntityType Name="PurchaseOrderDetail">
           <Key>
-            <PropertyRef Name="PurchaseOrderId" />
-            <PropertyRef Name="StationeryId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PurchaseOrderId" Type="int" Nullable="false" />
           <Property Name="StationeryId" Type="int" Nullable="false" />
           <Property Name="QuantityOrdered" Type="int" Nullable="false" />
@@ -153,7 +157,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Session">
@@ -180,12 +184,13 @@
           <Property Name="ReorderQuantity" Type="int" />
           <Property Name="UnitOfMeasure" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Image" Type="image" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ContactName" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -198,10 +203,9 @@
         </EntityType>
         <EntityType Name="SupplierTender">
           <Key>
-            <PropertyRef Name="StationeryId" />
-            <PropertyRef Name="Rank" />
-            <PropertyRef Name="Year" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StationeryId" Type="int" Nullable="false" />
           <Property Name="Rank" Type="int" Nullable="false" />
           <Property Name="Year" Type="int" Nullable="false" />
@@ -262,7 +266,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="CartDetail">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="EmployeeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -651,6 +655,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_AdjustmentVoucher_Employee" FromRole="AdjustmentVoucher" ToRole="Employee" />
           <NavigationProperty Name="AdjustmentVoucherDetails" Relationship="Self.FK_AdjustmentVoucherDetails_AdjustmentVoucher" FromRole="AdjustmentVoucher" ToRole="AdjustmentVoucherDetail" />
         </EntityType>
@@ -658,7 +664,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AdjustmentVoucherId" Type="Int32" Nullable="false" />
           <Property Name="StationeyId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
@@ -670,11 +676,11 @@
         <EntityType Name="CartDetail">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="StationeryId" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <Property Name="StationeryId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_CartDetail_DepartmentEmployee" FromRole="CartDetail" ToRole="Employee" />
           <NavigationProperty Name="Stationery" Relationship="Self.FK_CartDetail_Sationery" FromRole="CartDetail" ToRole="Stationery" />
@@ -701,7 +707,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DepartmentCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
@@ -719,17 +725,19 @@
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="ToDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_DepartmentCoverEmployee_DepartmentEmployee" FromRole="DepartmentCoverEmployee" ToRole="Employee" />
         </EntityType>
         <EntityType Name="Disbursement">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DeliveredEmployeeId" Type="Int32" Nullable="false" />
           <Property Name="ReceivedEmployeeId" Type="Int32" />
           <Property Name="AdHoc" Type="Boolean" Nullable="false" />
           <Property Name="DeliveryDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CollectionPoint" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Signature" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Disbursement_Disbursement" FromRole="Disbursement" ToRole="Employee" />
           <NavigationProperty Name="Employee1" Relationship="Self.FK_Disbursement_Employee" FromRole="Disbursement" ToRole="Employee" />
@@ -739,7 +747,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
@@ -765,7 +773,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <Property Name="Meassage" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_DeptEmpNotification_DepartmentEmployee" FromRole="EmployeeNotification" ToRole="Employee" />
@@ -790,9 +798,9 @@
         </EntityType>
         <EntityType Name="PurchaseOrderDetail">
           <Key>
-            <PropertyRef Name="PurchaseOrderId" />
-            <PropertyRef Name="StationeryId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PurchaseOrderId" Type="Int32" Nullable="false" />
           <Property Name="StationeryId" Type="Int32" Nullable="false" />
           <Property Name="QuantityOrdered" Type="Int32" Nullable="false" />
@@ -831,7 +839,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Employees" Relationship="Self.FK_DepartmentEmployee_DepartmentRole" FromRole="Role" ToRole="Employee" />
         </EntityType>
@@ -860,6 +868,7 @@
           <Property Name="ReorderQuantity" Type="Int32" />
           <Property Name="UnitOfMeasure" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AdjustmentVoucherDetails" Relationship="Self.FK_AdjustmentVoucherDetails_Stationery" FromRole="Stationery" ToRole="AdjustmentVoucherDetail" />
           <NavigationProperty Name="CartDetails" Relationship="Self.FK_CartDetail_Sationery" FromRole="Stationery" ToRole="CartDetail" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Sationery_Category" FromRole="Stationery" ToRole="Category" />
@@ -871,7 +880,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
@@ -886,10 +895,9 @@
         </EntityType>
         <EntityType Name="SupplierTender">
           <Key>
-            <PropertyRef Name="StationeryId" />
-            <PropertyRef Name="Rank" />
-            <PropertyRef Name="Year" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StationeryId" Type="Int32" Nullable="false" />
           <Property Name="Rank" Type="Int32" Nullable="false" />
           <Property Name="Year" Type="Int32" Nullable="false" />
@@ -952,7 +960,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="CartDetail">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="EmployeeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1341,6 +1349,8 @@
               <MappingFragment StoreEntitySet="AdjustmentVoucher">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1360,6 +1370,7 @@
             <EntityTypeMapping TypeName="LUSSISContextModel.CartDetail">
               <MappingFragment StoreEntitySet="CartDetail">
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="StationeryId" ColumnName="StationeryId" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="DateTime" ColumnName="DateTime" />
@@ -1403,6 +1414,7 @@
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="FromDate" ColumnName="FromDate" />
                 <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1414,6 +1426,7 @@
                 <ScalarProperty Name="ReceivedEmployeeId" ColumnName="ReceivedEmployeeId" />
                 <ScalarProperty Name="AdHoc" ColumnName="AdHoc" />
                 <ScalarProperty Name="DeliveryDateTime" ColumnName="DeliveryDateTime" />
+                <ScalarProperty Name="CollectionPoint" ColumnName="CollectionPoint" />
                 <ScalarProperty Name="Signature" ColumnName="Signature" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1461,6 +1474,7 @@
           <EntitySetMapping Name="PurchaseOrderDetails">
             <EntityTypeMapping TypeName="LUSSISContextModel.PurchaseOrderDetail">
               <MappingFragment StoreEntitySet="PurchaseOrderDetail">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PurchaseOrderId" ColumnName="PurchaseOrderId" />
                 <ScalarProperty Name="StationeryId" ColumnName="StationeryId" />
                 <ScalarProperty Name="QuantityOrdered" ColumnName="QuantityOrdered" />
@@ -1524,6 +1538,7 @@
                 <ScalarProperty Name="ReorderQuantity" ColumnName="ReorderQuantity" />
                 <ScalarProperty Name="UnitOfMeasure" ColumnName="UnitOfMeasure" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1546,6 +1561,7 @@
           <EntitySetMapping Name="SupplierTenders">
             <EntityTypeMapping TypeName="LUSSISContextModel.SupplierTender">
               <MappingFragment StoreEntitySet="SupplierTender">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="StationeryId" ColumnName="StationeryId" />
                 <ScalarProperty Name="Rank" ColumnName="Rank" />
                 <ScalarProperty Name="Year" ColumnName="Year" />

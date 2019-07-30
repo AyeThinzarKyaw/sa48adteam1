@@ -15,8 +15,9 @@ namespace LUSSIS.Models
     public partial class CartDetail
     {
         public int Id { get; set; }
+        public int EmployeeId { get; set; }
         public int StationeryId { get; set; }
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public System.DateTime DateTime { get; set; }
     
         public virtual Employee Employee { get; set; }

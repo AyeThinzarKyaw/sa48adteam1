@@ -34,6 +34,7 @@ namespace LUSSIS.Models
         public Nullable<int> ReorderQuantity { get; set; }
         public string UnitOfMeasure { get; set; }
         public byte[] Image { get; set; }
+        public string Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AdjustmentVoucherDetail> AdjustmentVoucherDetails { get; set; }
