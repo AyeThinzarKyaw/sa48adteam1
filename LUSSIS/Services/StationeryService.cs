@@ -24,5 +24,25 @@ namespace LUSSIS.Services
             //return stationeryRepo.FindBy(x => x.CategoryId == 2 && x.Bin == "Hello");
             return stationeryRepo.GetStationeriesBySupplierAndYear(supplierId, year);
         }
+
+        public IEnumerable<Stationery> GetAllStationeries()
+        {
+            return stationeryRepo.FindAll();
+        }
+
+        public Stationery GetStationeryById(int id)
+        {
+            return stationeryRepo.FindById(id);
+        }
+
+        public void CreateStationery(Stationery stationery)
+        {
+            stationeryRepo.Create(stationery);
+        }
+
+        public void UpdateStationery(Stationery stationery)
+        {
+            stationeryRepo.Update(stationery);
+        }
     }
 }
