@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LUSSIS.Models;
+using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
 
@@ -24,7 +25,6 @@ namespace LUSSIS.Controllers
         public ActionResult Detail(int stationeryId)
         {
             Stationery stationery= StationeryService.Instance.GetStationeryById(stationeryId);
-            stationery.SupplierTenders = stationery.SupplierTenders.OrderBy(x => x.Rank).ToList();
             return View(stationery);
         }
 
@@ -32,18 +32,68 @@ namespace LUSSIS.Controllers
         //By ATZK
         public ActionResult Create()
         {
-
-            return View();
+            StationeryDetailsDTO stationery = new StationeryDetailsDTO();
+            stationery.Categories = StationeryService.Instance.GetAllCategories();
+            stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+            return View(stationery);
         }
 
         //CRETE stationery postMethod 
         //By ATZK
         [HttpPost]
-        public ActionResult Create(Stationery stationery)
+        public ActionResult Create(StationeryDetailsDTO stationery)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                Stationery newStationery = new Stationery();
+                newStationery.Id = stationery.StationeryId;
+                newStationery.Code = stationery.Code;
+                newStationery.Description = stationery.Description;
+                newStationery.CategoryId = stationery.CategoryId;
+                newStationery.UnitOfMeasure = Enum.GetName(typeof(UomDTO.UOM), stationery.UOM);
+                newStationery.Bin = stationery.Bin;
+
+                StationeryService.Instance.CreateStationery(newStationery);
+
+                this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
+                this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
+                this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
+
+                return RedirectToAction("Index");
+            }
+            stationery.Categories = StationeryService.Instance.GetAllCategories();
+            stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+            return View(stationery);
         }
 
+        private void generateSupplierTender(int supplierId, int rank, int stationeryId,decimal price)
+        {
+            SupplierTender supplierTender = new SupplierTender();
+            
+            supplierTender = SupplierTenderService.Instance.GetSupplierTendersOfCurrentYearByStationeryId(stationeryId).SingleOrDefault(s => s.Rank == rank);
+            
+            if(supplierTender==null)
+            {
+                supplierTender = new SupplierTender();
+                supplierTender.StationeryId = stationeryId;
+                supplierTender.Year = DateTime.Now.Year;
+                supplierTender.SupplierId = supplierId;
+                supplierTender.Rank = rank;
+                supplierTender.Price = price;
+                SupplierTenderService.Instance.CreateSupplierTender(supplierTender);
+            }
+            else
+            {
+                supplierTender.SupplierId = supplierId;
+                supplierTender.Rank = rank;
+                supplierTender.Price = price;
+                SupplierTenderService.Instance.UpdateSupplierTender(supplierTender);
+            }
+            
+            //return supplierTender;
+            
+           
+        }
         //UPDATE stationery getMethod
         //By ATZK
         public ActionResult Update()

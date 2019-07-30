@@ -17,11 +17,13 @@ namespace LUSSIS.Repositories
         public void Create(T entity)
         {
             context.Set<T>().Add(entity);
+            Save();
         }
 
         public void Delete(T entity)
         {
             context.Set<T>().Remove(entity);
+            Save();
         }
 
         public IEnumerable<T> FindAll()
@@ -50,6 +52,7 @@ namespace LUSSIS.Repositories
             //is this line necessary?
             context.Set<T>().Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
+            Save();
         }
     }
 }

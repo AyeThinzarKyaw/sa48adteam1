@@ -174,7 +174,10 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\ErrorDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
+    <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
+    <Compile Include="Models\DTOs\UomDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -226,12 +229,12 @@
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ViewModels\Error.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\AdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\CartDetailRepo.cs" />
-    <Compile Include="Repositories\CollectionPoint.cs" />
+    <Compile Include="Repositories\CategoryRepo.cs" />
+    <Compile Include="Repositories\CollectionPointRepo.cs" />
     <Compile Include="Repositories\DepartmentCoverEmployeeRepo.cs" />
     <Compile Include="Repositories\DepartmentRepo.cs" />
     <Compile Include="Repositories\DisbursementRepo.cs" />
@@ -240,6 +243,7 @@
     <Compile Include="Repositories\Interfaces\IAdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\Interfaces\IAdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\Interfaces\ICartDetailRepo.cs" />
+    <Compile Include="Repositories\Interfaces\ICategoryRepo.cs" />
     <Compile Include="Repositories\Interfaces\ICollectionPointRepo.cs" />
     <Compile Include="Repositories\Interfaces\IDepartmentCoverEmployeeRepo.cs" />
     <Compile Include="Repositories\Interfaces\IDepartmentRepo.cs" />
@@ -414,6 +418,7 @@
     <Content Include="Views\Stationery\Index.cshtml" />
     <Content Include="Views\Stationery\Detail.cshtml" />
     <Content Include="Views\Stationery\Create.cshtml" />
+    <Content Include="Views\Stationery\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

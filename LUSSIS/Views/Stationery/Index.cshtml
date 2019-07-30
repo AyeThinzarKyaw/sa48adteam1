@@ -5,7 +5,7 @@
 
 <section class="content-header">
     <h1>
-        Manage Stationeries
+        Manage Catalogue
     </h1>
 </section>
 
@@ -16,9 +16,11 @@
             <div class="box">
                 <div class="box-header">
                     <div class="box-tools pull-right" style="position: relative;">
-                        <a href="catalogue-create.html" class="btn btn-success right">
-                            Create New
-                        </a>
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success right", @role = "button" })
+                        
+                        @*<a href="catalogue-create.html" class="btn btn-success right">
+            Create New
+        </a>*@
                     </div>
                 </div>
                 <div class="box-body">
@@ -26,15 +28,15 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Code)
+                                    Stationery Code
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Category.Type)
+                                    Category
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Description)
+                                    Description
                                 </th>
-                                <th>@Html.DisplayNameFor(model => model.UnitOfMeasure)</th>
+                                <th>Unit of Measue</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -67,9 +69,7 @@
                                         @Html.ActionLink("Change Status", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
                                     @*}*@
 
-                                    @*<a href="catalogue-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                    <a href="catalogue-update.html" class="btn btn-sm btn-warning">Update</a>
-                                    <a href="catalogue-delete.html" class="btn btn-sm btn-danger">Change Status</a>*@
+                                   
                                 </td>
                             </tr>
                             }
