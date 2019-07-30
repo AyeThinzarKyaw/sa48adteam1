@@ -21,6 +21,8 @@ namespace LUSSIS.Services
 
         public IEnumerable<SupplierTender> GetSupplierTendersOfCurrentYearByStationeryId(int stationeryId)
         {
+            //return supplierTenderRepo.FindBy(x => x.Year == DateTime.Now.Year && x.StationeryId == stationeryId);
+
             return supplierTenderRepo.GetSupplierTendersOfCurrentYearByStationeryId(stationeryId);
         }
 
