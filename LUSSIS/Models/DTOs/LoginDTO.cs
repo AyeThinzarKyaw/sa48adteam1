@@ -11,7 +11,7 @@ namespace LUSSIS.Models.DTOs
 
         public string EmployeeRoleName { get; set; }
 
-        public int SessionId { get; set; }
+        public string SessionGuid { get; set; }
 
     }
 }
