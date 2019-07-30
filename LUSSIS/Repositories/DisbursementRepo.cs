@@ -9,6 +9,7 @@ namespace LUSSIS.Repositories
 {
     public class DisbursementRepo : GenericRepo<Disbursement, int>, IDisbursementRepo
     {
+
         public IEnumerable<Disbursement> GetDisbursementsByDepartmentId(int depId)
         {
             var result = from d in Context.Disbursements
