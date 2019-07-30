@@ -11,12 +11,21 @@ namespace LUSSIS.Controllers
 {
     public class StationeryController : Controller
     {
-        // GET: Stationery
+        // GET: Stationery List
         //By ATZK
         public ActionResult Index()
         {
             var stationeries = StationeryService.Instance.GetAllStationeries().OrderBy(x => x.Code).ToList();
             return View(stationeries);
+        }
+
+        // GET: StationeryDetails
+        //By ATZK
+        public ActionResult Detail(int stationeryId)
+        {
+            Stationery stationery= StationeryService.Instance.GetStationeryById(stationeryId);
+            stationery.SupplierTenders = stationery.SupplierTenders.OrderBy(x => x.Rank).ToList();
+            return View(stationery);
         }
 
         //CRETE stationery getMethod
