@@ -419,6 +419,7 @@
     <Content Include="Views\Stationery\Index.cshtml" />
     <Content Include="Views\Stationery\Detail.cshtml" />
     <Content Include="Views\Stationery\Create.cshtml" />
+    <Content Include="Views\Stationery\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
