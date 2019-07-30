@@ -10,9 +10,9 @@ namespace LUSSIS.Repositories
     public class StationeryRepo : GenericRepo<Stationery, int>, IStationeryRepo
     {
         
-        IEnumerable<Stationery> IStationeryRepo.GetStationeriesBySupplierAndYear(Supplier supplier, int year)
+        public IEnumerable<Stationery> GetStationeriesBySupplierAndYear(int supplierId, int year)
         {
-            return Context.Stationeries.Where(s => s.Id == s.SupplierTenders.Single(t => t.SupplierId == supplier.Id && t.Year == year).StationeryId).Distinct().ToList();
+            return Context.Stationeries.Where(s => s.Id == s.SupplierTenders.Single(t => t.SupplierId == supplierId && t.Year == year).StationeryId).Distinct().ToList();
         }
 
 

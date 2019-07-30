@@ -19,12 +19,12 @@ namespace LUSSIS.Services
         }
 
 
-        IEnumerable<Stationery> IStationeryService.GetStationeriesBySupplierAndYear(Supplier supplier, int year)
+        public IEnumerable<Stationery> GetStationeriesBySupplierAndYear(int supplierId, int year)
         {
-            return stationeryRepo.GetStationeriesBySupplierAndYear(supplier, year);
+            return stationeryRepo.GetStationeriesBySupplierAndYear(supplierId, year);
         }
 
-        IEnumerable<Stationery> IStationeryService.GetAllStationeries()
+        public IEnumerable<Stationery> GetAllStationeries()
         {
             return stationeryRepo.FindAll();
         }
