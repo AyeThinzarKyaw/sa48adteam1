@@ -146,6 +146,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
     <Compile Include="Global.asax.cs">
@@ -232,7 +233,7 @@
     <Compile Include="Repositories\AdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\AdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\CartDetailRepo.cs" />
-    <Compile Include="Repositories\CollectionPoint.cs" />
+    <Compile Include="Repositories\CollectionPointRepo.cs" />
     <Compile Include="Repositories\DepartmentCoverEmployeeRepo.cs" />
     <Compile Include="Repositories\DepartmentRepo.cs" />
     <Compile Include="Repositories\DisbursementRepo.cs" />
@@ -249,8 +250,8 @@
     <Compile Include="Repositories\Interfaces\IGenericRepo.cs" />
     <Compile Include="Repositories\Interfaces\IPurchaseOrderDetailRepo.cs" />
     <Compile Include="Repositories\Interfaces\IPurchaseOrderRepo.cs" />
-    <Compile Include="Repositories\Interfaces\IRequisitionRepo.cs" />
     <Compile Include="Repositories\Interfaces\IRequisitionDetailRepo.cs" />
+    <Compile Include="Repositories\Interfaces\IRequisitionRepo.cs" />
     <Compile Include="Repositories\Interfaces\ISessionRepo.cs" />
     <Compile Include="Repositories\Interfaces\IStationeryRepo.cs" />
     <Compile Include="Repositories\Interfaces\ISupplierRepo.cs" />
@@ -263,7 +264,6 @@
     <Compile Include="Repositories\StationeryRepo.cs" />
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
-    <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
@@ -416,7 +416,6 @@
     <Content Include="Views\Stationery\Index.cshtml" />
     <Content Include="Views\Stationery\Detail.cshtml" />
     <Content Include="Views\Stationery\Create.cshtml" />
-    <Content Include="ConnectionStrings.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
