@@ -1,5 +1,6 @@
 ﻿using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
+using LUSSIS.Repositories;
 using LUSSIS.Repositories.Interfaces;
 using LUSSIS.Services.Interfaces;
 using System;
@@ -13,30 +14,39 @@ namespace LUSSIS.Services
     {
         private IEmployeeRepo employeeRepo;
         private ISessionRepo sessionRepo;
+        private static LoginService instance = new LoginService();
 
-        public LoginService(IEmployeeRepo employeeRepo, ISessionRepo sessionRepo)
+        private LoginService()
         {
-            this.employeeRepo = employeeRepo;
-            this.sessionRepo = sessionRepo;
+            employeeRepo = EmployeeRepo.Instance;
+            sessionRepo = SessionRepo.Instance;
+        }
+
+        //returns single instance
+        public static ILoginService Instance
+        {
+            get { return instance; }
         }
 
         public LoginDTO GetEmployeeLoginByUsernameAndPassword(string username, string password)
         {
             //return null if not valid employee
             //else return a loginDTO with required details
+
+            //Hash password first
             Employee e = employeeRepo.FindBy(x => x.Username == username && x.Password == password).SingleOrDefault();
             if (e == null) // no such user
             {
                 return null;
             }
             else
-            {
-                LoginDTO logignDTO = new LoginDTO();
-                Session newSession = new Session();
+            {                
+                Session newSession = new Session() { Employee = e, GUID = Guid.NewGuid().ToString(), LogInDateTime = DateTime.Now };
                 sessionRepo.Create(newSession);
                 //set attributes
+                LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, EmployeeRoleName = e.Role.Name, SessionGuid = newSession.GUID};
 
-                return logignDTO;
+                return loginDTO;
             }
         }
 
