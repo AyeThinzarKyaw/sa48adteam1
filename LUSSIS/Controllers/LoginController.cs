@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace LUSSIS.Controllers
 {
     public class LoginController : Controller
@@ -13,13 +14,14 @@ namespace LUSSIS.Controllers
         ILoginService loginService;
         
 
-        public LoginController(ILoginService loginService)
+        public LoginController()
         {
-            this.loginService = loginService;
+            this.loginService = LoginService.Instance;
         }
 
-        //some routing
+        //some routing [HttpPost}
         // GET: Login
+        
         public ActionResult Index()
         {
             //receives a username and password
@@ -29,7 +31,7 @@ namespace LUSSIS.Controllers
             LoginDTO loginDTO = loginService.GetEmployeeLoginByUsernameAndPassword("some username", "some password");
             if (loginDTO == null)
             {
-                //return loginpage with error message
+                //return indexpage with error message
 
             }
             else
