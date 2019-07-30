@@ -10,6 +10,14 @@ namespace LUSSIS.Repositories
 {
     public class EmployeeRepo : GenericRepo<Employee, int>, IEmployeeRepo
     {
+        private PurchaseOrderDetailRepo() { }
+
+        private static EmployeeRepo instance = new EmployeeRepo();
+        public static IEmployeeRepo Instance
+        {
+            get { return instance; }
+        }
+
         public IEnumerable<Employee> GetAllClerksByCollectionPointId(int collectionPointId)
         {
             var result = from e in Context.Employees

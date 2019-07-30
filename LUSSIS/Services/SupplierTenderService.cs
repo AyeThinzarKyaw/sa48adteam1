@@ -11,24 +11,24 @@ namespace LUSSIS.Services
 {
     public class SupplierTenderService : ISupplierTenderService
     {
-        private ISupplierTenderRepo supplierTenderRepo;
+        private SupplierTenderService() { }
 
-        public SupplierTenderService(ISupplierTenderRepo supplierTenderRepo)
+        private static SupplierTenderService instance = new SupplierTenderService();
+        public static ISupplierTenderService Instance
         {
-            this.supplierTenderRepo = supplierTenderRepo;
+            get { return instance; }
         }
-
 
         public IEnumerable<SupplierTender> GetSupplierTendersOfCurrentYearByStationeryId(int stationeryId)
         {
             //return supplierTenderRepo.FindBy(x => x.Year == DateTime.Now.Year && x.StationeryId == stationeryId);
 
-            return supplierTenderRepo.GetSupplierTendersOfCurrentYearByStationeryId(stationeryId);
+            return SupplierTenderRepo.Instance.GetSupplierTendersOfCurrentYearByStationeryId(stationeryId);
         }
 
         public IEnumerable<SupplierTender> GetAllSupplierTendersOfCurrentYear()
         {
-            return supplierTenderRepo.GetAllSupplierTendersOfCurrentYear();
+            return SupplierTenderRepo.Instance.GetAllSupplierTendersOfCurrentYear();
         }
     }
 }

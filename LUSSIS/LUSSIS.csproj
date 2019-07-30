@@ -248,8 +248,8 @@
     <Compile Include="Repositories\Interfaces\IGenericRepo.cs" />
     <Compile Include="Repositories\Interfaces\IPurchaseOrderDetailRepo.cs" />
     <Compile Include="Repositories\Interfaces\IPurchaseOrderRepo.cs" />
-    <Compile Include="Repositories\Interfaces\IRequisitionDetailRepo.cs" />
     <Compile Include="Repositories\Interfaces\IRequisitionRepo.cs" />
+    <Compile Include="Repositories\Interfaces\IRequisitionDetailRepo.cs" />
     <Compile Include="Repositories\Interfaces\ISessionRepo.cs" />
     <Compile Include="Repositories\Interfaces\IStationeryRepo.cs" />
     <Compile Include="Repositories\Interfaces\ISupplierRepo.cs" />
@@ -262,10 +262,10 @@
     <Compile Include="Repositories\StationeryRepo.cs" />
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
+    <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
-    <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\StationeryService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
   </ItemGroup>
@@ -419,6 +419,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\" />
+    <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

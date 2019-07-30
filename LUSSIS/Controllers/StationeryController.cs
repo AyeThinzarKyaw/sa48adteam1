@@ -11,20 +11,12 @@ namespace LUSSIS.Controllers
 {
     public class StationeryController : Controller
     {
-        IStationeryService stationeryService;
-        
-        public StationeryController(IStationeryService stationeryService)
-        {
-            this.stationeryService = stationeryService;
-        }
-        //StationeryService stationeryService;
-
         // GET: Stationery
         //By ATZK
         public ActionResult Index()
         {
-            var stationeries = stationeryService.GetAllStationeries().OrderBy(x => x.Code).ToList();
-            return View(stationeryService);
+            var stationeries = StationeryService.Instance.GetAllStationeries().OrderBy(x => x.Code).ToList();
+            return View(stationeries);
         }
 
         //CRETE stationery getMethod
