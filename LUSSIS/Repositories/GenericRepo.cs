@@ -16,6 +16,7 @@ namespace LUSSIS.Repositories
 
         public void Create(T entity)
         {
+            context = new LUSSISContext();
             context.Set<T>().Add(entity);
             Save();
         }
@@ -28,6 +29,7 @@ namespace LUSSIS.Repositories
 
         public IEnumerable<T> FindAll()
         {
+            context = new LUSSISContext();
             return context.Set<T>().ToList<T>();
         }
 

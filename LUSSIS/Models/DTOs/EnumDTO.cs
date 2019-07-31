@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LUSSIS.Models.DTOs
 {
-    public class UomDTO
+    public class EnumDTO
     {
         public enum UOM
         {
@@ -15,6 +15,12 @@ namespace LUSSIS.Models.DTOs
             Packet=3,
             Set=4,
             Other=5
+        }
+
+        public enum ActiveStatus
+        {
+            INACTIVE = 0,
+            ACTIVE = 1
         }
     }
 }

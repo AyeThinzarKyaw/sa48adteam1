@@ -1,0 +1,233 @@
+﻿@model LUSSIS.Models.DTOs.FormRequisitionDTO
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@section styles {
+    <style type="text/css">
+        input[type="text"] {
+            border: 1px solid #d2d6de;
+        }
+
+        .box {
+            margin: 0;
+        }
+    </style>
+}
+
+<section class="content-header">
+    <h1>Catalogue</h1>
+</section>
+
+<!-- Main content -->
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-body -->
+                <div class="box-body" style="height: 465px; overflow: hidden; overflow-y: auto;">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Unit of Measure</th>
+                                <th>Stock Availablility</th>
+                                <th>Reserved</th>
+                                <th>Waitlist</th>
+                                <th>OrderQty</th>
+                                <th>Confirmation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var catalogueItem in Model.CatalogueItems)
+                            {
+                                <tr>
+                                    <td>@catalogueItem.Item</td>
+                                    <td>@catalogueItem.UnitOfMeasure</td>
+                                </tr>
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+                    <a href="requsition-form.html" class="btn btn-success pull-right">Submit</a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-body -->
+                <div class="box-body" style="height: 465px; overflow: hidden; overflow-y: auto;">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Unit of Measure</th>
+                                <th>Stock Availablility</th>
+                                <th>Reserved</th>
+                                <th>Waitlist</th>
+                                <th>OrderQty</th>
+                                <th>Confirmation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Scissor</td>
+                                <td>Each</td>
+                                <td class="text-green">In stock</td>
+                                <td style="width: 20px;" class="text-green text-center">5</td>
+                                <td style="width: 20px;" class="text-orange text-center">15</td>
+                                <td style="width: 20px;"><input type="text" style="width: 80px;" /></td>
+                                <td style="width: 20px;" class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Pen Transparency Soluble</td>
+                                <td>Packet</td>
+                                <td class="text-orange">Low stock(20)</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Pen Whiteboard Marker Black</td>
+                                <td>Box</td>
+                                <td class="text-gray">Out of stock</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Pen Whiteboard Marker Blue</td>
+                                <td>Box</td>
+                                <td class="text-orange">Low stock(10)</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Ruler 12'</td>
+                                <td>Dozen</td>
+                                <td class="text-green">In stock</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Scissor</td>
+                                <td>Each</td>
+                                <td class="text-green">In stock</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Pen Transparency Soluble</td>
+                                <td>Packet</td>
+                                <td class="text-orange">Low stock(20)</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Pen Whiteboard Marker Black</td>
+                                <td>Box</td>
+                                <td class="text-gray">Out of stock</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Pen Whiteboard Marker Blue</td>
+                                <td>Box</td>
+                                <td class="text-orange">Low stock(10)</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Ruler 12'</td>
+                                <td>Dozen</td>
+                                <td class="text-green">In stock</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Pen Whiteboard Marker Blue</td>
+                                <td>Box</td>
+                                <td class="text-orange">Low stock(10)</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                            <tr>
+                                <td>Ruler 12'</td>
+                                <td>Dozen</td>
+                                <td class="text-green">In stock</td>
+                                <td class="text-green text-center">0</td>
+                                <td class="text-orange text-center">0</td>
+                                <td><input type="text" style="width: 80px;" /></td>
+                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+                    <a href="requsition-form.html" class="btn btn-success pull-right">Submit</a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 5 },
+                    { 'orderable': false, 'targets': 6 }
+                ],
+                'paging': false,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': false,
+                'autoWidth': false
+            })
+        })
+    </script>
+}
+

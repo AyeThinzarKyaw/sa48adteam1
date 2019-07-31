@@ -50,9 +50,9 @@ namespace LUSSIS.Controllers
                 newStationery.Code = stationery.Code;
                 newStationery.Description = stationery.Description;
                 newStationery.CategoryId = stationery.CategoryId;
-                newStationery.UnitOfMeasure = Enum.GetName(typeof(UomDTO.UOM), stationery.UOM);
+                newStationery.UnitOfMeasure = Enum.GetName(typeof(EnumDTO.UOM), stationery.UOM);
                 newStationery.Bin = stationery.Bin;
-
+                newStationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
                 StationeryService.Instance.CreateStationery(newStationery);
 
                 this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
@@ -110,6 +110,45 @@ namespace LUSSIS.Controllers
             return View();
         }
 
+
+        //CREATE category postMethod call from ajax
+        //By ATZK
+        
+        public JsonResult CreateCategory(string type)
+        {
+            Category category = new Category();
+            category.Type = type;
+            category.Id = 20;
+            StationeryService.Instance.CreateCategory(category);
+            var aa = StationeryService.Instance.GetAllCategories();
+
+            var bb =
+                from c in aa
+                orderby c.Type
+                select new
+                {
+                    Id = c.Id,
+                    Type = c.Type
+                };
+            return Json( bb, JsonRequestBehavior.AllowGet);
+        }
+
+        //change status from current status to other
+        //By ATZK
+        public ActionResult ChangeStatus(int stationeryId)
+        {
+            Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
+            if (stationery.Status== Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE))
+            {
+                stationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.INACTIVE);
+            }
+            else
+            {
+                stationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
+            }
+            StationeryService.Instance.UpdateStationery(stationery);
+            return RedirectToAction("Index");
+        }
 
     }
 }

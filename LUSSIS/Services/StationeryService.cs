@@ -54,5 +54,14 @@ namespace LUSSIS.Services
         {
             return SupplierRepo.Instance.FindAll().OrderBy(s => s.Name).ToList();
         }
+        public void CreateCategory(Category category)
+        {
+            CategoryRepo.Instance.Create(category);
+        }
+
+        public void UpdateCategory(Category category)
+        {
+            CategoryRepo.Instance.Update(category);
+        }
     }
 }

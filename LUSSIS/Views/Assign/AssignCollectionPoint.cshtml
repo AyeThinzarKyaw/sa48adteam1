@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "AssignCollectionPoint";
+}
+
+<section class="content-header">
+    <h1>
+        Collection Points
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <p>Current Collection Point - <b>Management School</b></p>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Collection Point (Pickup Time)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="r1" class="minimal">
+                                    </label> Stationery Store - Administration Building (9:30am)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="r1" class="minimal">
+                                    </label> Management School (11:00am)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="r1" class="minimal">
+                                    </label> Medical School (9:30am)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="r1" class="minimal">
+                                    </label> Engineering School (11:00am)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="r1" class="minimal">
+                                    </label> Science School (9:30am)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="r1" class="minimal">
+                                    </label> University Hospital (11:00am)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button class="btn btn-primary" style="margin-left: 100px;">Choose</button>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        })
+    </script>
+}

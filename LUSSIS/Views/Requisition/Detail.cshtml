@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+}
+
+<section class="content-header">
+    <!-- If Supervisor -->
+    <!-- <h1>
+        Requested Requisition Details
+    </h1> -->
+    <!-- If Supervisor -->
+
+    <h1>
+        Requisition Details
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table>
+                        <tr>
+                            <td>Requisition Form ID</td>
+                            <td>: DDS/11/99</td>
+                            <td></td>
+                            <td>Employee Name</td>
+                            <td>: Jenny Wong Mei Lin</td>
+                        </tr>
+                        <tr>
+                            <td>Requested Date</td>
+                            <td>: 20/12/2019</td>
+                            <td style="width: 400px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Requisition Status</td>
+                            <td>: <span class="text-green">Approved</span></td>
+                        </tr>
+
+                        <!-- If status = Approved -->
+                        <tr>
+                            <td>Approved By</td>
+                            <td>: Jimmy Weng</td>
+                        </tr>
+                        <!-- If status = Approved -->
+
+                    </table>
+                    <br /><br />
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Unit of Measure</th>
+                                <th>OrderQty</th>
+                                <th>Status</th>
+
+                                <!-- If status = Approved -->
+                                <th>Action</th>
+                                <!-- If status = Approved -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Scissor</td>
+                                <td>Each</td>
+                                <td>5</td>
+                                <td class="text-orange">WaitListed</td>
+
+                                <!-- If status = Approved & WaitListed -->
+                                <td style="width: 20px;"><a href="requisition-detail.html" class="btn btn-sm btn-danger">Cancel</a></td>
+                                <!-- If status = Approved & WaitListed -->
+                            </tr>
+                            <tr>
+                                <td>Scissor</td>
+                                <td>Each</td>
+                                <td>15</td>
+                                <td class="text-orange">WaitList Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Pen Transparency Soluble</td>
+                                <td>Packet</td>
+                                <td>15</td>
+                                <td class="text-blue">Reserved Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Pen Whiteboard Marker Black</td>
+                                <td>Box</td>
+                                <td>100</td>
+                                <td class="text-blue">Reserved Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Pen Whiteboard Marker Blue</td>
+                                <td>Box</td>
+                                <td>10</td>
+                                <td class="text-blue">Reserved Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Ruler 12'</td>
+                                <td>Dozen</td>
+                                <td>30</td>
+                                <td class="text-blue">Reserved Pending</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+
+                    <!-- /.For Supervisor(Requested Req) if Status = Pending -->
+                    <form>
+                        <div class="form-group">
+                            <label>Remark(Optional)</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                        </div>
+                    </form>
+                    <!-- /.For Supervisor(Requested Req) if Status = Pending -->
+
+                </div>
+                <!-- /.box-body -->
+
+                <!-- /.For Clerk if Status = Pending -->
+                <div class="box-footer">
+                    <a href="requsition-form.html" class="btn btn-danger pull-right">Cancel</a>
+                </div>
+                <!-- /.For Clerk if Status = Pending -->
+
+                <!-- /.For Supervisor(Requested Req) if Status = Pending -->
+                <div class="box-footer">
+                    <button class="btn btn-success pull-right">Approve</button>
+                    <a class="btn btn-danger pull-right" href="#" style="margin-right: 20px;">Reject</a>
+                </div>
+                <!-- /.For Supervisor(Requested Req) if Status = Pending -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
