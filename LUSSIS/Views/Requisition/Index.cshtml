@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<section class="content-header">
+    <h1>
+        My Requisition History
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Requisition Form ID</th>
+                                <th>Requested Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DDS/111/99</td>
+                                <td>20/12/2019</td>
+                                <td class="text-blue">Pending</td>
+                                <td>
+                                    <a href="requisition-detail-pending.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="#" class="btn btn-sm btn-danger">Cancel</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DDS/111/98</td>
+                                <td>20/11/2019</td>
+                                <td class="text-orange">Cancelled</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DDS/111/97</td>
+                                <td>20/10/2019</td>
+                                <td class="text-green">Approved</td>
+                                <td>
+                                    <a href="requisition-detail-approved.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DDS/111/96</td>
+                                <td>20/09/2019</td>
+                                <td class="text-red">Rejected</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DDS/111/95</td>
+                                <td>20/08/2019</td>
+                                <td class="text-grey">Completed</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+<script>
+    $(function () {
+        $('#table').DataTable({
+            'columnDefs': [
+                { 'orderable': false, 'targets': 3 }
+            ],
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        })
+    });
+</script>
+}
