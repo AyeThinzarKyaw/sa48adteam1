@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+}
+
+<section class="content-header">
+    <h1>
+        Purchase Order
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table>
+                        <tr>
+                            <td>Purchase Order ID</td>
+                            <td>: ADJ0011</td>
+                            <td style="width: 400px;"></td>
+                            <td>Supplier Name</td>
+                            <td>: ALPHA Office Supplies</td>
+                        </tr>
+                        <tr>
+                            <td>Purchase Date</td>
+                            <td>: 09/12/2019</td>
+                            <td></td>
+                            <td>Phone No</td>
+                            <td>: 4612238</td>
+                        </tr>
+                        <tr>
+                            <td>Estimated Delivery Date</td>
+                            <td>: 09/12/2019</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>: <span class="text-blue">Pending Approval</span></td>
+                        </tr>
+                        <tr>
+                            <td>Order By</td>
+                            <td>: Johnny</td>
+                        </tr>
+                    </table>
+                    <br /><br />
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item Number</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Unit of Measure</th>
+                                <th>Purchase Qty</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P100</td>
+                                <td>Scissors</td>
+                                <td>Scissor</td>
+                                <td>Each</td>
+                                <td>50</td>
+                                <td>$1</td>
+                                <td>$50</td>
+                            </tr>
+                            <tr>
+                                <td>P037</td>
+                                <td>Pen</td>
+                                <td>Pen Transparency Soluble</td>
+                                <td>Packet</td>
+                                <td>15</td>
+                                <td>$2</td>
+                                <td>$30</td>
+                            </tr>
+                            <tr>
+                                <td>P038</td>
+                                <td>Pen</td>
+                                <td>Pen Whiteboard Marker Black</td>
+                                <td>Box</td>
+                                <td>10</td>
+                                <td>$3</td>
+                                <td>$30</td>
+                            </tr>
+                            <tr>
+                                <td>P039</td>
+                                <td>Pen</td>
+                                <td>Pen Whiteboard Marker Blue</td>
+                                <td>Box</td>
+                                <td>10</td>
+                                <td>$2.5</td>
+                                <td>$25</td>
+                            </tr>
+                            <tr>
+                                <td>P002</td>
+                                <td>Ruler</td>
+                                <td>Ruler 12'</td>
+                                <td>Dozen</td>
+                                <td>6</td>
+                                <td>$1.5</td>
+                                <td>$9</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td> Total Amount : </td>
+                                <td>$144</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+
+                    <!-- If Supervisor -->
+                    <form>
+                        <div class="form-group">
+                            <label>Remark</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                        </div>
+                    </form>
+                    <!-- If Supervisor -->
+
+                </div>
+                <!-- /.box-body -->
+
+                <!-- If Supervisor -->
+                <div class="box-footer">
+                    <button class="btn btn-success pull-right" style="margin-left: 20px;">Approve</button>
+                    <a class="btn btn-danger pull-right" href="product.html">Reject</a>
+                </div>
+                <!-- If Supervisor -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
