@@ -1,4 +1,6 @@
 ﻿using LUSSIS.Models;
+using LUSSIS.Services;
+using LUSSIS.Services.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,12 @@ namespace LUSSIS.Controllers
     public class MobileLoginController : ApiController
     {
         private LUSSISContext db = new LUSSISContext();
+        ILoginService loginService;
+
+        public MobileLoginController()
+        {
+            this.loginService = LoginService.Instance;
+        }
 
         //POST: api/MobileLogin
         //Written by Charles
@@ -20,7 +28,7 @@ namespace LUSSIS.Controllers
             if(db.Employees.Any(user => user.Username.Equals(employee.Username)))
             {
                 Employee emp = db.Employees.Where(user => user.Username.Equals(employee.Username)).First();
-                if(employee.Password.Equals(emp.Password))
+                if(loginService.HashPassword(employee.Password).Equals(emp.Password))
                     return emp;
                 else
                     return null;

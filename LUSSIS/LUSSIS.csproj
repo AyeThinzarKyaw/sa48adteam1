@@ -284,6 +284,7 @@
     <Compile Include="Services\RequisitionManagementService.cs" />
     <Compile Include="Services\StationeryService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
+    <Compile Include="Util\MD5Hash.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin-lte\css\AdminLTE.css" />
