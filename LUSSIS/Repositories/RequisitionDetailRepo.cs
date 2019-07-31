@@ -16,5 +16,12 @@ namespace LUSSIS.Repositories
         {
             get { return instance; }
         }
+
+        public int GetReservedCountForStationery(int stationeryId)
+        {
+            return (from rd in Context.RequisitionDetails
+                    where rd.StationeryId == stationeryId
+                    select rd.QuantityOrdered).Sum();
+        }
     }
 }

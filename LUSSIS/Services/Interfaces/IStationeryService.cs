@@ -20,5 +20,9 @@ namespace LUSSIS.Services.Interfaces
 
         IEnumerable<Category> GetAllCategories();
         IEnumerable<Supplier> GetAllSuppliers();
+
+        void CreateCategory(Category category);
+
+        void UpdateCategory(Category category);
     }
 }
