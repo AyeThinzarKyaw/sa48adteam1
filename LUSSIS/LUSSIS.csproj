@@ -178,7 +178,7 @@
     <Compile Include="Models\DTOs\ErrorDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
-    <Compile Include="Models\DTOs\UomDTO.cs" />
+    <Compile Include="Models\DTOs\EnumDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
