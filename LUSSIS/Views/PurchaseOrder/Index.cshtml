@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<section class="content-header">
+    <h1>
+        Purchase Orders
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Search PO between</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>From Date:</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control pull-right" id="datepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>To Date:</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control pull-right" id="datepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-success" style="margin-top:25px;">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="box">
+
+                <!-- If Clerk -->
+                <div class="box-header">
+                    <div class="box-tools pull-right" style="position: relative;">
+                        <a href="purchase-order-select-item.html" class="btn btn-primary right">Add Item To Raise PO</a>
+                    </div>
+                </div>
+                <!-- If Clerk -->
+
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>PO Number</th>
+                                <th>Order Date</th>
+                                <th>Estimated Delivery Date</th>
+                                <th>Supplier</th>
+
+                                <!-- If Supervisor
+                                <th>Order By(Clerk Name)</th> -->
+
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PO000019</td>
+                                <td>15/7/2019</td>
+                                <td>19/7/2019</td>
+                                <td>Alpha Office Supplies</td>
+                                <td class="text-blue">Pending Approval</td>
+                                <td>
+                                    <a href="purchase-order-detail.html" class="btn btn-sm btn-primary">Detail</a>
+
+                                    <!-- If Clerk -->
+                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>
+                                    <!-- If Clerk -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>PO00009</td>
+                                <td>15/7/2019</td>
+                                <td>14/7/2019</td>
+                                <td>Cheap Stationery</td>
+                                <td class="text-blue">Pending Approval</td>
+                                <td>
+                                    <a href="purchase-order-detail.html" class="btn btn-sm btn-primary">Detail</a>
+
+                                    <!-- If Clerk -->
+                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>
+                                    <!-- If Clerk -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>PO00008</td>
+                                <td>15/7/2019</td>
+                                <td>19/7/2019</td>
+                                <td>OMEGA Stationery</td>
+                                <td class="text-success">Approved</td>
+                                <td>
+                                    <a href="purchase-order-detail.html" class="btn btn-sm btn-primary">Detail</a>
+
+                                    <!-- If Clerk -->
+                                    <a href="receive-delivery.html" class="btn btn-sm btn-primary">Receive Delivery</a>
+                                    <!-- If Clerk -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>PO00007</td>
+                                <td>14/7/2019</td>
+                                <td>19/7/2019</td>
+                                <td>Cheap Stationery</td>
+                                <td>Received</td>
+                                <td>
+                                    <a href="purchase-order-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 5 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+}
+
