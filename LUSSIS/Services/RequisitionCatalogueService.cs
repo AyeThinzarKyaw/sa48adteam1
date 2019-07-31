@@ -42,7 +42,7 @@ namespace LUSSIS.Services
             foreach(Stationery s in stationeries)
             {
                 getCurrentBalance(s);
-                catalogueItems.Add(new CatalogueItemDTO { Item = s.Description, UnitOfMeasure = s.UnitOfMeasure,  })
+                catalogueItems.Add(new CatalogueItemDTO { Item = s.Description, UnitOfMeasure = s.UnitOfMeasure, });
             }
 
             if (cartDetails != null)
@@ -55,7 +55,7 @@ namespace LUSSIS.Services
 
         private void getCurrentBalance(Stationery s)
         {
-            int reservedCount = ;
+            int reservedCount = 0;
             int cartCount = 0;
 
 
