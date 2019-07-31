@@ -1,4 +1,5 @@
-﻿using LUSSIS.Services;
+﻿using LUSSIS.Models.DTOs;
+using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,8 @@ namespace LUSSIS.Controllers
 
         public ActionResult ViewCatalogue(int employeeId)
         {
-
-
+            List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(employeeId);
+            ViewData["catalogueItems"] = catalogueItems;
             return View();
         }
     }

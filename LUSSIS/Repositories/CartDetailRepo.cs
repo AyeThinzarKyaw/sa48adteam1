@@ -19,10 +19,9 @@ namespace LUSSIS.Repositories
 
         public int GetCountOnHoldForStationery(int stationeryId)
         {
-            //return from cd in Context.CartDetails
-            //       where cd.StationeryId == stationeryId
-            //       select cd.Quantity.Sum();
-            return 0;
+            return (from cd in Context.CartDetails
+                   where cd.StationeryId == stationeryId
+                   select cd.Quantity).Sum();
                    
         }
     }

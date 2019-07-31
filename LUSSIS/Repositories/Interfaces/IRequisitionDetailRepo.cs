@@ -9,6 +9,6 @@ namespace LUSSIS.Repositories.Interfaces
 {
     public interface IRequisitionDetailRepo : IGenericRepo<RequisitionDetail, int>
     {
-
+        int GetReservedCountForStationery(int stationeryId);
     }
 }

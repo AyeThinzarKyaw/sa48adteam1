@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Enums;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Repositories;
 using LUSSIS.Repositories.Interfaces;
@@ -41,25 +42,57 @@ namespace LUSSIS.Services
             //for each stationery in stationeries create a catalogueItemDTO
             foreach(Stationery s in stationeries)
             {
-                getCurrentBalance(s);
-                catalogueItems.Add(new CatalogueItemDTO { Item = s.Description, UnitOfMeasure = s.UnitOfMeasure,  })
+                int currBalance =  getCurrentBalance(s);
+                StockAvailabilityEnum stockAvailEnum;
+                int? lowStockCount = null;
+
+                if (currBalance <= 0)
+                {
+                    stockAvailEnum = StockAvailabilityEnum.OutOfStock;
+                }
+                else if (currBalance < s.ReorderLevel)
+                {
+                    stockAvailEnum = StockAvailabilityEnum.LowStock;
+                    lowStockCount = currBalance;
+                }
+                else
+                {
+                    stockAvailEnum = StockAvailabilityEnum.InStock;
+                }
+
+                catalogueItems.Add(new CatalogueItemDTO { Item = s.Description,
+                    UnitOfMeasure = s.UnitOfMeasure, StockAvailability =  stockAvailEnum,
+                    LowStockAvailability = lowStockCount, StationeryId = s.Id});
             }
 
             if (cartDetails != null)
             {
-
+                foreach(CartDetail cd in cartDetails)
+                {
+                    CatalogueItemDTO catItemDTO = catalogueItems.Find(x => x.StationeryId == cd.StationeryId);
+                    catItemDTO.OrderQtyInput = cd.Quantity;
+                    if (cd.Quantity <= getCurrentBalance(cd.Stationery))
+                    {
+                        catItemDTO.ReservedCount = cd.Quantity;
+                    }
+                    else
+                    {
+                        catItemDTO.ReservedCount = getCurrentBalance(cd.Stationery);
+                        catItemDTO.WaitlistCount = cd.Quantity - getCurrentBalance(cd.Stationery);
+                    }
+                    catItemDTO.Confirmation = true;
+                }
             }
-
-            throw new NotImplementedException();
+            return catalogueItems;
         }
 
-        private void getCurrentBalance(Stationery s)
+        private int getCurrentBalance(Stationery s)
         {
-            int reservedCount = ;
-            int cartCount = 0;
+            int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(s.Id);
+            int cartCount = cartDetailRepo.GetCountOnHoldForStationery(s.Id); //could be 0
+            int totalCount = stationeryRepo.FindById(s.Id).Quantity;
 
-
-            throw new NotImplementedException();
+            return totalCount - reservedCount - cartCount;
         }
 
 
