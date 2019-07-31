@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<section class="content-header">
+    <h1>
+        New Adjustment Voucher
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Item Number </label>
+                                    <select class="form-control select2">
+                                        <option></option>
+                                        <option>P002-Ruler 12'</option>
+                                        <option>P037-Pen Transparency Soluble</option>
+                                        <option>P038-Pen Whiteboard Marker Black</option>
+                                        <option>P039-Pen Whiteboard Marker Blue</option>
+                                        <option>P100-Scissor</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label style="width: 100%;">Adjusted Qty </label>
+                                    <input type="text" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Reason</label>
+                                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="box-tools">
+                                    <a href="clerk-adjustvoucher-create.html" class="btn btn-primary" style="margin-top: 60px;">Add</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item Number</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Unit of Measure</th>
+                                <th>Adjusted Qty</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P100</td>
+                                <td>Scissors</td>
+                                <td>Scissor</td>
+                                <td>Each</td>
+                                <td><input type="text" value="-5" style="width: 150px;" /></td>
+                                <td><a href="remove.html" class="btn btn-danger right">Remove</a></td>
+                            </tr>
+                            <tr>
+                                <td>P037</td>
+                                <td>Pen</td>
+                                <td>Pen Transparency Soluble</td>
+                                <td>Packet</td>
+                                <td><input type="text" value="-15" style="width: 150px;" /></td>
+                                <td><a href="remove.html" class="btn btn-danger right">Remove</a></td>
+                            </tr>
+                            <tr>
+                                <td>P038</td>
+                                <td>Pen</td>
+                                <td>Pen Whiteboard Marker Black</td>
+                                <td>Box</td>
+                                <td><input type="text" value="+10" style="width: 150px;" /></td>
+                                <td><a href="remove.html" class="btn btn-danger right">Remove</a></td>
+                            </tr>
+                            <tr>
+                                <td>P039</td>
+                                <td>Pen</td>
+                                <td>Pen Whiteboard Marker Blue</td>
+                                <td>Box</td>
+                                <td><input type="text" value="-10" style="width: 150px;" /></td>
+                                <td><a href="remove.html" class="btn btn-danger right">Remove</a></td>
+                            </tr>
+                            <tr>
+                                <td>P002</td>
+                                <td>Ruler</td>
+                                <td>Ruler 12'</td>
+                                <td>Dozen</td>
+                                <td><input type="text" value="-6" style="width: 150px;" /></td>
+                                <td><a href="remove.html" class="btn btn-danger right">Remove</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button class="btn btn-success pull-right">Submit</button>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>

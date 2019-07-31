@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<section class="content-header">
+
+    <!-- If Clerk -->
+    <!-- <h1>My Adjustment Vouchers</h1> -->
+
+    <h1>
+        Adjustment Vouchers
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+
+                <!-- If Clerk -->
+                <div class="box-header">
+                    <div class="box-tools pull-right" style="position: relative;">
+                        <a href="adjustment-voucher-create.html" class="btn btn-success right">Raise New Adjustment Voucher</a>
+                    </div>
+                </div>
+                <!-- If Clerk -->
+
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Voucher ID</th>
+                                <th>Voucher Date</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ADJ0009</td>
+                                <td>09/07/2019</td>
+                                <td>375</td>
+                                <td>Acknowledged</td>
+                                <td>
+                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ADJ0008</td>
+                                <td>22/06/2019</td>
+                                <td>127</td>
+                                <td>Acknowledged</td>
+                                <td>
+                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ADJ0007</td>
+                                <td>11/08/2019</td>
+                                <td>80</td>
+                                <td>Acknowledged</td>
+                                <td>
+                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ADJ0010</td>
+                                <td>29/10/2019</td>
+                                <td>290</td>
+                                <td>Acknowledged</td>
+                                <td>
+                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ADJ0011</td>
+                                <td>09/12/2019</td>
+                                <td>110</td>
+                                <td class="text-blue">Pending</td>
+                                <td>
+                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 4 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+}
