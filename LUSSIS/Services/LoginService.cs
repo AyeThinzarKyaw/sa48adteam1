@@ -41,7 +41,7 @@ namespace LUSSIS.Services
             }
             else
             {                
-                Session newSession = new Session() { Employee = e, GUID = Guid.NewGuid().ToString(), LogInDateTime = DateTime.Now };
+                Session newSession = new Session() { EmployeeId = e.Id, GUID = Guid.NewGuid().ToString(), LogInDateTime = DateTime.Now };
                 sessionRepo.Create(newSession);
                 //set attributes
                 LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, EmployeeRoleName = e.Role.Name, SessionGuid = newSession.GUID};

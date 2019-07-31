@@ -179,6 +179,8 @@
     </Compile>
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
     <Compile Include="Models\DTOs\ErrorDTO.cs" />
+    <Compile Include="Models\DTOs\FormLoginDTO.cs" />
+    <Compile Include="Models\DTOs\FormRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
     <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
@@ -433,18 +435,14 @@
     <Content Include="Views\Supplier\Detail.cshtml" />
     <Content Include="Views\Supplier\Index.cshtml" />
     <Content Include="Views\Supplier\Update.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
-    <Content Include="Views\PurchaseOrder\Detail.cshtml" />
-    <Content Include="Views\PurchaseOrder\Index.cshtml" />
     <Content Include="Views\AdjustmentVoucher\Create.cshtml" />
     <Content Include="Views\AdjustmentVoucher\Detail.cshtml" />
     <Content Include="Views\AdjustmentVoucher\Index.cshtml" />
     <Content Include="Views\Assign\AssignClerk.cshtml" />
-    <Content Include="Views\Requisition\Detail.cshtml" />
-    <Content Include="Views\Requisition\Create.cshtml" />
-    <Content Include="Views\Requisition\Index.cshtml" />
-    <Content Include="Views\Assign\AssignCoverStaff.cshtml" />
-    <Content Include="Views\Assign\AssignDeptRep.cshtml" />
+    <Content Include="Views\PurchaseOrder\Detail.cshtml" />
+    <Content Include="Views\PurchaseOrder\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Requisition\ViewCatalogue.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
