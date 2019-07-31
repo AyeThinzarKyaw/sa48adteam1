@@ -146,6 +146,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -174,7 +175,10 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
+    <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
+    <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -231,7 +235,7 @@
     <Compile Include="Repositories\AdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\AdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\CartDetailRepo.cs" />
-    <Compile Include="Repositories\CollectionPoint.cs" />
+    <Compile Include="Repositories\CollectionPointRepo.cs" />
     <Compile Include="Repositories\DepartmentCoverEmployeeRepo.cs" />
     <Compile Include="Repositories\DepartmentRepo.cs" />
     <Compile Include="Repositories\DisbursementRepo.cs" />
@@ -262,10 +266,14 @@
     <Compile Include="Repositories\StationeryRepo.cs" />
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
+    <Compile Include="Services\Interfaces\IRequisitionCatalogueService.cs" />
+    <Compile Include="Services\Interfaces\IRequisitionManagementService.cs" />
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
+    <Compile Include="Services\RequisitionCatalogueService.cs" />
+    <Compile Include="Services\RequisitionManagementService.cs" />
     <Compile Include="Services\StationeryService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
   </ItemGroup>
@@ -420,6 +428,7 @@
     <Folder Include="Filters\" />
     <Folder Include="Images\" />
     <Folder Include="Views\Login\" />
+    <Folder Include="Views\Requisition\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

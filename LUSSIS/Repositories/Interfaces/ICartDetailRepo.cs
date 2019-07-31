@@ -9,6 +9,6 @@ namespace LUSSIS.Repositories.Interfaces
 {
     public interface ICartDetailRepo : IGenericRepo<CartDetail, int>
     {
-
+        int GetCountOnHoldForStationery(int stationeryId);
     }
 }
