@@ -147,7 +147,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
+    <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
+    <Compile Include="Enums\StockAvailabilityEnum.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -427,12 +429,6 @@
     <Content Include="Views\Stationery\Detail.cshtml" />
     <Content Include="Views\Stationery\Create.cshtml" />
     <Content Include="Views\Stationery\Update.cshtml" />
-    <Content Include="Views\AdjustmentVoucher\Create.cshtml" />
-    <Content Include="Views\AdjustmentVoucher\Detail.cshtml" />
-    <Content Include="Views\AdjustmentVoucher\Index.cshtml" />
-    <Content Include="Views\Assign\AssignClerk.cshtml" />
-    <Content Include="Views\PurchaseOrder\Detail.cshtml" />
-    <Content Include="Views\PurchaseOrder\Index.cshtml" />
     <Content Include="Views\Supplier\Create.cshtml" />
     <Content Include="Views\Supplier\Detail.cshtml" />
     <Content Include="Views\Supplier\Index.cshtml" />
@@ -443,6 +439,7 @@
     <Folder Include="Filters\" />
     <Folder Include="Images\" />
     <Folder Include="Views\Login\" />
+    <Folder Include="Views\Requisition\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
