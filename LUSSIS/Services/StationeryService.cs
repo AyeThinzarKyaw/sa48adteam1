@@ -31,7 +31,9 @@ namespace LUSSIS.Services
 
         public Stationery GetStationeryById(int id)
         {
-            return StationeryRepo.Instance.FindById(id);
+            Stationery stationery=StationeryRepo.Instance.FindById(id);
+            stationery.SupplierTenders = stationery.SupplierTenders.OrderBy(x => x.Rank).ToList();
+            return stationery;
         }
 
         public void CreateStationery(Stationery stationery)
@@ -42,6 +44,15 @@ namespace LUSSIS.Services
         public void UpdateStationery(Stationery stationery)
         {
             StationeryRepo.Instance.Update(stationery);
+        }
+        public IEnumerable<Category> GetAllCategories()
+        {
+            return CategoryRepo.Instance.FindAll().OrderBy(c=>c.Type).ToList();
+        }
+
+        public IEnumerable<Supplier> GetAllSuppliers()
+        {
+            return SupplierRepo.Instance.FindAll().OrderBy(s => s.Name).ToList();
         }
     }
 }

@@ -30,5 +30,15 @@ namespace LUSSIS.Services
         {
             return SupplierTenderRepo.Instance.GetAllSupplierTendersOfCurrentYear();
         }
+
+        public void CreateSupplierTender(SupplierTender supplierTender)
+        {
+            SupplierTenderRepo.Instance.Create(supplierTender);
+        }
+        public void UpdateSupplierTender(SupplierTender supplierTender)
+        {
+            SupplierTenderRepo.Instance.Update(supplierTender);
+        }
+
     }
 }

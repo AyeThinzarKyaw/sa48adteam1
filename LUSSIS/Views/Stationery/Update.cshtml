@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "Update";
+}
+
+<section class="content-header">
+    <h1>
+        Stationery Update
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Item Number</label>
+                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Item Number">
+                            </div>
+                        </div>
+                        <!-- select box -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select class="form-control select2" style="width: 100%;">
+                                    <option selected="selected">Pen</option>
+                                    <option>Clip</option>
+                                    <option>Envelope</option>
+                                    <option>File</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <!-- PRICE box -->
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Description">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Unit of Measurement</label>
+                                <select class="form-control select2" style="width: 100%;">
+                                    <option>Dozen</option>
+                                    <option>Box</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>BIN</label>
+                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter BIN">
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Supplier Order</th>
+                                <th>Supplier Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Supplier 1</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;">
+                                        <option selected="selected">Select Supplier1</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="form-control" style="width: 150px;"></td>
+                            </tr>
+                            <tr>
+                                <td>Supplier 2</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;">
+                                        <option selected="selected">Select Supplier2</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="form-control" style="width: 150px;"></td>
+                            </tr>
+                            <tr>
+                                <td>Supplier 3</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;">
+                                        <option selected="selected">Select Supplier3</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="form-control" style="width: 150px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button class="btn btn-warning pull-right">Update</button>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>

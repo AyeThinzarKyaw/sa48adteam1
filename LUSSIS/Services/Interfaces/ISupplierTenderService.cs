@@ -12,5 +12,7 @@ namespace LUSSIS.Services.Interfaces
         IEnumerable<SupplierTender> GetSupplierTendersOfCurrentYearByStationeryId(int stationeryId);
 
         IEnumerable<SupplierTender> GetAllSupplierTendersOfCurrentYear();
+        void CreateSupplierTender(SupplierTender supplierTender);
+        void UpdateSupplierTender(SupplierTender supplierTender);
     }
 }

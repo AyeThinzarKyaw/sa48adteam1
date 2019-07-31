@@ -18,6 +18,7 @@ namespace LUSSIS.Models
         public int EmployeeId { get; set; }
         public System.DateTime FromDate { get; set; }
         public System.DateTime ToDate { get; set; }
+        public string Status { get; set; }
     
         public virtual Employee Employee { get; set; }
     }

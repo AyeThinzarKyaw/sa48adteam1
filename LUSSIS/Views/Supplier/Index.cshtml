@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<section class="content-header">
+    <h1>
+        Manage Supplier
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="box-tools pull-right" style="position: relative;">
+                        <a href="supplier-create.html" class="btn btn-success right">
+                            Create New
+                        </a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <!--VLR001-->
+                            <tr>
+                                <th>Supplier Code</th>
+                                <th>GST Reg No</th>
+                                <th>Supplier Name</th>
+                                <th>Contact Name</th>
+                                <th>Phone No</th>
+                                <th>Fax No</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ALPHA</td>
+                                <td>MR-8500440-2</td>
+                                <td>ALPHA Office Supplies</td>
+                                <td>Ms Irene Tan</td>
+                                <td>4619928</td>
+                                <td>4612238</td>
+                                <td>
+                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CHEP</td>
+                                <td>Nil</td>
+                                <td>Cheap Stationer</td>
+                                <td>Ms Soh Kway Koh</td>
+                                <td>3543234</td>
+                                <td>4742434</td>
+                                <td>
+                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>BANE</td>
+                                <td>MR-8200420-2</td>
+                                <td>BANES Shop</td>
+                                <td>Mr Loh Ah Pek</td>
+                                <td>4781234</td>
+                                <td>4612238</td>
+                                <td>
+                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>OMEG</td>
+                                <td>MR-85553330-1</td>
+                                <td>OMEGA Stationery Supplier</td>
+                                <td>Mr Ronnie Ho</td>
+                                <td>7671233</td>
+                                <td>7671234</td>
+                                <td>
+                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
+                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 6 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+}
+
