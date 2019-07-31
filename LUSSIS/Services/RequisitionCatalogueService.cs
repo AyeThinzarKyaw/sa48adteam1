@@ -114,6 +114,11 @@ namespace LUSSIS.Services
 
         public CatalogueItemDTO AddCartDetail(CatalogueItemDTO catalogueItemDTO)
         {
+            Stationery s = stationeryRepo.FindById(catalogueItemDTO.StationeryId);
+            int? requestedBalance = catalogueItemDTO.OrderQtyInput;
+            int currBalance = getCurrentBalance(s);
+
+
             throw new NotImplementedException();
         }
 
