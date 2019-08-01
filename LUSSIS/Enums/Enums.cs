@@ -14,27 +14,41 @@ namespace LUSSIS.Enums
 
     public enum UOM
     {
-        Box = 0,
-        Dozen = 1,
-        Each = 2,
-        Packet = 3,
-        Set = 4,
-        Other = 5
+        Box,
+        Dozen,
+        Each,
+        Packet,
+        Set,
+        Other
     }
 
     public enum ActiveStatus
     {
-        INACTIVE = 0,
-        ACTIVE = 1
+        INACTIVE,
+        ACTIVE
     }
 
     public enum POStatus
     {
-        OPEN = 0,
-        PENDING = 1,
-        APPROVED = 2,
-        REJECTED = 3,
-        CANCELLED = 4,
-        CLOSED = 5
+        OPEN,
+        PENDING,
+        APPROVED,
+        REJECTED,
+        CANCELLED,
+        CLOSED 
+    }
+
+    public enum RequisitionStatus
+    {
+        Created,
+        ReservedPending,
+        Preparing,
+        WaitlistPending,
+        WaitlistApproved,
+        RetrievedandPendingDisbursement,
+        Collected,
+        Rejected,
+        Cancelled
+
     }
 }
