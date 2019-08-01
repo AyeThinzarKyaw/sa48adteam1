@@ -13,11 +13,13 @@ namespace LUSSIS.Controllers
     public class LoginController : Controller
     {
         ILoginService loginService;
+        IRequisitionCatalogueService requisitionCatalogueService;
         
 
         public LoginController()
         {
             this.loginService = LoginService.Instance;
+            this.requisitionCatalogueService = RequisitionCatalogueService.Instance;
         }
 
 
@@ -47,7 +49,10 @@ namespace LUSSIS.Controllers
                 //check for role
                 if (loginDTO.EmployeeRoleName.Contains("Department"))
                 {
-                    return new RequisitionController().ViewCatalogue(loginDTO);
+                    List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(loginDTO.EmployeeId);
+                    FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems, LoginDTO = loginDTO };
+
+                    return View("../Requisition/ViewCatalogue",  model);
                 }
                 else
                 {

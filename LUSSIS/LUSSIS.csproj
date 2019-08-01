@@ -443,6 +443,9 @@
     <Content Include="Views\PurchaseOrder\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Requisition\ViewCatalogue.cshtml" />
+    <Content Include="Views\Requisition\Create.cshtml" />
+    <Content Include="Views\Requisition\Detail.cshtml" />
+    <Content Include="Views\Requisition\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

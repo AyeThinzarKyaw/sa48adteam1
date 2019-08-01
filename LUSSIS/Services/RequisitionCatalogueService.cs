@@ -17,6 +17,7 @@ namespace LUSSIS.Services
         private IStationeryRepo stationeryRepo;
         private IRequisitionRepo requisitionRepo;
         private IRequisitionDetailRepo requisitionDetailRepo;
+        private IAdjustmentVoucherRepo adjustmentVoucherRepo;
         private static RequisitionCatalogueService instance = new RequisitionCatalogueService();
 
         private RequisitionCatalogueService()
@@ -43,23 +44,13 @@ namespace LUSSIS.Services
             foreach(Stationery s in stationeries)
             {
                 int currBalance =  getCurrentBalance(s);
-                StockAvailabilityEnum stockAvailEnum;
                 int? lowStockCount = null;
-
-                if (currBalance <= 0)
+                StockAvailabilityEnum stockAvailEnum = getStockAvailabilityStatus(currBalance, s.ReorderLevel);
+                if(stockAvailEnum == StockAvailabilityEnum.LowStock)
                 {
-                    stockAvailEnum = StockAvailabilityEnum.OutOfStock;
-                }
-                else if (currBalance < s.ReorderLevel)
-                {
-                    stockAvailEnum = StockAvailabilityEnum.LowStock;
                     lowStockCount = currBalance;
                 }
-                else
-                {
-                    stockAvailEnum = StockAvailabilityEnum.InStock;
-                }
-
+ 
                 catalogueItems.Add(new CatalogueItemDTO { Item = s.Description,
                     UnitOfMeasure = s.UnitOfMeasure, StockAvailability =  stockAvailEnum,
                     LowStockAvailability = lowStockCount, StationeryId = s.Id});
@@ -71,28 +62,67 @@ namespace LUSSIS.Services
                 {
                     CatalogueItemDTO catItemDTO = catalogueItems.Find(x => x.StationeryId == cd.StationeryId);
                     catItemDTO.OrderQtyInput = cd.Quantity;
-                    if (cd.Quantity <= getCurrentBalance(cd.Stationery))
-                    {
-                        catItemDTO.ReservedCount = cd.Quantity;
-                    }
-                    else
-                    {
-                        catItemDTO.ReservedCount = getCurrentBalance(cd.Stationery);
-                        catItemDTO.WaitlistCount = cd.Quantity - getCurrentBalance(cd.Stationery);
-                    }
+                    catItemDTO.ReservedCount = getReservedBalanceForExistingCartItem(cd);
+                    catItemDTO.WaitlistCount = cd.Quantity - catItemDTO.ReservedCount;
                     catItemDTO.Confirmation = true;
                 }
             }
             return catalogueItems;
         }
 
+        private StockAvailabilityEnum getStockAvailabilityStatus(int currBalance, int? reorderLevel)
+        {
+            if (currBalance <= 0)
+            {
+                return StockAvailabilityEnum.OutOfStock;
+            }
+            else if (reorderLevel != null && currBalance < reorderLevel)
+            {
+                return StockAvailabilityEnum.LowStock;
+                
+            }
+            else 
+            {
+                return StockAvailabilityEnum.InStock;
+            }
+        }
+
+        private int getReservedBalanceForExistingCartItem(CartDetail cd)
+        {
+            //Q - requisition reserved - adjustment open - total in front of queue
+            int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(cd.StationeryId);
+            int foqCartCount = cartDetailRepo.GetFrontOfQueueCartCountForStationery(cd.StationeryId, cd.DateTime);
+            int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(cd.StationeryId);
+            int totalCount = stationeryRepo.FindById(cd.StationeryId).Quantity;
+            int netCount = totalCount - reservedCount - foqCartCount - openAdjustmentCount;
+
+            if (netCount <= 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return netCount;
+            }
+        }
+
         private int getCurrentBalance(Stationery s)
         {
             int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(s.Id);
             int cartCount = cartDetailRepo.GetCountOnHoldForStationery(s.Id); //could be 0
+            int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(s.Id);
             int totalCount = stationeryRepo.FindById(s.Id).Quantity;
+            int netCount = totalCount - reservedCount - cartCount - openAdjustmentCount;
 
-            return totalCount - reservedCount - cartCount;
+            if(netCount <= 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return netCount;
+            }
+          
         }
 
 
@@ -112,22 +142,42 @@ namespace LUSSIS.Services
             
         }     
 
-        public CatalogueItemDTO AddCartDetail(CatalogueItemDTO catalogueItemDTO)
+        public CatalogueItemDTO AddCartDetail(int employeeId, int stationeryId, int inputQty)
         {
-            Stationery s = stationeryRepo.FindById(catalogueItemDTO.StationeryId);
-            int? requestedBalance = catalogueItemDTO.OrderQtyInput;
+            Stationery s = stationeryRepo.FindById(stationeryId);
             int currBalance = getCurrentBalance(s);
+            int reserved = 0;
+            int waitlist = 0;
+            if (inputQty > currBalance)
+            {
+                reserved = currBalance;
+                waitlist = inputQty - currBalance;
+            }
+            else{
+                reserved = inputQty;
+            }
+            CartDetail cd = new CartDetail { DateTime = DateTime.Now, EmployeeId = employeeId, Quantity = inputQty, StationeryId = stationeryId };
+            cartDetailRepo.Create(cd); //persist new cart detail
 
+            //can abstract into a method and share with above bbut must instantiate a new DTO first
+            int newStockBalance = getCurrentBalance(s);
+            int? lowStockCount = null;
+            StockAvailabilityEnum stockAvailEnum = getStockAvailabilityStatus(currBalance, s.ReorderLevel);
+            if (stockAvailEnum == StockAvailabilityEnum.LowStock)
+            {
+                lowStockCount = currBalance;
+            }
 
-            throw new NotImplementedException();
+            return new CatalogueItemDTO { StockAvailability = stockAvailEnum, LowStockAvailability = lowStockCount, ReservedCount = reserved, WaitlistCount = waitlist };
+
         }
 
-        public void RemoveCartDetail(CatalogueItemDTO catalogueItemDTO)
+        public void RemoveCartDetail(int employeeId, int stationeryId)
         {
             throw new NotImplementedException();
         }
 
-        public CatalogueItemDTO UpdateCartDetail(CatalogueItemDTO catalogueItemDTO)
+        public CatalogueItemDTO UpdateCartDetail(int employeeId, int stationeryId, int inputQty)
         {
             throw new NotImplementedException();
         }
