@@ -16,9 +16,9 @@ namespace LUSSIS
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings
-                .ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                .ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; //By Charles
             GlobalConfiguration.Configuration.Formatters
-                .Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
+                .Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter); //By Charles
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);

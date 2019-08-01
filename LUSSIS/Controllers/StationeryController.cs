@@ -45,14 +45,24 @@ namespace LUSSIS.Controllers
         {
             if (ModelState.IsValid)
             {
-                Stationery newStationery = new Stationery();
-                newStationery.Id = stationery.StationeryId;
-                newStationery.Code = stationery.Code;
-                newStationery.Description = stationery.Description;
-                newStationery.CategoryId = stationery.CategoryId;
-                newStationery.UnitOfMeasure = Enum.GetName(typeof(EnumDTO.UOM), stationery.UOM);
-                newStationery.Bin = stationery.Bin;
-                newStationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
+                if (stationery.Supplier1 == stationery.Supplier2 || stationery.Supplier1 == stationery.Supplier3 || stationery.Supplier2 == stationery.Supplier3)
+                {
+                    stationery.Error = new ErrorDTO();
+                    stationery.Error.HasError = true;
+                    stationery.Error.Message = "Suppliers must be three different suppliers!";
+                    stationery.Categories = StationeryService.Instance.GetAllCategories();
+                    stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                    return View(stationery);
+                }
+
+                Stationery newStationery = this.generateStationery(stationery);
+                //newStationery.Id = stationery.StationeryId;
+                //newStationery.Code = stationery.Code;
+                //newStationery.Description = stationery.Description;
+                //newStationery.CategoryId = stationery.CategoryId;
+                //newStationery.UnitOfMeasure = Enum.GetName(typeof(EnumDTO.UOM), stationery.UOM);
+                //newStationery.Bin = stationery.Bin;
+                //newStationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
                 StationeryService.Instance.CreateStationery(newStationery);
 
                 this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
@@ -66,6 +76,24 @@ namespace LUSSIS.Controllers
             return View(stationery);
         }
 
+        
+        //By ATZK
+        private Stationery generateStationery(StationeryDetailsDTO stationery)
+        {
+            Stationery newStationery = StationeryService.Instance.GetStationeryById(stationery.StationeryId);
+            if (newStationery == null) newStationery = new Stationery();
+            newStationery.Id = stationery.StationeryId;
+            newStationery.Code = stationery.Code;
+            newStationery.Description = stationery.Description;
+            newStationery.CategoryId = stationery.CategoryId;
+            newStationery.UnitOfMeasure = Enum.GetName(typeof(EnumDTO.UOM), stationery.UOM);
+            newStationery.Bin = stationery.Bin;
+            newStationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
+            return newStationery;
+        }
+
+        
+        //By ATZK
         private void generateSupplierTender(int supplierId, int rank, int stationeryId,decimal price)
         {
             SupplierTender supplierTender = new SupplierTender();
@@ -94,20 +122,69 @@ namespace LUSSIS.Controllers
             
            
         }
+
+        //By ATZK
+        private StationeryDetailsDTO generateStationeryDetailsDTO(int stationeryId)
+        {
+            Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
+
+            StationeryDetailsDTO stationeryDetails = new StationeryDetailsDTO();
+            stationeryDetails.StationeryId = stationery.Id;
+            stationeryDetails.Code = stationery.Code;
+            stationeryDetails.Description = stationery.Description;
+            stationeryDetails.Bin = stationery.Bin;
+            stationeryDetails.CategoryId = stationery.CategoryId;
+            stationeryDetails.Supplier1 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 1).SupplierId;
+            stationeryDetails.Supplier2 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 2).SupplierId;
+            stationeryDetails.Supplier3 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 3).SupplierId;
+            stationeryDetails.Price1 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 1).Price;
+            stationeryDetails.Price2 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 2).Price;
+            stationeryDetails.Price3 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 3).Price;
+
+            return stationeryDetails;
+
+        }
+
         //UPDATE stationery getMethod
         //By ATZK
-        public ActionResult Update()
+        public ActionResult Update(int stationeryId)
         {
+            StationeryDetailsDTO stationeryDetails = this.generateStationeryDetailsDTO(stationeryId);
 
-            return View();
+            stationeryDetails.Categories = StationeryService.Instance.GetAllCategories();
+            stationeryDetails.Suppliers = StationeryService.Instance.GetAllSuppliers();
+            return View(stationeryDetails);
         }
 
         //UPDATE stationery postMethod 
         //By ATZK
         [HttpPost]
-        public ActionResult Update(Stationery stationery)
+        public ActionResult Update(StationeryDetailsDTO stationery)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                if(stationery.Supplier1==stationery.Supplier2 || stationery.Supplier1 == stationery.Supplier3 || stationery.Supplier2 == stationery.Supplier3)
+                {
+                    stationery.Error = new ErrorDTO();
+                    stationery.Error.HasError = true;
+                    stationery.Error.Message = "Suppliers must be three different suppliers!";
+                    stationery.Categories = StationeryService.Instance.GetAllCategories();
+                    stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                    return View(stationery);
+                }
+
+                Stationery newStationery = this.generateStationery(stationery);
+                StationeryService.Instance.UpdateStationery(newStationery);
+
+                this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
+                this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
+                this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
+
+                return RedirectToAction("Index");
+            }
+            stationery.Categories = StationeryService.Instance.GetAllCategories();
+            stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+            return View(stationery);
         }
 
 

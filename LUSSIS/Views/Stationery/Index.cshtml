@@ -66,10 +66,6 @@
                                     }
                                     else
                                     {
-                                        @*<a onclick="changeStatus(@stationery.Id)" class="btn btn-sm btn-danger">
-                                            Make Inactive
-                                        </a>
-                                        @Html.ActionLink("Make Inactive", null, new { @onclick = "changeStatus("+stationery.Id+")", @class = "btn btn-sm btn-danger", @role = "button" })*@
                                         @Html.ActionLink("Make Inactive", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
                                     }
 
