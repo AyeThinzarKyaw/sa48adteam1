@@ -18,8 +18,12 @@ namespace LUSSIS.Models
         public LUSSISContext()
             : base("name=LUSSISContext")
         {
+            //this solves the self-referencing loop
+            //Written by Charles
+            Configuration.ProxyCreationEnabled = false;
+
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

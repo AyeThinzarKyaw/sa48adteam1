@@ -11,7 +11,9 @@ namespace LUSSIS.Services.Interfaces
     public interface ILoginService
     {
         LoginDTO GetEmployeeLoginByUsernameAndPassword(string username, string password);
+        string HashPassword(string password);
 
-       
+
+
     }
 }

@@ -18,6 +18,18 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-body">
+                        @if (Model.Error != null && Model.Error.HasError == true && !String.IsNullOrEmpty(Model.Error.Message))
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="text-danger">
+                                            @Model.Error.Message
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                         <div class="row">
 
                             <div class="col-md-6">
@@ -32,22 +44,30 @@
                                 <div class="form-group">
                                     <label>Category</label>
                                     <select id="CategoryId" class="form-control" name="CategoryId">
-                                        <option value="0">Choose Category</option>
+
                                         @if (Model.Categories != null)
                                         {
                                             foreach (var item in Model.Categories)
                                             {
-                                                <option value="@item.Id">
-                                                    @if (item.Id == @Model.CategoryId)
-                                                    {
-                                                        <text>selected="selected"</text>
-                                                    }
-                                                    @item.Type
-                                                </option>
+                                                if (item.Id == @Model.CategoryId)
+                                                {
+                                                    <option value="@item.Id" selected>
+
+                                                        @item.Type
+                                                    </option>
+
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">
+
+                                                        @item.Type
+                                                    </option>
+                                                }
                                             }
                                         }
                                     </select>
-                                    
+
                                     @*@Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Type"), new { @class = "form-control select2", @style = "width: 100%;" })*@
                                     @*@Html.DropDownListFor(x => x.CategoryId, new SelectList(Model.Categories, "Id", "Type"), new { @id = "categoryList", @class = "form-control select2", @style = "width: 100%;" })*@
                                     <a href="#" data-toggle="modal" data-target="#categoryModal" class="btn btn-sm btn-primary">Add New Category</a>
@@ -158,67 +178,72 @@
     </div>
 </section>
 
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+@*<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">*@
 @section scripts {
     <script>
         function addCategory() {
             //if (confirm("Are you sure you want to add a new category?")) {
             debugger;
             var categoryText = document.getElementById("txtcategory").value;
-            var url = "/Stationery/CreateCategory?type=" +categoryText;
-        $.ajax({
-            url: url,
-            type: "GET",
-            async: true,
-            success: function (data) {
-                alert(data);
-                var result="";
-                $('#CategoryId').empty();
+            var url = "/Stationery/CreateCategory?type=" + categoryText;
+            $.ajax({
+                url: url,
+                type: "GET",
+                async: true,
+                success: function (data) {
+                    debugger;
+                    alert(data);
+                    var result = "";
+                    var val = $('#CategoryId');
+                    alert(val);
+                    $('#CategoryId').empty();
+                    val = $('#CategoryId');
+                    alert(val);
+                    $.each(data, function (i, d) {
 
-                            $.each(data, function (i, d) {
+                        //alert(i+"/"+d.Id);
+                        result += '<option value="' + d.Id + '"';
 
-                                //alert(i+"/"+d.Id);
-                                result += '<option value="' + d.Id + '"';
+                        result += '>' + d.Type + '</option>';
 
-                                result += '>' + d.Type + '</option>';
-                                alert(result);
-                            });
-                $('#CategoryId').append(result);
-    },
-    error: function (data) { }
-    });
-                //$.ajax({
-                //    type: "POST",
-                //    url: "/Stationery/CreateCategory",
-                //    content: "application/json; charset=utf-8",
-                //    dataType: "json",
-                //    data: { 'type': categoryText },
-                //    success: function (data) {
-                //        if (data == true) {
-                //            //document.getElementById("txtcategory").value = "";
-                //            alert("success");
-                //            //console.log("test");
-                           
-                //            //var result;
-                //            //$('#CategoryId').empty();
+                    });
+                    alert(result);
+                    debugger;
+                    $('#CategoryId').append(result).pre;
+                },
+                error: function (data) { }
+            });
+            //$.ajax({
+            //    type: "GET",
+            //    url: "/Stationery/CreateCategory",
+            //    content: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    data: { 'type': categoryText },
+            //    success: function (data) {
 
-                //            //$.each(data[1], function (i, d) {
+            //            $('#CategoryId').empty();
 
-                //            //    //alert(i+"/"+d.Id);
-                //            //    result += '<option value="' + d.Id + '"';
+            //        $.each(data, function (i, d) {
 
-                //            //    result += '>' + d.Type + '</option>';
+            //            alert(i+"/"+d.Id);
+            //            result += '<option value="' + d.Id + '"';
 
-                //            //});
-                //            //$('#CategoryId').append(result);
-                //        }
-                        
-                        
-                //    },
-                //    error: function (xhr, textStatus, errorThrown) {
-                //        // TODO: Show error
-                //    }
-                //});
-            //}
+            //            result += '>' + 'aa' + '</option>';
+            //            alert(result);
+            //        });
+            //        $('#CategoryId').append(result);
+
+
+
+            //    },
+            //    error: function (xhr, textStatus, errorThrown) {
+            //        // TODO: Show error
+            //    }
+            //});
         }
+
     </script>
 }

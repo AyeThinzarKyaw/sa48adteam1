@@ -147,6 +147,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
     <Compile Include="Enums\StockAvailabilityEnum.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Models\DTOs\FormLoginDTO.cs" />
     <Compile Include="Models\DTOs\FormRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
+    <Compile Include="Models\DTOs\POCatalogueDTO.cs" />
     <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
@@ -275,15 +277,18 @@
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
+    <Compile Include="Services\Interfaces\IPurchaseOrderService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionCatalogueService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionManagementService.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
     <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\PurchaseOrderService.cs" />
     <Compile Include="Services\RequisitionCatalogueService.cs" />
     <Compile Include="Services\RequisitionManagementService.cs" />
     <Compile Include="Services\StationeryService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
+    <Compile Include="Util\MD5Hash.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin-lte\css\AdminLTE.css" />
@@ -413,7 +418,9 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\tether.js" />
     <Content Include="Scripts\tether.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -443,9 +450,19 @@
     <Content Include="Views\PurchaseOrder\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Requisition\ViewCatalogue.cshtml" />
+    <Content Include="Views\Assign\AssignCollectionPoint.cshtml" />
+    <Content Include="Views\Disbursement\Index.cshtml" />
+    <Content Include="Views\Disbursement\Detail.cshtml" />
+    <Content Include="Views\Chart\InventoryHistoricalData.cshtml" />
+    <Content Include="Views\Assign\AssignCoverStaff.cshtml" />
+    <Content Include="Views\Assign\AssignDeptRep.cshtml" />
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Detail.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Inventory\Detail.cshtml" />
+    <Content Include="Views\Owed\Index.cshtml" />
+    <Content Include="Views\Retrieval\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
