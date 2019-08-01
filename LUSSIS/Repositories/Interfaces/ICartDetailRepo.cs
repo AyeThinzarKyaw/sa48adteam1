@@ -10,5 +10,7 @@ namespace LUSSIS.Repositories.Interfaces
     public interface ICartDetailRepo : IGenericRepo<CartDetail, int>
     {
         int GetCountOnHoldForStationery(int stationeryId);
+
+        int GetFrontOfQueueCartCountForStationery(int stationeryId, DateTime datetime);
     }
 }

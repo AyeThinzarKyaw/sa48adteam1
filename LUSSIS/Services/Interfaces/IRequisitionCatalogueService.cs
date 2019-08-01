@@ -13,10 +13,10 @@ namespace LUSSIS.Services.Interfaces
 
         List<CatalogueItemDTO> GetCatalogueItems(int employeeId);
 
-        CatalogueItemDTO AddCartDetail(CatalogueItemDTO catalogueItemDTO);
+        CatalogueItemDTO AddCartDetail(int employeeId, int stationeryId, int inputQty);
 
-        void RemoveCartDetail(CatalogueItemDTO catalogueItemDTO);
+        void RemoveCartDetail(int employeeId, int stationeryId);
 
-        CatalogueItemDTO UpdateCartDetail(CatalogueItemDTO catalogueItemDTO);
+        CatalogueItemDTO UpdateCartDetail(int employeeId, int stationeryId, int inputQty);
     }
 }

@@ -19,9 +19,17 @@ namespace LUSSIS.Repositories
 
         public int GetReservedCountForStationery(int stationeryId)
         {
-            return (from rd in Context.RequisitionDetails
-                    where rd.StationeryId == stationeryId
-                    select rd.QuantityOrdered).Sum();
+            if (Context.RequisitionDetails.Any(x => x.StationeryId == stationeryId && x.Status.StartsWith("Reserved")))
+            {
+                return (int)(from rd in Context.RequisitionDetails
+                             where rd.StationeryId == stationeryId
+                             select rd.QuantityOrdered).Sum();
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
     }
 }

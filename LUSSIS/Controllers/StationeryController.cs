@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
+using LUSSIS.Enums;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
 
@@ -86,9 +87,9 @@ namespace LUSSIS.Controllers
             newStationery.Code = stationery.Code;
             newStationery.Description = stationery.Description;
             newStationery.CategoryId = stationery.CategoryId;
-            newStationery.UnitOfMeasure = Enum.GetName(typeof(EnumDTO.UOM), stationery.UOM);
+            newStationery.UnitOfMeasure = Enum.GetName(typeof(Enums.UOM), stationery.UOM);
             newStationery.Bin = stationery.Bin;
-            newStationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
+            newStationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
             return newStationery;
         }
 
@@ -215,13 +216,13 @@ namespace LUSSIS.Controllers
         public ActionResult ChangeStatus(int stationeryId)
         {
             Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
-            if (stationery.Status== Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE))
+            if (stationery.Status== Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE))
             {
-                stationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.INACTIVE);
+                stationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.INACTIVE);
             }
             else
             {
-                stationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
+                stationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
             }
             StationeryService.Instance.UpdateStationery(stationery);
             return RedirectToAction("Index");
