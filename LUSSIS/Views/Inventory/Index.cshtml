@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<section class="content-header">
+    <h1>
+        Inventory Items
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item Number</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Location</th>
+                                <th>Unit of Measure</th>
+                                <th>Qty InStock</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P002</td>
+                                <td>Ruler</td>
+                                <td>Ruler 12</td>
+                                <td>A7</td>
+                                <td>Dozen</td>
+                                <td>189</td>
+                                <td>
+                                    <a href="inventory-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P037</td>
+                                <td>Pen</td>
+                                <td>Pen Transparancy double</td>
+                                <td>A9</td>
+                                <td>Packet</td>
+                                <td>200</td>
+                                <td>
+                                    <a href="inventory-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P038</td>
+                                <td>Pen</td>
+                                <td>Whiteboard Marker Black</td>
+                                <td>F28</td>
+                                <td>Box</td>
+                                <td>30</td>
+                                <td>
+                                    <a href="inventory-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P039</td>
+                                <td>Pen</td>
+                                <td>Whiteboard Marker Blue</td>
+                                <td>A3</td>
+                                <td>Box</td>
+                                <td>47</td>
+                                <td>
+                                    <a href="inventory-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P100</td>
+                                <td>Scissors</td>
+                                <td>Scissor Small</td>
+                                <td>K49</td>
+                                <td>Box</td>
+                                <td>21</td>
+                                <td>
+                                    <a href="inventory-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 6 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+}

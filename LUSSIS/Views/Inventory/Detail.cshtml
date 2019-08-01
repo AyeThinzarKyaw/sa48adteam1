@@ -1,0 +1,176 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+}
+
+<section class="content-header">
+    <h1>
+        Inventory Item Details
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Supplier Information</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table>
+                        <tr>
+                            <td>Item Number</td>
+                            <td>: P002</td>
+                            <td style="width: 400px;"></td>
+                            <td>Unit of Measure</td>
+                            <td>: Dozen</td>
+                        </tr>
+                        <tr>
+                            <td>Category</td>
+                            <td>: Ruler</td>
+                            <td></td>
+                            <td>Description</td>
+                            <td>: Ruler 12'</td>
+                        </tr>
+                        <tr>
+                            <td>BIN</td>
+                            <td>: #09-22</td>
+                        </tr>
+                    </table>
+                    <br />
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Supplier Code</th>
+                                <th>Supplier Name</th>
+                                <th>Contact Person</th>
+                                <th>Contact No.</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>BANE</td>
+                                <td>BANES Shop</td>
+                                <td>Mr Loh Ah Pek</td>
+                                <td>64781234</td>
+                                <td>$3.10</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>OMEG</td>
+                                <td>OMEGA Stationery Shop</td>
+                                <td>Mr Ronne Ho</td>
+                                <td>67671233</td>
+                                <td>$3.60</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>CHEP</td>
+                                <td>Cheap Stationery</td>
+                                <td>Mr Soh Kway Koh</td>
+                                <td>63543234</td>
+                                <td>$3.70</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Stock Movements</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Dept/Supplier</th>
+                                <th>Qty</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>02/01/2000</td>
+                                <td>Supplier - BANE</td>
+                                <td>+500</td>
+                                <td>550</td>
+                            </tr>
+                            <tr>
+                                <td>03/01/2000</td>
+                                <td>English Department</td>
+                                <td>-20</td>
+                                <td>530</td>
+                            </tr>
+                            <tr>
+                                <td>08/01/2000</td>
+                                <td>Stock Adjustment 001/001/2000</td>
+                                <td>+4</td>
+                                <td>534</td>
+                            </tr>
+                            <tr>
+                                <td>09/01/2000</td>
+                                <td>Electronic/Electric Engineering Department</td>
+                                <td>-30</td>
+                                <td>504</td>
+                            </tr>
+                            <tr>
+                                <td>09/01/2000</td>
+                                <td>Administration Department</td>
+                                <td>-50</td>
+                                <td>454</td>
+                            </tr>
+                            <tr>
+                                <td>14/01/2000</td>
+                                <td>Supplier - BANE</td>
+                                <td>+500</td>
+                                <td>954</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+}
