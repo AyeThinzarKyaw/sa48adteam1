@@ -150,7 +150,7 @@
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
-    <Compile Include="Enums\StockAvailabilityEnum.cs" />
+    <Compile Include="Enums\Enums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -187,7 +187,6 @@
     <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
-    <Compile Include="Models\DTOs\EnumDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>

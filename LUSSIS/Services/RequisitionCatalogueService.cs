@@ -43,21 +43,21 @@ namespace LUSSIS.Services
             foreach(Stationery s in stationeries)
             {
                 int currBalance =  getCurrentBalance(s);
-                StockAvailabilityEnum stockAvailEnum;
+                Enums.StockAvailabilityEnum stockAvailEnum;
                 int? lowStockCount = null;
 
                 if (currBalance <= 0)
                 {
-                    stockAvailEnum = StockAvailabilityEnum.OutOfStock;
+                    stockAvailEnum = Enums.StockAvailabilityEnum.OutOfStock;
                 }
                 else if (currBalance < s.ReorderLevel)
                 {
-                    stockAvailEnum = StockAvailabilityEnum.LowStock;
+                    stockAvailEnum = Enums.StockAvailabilityEnum.LowStock;
                     lowStockCount = currBalance;
                 }
                 else
                 {
-                    stockAvailEnum = StockAvailabilityEnum.InStock;
+                    stockAvailEnum = Enums.StockAvailabilityEnum.InStock;
                 }
 
                 catalogueItems.Add(new CatalogueItemDTO { Item = s.Description,
