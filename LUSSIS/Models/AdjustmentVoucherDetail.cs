@@ -16,8 +16,8 @@ namespace LUSSIS.Models
     {
         public int Id { get; set; }
         public int AdjustmentVoucherId { get; set; }
-        public int StationeyId { get; set; }
-        public string Quantity { get; set; }
+        public int StationeryId { get; set; }
+        public int Quantity { get; set; }
         public System.DateTime DateTime { get; set; }
         public string Reason { get; set; }
     

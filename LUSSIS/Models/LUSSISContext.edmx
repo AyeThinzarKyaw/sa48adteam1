@@ -20,8 +20,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AdjustmentVoucherId" Type="int" Nullable="false" />
-          <Property Name="StationeyId" Type="int" Nullable="false" />
-          <Property Name="Quantity" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="StationeryId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="DateTime" Type="datetime" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
         </EntityType>
@@ -255,7 +255,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AdjustmentVoucherDetail">
-              <PropertyRef Name="StationeyId" />
+              <PropertyRef Name="StationeryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -667,8 +667,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AdjustmentVoucherId" Type="Int32" Nullable="false" />
-          <Property Name="StationeyId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="StationeryId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Reason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AdjustmentVoucher" Relationship="Self.FK_AdjustmentVoucherDetails_AdjustmentVoucher" FromRole="AdjustmentVoucherDetail" ToRole="AdjustmentVoucher" />
@@ -950,7 +950,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AdjustmentVoucherDetail">
-              <PropertyRef Name="StationeyId" />
+              <PropertyRef Name="StationeryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1361,7 +1361,7 @@
               <MappingFragment StoreEntitySet="AdjustmentVoucherDetail">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AdjustmentVoucherId" ColumnName="AdjustmentVoucherId" />
-                <ScalarProperty Name="StationeyId" ColumnName="StationeyId" />
+                <ScalarProperty Name="StationeryId" ColumnName="StationeryId" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="DateTime" ColumnName="DateTime" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
