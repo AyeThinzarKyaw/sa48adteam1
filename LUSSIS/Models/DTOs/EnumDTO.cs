@@ -22,5 +22,15 @@ namespace LUSSIS.Models.DTOs
             INACTIVE = 0,
             ACTIVE = 1
         }
+
+        public enum POStatus
+        {
+            OPEN=0,
+            PENDING=1,
+            APPROVED=2,
+            REJECTED=3,
+            CANCELLED=4,
+            CLOSED=5
+        }
     }
 }
