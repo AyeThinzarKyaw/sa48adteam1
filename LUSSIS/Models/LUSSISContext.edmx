@@ -130,6 +130,7 @@
           <Property Name="StationeryId" Type="int" Nullable="false" />
           <Property Name="QuantityOrdered" Type="int" Nullable="false" />
           <Property Name="QuantityDelivered" Type="int" />
+          <Property Name="Confirmed" Type="bit" />
         </EntityType>
         <EntityType Name="Requisition">
           <Key>
@@ -805,6 +806,7 @@
           <Property Name="StationeryId" Type="Int32" Nullable="false" />
           <Property Name="QuantityOrdered" Type="Int32" Nullable="false" />
           <Property Name="QuantityDelivered" Type="Int32" />
+          <Property Name="Confirmed" Type="Boolean" />
           <NavigationProperty Name="PurchaseOrder" Relationship="Self.FK_PurchaseOrderDetail_PurchaseOrder" FromRole="PurchaseOrderDetail" ToRole="PurchaseOrder" />
           <NavigationProperty Name="Stationery" Relationship="Self.FK_PurchaseOrderDetail_Sationery" FromRole="PurchaseOrderDetail" ToRole="Stationery" />
         </EntityType>
@@ -1479,6 +1481,7 @@
                 <ScalarProperty Name="StationeryId" ColumnName="StationeryId" />
                 <ScalarProperty Name="QuantityOrdered" ColumnName="QuantityOrdered" />
                 <ScalarProperty Name="QuantityDelivered" ColumnName="QuantityDelivered" />
+                <ScalarProperty Name="Confirmed" ColumnName="Confirmed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
