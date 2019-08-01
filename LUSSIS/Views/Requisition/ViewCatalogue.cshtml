@@ -1,21 +1,19 @@
-﻿@{
-    ViewBag.Title = "Create";
-}
+﻿@model LUSSIS.Models.DTOs.FormRequisitionDTO
 
 @{
     ViewBag.Title = "Home Page";
 }
 
 @section styles {
-<style type="text/css">
-    input[type="text"] {
-        border: 1px solid #d2d6de;
-    }
+    <style type="text/css">
+        input[type="text"] {
+            border: 1px solid #d2d6de;
+        }
 
-    .box {
-        margin: 0;
-    }
-</style>
+        .box {
+            margin: 0;
+        }
+    </style>
 }
 
 <section class="content-header">
@@ -23,6 +21,49 @@
 </section>
 
 <!-- Main content -->
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-body -->
+                <div class="box-body" style="height: 465px; overflow: hidden; overflow-y: auto;">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Unit of Measure</th>
+                                <th>Stock Availablility</th>
+                                <th>Reserved</th>
+                                <th>Waitlist</th>
+                                <th>OrderQty</th>
+                                <th>Confirmation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var catalogueItem in Model.CatalogueItems)
+                            {
+                                <tr>
+                                    <td>@catalogueItem.Item</td>
+                                    <td>@catalogueItem.UnitOfMeasure</td>
+                                </tr>
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+                    <a href="requsition-form.html" class="btn btn-success pull-right">Submit</a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -166,7 +207,7 @@
 </section>
 
 @section scripts {
-<script>
+    <script>
         //iCheck for checkbox and radio inputs
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
@@ -187,6 +228,6 @@
                 'autoWidth': false
             })
         })
-</script>
+    </script>
 }
 

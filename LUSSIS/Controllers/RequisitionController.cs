@@ -15,7 +15,7 @@ namespace LUSSIS.Controllers
 
         IRequisitionManagementService requisitionManagementService;
 
-        RequisitionController()
+        public RequisitionController()
         {
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
             requisitionManagementService = RequisitionManagementService.Instance;
@@ -27,11 +27,12 @@ namespace LUSSIS.Controllers
             return View();
         }
 
-        public ActionResult ViewCatalogue(int employeeId)
+        public ActionResult ViewCatalogue(LoginDTO loginDTO)
         {
-            List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(employeeId);
-            ViewData["catalogueItems"] = catalogueItems;
-            return View();
+            List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(loginDTO.EmployeeId);
+            FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems };
+
+            return View(model);
         }
     }
 }

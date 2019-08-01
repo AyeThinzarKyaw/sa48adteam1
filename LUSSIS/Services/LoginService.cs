@@ -3,9 +3,11 @@ using LUSSIS.Models.DTOs;
 using LUSSIS.Repositories;
 using LUSSIS.Repositories.Interfaces;
 using LUSSIS.Services.Interfaces;
+using LUSSIS.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 
 namespace LUSSIS.Services
@@ -34,19 +36,29 @@ namespace LUSSIS.Services
             //else return a loginDTO with required details
 
             //Hash password first
-            Employee e = employeeRepo.FindBy(x => x.Username == username && x.Password == password).SingleOrDefault();
+            string hashedPassword = HashPassword(password);
+
+            Employee e = employeeRepo.FindBy(x => x.Username == username && x.Password == hashedPassword).SingleOrDefault();
             if (e == null) // no such user
             {
                 return null;
             }
             else
             {                
-                Session newSession = new Session() { Employee = e, GUID = Guid.NewGuid().ToString(), LogInDateTime = DateTime.Now };
+                Session newSession = new Session() { EmployeeId = e.Id, GUID = Guid.NewGuid().ToString(), LogInDateTime = DateTime.Now };
                 sessionRepo.Create(newSession);
                 //set attributes
                 LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, EmployeeRoleName = e.Role.Name, SessionGuid = newSession.GUID};
 
                 return loginDTO;
+            }
+        }
+
+        public string HashPassword(string password)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                return MD5Hash.GetMd5Hash(md5Hash, password);
             }
         }
 
