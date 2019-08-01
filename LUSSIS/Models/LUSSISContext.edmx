@@ -29,7 +29,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeId" Type="int" Nullable="false" />
           <Property Name="StationeryId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
@@ -39,7 +39,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="CollectionPoint">
@@ -147,7 +147,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RequisitionId" Type="int" Nullable="false" />
-          <Property Name="DisbursementId" Type="int" Nullable="false" />
+          <Property Name="DisbursementId" Type="int" />
           <Property Name="StationeryId" Type="int" Nullable="false" />
           <Property Name="QuantityOrdered" Type="int" Nullable="false" />
           <Property Name="QuantityDelivered" Type="int" />
@@ -439,7 +439,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_RequisitionDetail_Disbursement">
-          <End Role="Disbursement" Type="Self.Disbursement" Multiplicity="1" />
+          <End Role="Disbursement" Type="Self.Disbursement" Multiplicity="0..1" />
           <End Role="RequisitionDetail" Type="Self.RequisitionDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Disbursement">
@@ -677,7 +677,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <Property Name="StationeryId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
@@ -689,7 +689,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Stationeries" Relationship="Self.FK_Sationery_Category" FromRole="Category" ToRole="Stationery" />
         </EntityType>
@@ -826,7 +826,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RequisitionId" Type="Int32" Nullable="false" />
-          <Property Name="DisbursementId" Type="Int32" Nullable="false" />
+          <Property Name="DisbursementId" Type="Int32" />
           <Property Name="StationeryId" Type="Int32" Nullable="false" />
           <Property Name="QuantityOrdered" Type="Int32" Nullable="false" />
           <Property Name="QuantityDelivered" Type="Int32" />
@@ -1061,7 +1061,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_RequisitionDetail_Disbursement">
-          <End Role="Disbursement" Type="Self.Disbursement" Multiplicity="1" />
+          <End Role="Disbursement" Type="Self.Disbursement" Multiplicity="0..1" />
           <End Role="RequisitionDetail" Type="Self.RequisitionDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Disbursement">

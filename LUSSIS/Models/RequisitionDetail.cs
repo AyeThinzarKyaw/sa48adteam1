@@ -16,7 +16,7 @@ namespace LUSSIS.Models
     {
         public int Id { get; set; }
         public int RequisitionId { get; set; }
-        public int DisbursementId { get; set; }
+        public Nullable<int> DisbursementId { get; set; }
         public int StationeryId { get; set; }
         public int QuantityOrdered { get; set; }
         public Nullable<int> QuantityDelivered { get; set; }

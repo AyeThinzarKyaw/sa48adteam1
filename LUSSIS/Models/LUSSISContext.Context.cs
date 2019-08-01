@@ -22,7 +22,7 @@ namespace LUSSIS.Models
             //Written by Charles
             Configuration.ProxyCreationEnabled = false;
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
