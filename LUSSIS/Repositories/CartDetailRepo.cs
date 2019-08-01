@@ -19,10 +19,33 @@ namespace LUSSIS.Repositories
 
         public int GetCountOnHoldForStationery(int stationeryId)
         {
-            return (from cd in Context.CartDetails
-                   where cd.StationeryId == stationeryId
-                   select cd.Quantity).Sum();
+            if (Context.CartDetails.Any(x => x.StationeryId == stationeryId))
+            {
+                return (int)(from cd in Context.CartDetails
+                             where cd.StationeryId == stationeryId
+                             select cd.Quantity).Sum();
+            }
+            else
+            {
+                return 0;
+            }
                    
+        }
+
+        public int GetFrontOfQueueCartCountForStationery(int stationeryId, DateTime datetime)
+        {
+            if (Context.CartDetails.Any(x => x.StationeryId == stationeryId && x.DateTime < datetime))
+            {
+                return (int)(from cd in Context.CartDetails
+                             where cd.StationeryId == stationeryId
+                             where cd.DateTime < datetime
+                             select cd.Quantity).Sum();
+            }
+            else
+            {
+                return 0;
+            }
+
         }
     }
 }
