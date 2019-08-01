@@ -1,4 +1,5 @@
-﻿
+﻿@model LUSSIS.Models.DTOs.StationeryDetailsDTO
+@using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Update";
 }
@@ -11,117 +12,223 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-body">
-                    <div class="row">
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="row">
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Item Number</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Item Number">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Stationery Code</label><label class="text-red">&nbsp;*</label>
+                                    @Html.TextBoxFor(x => x.Code, new { @class = "form-control", @placeholder = "Enter Item Number" })
+                                    @Html.ValidationMessageFor(x => x.Code, "", new { @class = "text-danger" })
+                                </div>
                             </div>
-                        </div>
-                        <!-- select box -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Category</label>
-                                <select class="form-control select2" style="width: 100%;">
-                                    <option selected="selected">Pen</option>
-                                    <option>Clip</option>
-                                    <option>Envelope</option>
-                                    <option>File</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                            <!-- select box -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="CategoryId" class="form-control" name="CategoryId">
+                                        <option value="0">Choose Category</option>
+                                        @if (Model.Categories != null)
+                                        {
+                                            foreach (var item in Model.Categories)
+                                            {
+                                                if (item.Id == @Model.CategoryId)
+                                                {
+                                                    <option value="@item.Id" selected>
+
+                                                        @item.Type
+                                                    </option>
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">
+
+                                                        @item.Type
+                                                    </option>
+                                                }
 
 
-                    <div class="row">
-                        <!-- PRICE box -->
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Description</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Description">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Unit of Measurement</label>
-                                <select class="form-control select2" style="width: 100%;">
-                                    <option>Dozen</option>
-                                    <option>Box</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>BIN</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter BIN">
-                            </div>
-                        </div>
-                    </div>
-
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Supplier Order</th>
-                                <th>Supplier Name</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Supplier 1</td>
-                                <td>
-                                    <select class="form-control select2" style="width: 100%;">
-                                        <option selected="selected">Select Supplier1</option>
-                                        <option>ALPHA Office Supplies</option>
-                                        <option>Cheap Stationer</option>
-                                        <option>BANES Shop</option>
+                                            }
+                                        }
                                     </select>
-                                </td>
-                                <td><input type="text" class="form-control" style="width: 150px;"></td>
-                            </tr>
-                            <tr>
-                                <td>Supplier 2</td>
-                                <td>
-                                    <select class="form-control select2" style="width: 100%;">
-                                        <option selected="selected">Select Supplier2</option>
-                                        <option>ALPHA Office Supplies</option>
-                                        <option>Cheap Stationer</option>
-                                        <option>BANES Shop</option>
-                                    </select>
-                                </td>
-                                <td><input type="text" class="form-control" style="width: 150px;"></td>
-                            </tr>
-                            <tr>
-                                <td>Supplier 3</td>
-                                <td>
-                                    <select class="form-control select2" style="width: 100%;">
-                                        <option selected="selected">Select Supplier3</option>
-                                        <option>ALPHA Office Supplies</option>
-                                        <option>Cheap Stationer</option>
-                                        <option>BANES Shop</option>
-                                    </select>
-                                </td>
-                                <td><input type="text" class="form-control" style="width: 150px;"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                                    @*@Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Type"), new { @class = "form-control select2", @style = "width: 100%;" })*@
+                                    @*@Html.DropDownListFor(x => x.CategoryId, new SelectList(Model.Categories, "Id", "Type"), new { @id = "categoryList", @class = "form-control select2", @style = "width: 100%;" })*@
+                                    <a href="#" data-toggle="modal" data-target="#categoryModal" class="btn btn-sm btn-primary">Add New Category</a>
+                                    @*@Html.ActionLink("Add Category", null, new { @data-toggle = "modal", @data-target = "#categoryModal", @class = "btn btn-sm btn-primary", @role = "button" })*@
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Description</label><label class="text-red">&nbsp;*</label>
+                                    @Html.TextBoxFor(x => x.Description, new { @class = "form-control", @placeholder = "Enter Description" })
+                                    @Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Unit of Measurement</label>
+                                    @Html.DropDownList("UOM", EnumHelper.GetSelectList(typeof(EnumDTO.UOM)), new { @class = "form-control select2", @style = "width: 100%;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>BIN</label>
+                                    @Html.TextBoxFor(x => x.Bin, new { @class = "form-control", @placeholder = "Enter BIN" })
+                                    @Html.ValidationMessageFor(x => x.Bin, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Supplier Order</th>
+                                    <th>Supplier Name</th>
+                                    <th>Price<label class="text-red">&nbsp;*</label></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Supplier 1</td>
+                                    <td>
+                                        @Html.DropDownListFor(x => x.Supplier1, new SelectList(Model.Suppliers, "Id", "Name"), new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(x => x.Price1, new { @class = "form-control", @placeholder = "Enter Price" })
+                                        @Html.ValidationMessageFor(x => x.Price1, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Supplier 2</td>
+                                    <td>
+                                        @Html.DropDownListFor(x => x.Supplier2, new SelectList(Model.Suppliers, "Id", "Name"), new { @class = "form-control select2", @style = "width: 100%;" })
+
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(x => x.Price2, new { @class = "form-control", @placeholder = "Enter Price" })
+                                        @Html.ValidationMessageFor(x => x.Price2, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Supplier 3</td>
+                                    <td>
+                                        @Html.DropDownListFor(x => x.Supplier3, new SelectList(Model.Suppliers, "Id", "Name"), new { @class = "form-control select2", @style = "width: 100%;" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(x => x.Price3, new { @class = "form-control", @placeholder = "Enter Price" })
+                                        @Html.ValidationMessageFor(x => x.Price3, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="submit" value="Update" class="btn btn-success pull-right" />
+                    </div>
                 </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <button class="btn btn-warning pull-right">Update</button>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    }
+    <div class="modal fade" id="categoryModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="clsBtn" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add new category</h4>
+
+                </div>
+                <div class="modal-body">
+                    <form>
+                        Category
+                        @Html.TextBox("txtcategory", null, new { @id = "txtcategory", @class = "form-control" })
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @Html.ActionLink("Add", null, null, new { @onclick = "addCategory();", @class = "btn btn-sm btn-success", @role = "button" })
                 </div>
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
+
+@section scripts {
+    <script>
+        function addCategory() {
+            //if (confirm("Are you sure you want to add a new category?")) {
+            debugger;
+            var categoryText = document.getElementById("txtcategory").value;
+            var url = "/Stationery/CreateCategory?type=" +categoryText;
+        $.ajax({
+            url: url,
+            type: "GET",
+            async: true,
+            success: function (data) {
+                alert(data);
+                var result="";
+                $('#CategoryId').empty();
+
+                            $.each(data, function (i, d) {
+
+                                //alert(i+"/"+d.Id);
+                                result += '<option value="' + d.Id + '"';
+
+                                result += '>' + d.Type + '</option>';
+                                alert(result);
+                            });
+                $('#CategoryId').append(result);
+            },
+            error: function (data) { }
+            });
+                        //$.ajax({
+                        //    type: "POST",
+                        //    url: "/Stationery/CreateCategory",
+                        //    content: "application/json; charset=utf-8",
+                        //    dataType: "json",
+                        //    data: { 'type': categoryText },
+                        //    success: function (data) {
+                        //        if (data == true) {
+                        //            //document.getElementById("txtcategory").value = "";
+                        //            alert("success");
+                        //            //console.log("test");
+
+                        //            //var result;
+                        //            //$('#CategoryId').empty();
+
+                        //            //$.each(data[1], function (i, d) {
+
+                        //            //    //alert(i+"/"+d.Id);
+                        //            //    result += '<option value="' + d.Id + '"';
+
+                        //            //    result += '>' + d.Type + '</option>';
+
+                        //            //});
+                        //            //$('#CategoryId').append(result);
+                        //        }
+
+
+                        //    },
+                        //    error: function (xhr, textStatus, errorThrown) {
+                        //        // TODO: Show error
+                        //    }
+                        //});
+                    //}
+                }
+    </script>
+}
