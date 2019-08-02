@@ -33,10 +33,10 @@ namespace LUSSIS.Repositories
             
         }
 
-        public List<RequisitionDetail> RequisitionDetailsEagerLoadStationeryNameAndUOM(int requisitionId)
+        public List<RequisitionDetail> RequisitionDetailsEagerLoadStationery(int requisitionId)
         {
-            return Context.RequisitionDetails.Include(x => x.Stationery.Description)
-                .Include(x => x.Stationery.UnitOfMeasure).Where(x => x.RequisitionId == requisitionId)
+            return Context.RequisitionDetails.Include(x => x.Stationery)
+                .Where(x => x.RequisitionId == requisitionId)
                 .ToList();
         }
     }

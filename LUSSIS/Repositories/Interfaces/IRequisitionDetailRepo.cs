@@ -11,6 +11,6 @@ namespace LUSSIS.Repositories.Interfaces
     {
         int GetReservedCountForStationery(int stationeryId);
 
-        List<RequisitionDetail> RequisitionDetailsEagerLoadStationeryNameAndUOM(int requisitionId);
+        List<RequisitionDetail> RequisitionDetailsEagerLoadStationery(int requisitionId);
     }
 }

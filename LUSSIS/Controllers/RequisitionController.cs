@@ -29,7 +29,7 @@ namespace LUSSIS.Controllers
         public ActionResult ViewCatalogue(LoginDTO loginDTO)
         {
             List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(loginDTO.EmployeeId);
-            FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems };
+            FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems, LoginDTO = loginDTO };
 
             return View(model);
         }
@@ -53,17 +53,17 @@ namespace LUSSIS.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public void SubmitRequisitionForm(LoginDTO loginDTO)
+        public ActionResult SubmitRequisitionForm(LoginDTO loginDTO)
         {
 
             //convert all cart items into requsitiondetails for this requisition
             Requisition newRequisition = requisitionCatalogueService.ConvertCartDetailsToRequisitionDetails(loginDTO.EmployeeId);
 
-           //notify dept head for approval
+            //notify dept head for approval
 
-
+            return RedirectToAction("ViewCatalogue", loginDTO);
            //return to catalogue/dashboard view
-           ViewCatalogue(loginDTO); 
+           //ViewCatalogue(loginDTO); 
         }
 
         public ActionResult ViewRequisitionList(LoginDTO loginDTO)
@@ -93,10 +93,6 @@ namespace LUSSIS.Controllers
         {
             return View();
         }
-
-        //Department head methods
-        //approve/reject requested requisition
-        //view requisition detail
 
     }
 }

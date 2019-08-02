@@ -234,30 +234,32 @@ namespace LUSSIS.Services
                     {
                         QuantityOrdered = waitllistCount,
                         RequisitionId = newRequisition.Id,
-                        Status = RequisitionDetailStatusEnum.WAITLIST_PENDING.ToString()
+                        Status = RequisitionDetailStatusEnum.WAITLIST_PENDING.ToString(),
+                        StationeryId = cd.StationeryId
                     };
                     requisitionDetailRepo.Create(waitlistRequisitionDetail);
                     if(reservedCount > 0)
                     {
-                        createReservedPendingRequisitionDetail(reservedCount, newRequisition.Id);
+                        createReservedPendingRequisitionDetail(reservedCount, newRequisition.Id, cd.StationeryId);
                     }                    
                 }
                 else
                 {
-                    createReservedPendingRequisitionDetail(cd.Quantity, newRequisition.Id);
+                    createReservedPendingRequisitionDetail(cd.Quantity, newRequisition.Id, cd.StationeryId);
                 }
 
             }
             return newRequisition;
         }
 
-        private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId)
+        private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId, int stationeryId)
         {
             RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
             {
                 QuantityOrdered = reservedCount,
                 RequisitionId = requisitionId,
-                Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString()
+                Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString(),
+                StationeryId = stationeryId
             };
             requisitionDetailRepo.Create(reservedRequisitionDetail);
         }
@@ -267,12 +269,13 @@ namespace LUSSIS.Services
             string employeeName = employeeRepo.FindById(employeeId).Name;
             Requisition requisition = requisitionRepo.FindById(requisitionId);
             //switch to eager loading method
-            List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
-
+            //List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
+            List<RequisitionDetail> requisitionDetails = requisitionDetailRepo.RequisitionDetailsEagerLoadStationery(requisitionId);
             return new RequisitionDetailsDTO() { EmployeeName = employeeName,
                 RequestedDate = requisition.DateTime.ToString("dd/MM/yyyy"),
                 RequisitionFormId = requisition.Id,
-                RequisitionStatus = requisition.Status };
+                RequisitionStatus = requisition.Status,
+                RequisitionDetails = requisitionDetails};
         }
     }
 }
