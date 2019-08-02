@@ -466,6 +466,8 @@
     <Content Include="Views\Owed\Index.cshtml" />
     <Content Include="Views\Retrieval\Index.cshtml" />
     <Content Include="Views\Retrieval\Detail.cshtml" />
+    <Content Include="Views\Requisition\ViewRequisitionList.cshtml" />
+    <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

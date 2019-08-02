@@ -18,6 +18,7 @@ namespace LUSSIS.Services
         private IRequisitionRepo requisitionRepo;
         private IRequisitionDetailRepo requisitionDetailRepo;
         private IAdjustmentVoucherRepo adjustmentVoucherRepo;
+        private IEmployeeRepo employeeRepo;
         private static RequisitionCatalogueService instance = new RequisitionCatalogueService();
 
         private RequisitionCatalogueService()
@@ -27,6 +28,7 @@ namespace LUSSIS.Services
             requisitionRepo = RequisitionRepo.Instance;
             requisitionDetailRepo = RequisitionDetailRepo.Instance;
             adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
+            employeeRepo = EmployeeRepo.Instance;
         }
 
         //returns single instance
@@ -209,10 +211,6 @@ namespace LUSSIS.Services
             return (List<Requisition>)requisitionRepo.FindBy(x=> x.EmployeeId == employeeId);  
         }
 
-        public List<RequisitionDetail> GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId)
-        {
-            return (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
-        }
 
         public Requisition ConvertCartDetailsToRequisitionDetails(int employeeId)
         {
@@ -266,7 +264,15 @@ namespace LUSSIS.Services
 
         RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId)
         {
-            throw new NotImplementedException();
+            string employeeName = employeeRepo.FindById(employeeId).Name;
+            Requisition requisition = requisitionRepo.FindById(requisitionId);
+            //switch to eager loading method
+            List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
+
+            return new RequisitionDetailsDTO() { EmployeeName = employeeName,
+                RequestedDate = requisition.DateTime.ToString("dd/MM/yyyy"),
+                RequisitionFormId = requisition.Id,
+                RequisitionStatus = requisition.Status };
         }
     }
 }

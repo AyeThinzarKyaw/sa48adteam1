@@ -1,0 +1,150 @@
+﻿@model LUSSIS.Models.DTOs.RequisitionDetailsDTO
+
+@{
+    ViewBag.Title = "ViewRequisitionDetail";
+}
+
+<section class="content-header">
+    <!-- If Supervisor -->
+    <!-- <h1>
+        Requested Requisition Details
+    </h1> -->
+    <!-- If Supervisor -->
+
+    <h1>
+        Requisition Details
+    </h1>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table>
+                        <tr>
+                            <td>Requisition Form ID</td>
+                            <td>: @Model.RequisitionFormId</td>
+                            <td></td>
+                            <td>Employee Name</td>
+                            <td>: @Model.EmployeeName</td>
+                        </tr>
+                        <tr>
+                            <td>Requested Date</td>
+                            <td>: @Model.RequestedDate</td>
+                            <td style="width: 400px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Requisition Status</td>
+                            @if (Model.RequisitionStatus.Equals("PENDING"))
+                            {
+                                <td>: <span class="text-blue">Pending</span></td>
+                            }
+                            else if (Model.RequisitionStatus.Equals("CANCELLED"))
+                            {
+                                <td>: <span class="text-orange">Cancelled</span></td>
+                            }
+                            else if (Model.RequisitionStatus.Equals("APPROVED"))
+                            {
+                                <td>: <span class="text-green">Approved</span></td>
+                            }
+                            else if (Model.RequisitionStatus.Equals("REJECTED"))
+                            {
+                                <td>: <span class="text-red">Rejected</span></td>
+                            }
+                            else //STATUS COMPLETED
+                            {
+                                <td>: <span class="text-grey">Completed</span></td>
+                            }
+
+                        </tr>
+
+                    </table>
+                    <br /><br />
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Unit of Measure</th>
+                                <th>OrderQty</th>
+                                <th>Status</th>
+                                @{
+                                    if (Model.RequisitionStatus.Equals("APPROVED"))
+                                    {
+                                        <!-- If status = Approved -->
+                                        <th>Action</th>
+                                        <!-- If status = Approved -->
+                                    }
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var rd in Model.RequisitionDetails)
+                                {
+                                    <tr>
+                                        <td>@rd.Stationery.Description</td>
+                                        <td>@rd.Stationery.UnitOfMeasure</td>
+                                        <td>@rd.QuantityOrdered</td>
+                                        @if (rd.Status.Equals("PREPARING"))
+                                        {
+                                            <td class="text-blue">Preparing</td>
+                                        }
+                                        else if (rd.Status.Equals("WAITLIST_APPROVED"))
+                                        {
+                                            <td class="text-orange">WaitListed</td>
+                                            <td>
+                                                <input type="button" class="btn btn-sm btn-danger" value="Cancel"
+                                                       onclick="location.href='@Url.Action("CancelWaitlistedRequisitionDetail", "Requisition", new { @loginDTO = Model.LoginDTO, @requisitionDetailId = rd.Id})'" />
+                                            </td>
+                                        }
+                                        else if (rd.Status.Equals("PENDING_COLLECTION"))
+                                        {
+                                            <td class="text-light-blue">Pending Collection</td>
+                                        }
+                                        else if (rd.Status.Equals("CANCELLED"))
+                                        {
+                                            <td class="text-maroon">Cancelled</td>
+                                        }
+                                        else if (rd.Status.Equals("REJECTED"))
+                                        {
+                                            <td class="text-red">Rejected</td>
+                                        }
+                                        else if (rd.Status.Equals("COLLECTED"))
+                                        {
+                                            <td class="text-grey">Fulfilled</td>
+                                        }
+                                        else if (rd.Status.Equals("WAITLIST_PENDING"))
+                                        {
+                                            <td class="text-orange">Waitlist Pending</td>
+                                        }
+                                        else//RESERVED_PENDING
+                                        {
+                                            <td class="text-blue">Reserved Pending</td>
+                                        }
+
+                                    </tr>
+                                }
+                            }
+                    </table>
+                </div>
+
+                <!-- /.box-body -->
+                <!-- /.For Staff if Status = Pending -->
+                @if (Model.RequisitionStatus.Equals("PENDING"))
+                {
+                    <div class="box-footer">
+                        <input type="button" class="btn btn-sm btn-danger" value="Cancel"
+                               onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new { @loginDTO = Model.LoginDTO, @requisitionId = Model.RequisitionFormId})'" />
+                    </div>
+                    <!-- /.For Staff if Status = Pending -->
+                }
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+
