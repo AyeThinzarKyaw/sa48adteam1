@@ -26,7 +26,7 @@ namespace LUSSIS.Repositories
                                    select avd.Quantity;
                 if (query != null)
                 {
-                    return 1;
+                    return 0;
                     //return query.Sum()
                 }
                 else

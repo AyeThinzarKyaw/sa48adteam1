@@ -47,14 +47,14 @@ namespace LUSSIS.Controllers
             else
             {
                 //check for role
-                if (loginDTO.EmployeeRoleName.Contains("Department"))
+                if (loginDTO.RoleId >=1 && loginDTO.RoleId <= 4) //dept staff
                 {
                     List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(loginDTO.EmployeeId);
                     FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems, LoginDTO = loginDTO };
 
                     return View("../Requisition/ViewCatalogue",  model);
                 }
-                else
+                else //clerks
                 {
                     //return clerk view
                 }

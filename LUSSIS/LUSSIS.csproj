@@ -184,10 +184,13 @@
     <Compile Include="Models\DTOs\FormRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
     <Compile Include="Models\DTOs\POCatalogueDTO.cs" />
-    <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
-    <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
+    <Compile Include="Models\DTOs\RequestedRequisitionDetailDTO.cs" />
+    <Compile Include="Models\DTOs\StaffRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\DTOs\EnumDTO.cs" />
+    <Compile Include="Models\DTOs\ApprovedRequisitionDetailDTO.cs" />
+    <Compile Include="Models\DTOs\HeadReviewRequisitionDetailDTO.cs" />
+    <Compile Include="Models\DTOs\DeptRequisitionListDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -276,6 +279,8 @@
     <Compile Include="Repositories\StationeryRepo.cs" />
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
+    <Compile Include="Services\EmailNotificationService.cs" />
+    <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\Interfaces\IPurchaseOrderService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionCatalogueService.cs" />

@@ -9,6 +9,8 @@ namespace LUSSIS.Repositories.Interfaces
 {
     public interface IRequisitionRepo : IGenericRepo<Requisition, int>
     {
+        List<Requisition> RequisitionsEagerLoadEmployee(int employeeId);
 
+        List<Requisition> DepartmentRequisitionsEagerLoadEmployee(int deptHeadEmployeeId);
     }
 }
