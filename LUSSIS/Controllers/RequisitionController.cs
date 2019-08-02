@@ -14,12 +14,10 @@ namespace LUSSIS.Controllers
     {
         IRequisitionCatalogueService requisitionCatalogueService;
 
-        IRequisitionManagementService requisitionManagementService;
 
         public RequisitionController()
         {
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
-            requisitionManagementService = RequisitionManagementService.Instance;
         }
 
         // GET: Requisition
@@ -71,27 +69,29 @@ namespace LUSSIS.Controllers
         public ActionResult ViewRequisitionList(LoginDTO loginDTO)
         {
             //Get all requsition from this employee
-            List<Requisition> requisitionHistory = requisitionCatalogueService.GetRequisitionHistory(loginDTO.EmployeeId);
+            List<Requisition> requisitionHistory = requisitionCatalogueService.GetPersonalRequisitionHistory(loginDTO.EmployeeId);
 
-            DeptRequisitionListDTO model = new DeptRequisitionListDTO() {LoginDTO = loginDTO, Requisitions = requisitionHistory };
+            RequisitionsDTO model = new RequisitionsDTO() {LoginDTO = loginDTO, Requisitions = requisitionHistory };
             
             //viewData add additional data
             return View(model);
         }
 
-        public ActionResult ViewRequisitionDetail(DeptRequisitionListDTO viewModel)
+        public ActionResult ViewRequisitionDetail(LoginDTO loginDTO, int requisitionId)
         {
-            DeptRequisitionListDTO model = new DeptRequisitionListDTO() { LoginDTO = viewModel.LoginDTO };
+            //List<RequisitionDetail> requisitionDetails = requisitionCatalogueService.GetRequisitionDetailsForPersonalRequisition(requisitionId);
+            //Requisition requisition = 
+            //RequisitionDetailsDTO model = new RequisitionDetailsDTO() { LoginDTO = loginDTO, RequisitionDetails = requisitionDetails };
 
-            return View(model);
+            return View();//model);
         }
 
-        public ActionResult CancelPendingRequisition(DeptRequisitionListDTO viewModel)
+        public ActionResult CancelPendingRequisition()
         {
             return View();
         }
 
-        public ActionResult CancelWaitlistedRequisitionDetail(ApprovedRequisitionDetailDTO vieModel)
+        public ActionResult CancelWaitlistedRequisitionDetail(RequisitionDetailsDTO vieModel)
         {
             return View();
         }

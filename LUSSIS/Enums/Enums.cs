@@ -38,6 +38,27 @@ namespace LUSSIS.Enums
         CLOSED 
     }
 
+    public enum RequisitionDetailStatusEnum
+    {
+        RESERVED_PENDING,
+        WAITLIST_PENDING,
+        PREPARING,
+        WAITLIST_APPROVED,
+        PENDING_COLLECTION,
+        COLLECTED,
+        REJECTED,
+        CANCELLED
+    }
+
+    public enum RequisitionStatusEnum
+    {
+        PENDING,
+        APPROVED,
+        COMPLETED,
+        REJECTED,
+        CANCELLED
+    }
+
     public enum RequisitionStatus
     {
         Created,

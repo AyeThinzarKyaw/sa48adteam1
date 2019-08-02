@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LUSSIS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace LUSSIS.Services.Interfaces
 {
     public interface IRequisitionManagementService
     {
+        List<Requisition> GetDepartmentRequisitions(int deptId);
     }
 }

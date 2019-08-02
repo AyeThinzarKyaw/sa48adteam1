@@ -204,15 +204,14 @@ namespace LUSSIS.Services
             throw new NotImplementedException();
         }
 
-        public List<Requisition> GetRequisitionHistory(int employeeId)
+        public List<Requisition> GetPersonalRequisitionHistory(int employeeId)
         {
-            return (List<Requisition>)requisitionRepo.FindBy(x => x.EmployeeId == employeeId);
-  
+            return (List<Requisition>)requisitionRepo.FindBy(x=> x.EmployeeId == employeeId);  
         }
 
-        public List<Requisition> GetDeptHeadEmployeesPendingRequisitions(int deptHeadEmployeeId)
+        public List<RequisitionDetail> GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId)
         {
-            throw new NotImplementedException();
+            return (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
         }
 
         public Requisition ConvertCartDetailsToRequisitionDetails(int employeeId)
@@ -263,6 +262,11 @@ namespace LUSSIS.Services
                 Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString()
             };
             requisitionDetailRepo.Create(reservedRequisitionDetail);
+        }
+
+        RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

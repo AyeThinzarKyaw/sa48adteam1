@@ -1,4 +1,5 @@
-﻿using LUSSIS.Repositories;
+﻿using LUSSIS.Models;
+using LUSSIS.Repositories;
 using LUSSIS.Repositories.Interfaces;
 using LUSSIS.Services.Interfaces;
 using System;
@@ -28,6 +29,11 @@ namespace LUSSIS.Services
         public static IRequisitionManagementService Instance
         {
             get { return instance; }
+        }
+
+        public List<Requisition> GetDepartmentRequisitions(int deptId)
+        {
+            return requisitionRepo.DepartmentRequisitionsEagerLoadEmployee(deptId);
         }
     }
 }

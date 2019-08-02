@@ -19,9 +19,9 @@ namespace LUSSIS.Services.Interfaces
 
         CatalogueItemDTO UpdateCartDetail(int employeeId, int stationeryId, int inputQty);
 
-        List<Requisition> GetRequisitionHistory(int employeeId);
+        List<Requisition> GetPersonalRequisitionHistory(int employeeId);
 
-        List<Requisition> GetDeptHeadEmployeesPendingRequisitions(int deptHeadEmployeeId);
+        RequisitionDetailsDTO GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId);
 
         Requisition ConvertCartDetailsToRequisitionDetails(int employeeId);
     }
