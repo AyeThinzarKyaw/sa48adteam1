@@ -9,7 +9,7 @@ namespace LUSSIS.Models.DTOs
     {
         public int EmployeeId { get; set; }
 
-        public string EmployeeRoleName { get; set; }
+        public int RoleId { get; set; }
 
         public string SessionGuid { get; set; }
 

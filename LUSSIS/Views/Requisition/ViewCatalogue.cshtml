@@ -92,7 +92,7 @@
                     </table>
                 </div>
                 <div class="box-footer">
-                    <a href="requsition-form.html" class="btn btn-success pull-right">Submit</a>
+                    <input type="button" class="btn btn-success pull-right" value="Submit!" onclick="location.href='@Url.Action("SubmitRequisitionForm", "Requisition", Model.LoginDTO)'" />
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -106,6 +106,46 @@
 
 @section scripts {
     <script>
+        $('.minimal').on('ifUnchecked', function (event) {
+            var stationeryId = $(this).attr('id');
+            var employeeId = document.getElementById("employeeId").value;
+            var data = JSON.stringify({
+                'employeeId': employeeId,
+                'stationeryId': stationeryId,
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Requisition/RemoveItemFromCart",
+                async: true,
+                data: data,
+                contentType: 'application/json',
+                success: function (r) {
+                    UpdateAvailability(r, "availStatus" + stationeryId);
+                }
+            });
+
+        });
+
+        function UpdateAvailability(r, elementId) {
+            var availstatus = r.availstatus;
+            console.log(availstatus);
+            if (availstatus === 'LowStock') {
+
+                document.getElementById(elementId).setAttribute('class', "text-orange");
+                var lowStockCount = r.lowstockcount;
+                document.getElementById(elementId).innerHTML = "Low stock(" + lowStockCount + ")";
+            }
+            else if (availstatus === 'OutOfStock') {
+                document.getElementById(elementId).setAttribute('class', "text-gray");
+                document.getElementById(elementId).innerHTML = "Out of stock";
+            }
+            else {
+                document.getElementById(elementId).setAttribute('class', "text-green");
+                document.getElementById(elementId).innerHTML = "In stock";
+            }
+        }
+
         $('.minimal').on('ifChecked', function (event) {
             var stationeryId = $(this).attr('id');
             var input = document.getElementById("inputBox" + stationeryId).value;
@@ -125,21 +165,7 @@
                     data: data,
                     success: function (r) {
                         //alert(r.reserved);
-                        var availstatus = r.availstatus;
-                        if (availstatus === 'LowStock') {
-                            document.getElementById("availStatus" + stationeryId).setAttribute('class', "text-orange");
-                            var lowStockCount = r.lowstockcount;
-                            document.getElementById("availStatus" + stationeryId).innerHTML = "Low stock(" + lowStockCount + ")";
-                        }
-                        else if (availstatus === 'OutOfStock') {
-                            document.getElementById("availStatus" + stationeryId).setAttribute('class', "text-gray");
-                            document.getElementById("availStatus" + stationeryId).innerHTML = "Out of stock";
-                        }
-                        else {
-                            document.getElementById("availStatus" + stationeryId).setAttribute('class', "text-green");
-                            document.getElementById("availStatus" + stationeryId).innerHTML = "In stock";
-                        }
-
+                        UpdateAvailability(r, "availStatus" + stationeryId);
                         document.getElementById("reservedBox" + stationeryId).innerHTML = r.reserved ;
                         document.getElementById("waitlistBox" + stationeryId).innerHTML = r.waitlist ;
                     },
@@ -149,7 +175,7 @@
                 //alert(input);
             }
             else {
-                //do nothing
+                //no input, do nothing
             }
         
         });
