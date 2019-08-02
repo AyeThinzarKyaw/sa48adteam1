@@ -34,5 +34,16 @@ namespace LUSSIS.Controllers
 
             return View(model);
         }
+
+        public JsonResult AddItemToCart(int employeeId, int stationeryId, int inputQty)
+        {
+            CatalogueItemDTO catalogueItemDTO = requisitionCatalogueService.AddCartDetail(employeeId, stationeryId, inputQty);
+            return Json(new { availstatus = catalogueItemDTO.StockAvailability.ToString(),
+                lowstockcount = catalogueItemDTO.LowStockAvailability,
+                reserved = catalogueItemDTO.ReservedCount,
+                waitlist = catalogueItemDTO.WaitlistCount }, JsonRequestBehavior.AllowGet);
+
+        }
+
     }
 }

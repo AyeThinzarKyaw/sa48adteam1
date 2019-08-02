@@ -19,6 +19,7 @@ namespace LUSSIS.Models
         public int StationeryId { get; set; }
         public int QuantityOrdered { get; set; }
         public Nullable<int> QuantityDelivered { get; set; }
+        public Nullable<bool> Confirmed { get; set; }
     
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         public virtual Stationery Stationery { get; set; }
