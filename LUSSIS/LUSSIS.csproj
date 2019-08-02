@@ -468,12 +468,12 @@
     <Content Include="Views\Retrieval\Detail.cshtml" />
     <Content Include="Views\Requisition\ViewRequisitionList.cshtml" />
     <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />
+    <Content Include="Views\DeptHead\ReviewRequisitionDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\" />
-    <Folder Include="Views\DeptHead\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

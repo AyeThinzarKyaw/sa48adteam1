@@ -264,7 +264,7 @@ namespace LUSSIS.Services
             requisitionDetailRepo.Create(reservedRequisitionDetail);
         }
 
-        RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId)
+        RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(int requisitionId, int employeeId)
         {
             string employeeName = employeeRepo.FindById(employeeId).Name;
             Requisition requisition = requisitionRepo.FindById(requisitionId);
@@ -277,5 +277,31 @@ namespace LUSSIS.Services
                 RequisitionStatus = requisition.Status,
                 RequisitionDetails = requisitionDetails};
         }
+
+        public void CancelPendingRequisition(int requisitionId)
+        {
+            Requisition r = requisitionRepo.FindById(requisitionId);
+            r.Status = RequisitionStatusEnum.CANCELLED.ToString();
+            requisitionRepo.Update(r);
+            CascadeToRequisitionDetails("cancel", requisitionId);
+
+        }
+
+        private void CascadeToRequisitionDetails(string action, int requisitionId)
+        {
+            //get all requisitiondetails belonging to this requisition
+            if (action.Equals("cancel"))
+            {
+
+            }
+        }
+
+        public void CancelWaitlistedRequisitionDetail(int requisitionDetailId)
+        {
+            RequisitionDetail rd = requisitionDetailRepo.FindById(requisitionDetailId);
+            rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
+            requisitionDetailRepo.Update(rd);
+        }
+
     }
 }

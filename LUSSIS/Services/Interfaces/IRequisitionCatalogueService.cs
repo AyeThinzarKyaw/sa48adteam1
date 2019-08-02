@@ -21,8 +21,13 @@ namespace LUSSIS.Services.Interfaces
 
         List<Requisition> GetPersonalRequisitionHistory(int employeeId);
 
-        RequisitionDetailsDTO GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId);
+        RequisitionDetailsDTO GetRequisitionDetailsForSingleRequisition(int requisitionId, int employeeId);
 
         Requisition ConvertCartDetailsToRequisitionDetails(int employeeId);
+
+        void CancelWaitlistedRequisitionDetail(int requisitionDetailId);
+
+        void CancelPendingRequisition(int requisitionId);
+
     }
 }

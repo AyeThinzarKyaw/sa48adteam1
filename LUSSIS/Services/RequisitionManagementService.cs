@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Enums;
+using LUSSIS.Models;
 using LUSSIS.Repositories;
 using LUSSIS.Repositories.Interfaces;
 using LUSSIS.Services.Interfaces;
@@ -34,6 +35,43 @@ namespace LUSSIS.Services
         public List<Requisition> GetDepartmentRequisitions(int deptId)
         {
             return requisitionRepo.DepartmentRequisitionsEagerLoadEmployee(deptId);
+        }
+
+        public void ApproveRejectPendingRequisition(int requisitionId, string action, string remarks)
+        {
+            Requisition r = requisitionRepo.FindById(requisitionId);
+            if(remarks != null)
+            {
+                r.Remarks = remarks;
+            }
+
+            if (action.Equals("approve"))
+            {
+                r.Status = RequisitionStatusEnum.APPROVED.ToString();
+                requisitionRepo.Update(r);
+                CascadeToRequisitionDetails(action, requisitionId);
+            }
+            else
+            {
+                r.Status = RequisitionStatusEnum.REJECTED.ToString();
+                requisitionRepo.Update(r);
+                CascadeToRequisitionDetails(action, requisitionId);
+            }
+        }
+
+        private void CascadeToRequisitionDetails(string action, int requisitionId)
+        {
+            if (action.Equals("approve"))
+            {
+                //change to reserved pending to preparing
+
+                //change waitlist pending to waitlist approved
+            }
+            else
+            {
+                //change all to rejected
+            }
+                throw new NotImplementedException();
         }
     }
 }

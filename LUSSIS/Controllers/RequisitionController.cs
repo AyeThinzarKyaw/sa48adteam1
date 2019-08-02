@@ -79,18 +79,20 @@ namespace LUSSIS.Controllers
 
         public ActionResult ViewRequisitionDetail(LoginDTO loginDTO, int requisitionId)
         {
-            RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForPersonalRequisition(requisitionId, loginDTO.EmployeeId);
+            RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, loginDTO.EmployeeId);
             model.LoginDTO = loginDTO;
             return View(model);
         }
 
         public ActionResult CancelPendingRequisition(LoginDTO loginDTO, int requisitionId)
         {
-            return View();
+            requisitionCatalogueService.CancelPendingRequisition(requisitionId);
+            return RedirectToAction("ViewRequisitionList", loginDTO);
         }
 
         public ActionResult CancelWaitlistedRequisitionDetail(LoginDTO loginDTO, int requisitionDetailId)
         {
+            requisitionCatalogueService.CancelWaitlistedRequisitionDetail(requisitionDetailId);
             return View();
         }
 

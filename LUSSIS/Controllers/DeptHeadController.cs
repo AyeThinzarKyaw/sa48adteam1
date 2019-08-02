@@ -12,10 +12,12 @@ namespace LUSSIS.Controllers
     public class DeptHeadController : Controller
     {
         IRequisitionManagementService requisitionManagementService;
+        IRequisitionCatalogueService requisitionCatalogueService;
 
         public DeptHeadController()
         {
             requisitionManagementService = RequisitionManagementService.Instance;
+            requisitionCatalogueService = RequisitionCatalogueService.Instance;
         }
 
         // GET: DeptHead
@@ -26,22 +28,20 @@ namespace LUSSIS.Controllers
 
         public ActionResult ViewDepartmentRequisitions(LoginDTO loginDTO)
         {
+
             return View();
         }
 
         public ActionResult ReviewRequisitionDetails(LoginDTO loginDTO, int requisitionId)
         {
-            return View();
+            RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, loginDTO.EmployeeId);
+            model.LoginDTO = loginDTO;
+            return View(model);
         }
 
-        public ActionResult ApproveRequisition(LoginDTO loginDTO, int requisitionId)
+        public ActionResult ApproveRejectPendingRequisition(string button, RequisitionDetailsDTO viewModel)
         {
-            return View();
-        }
-
-        public ActionResult RejectRequisition(LoginDTO loginDTO, int requisitionId)
-        {
-            return View();
+            requisitionManagementService
         }
     }
 }
