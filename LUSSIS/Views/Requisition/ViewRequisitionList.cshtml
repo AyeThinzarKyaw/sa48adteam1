@@ -1,0 +1,102 @@
+﻿@model LUSSIS.Models.DTOs.RequisitionsDTO
+
+@{
+    ViewBag.Title = "ViewRequisitionList";
+}
+
+<section class="content-header">
+    <!-- If Supervisor -->
+    <!-- <h1>
+        Requested Requisitions
+    </h1> -->
+    <!-- If Supervisor -->
+
+    <h1>
+        My Requisition History
+    </h1>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Requisition Form ID</th>
+                                <th>Requested Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ 
+                                foreach(var r in Model.Requisitions)
+                                {
+                                    <tr>
+                                        <td>@r.Id</td>
+                                        <td>@r.DateTime.ToString("dd/MM/yyyy")</td>
+                                        @if (r.Status.Equals("PENDING"))
+                                        {
+                                            <td class="text-blue">Pending</td>
+                                        }
+                                        else if (r.Status.Equals("CANCELLED"))
+                                        {
+                                            <td class="text-orange">Cancelled</td>
+                                        }
+                                        else if (r.Status.Equals("APPROVED"))
+                                        {
+                                            <td class="text-green">Approved</td>
+                                        }
+                                        else if (r.Status.Equals("REJECTED"))
+                                        {
+                                            <td class="text-red">Rejected</td>
+                                        }
+                                        else //STATUS COMPLETED
+                                        {
+                                            <td class="text-grey">Completed</td>
+                                        }
+                                    <td>
+                                        <input type="button" class="btn btn-sm btn-primary" value="Detail"
+                                               onclick="location.href='@Url.Action("ViewRequisitionDetail", "Requisition", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionId = r.Id})'" />
+                                        @if (r.Status.Equals("PENDING"))
+                                        {
+                                            <input type="button" class="btn btn-sm btn-danger" value="Cancel"
+                                                   onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionId = r.Id})'" />
+                                        }
+
+                                    </td>
+                                    </tr>
+                                }
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+    $(function () {
+        $('#table').DataTable({
+            'columnDefs': [
+                { 'orderable': false, 'targets': 3 }
+            ],
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        })
+    });
+    </script>
+}

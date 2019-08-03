@@ -144,6 +144,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ClerkRequisitionsController.cs" />
+    <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
@@ -178,14 +180,14 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\RequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
     <Compile Include="Models\DTOs\ErrorDTO.cs" />
     <Compile Include="Models\DTOs\FormLoginDTO.cs" />
     <Compile Include="Models\DTOs\FormRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
-    <Compile Include="Models\DTOs\POCatalogueDTO.cs" />
-    <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
-    <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
+    <Compile Include="Models\DTOs\RequisitionsDTO.cs" />
+    <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
@@ -207,6 +209,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PO_getPOCatalogue_Result.cs">
+      <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseOrder.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
@@ -275,6 +280,8 @@
     <Compile Include="Repositories\StationeryRepo.cs" />
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
+    <Compile Include="Services\EmailNotificationService.cs" />
+    <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\Interfaces\IPurchaseOrderService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionCatalogueService.cs" />
@@ -464,10 +471,17 @@
     <Content Include="Views\Owed\Index.cshtml" />
     <Content Include="Views\Retrieval\Index.cshtml" />
     <Content Include="Views\Retrieval\Detail.cshtml" />
+    <Content Include="Views\Requisition\ViewRequisitionList.cshtml" />
+    <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />
+    <Content Include="Views\DeptHead\ReviewRequisitionDetails.cshtml" />
+    <Content Include="Views\DeptHead\ViewDepartmentRequisitions.cshtml" />
+    <Content Include="Views\PurchaseOrder\Catalogue.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Images\" />
+    <Folder Include="Views\ClerkRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

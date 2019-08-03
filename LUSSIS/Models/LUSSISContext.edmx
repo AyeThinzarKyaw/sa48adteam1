@@ -523,6 +523,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="PO_getPOCatalogue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="LUSSISContextModelStoreContainer">
           <EntitySet Name="AdjustmentVoucher" EntityType="Self.AdjustmentVoucher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AdjustmentVoucherDetail" EntityType="Self.AdjustmentVoucherDetail" Schema="dbo" store:Type="Tables" />
@@ -1339,7 +1340,19 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="SupplierTender" EntitySet="SupplierTenders" />
           </AssociationSet>
+          <FunctionImport Name="PO_getPOCatalogue" ReturnType="Collection(LUSSISContextModel.PO_getPOCatalogue_Result)" />
         </EntityContainer>
+        <ComplexType Name="PO_getPOCatalogue_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="StockQty" Nullable="false" />
+          <Property Type="Int32" Name="AvailableQty" Nullable="false" />
+          <Property Type="Int32" Name="WaitlistQty" Nullable="false" />
+          <Property Type="Int32" Name="Unsubmitted" Nullable="false" />
+          <Property Type="Int32" Name="ReorderLevel" Nullable="true" />
+          <Property Type="Int32" Name="ReorderQuantity" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1584,6 +1597,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO_getPOCatalogue" FunctionName="LUSSISContextModel.Store.PO_getPOCatalogue">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LUSSISContextModel.PO_getPOCatalogue_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StockQty" ColumnName="StockQty" />
+                <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
+                <ScalarProperty Name="WaitlistQty" ColumnName="WaitlistQty" />
+                <ScalarProperty Name="Unsubmitted" ColumnName="Unsubmitted" />
+                <ScalarProperty Name="ReorderLevel" ColumnName="ReorderLevel" />
+                <ScalarProperty Name="ReorderQuantity" ColumnName="ReorderQuantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

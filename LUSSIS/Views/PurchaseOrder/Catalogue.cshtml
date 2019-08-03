@@ -1,0 +1,108 @@
+﻿@model IEnumerable<LUSSIS.Models.PO_getPOCatalogue_Result>
+
+@{
+    ViewBag.Title = "Select PO Item";
+}
+
+<section class="content-header">
+    <h1>
+        Select Purchase Order Items
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box" style="height:550px; overflow-y:scroll;">
+                <div class="box-header">
+                    <div class="col-md-6 box-tools " style="position: relative;">
+                        <input id="showConfirmed" type="checkbox" />Show all confirmed items
+                    </div>
+                    <div class="col-md-6 box-tools pull-right" style="position: relative;">
+                        @Html.ActionLink("Select Supplier", "Create", null, new { @class = "btn btn-success right", @role = "button" })
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th width="5%">
+                                    Stationery Code
+                                </th>
+                                <th width="15%">
+                                    Description
+                                </th>
+                                <th width="5%">Available Qty</th>
+                                <th width="5%">Waitlist Qty</th>
+                                <th width="10%">Order Qty</th>
+                                <th width="10%">Reorder Level</th>
+                                <th width="10%">Recommended Reorder Qty</th>
+                                <th width="10%">Select</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var stationery in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => stationery.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => stationery.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => stationery.AvailabilityQty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => stationery.WaitlistQty)
+                                </td>
+                                @{
+                                    string inputBoxId = "txtQty" + stationery.Id;
+
+                                }
+                                <td>
+                                    <input id=@inputBoxId type="text" style="width: 80px;" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => stationery.ReorderLevel)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => stationery.ReorderQuantity)
+                                </td>
+                                <td>
+                                    <input id=@stationery.Id type="checkbox" class="minimal">
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 7}
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+
+    </script>
+}

@@ -2,6 +2,7 @@
 using LUSSIS.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -16,5 +17,12 @@ namespace LUSSIS.Repositories
         {
             get { return instance; }
         }
+
+        public List<Requisition> DepartmentRequisitionsEagerLoadEmployee(int deptId)
+        {
+            return Context.Requisitions.Include(r => r.Employee).Where(x => x.Employee.DepartmentId == deptId).ToList();
+
+        }
+
     }
 }
