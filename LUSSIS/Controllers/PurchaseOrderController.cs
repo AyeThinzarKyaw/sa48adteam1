@@ -17,8 +17,7 @@ namespace LUSSIS.Controllers
         public ActionResult Index()
         {
             PurchaseOrderListDTO purchaseOrders = new PurchaseOrderListDTO();
-            purchaseOrders.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders()
-                                            .OrderByDescending(x => x.OrderDateTime);
+            purchaseOrders.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders();
 
             return View(purchaseOrders);
         }

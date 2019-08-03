@@ -1,5 +1,5 @@
 ﻿@model LUSSIS.Models.DTOs.StationeryDetailsDTO
-@using LUSSIS.Models.DTOs;
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Create";
 }
@@ -88,7 +88,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Unit of Measurement</label>
-                                    @Html.DropDownList("UOM", EnumHelper.GetSelectList(typeof(EnumDTO.UOM)), new { @class = "form-control select2", @style = "width: 100%;" })
+                                    @Html.DropDownList("UOM", EnumHelper.GetSelectList(typeof(UOM)), new { @class = "form-control select2", @style = "width: 100%;" })
                                 </div>
                             </div>
                         </div>

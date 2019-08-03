@@ -1,5 +1,5 @@
 ﻿@model LUSSIS.Models.Stationery
-@using LUSSIS.Models.DTOs;
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Detail";
 }
@@ -66,7 +66,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer ">
                     @Html.ActionLink("Update", "Update", new { stationeryId = Model.Id }, new { @class = "btn btn-sm btn-warning pull-right", @role = "button" })
-                    @if (Model.Status == Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.INACTIVE))
+                    @if (Model.Status == Enum.GetName(typeof(ActiveStatus), ActiveStatus.INACTIVE))
                     {
                         @Html.ActionLink("Make Active", "ChangeStatus", new { stationeryId = Model.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
                     }
