@@ -2,6 +2,7 @@
 using LUSSIS.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -30,6 +31,13 @@ namespace LUSSIS.Repositories
                 return 0;
             }
             
+        }
+
+        public List<RequisitionDetail> RequisitionDetailsEagerLoadStationery(int requisitionId)
+        {
+            return Context.RequisitionDetails.Include(x => x.Stationery)
+                .Where(x => x.RequisitionId == requisitionId)
+                .ToList();
         }
     }
 }

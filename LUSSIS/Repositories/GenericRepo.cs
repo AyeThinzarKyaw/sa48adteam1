@@ -14,11 +14,12 @@ namespace LUSSIS.Repositories
         private LUSSISContext context = new LUSSISContext();
         public LUSSISContext Context { get { return this.context; } }
 
-        public void Create(T entity)
+        public T Create(T entity)
         {
             context = new LUSSISContext();
-            context.Set<T>().Add(entity);
+            T newEntity =  context.Set<T>().Add(entity);
             Save();
+            return newEntity;
         }
 
         public void Delete(T entity)
@@ -55,6 +56,12 @@ namespace LUSSIS.Repositories
             context.Set<T>().Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
             Save();
+        }
+
+        public T FindOneBy(Expression<Func<T, bool>> predicate)
+        {
+            return context.Set<T>().Where(predicate).SingleOrDefault();
+
         }
     }
 }

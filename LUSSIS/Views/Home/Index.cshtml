@@ -1,20 +1,12 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
-
-@section styles {
-    <style type="text/css">
-        input[type="text"] {
-            border: 1px solid #d2d6de;
-        }
-        .box {
-            margin: 0;
-        }
-    </style>
+﻿
+@{
+    ViewBag.Title = "Detail";
 }
 
 <section class="content-header">
-    <h1>Catalogue</h1>
+    <h1>
+        Disbursement Details
+    </h1>
 </section>
 
 <!-- Main content -->
@@ -22,134 +14,141 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-                <!-- /.box-body -->
-                <div class="box-body" style="height: 465px; overflow: hidden; overflow-y: auto;">
-                    <table id="table" class="table table-bordered table-hover">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>Disbursement ID</td>
+                                    <td>: DD005</td>
+                                </tr>
+                                <tr>
+                                    <td>Collection Date</td>
+                                    <td>: 20/11/2019</td>
+                                </tr>
+                                <tr>
+                                    <td>Collection Point</td>
+                                    <td>: Medical School (11:00am)</td>
+                                </tr>
+                                <tr>
+                                    <td>Collection Status</td>
+                                    <td>: <span class="text-blue">Pending Collection</span></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- If Clerk -->
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>Dept Name</td>
+                                    <td>: Department of Registrar</td>
+                                </tr>
+                                <tr>
+                                    <td>Dept Code</td>
+                                    <td>: DDS</td>
+                                </tr>
+                                <tr>
+                                    <td>Dept Representative</td>
+                                    <td>: Steve</td>
+                                </tr>
+                                <tr>
+                                    <td>Contact No.</td>
+                                    <td>: 68711907</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- If Clerk -->
+                    </div>
+                    <br /><br />
+                    <table id="example2" class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Item</th>
                                 <th>Unit of Measure</th>
-                                <th>Stock Availablility</th>
-                                <th>Reserved</th>
-                                <th>Waitlist</th>
-                                <th>OrderQty</th>
-                                <th>Confirmation</th>
+                                <th>Qty</th>
+
+                                <!-- If Dept Representative -->
+                                <th>Action</th>
+                                <!-- If Dept Representative -->
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Scissor</td>
                                 <td>Each</td>
-                                <td class="text-green">In stock</td>
-                                <td style="width: 20px;" class="text-green text-center">5</td>
-                                <td style="width: 20px;" class="text-orange text-center">15</td>
-                                <td style="width: 20px;"><input type="text" style="width: 80px;" /></td>
-                                <td style="width: 20px;" class="text-center"><input type="checkbox" class="minimal"></td>
+                                <td>5</td>
+
+                                <!-- If Dept Representative -->
+                                <td>
+                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        View Detail <i class="fa fa-chevron-down"></i>
+                                    </button>
+                                </td>
+                                <!-- If Dept Representative -->
                             </tr>
                             <tr>
                                 <td>Pen Transparency Soluble</td>
                                 <td>Packet</td>
-                                <td class="text-orange">Low stock(20)</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Pen Whiteboard Marker Black</td>
-                                <td>Box</td>
-                                <td class="text-gray">Out of stock</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Pen Whiteboard Marker Blue</td>
-                                <td>Box</td>
-                                <td class="text-orange">Low stock(10)</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                                <td>15</td>
+
+                                <!-- If Dept Representative -->
+                                <td>
+                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        View Detail <i class="fa fa-chevron-down"></i>
+                                    </button>
+                                </td>
+                                <!-- If Dept Representative -->
                             </tr>
                             <tr>
                                 <td>Ruler 12'</td>
                                 <td>Dozen</td>
-                                <td class="text-green">In stock</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                                <td>30</td>
+
+                                <!-- If Dept Representative -->
+                                <td style="width: 20px;">
+                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        View Detail <i class="fa fa-chevron-up"></i>
+                                    </button>
+                                </td>
+                                <!-- If Dept Representative -->
                             </tr>
                             <tr>
-                                <td>Scissor</td>
-                                <td>Each</td>
-                                <td class="text-green">In stock</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Pen Transparency Soluble</td>
-                                <td>Packet</td>
-                                <td class="text-orange">Low stock(20)</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Pen Whiteboard Marker Black</td>
-                                <td>Box</td>
-                                <td class="text-gray">Out of stock</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Pen Whiteboard Marker Blue</td>
-                                <td>Box</td>
-                                <td class="text-orange">Low stock(10)</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Ruler 12'</td>
-                                <td>Dozen</td>
-                                <td class="text-green">In stock</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Pen Whiteboard Marker Blue</td>
-                                <td>Box</td>
-                                <td class="text-orange">Low stock(10)</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
-                            </tr>
-                            <tr>
-                                <td>Ruler 12'</td>
-                                <td>Dozen</td>
-                                <td class="text-green">In stock</td>
-                                <td class="text-green text-center">0</td>
-                                <td class="text-orange text-center">0</td>
-                                <td><input type="text" style="width: 80px;" /></td>
-                                <td class="text-center"><input type="checkbox" class="minimal"></td>
+                                <td colspan="4" style="padding: 0;">
+                                    <div class="collapse" id="collapseExample">
+                                        <table id="example2" class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Requisition Form</th>
+                                                    <th>Requested Date</th>
+                                                    <th>Employee Name</th>
+                                                    <th>Requested Qty</th>
+                                                    <th>Disbursed Qty</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>DDS/11/99</td>
+                                                    <td>20/08/2019</td>
+                                                    <td>David</td>
+                                                    <td>10</td>
+                                                    <td>10</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DDS/130/12</td>
+                                                    <td>21/08/2019</td>
+                                                    <td>Arial</td>
+                                                    <td>5</td>
+                                                    <td>4</td>
+                                                </tr>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="box-footer">
-                    <a href="requsition-form.html" class="btn btn-success pull-right">Submit</a>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -159,28 +158,3 @@
     </div>
     <!-- /.row -->
 </section>
-
-@section scripts {
-    <script>
-        //iCheck for checkbox and radio inputs
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        });
-
-        $(function () {
-            $('#table').DataTable({
-                'columnDefs': [
-                    { 'orderable': false, 'targets': 5 },
-                    { 'orderable': false, 'targets': 6 }
-                ],
-                'paging': false,
-                'lengthChange': false,
-                'searching': true,
-                'ordering': true,
-                'info': false,
-                'autoWidth': false
-            })
-        })
-    </script>
-}

@@ -18,6 +18,7 @@ namespace LUSSIS.Services
         private IRequisitionRepo requisitionRepo;
         private IRequisitionDetailRepo requisitionDetailRepo;
         private IAdjustmentVoucherRepo adjustmentVoucherRepo;
+        private IEmployeeRepo employeeRepo;
         private static RequisitionCatalogueService instance = new RequisitionCatalogueService();
 
         private RequisitionCatalogueService()
@@ -26,6 +27,8 @@ namespace LUSSIS.Services
             stationeryRepo = StationeryRepo.Instance;
             requisitionRepo = RequisitionRepo.Instance;
             requisitionDetailRepo = RequisitionDetailRepo.Instance;
+            adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
+            employeeRepo = EmployeeRepo.Instance;
         }
 
         //returns single instance
@@ -43,17 +46,14 @@ namespace LUSSIS.Services
             //for each stationery in stationeries create a catalogueItemDTO
             foreach(Stationery s in stationeries)
             {
-                int currBalance =  getCurrentBalance(s);
-                int? lowStockCount = null;
-                StockAvailabilityEnum stockAvailEnum = getStockAvailabilityStatus(currBalance, s.ReorderLevel);
-                if(stockAvailEnum == StockAvailabilityEnum.LowStock)
+                CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO()
                 {
-                    lowStockCount = currBalance;
-                }
- 
-                catalogueItems.Add(new CatalogueItemDTO { Item = s.Description,
-                    UnitOfMeasure = s.UnitOfMeasure, StockAvailability =  stockAvailEnum,
-                    LowStockAvailability = lowStockCount, StationeryId = s.Id});
+                    Item = s.Description,
+                    UnitOfMeasure = s.UnitOfMeasure,
+                    StationeryId = s.Id
+                };
+                getCatalogueItemAvailability(catalogueItemDTO, s);               
+                catalogueItems.Add(catalogueItemDTO);
             }
 
             if (cartDetails != null)
@@ -99,6 +99,10 @@ namespace LUSSIS.Services
             if (netCount <= 0)
             {
                 return 0;
+            }
+            else if (netCount >= cd.Quantity)
+            {
+                return cd.Quantity;
             }
             else
             {
@@ -160,7 +164,32 @@ namespace LUSSIS.Services
             cartDetailRepo.Create(cd); //persist new cart detail
 
             //can abstract into a method and share with above bbut must instantiate a new DTO first
-            int newStockBalance = getCurrentBalance(s);
+            CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO() { ReservedCount = reserved, WaitlistCount = waitlist };
+            getCatalogueItemAvailability(catalogueItemDTO, s);
+
+            return catalogueItemDTO;
+
+        }
+
+        public CatalogueItemDTO RemoveCartDetail(int employeeId, int stationeryId)
+        {
+            Stationery s = stationeryRepo.FindById(stationeryId);
+            //remove cd from db first
+            CartDetail cd = cartDetailRepo.FindOneBy(x => x.EmployeeId == employeeId && x.StationeryId == stationeryId);
+            if(cd != null)
+            {
+                cartDetailRepo.Delete(cd);
+                CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO();
+                getCatalogueItemAvailability(catalogueItemDTO, s);
+                return catalogueItemDTO;
+            }
+
+            return null;
+        }
+
+        private void getCatalogueItemAvailability(CatalogueItemDTO catalogueItemDTO, Stationery s)
+        {
+            int currBalance = getCurrentBalance(s);
             int? lowStockCount = null;
             StockAvailabilityEnum stockAvailEnum = getStockAvailabilityStatus(currBalance, s.ReorderLevel);
             if (stockAvailEnum == StockAvailabilityEnum.LowStock)
@@ -168,18 +197,111 @@ namespace LUSSIS.Services
                 lowStockCount = currBalance;
             }
 
-            return new CatalogueItemDTO { StockAvailability = stockAvailEnum, LowStockAvailability = lowStockCount, ReservedCount = reserved, WaitlistCount = waitlist };
-
-        }
-
-        public void RemoveCartDetail(int employeeId, int stationeryId)
-        {
-            throw new NotImplementedException();
+            catalogueItemDTO.StockAvailability = stockAvailEnum;
+            catalogueItemDTO.LowStockAvailability = lowStockCount;
         }
 
         public CatalogueItemDTO UpdateCartDetail(int employeeId, int stationeryId, int inputQty)
         {
             throw new NotImplementedException();
         }
+
+        public List<Requisition> GetPersonalRequisitionHistory(int employeeId)
+        {
+            return (List<Requisition>)requisitionRepo.FindBy(x=> x.EmployeeId == employeeId);  
+        }
+
+
+        public Requisition ConvertCartDetailsToRequisitionDetails(int employeeId)
+        {
+            //erase records from cartDetails
+            List<CartDetail> cartDetails = (List<CartDetail>)cartDetailRepo.FindBy(x => x.EmployeeId == employeeId);
+            Requisition newRequisition = new Requisition() {DateTime = DateTime.Now, EmployeeId = employeeId,
+                Status = RequisitionStatusEnum.PENDING.ToString() };
+            newRequisition = requisitionRepo.Create(newRequisition);
+            List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
+
+            foreach(CartDetail cd in cartDetails)
+            {
+                cartDetailRepo.Delete(cd);
+
+                int reservedCount = getReservedBalanceForExistingCartItem(cd);
+                if(reservedCount < cd.Quantity)
+                {
+                    int waitllistCount = cd.Quantity - reservedCount;
+                    //has waitlist, create 2 requisition details
+                    RequisitionDetail waitlistRequisitionDetail = new RequisitionDetail()
+                    {
+                        QuantityOrdered = waitllistCount,
+                        RequisitionId = newRequisition.Id,
+                        Status = RequisitionDetailStatusEnum.WAITLIST_PENDING.ToString(),
+                        StationeryId = cd.StationeryId
+                    };
+                    requisitionDetailRepo.Create(waitlistRequisitionDetail);
+                    if(reservedCount > 0)
+                    {
+                        createReservedPendingRequisitionDetail(reservedCount, newRequisition.Id, cd.StationeryId);
+                    }                    
+                }
+                else
+                {
+                    createReservedPendingRequisitionDetail(cd.Quantity, newRequisition.Id, cd.StationeryId);
+                }
+
+            }
+            return newRequisition;
+        }
+
+        private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId, int stationeryId)
+        {
+            RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
+            {
+                QuantityOrdered = reservedCount,
+                RequisitionId = requisitionId,
+                Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString(),
+                StationeryId = stationeryId
+            };
+            requisitionDetailRepo.Create(reservedRequisitionDetail);
+        }
+
+        RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(int requisitionId, int employeeId)
+        {
+            string employeeName = employeeRepo.FindById(employeeId).Name;
+            Requisition requisition = requisitionRepo.FindById(requisitionId);
+            //switch to eager loading method
+            //List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
+            List<RequisitionDetail> requisitionDetails = requisitionDetailRepo.RequisitionDetailsEagerLoadStationery(requisitionId);
+            return new RequisitionDetailsDTO() { EmployeeName = employeeName,
+                RequestedDate = requisition.DateTime.ToString("dd/MM/yyyy"),
+                RequisitionFormId = requisition.Id,
+                RequisitionStatus = requisition.Status,
+                RequisitionDetails = requisitionDetails};
+        }
+
+        public void CancelPendingRequisition(int requisitionId)
+        {
+            Requisition r = requisitionRepo.FindById(requisitionId);
+            r.Status = RequisitionStatusEnum.CANCELLED.ToString();
+            requisitionRepo.Update(r);
+            CascadeToRequisitionDetails("cancel", requisitionId);
+
+        }
+
+        private void CascadeToRequisitionDetails(string action, int requisitionId)
+        {
+            //get all requisitiondetails belonging to this requisition
+            if (action.Equals("cancel"))
+            {
+
+            }
+        }
+
+        public void CancelWaitlistedRequisitionDetail(int requisitionDetailId)
+        {
+            RequisitionDetail rd = requisitionDetailRepo.FindById(requisitionDetailId);
+            rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
+            requisitionDetailRepo.Update(rd);
+        }
+
     }
 }

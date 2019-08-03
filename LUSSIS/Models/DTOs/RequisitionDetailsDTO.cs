@@ -5,13 +5,20 @@ using System.Web;
 
 namespace LUSSIS.Models.DTOs
 {
-    public class RequestedRequisitionDetailsDTO
+    public class RequisitionDetailsDTO
     {
-        public string RequisitionFormId { get; set; }
-        public DateTime RequestedDate { get; set; }
-        public string Status { get; set; }
+        public LoginDTO LoginDTO {get; set;}
+
+        public int RequisitionFormId { get; set; }
+
+        public string RequestedDate { get; set; }
+
+        public string RequisitionStatus { get; set; }
+
         public string EmployeeName { get; set; }
+
         public List<RequisitionDetail> RequisitionDetails { get; set; }
+
         public string Remarks { get; set; }
 
     }

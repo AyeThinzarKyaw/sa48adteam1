@@ -3,5 +3,135 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<section class="content-header">
+    <h1>
+        Retrieval List
+    </h1>
+</section>
 
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="box-tools pull-right" style="position: relative;">
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+                            Generate Adhoc Retrieval
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <!--VLR001-->
+                            <tr>
+                                <th>Retrieval Form ID</th>
+                                <th>Retrieval Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>R12345678</td>
+                                <td>28/06/2019</td>
+                                <td>
+                                    <a href="retrieval-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>R12345677</td>
+                                <td>21/06/2019</td>
+                                <td>
+                                    <a href="retrieval-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>R12345676</td>
+                                <td>14/06/2019</td>
+                                <td>
+                                    <a href="retrieval-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>R12345675</td>
+                                <td>07/06/2019</td>
+                                <td>
+                                    <a href="retrieval-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Generate Adhoc Retrieval</h4>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Department </label>
+                                <select class="form-control select2">
+                                    <option></option>
+                                    <option>Department1</option>
+                                    <option>Department2</option>
+                                    <option>Department3</option>
+                                    <option>Department4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="width: 100%;">Requisition Form ID</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">Generate</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+@section scripts {
+    <script>
+
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 2 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+}

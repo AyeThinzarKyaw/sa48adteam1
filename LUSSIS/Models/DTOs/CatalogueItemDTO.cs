@@ -11,7 +11,7 @@ namespace LUSSIS.Models.DTOs
         public int StationeryId { get; set; }
         public string Item { get; set; }
         public string UnitOfMeasure { get; set; }
-        public Enum StockAvailability { get; set; }
+        public StockAvailabilityEnum StockAvailability { get; set; }
         public int? LowStockAvailability { get; set; }
 
         public int ReservedCount { get; set; }
