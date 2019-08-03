@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "SelectSupplier";
+}
+
+<section class="content-header">
+    <h1>
+        Select Supplier
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item Number</th>
+                                <th>Description</th>
+                                <th>Available Qty</th>
+                                <th>Waitlist Qty</th>
+                                <th>Order Qty</th>
+                                <th>Reorder Level</th>
+                                <th style="width: 80px;">Recomm Reorder Qty</th>
+                                <th>Supplier</th>
+                                <th>Confirm</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="old">
+                            <tr id="row1">
+                                <td>P040</td>
+                                <td>Whiteboard Marker Green</td>
+                                <td><b>35</b></td>
+                                <td>0</td>
+                                <td>
+                                    <input type="text" value="63" style="width: 100px;" />
+                                </td>
+                                <td>30</td>
+                                <td>50</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;" data-id="supp1">
+                                        <option class="nth">Select Supplier1</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="checkbox" class="minimal"></td>
+                                <td><a href="product-detail.html" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
+                            </tr>
+                            <tr id="row2">
+                                <td>T001</td>
+                                <td>Thumb Tasks Large</td>
+                                <td class="text-red"><b>0</b></td>
+                                <td>0</td>
+                                <td>
+                                    <input type="text" value="26" style="width: 100px;" />
+                                </td>
+
+                                <td>10</td>
+                                <td>10</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;" data-id="supp2">
+                                        <option class="nth">Select Supplier1</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="checkbox" class="minimal"></td>
+                                <td><a href="product-detail.html" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
+                            </tr>
+                            <tr id="row3">
+                                <td>F031</td>
+                                <td>Folder plastic blue</td>
+                                <td class="text-red"><b>180</b></td>
+                                <td>0</td>
+                                <td>
+                                    <input type="text" value="150" style="width: 100px;" />
+                                </td>
+                                <td>200</td>
+                                <td>150</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;" data-id="supp3">
+                                        <option class="nth">Select Supplier1</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="checkbox" class="minimal"></td>
+                                <td><a href="product-detail.html" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
+                            </tr>
+                            <tr id="row4">
+                                <td>C001</td>
+                                <td>Clips Double 1"</td>
+                                <td class="text-red"><b>29</b></td>
+                                <td>0</td>
+                                <td>
+                                    <input type="text" value="55" style="width: 100px;" />
+                                </td>
+                                <td>30</td>
+                                <td>30</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;" data-id="supp4">
+                                        <option class="nth">Select Supplier1</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="checkbox" class="minimal"></td>
+                                <td><a href="product-detail.html" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
+                            </tr>
+                            <tr id="row5">
+                                <td>C002</td>
+                                <td>Clips Double 2"</td>
+                                <td>30</td>
+                                <td>0</td>
+                                <td>
+                                    <input type="text" value="30" style="width: 100px;" />
+                                </td>
+                                <td>30</td>
+                                <td>30</td>
+                                <td>
+                                    <select class="form-control select2" style="width: 100%;" data-id="supp5">
+                                        <option class="nth">Select Supplier1</option>
+                                        <option>ALPHA Office Supplies</option>
+                                        <option>Cheap Stationer</option>
+                                        <option>BANES Shop</option>
+                                    </select>
+                                </td>
+                                <td><input type="checkbox" class="minimal"></td>
+                                <td><a href="product-detail.html" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button class="btn btn-success pull-right">Submit</button>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section scripts {
+    <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        })
+
+        $(".select2").change(function () {
+
+            var str = "";
+            $(this).find("option:selected").each(function () {
+                str += $(this).text() + " ";
+            });
+
+            var res = str.substring(0, 3);
+            var content = $(this).parent().parent().attr('id')
+
+            var par = $("#" + content).parent().attr('class');
+            if (res != "Sel") {
+
+                //if this class already exists or not
+                if ($('.' + res).length) {
+                    $("#" + content).detach().prependTo('.' + res);
+                }
+                else {
+                    $("table").append("<tbody id='" + res + "'><tr><td colspan='2' class='with-border' style='background-color: #ecf0f5; color: #3c8dbc;'><b>" + str + "</b></td><td colspan='2' style='background-color: #ecf0f5;'>Estimated Delivery Date :</td><td colspan='2' style='background-color: #ecf0f5;'><div class='form-group' style='margin: 0;'><div class='input-group date'><div class='input-group-addon'><i class='fa fa-calendar'></i></div><input type='date' class='form-control pull-right' id='datepicker'></div></div></td><td colspan='4' style='background-color: #ecf0f5;'></td></tr></tbody>");
+                    $("table").append("<tbody class='" + res + "'></tbody>");
+                    $("#" + content).detach().prependTo('.' + res);
+                }
+            }
+            else {
+                $("#" + content).detach().prependTo('.old');
+            }
+
+            var empty = $("." + par).has("tr").length;
+            if (empty == 0) {
+                console.log(empty);
+                console.log(par);
+                $("." + par).remove();
+                $("#" + par).remove();
+            }
+        });
+    </script>
+}
