@@ -20,7 +20,7 @@ namespace LUSSIS.Models
         {
             //this solves the self-referencing loop
             //Written by Charles
-            Configuration.ProxyCreationEnabled = false;
+            //Configuration.ProxyCreationEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
