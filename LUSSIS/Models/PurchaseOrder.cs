@@ -28,6 +28,7 @@ namespace LUSSIS.Models
         public string DeliveryOrderNo { get; set; }
         public Nullable<System.DateTime> DeliveryDateTime { get; set; }
         public string Status { get; set; }
+        public string Remark { get; set; }
         public string DO { get; set; }
         public string Invoice { get; set; }
     
