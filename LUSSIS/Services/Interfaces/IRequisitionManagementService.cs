@@ -9,8 +9,9 @@ namespace LUSSIS.Services.Interfaces
 {
     public interface IRequisitionManagementService
     {
-        List<Requisition> GetDepartmentRequisitions(int deptId);
+        List<Requisition> GetDepartmentRequisitions(int deptHeadEmployeeId);
 
-        void ApproveRejectPendingRequisition(int requisitionId, string action, string remarks)
+        void ApproveRejectPendingRequisition(int requisitionId, string action, string remarks);
+
     }
 }

@@ -90,10 +90,15 @@ namespace LUSSIS.Controllers
             return RedirectToAction("ViewRequisitionList", loginDTO);
         }
 
-        public ActionResult CancelWaitlistedRequisitionDetail(LoginDTO loginDTO, int requisitionDetailId)
+        public ActionResult CancelWaitlistedRequisitionDetail(LoginDTO loginDTO, int requisitionDetailId, int requisitionId)
         {
             requisitionCatalogueService.CancelWaitlistedRequisitionDetail(requisitionDetailId);
-            return View();
+            return RedirectToAction("ViewRequisitionDetail", 
+                new {SessionGUID = loginDTO.SessionGuid,
+                    EmployeeId = loginDTO.EmployeeId,
+                    RoleId = loginDTO.RoleId,
+                    requisitionId = requisitionId
+                });
         }
 
     }

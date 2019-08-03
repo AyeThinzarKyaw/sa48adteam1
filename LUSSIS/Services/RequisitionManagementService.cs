@@ -16,6 +16,7 @@ namespace LUSSIS.Services
         private IRequisitionRepo requisitionRepo;
         private IRequisitionDetailRepo requisitionDetailRepo;
         private IEmployeeRepo employeeRepo;
+        private IDepartmentRepo departmentRepo;
         private static RequisitionManagementService instance = new RequisitionManagementService();
 
         private RequisitionManagementService()
@@ -24,6 +25,8 @@ namespace LUSSIS.Services
             requisitionRepo = RequisitionRepo.Instance;
             requisitionDetailRepo = RequisitionDetailRepo.Instance;
             employeeRepo = EmployeeRepo.Instance;
+            departmentRepo = DepartmentRepo.Instance;
+
         }
 
         //returns single instance
@@ -32,9 +35,12 @@ namespace LUSSIS.Services
             get { return instance; }
         }
 
-        public List<Requisition> GetDepartmentRequisitions(int deptId)
+        public List<Requisition> GetDepartmentRequisitions(int deptHeadEmployeeId)
         {
-            return requisitionRepo.DepartmentRequisitionsEagerLoadEmployee(deptId);
+            //get dept Id
+            Employee deptHead = employeeRepo.FindById(deptHeadEmployeeId);
+
+            return requisitionRepo.DepartmentRequisitionsEagerLoadEmployee(deptHead.DepartmentId);
         }
 
         public void ApproveRejectPendingRequisition(int requisitionId, string action, string remarks)
@@ -61,17 +67,41 @@ namespace LUSSIS.Services
 
         private void CascadeToRequisitionDetails(string action, int requisitionId)
         {
+            List<RequisitionDetail> rds = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == requisitionId);
+            
             if (action.Equals("approve"))
             {
-                //change to reserved pending to preparing
-
-                //change waitlist pending to waitlist approved
+                foreach (RequisitionDetail rd in rds)
+                {
+                    if (rd.Status.Equals(RequisitionDetailStatusEnum.RESERVED_PENDING.ToString()))
+                    {
+                        //change from reserved pending to preparing
+                        rd.Status = RequisitionDetailStatusEnum.PREPARING.ToString();
+                        requisitionDetailRepo.Update(rd);
+                    }
+                    else if(rd.Status.Equals(RequisitionDetailStatusEnum.WAITLIST_PENDING.ToString()))
+                    {
+                        //change waitlist pending to waitlist approved
+                        rd.Status = RequisitionDetailStatusEnum.WAITLIST_APPROVED.ToString();
+                        requisitionDetailRepo.Update(rd);
+                    }
+                    else
+                    {
+                        //throw new Exception("This RD shouldnt belong to a pending Requsition!");
+                    }
+                    
+                }
+               
             }
             else
             {
-                //change all to rejected
+                //rejected
+                foreach (RequisitionDetail rd in rds)
+                {
+                    rd.Status = RequisitionDetailStatusEnum.REJECTED.ToString();
+                    requisitionDetailRepo.Update(rd);
+                }
             }
-                throw new NotImplementedException();
         }
     }
 }
