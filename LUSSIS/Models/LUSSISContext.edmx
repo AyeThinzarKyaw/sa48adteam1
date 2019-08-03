@@ -121,6 +121,7 @@
           <Property Name="Remark" Type="nvarchar" MaxLength="1000" />
           <Property Name="DO" Type="nvarchar" MaxLength="100" />
           <Property Name="Invoice" Type="nvarchar" MaxLength="100" />
+          <Property Name="DORemark" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="PurchaseOrderDetail">
           <Key>
@@ -796,6 +797,7 @@
           <Property Name="Remark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="DO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Invoice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DORemark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_PurchaseOrder_Employee" FromRole="PurchaseOrder" ToRole="Employee" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_PurchaseOrder_Supplier" FromRole="PurchaseOrder" ToRole="Supplier" />
           <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetail_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseOrderDetail" />
@@ -1486,6 +1488,7 @@
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="DO" ColumnName="DO" />
                 <ScalarProperty Name="Invoice" ColumnName="Invoice" />
+                <ScalarProperty Name="DORemark" ColumnName="DORemark" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

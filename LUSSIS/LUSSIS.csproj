@@ -476,6 +476,7 @@
     <Content Include="Views\DeptHead\ReviewRequisitionDetails.cshtml" />
     <Content Include="Views\DeptHead\ViewDepartmentRequisitions.cshtml" />
     <Content Include="Views\PurchaseOrder\Catalogue.cshtml" />
+    <Content Include="Views\PurchaseOrder\ReceiveDO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

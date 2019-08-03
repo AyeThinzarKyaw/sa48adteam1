@@ -98,6 +98,10 @@ namespace LUSSIS.Controllers
             return Json(new object[] { false, "This purchase order does not exist." }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ReceiveDO(int poId)
+        {
+            return View();
+        }
 
     }
 }
