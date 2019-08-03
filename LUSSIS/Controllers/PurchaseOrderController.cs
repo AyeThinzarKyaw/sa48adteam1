@@ -100,7 +100,15 @@ namespace LUSSIS.Controllers
 
         public ActionResult ReceiveDO(int poId)
         {
-            return View();
+            ReceiveDoDTO receiveDO = new ReceiveDoDTO();
+            receiveDO.purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
+            return View(receiveDO);
+        }
+
+        [HttpPost]
+        public ActionResult ReceiveDO(ReceiveDoDTO receiveDO)
+        {
+            return View(receiveDO);
         }
 
     }

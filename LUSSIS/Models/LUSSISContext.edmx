@@ -203,6 +203,7 @@
           <Property Name="Address2" Type="nvarchar" MaxLength="50" />
           <Property Name="Address3" Type="nvarchar" MaxLength="50" />
           <Property Name="GST_No" Type="nvarchar" MaxLength="50" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SupplierTender">
           <Key>
@@ -897,6 +898,7 @@
           <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GST_No" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PurchaseOrder_Supplier" FromRole="Supplier" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SupplierTenders" Relationship="Self.FK_SupplierTender_Supplier" FromRole="Supplier" ToRole="SupplierTender" />
         </EntityType>
@@ -1577,6 +1579,7 @@
                 <ScalarProperty Name="Address2" ColumnName="Address2" />
                 <ScalarProperty Name="Address3" ColumnName="Address3" />
                 <ScalarProperty Name="GST_No" ColumnName="GST_No" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

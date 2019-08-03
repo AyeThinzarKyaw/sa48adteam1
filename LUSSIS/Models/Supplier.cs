@@ -31,6 +31,7 @@ namespace LUSSIS.Models
         public string Address2 { get; set; }
         public string Address3 { get; set; }
         public string GST_No { get; set; }
+        public bool Active { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }

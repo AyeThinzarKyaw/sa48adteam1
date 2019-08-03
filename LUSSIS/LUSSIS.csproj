@@ -180,6 +180,7 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\ReceiveDoDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
     <Compile Include="Models\DTOs\ErrorDTO.cs" />
