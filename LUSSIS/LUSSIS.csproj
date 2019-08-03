@@ -144,6 +144,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -469,11 +470,13 @@
     <Content Include="Views\Requisition\ViewRequisitionList.cshtml" />
     <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />
     <Content Include="Views\DeptHead\ReviewRequisitionDetails.cshtml" />
+    <Content Include="Views\DeptHead\ViewDepartmentRequisitions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\" />
+    <Folder Include="Views\ClerkRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

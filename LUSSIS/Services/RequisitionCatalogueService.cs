@@ -292,7 +292,12 @@ namespace LUSSIS.Services
             //get all requisitiondetails belonging to this requisition
             if (action.Equals("cancel"))
             {
-
+                List<RequisitionDetail> rds = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=>x.RequisitionId == requisitionId);
+                foreach(RequisitionDetail rd in rds)
+                {
+                    rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
+                    requisitionDetailRepo.Update(rd);
+                }
             }
         }
 

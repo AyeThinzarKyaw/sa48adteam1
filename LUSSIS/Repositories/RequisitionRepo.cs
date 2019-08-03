@@ -20,12 +20,8 @@ namespace LUSSIS.Repositories
 
         public List<Requisition> DepartmentRequisitionsEagerLoadEmployee(int deptId)
         {
-            var result = from r in Context.Requisitions.Include(r=>r.Employee)
-                         join e in Context.Employees on r.EmployeeId equals e.Id
-                         join d in Context.Departments on e.DepartmentId equals d.Id
-                         where d.Id == deptId
-                         select r;
-            return result.ToList(); 
+            return Context.Requisitions.Include(r => r.Employee).Where(x => x.Employee.DepartmentId == deptId).ToList();
+
         }
 
     }

@@ -95,7 +95,13 @@
                                             <td class="text-orange">WaitListed</td>
                                             <td>
                                                 <input type="button" class="btn btn-sm btn-danger" value="Cancel"
-                                                       onclick="location.href='@Url.Action("CancelWaitlistedRequisitionDetail", "Requisition", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionDetailId = rd.Id})'" />
+                                                       onclick="location.href='@Url.Action("CancelWaitlistedRequisitionDetail",
+                                                                              "Requisition",
+                                                                              new { @SessionGUID = Model.LoginDTO.SessionGuid,
+                                                                                  @EmployeeId = Model.LoginDTO.EmployeeId,
+                                                                                  @RoleId = Model.LoginDTO.RoleId,
+                                                                                  @requisitionDetailId = rd.Id,
+                                                                                  @requisitionId = Model.RequisitionFormId})'" />
                                             </td>
                                         }
                                         else if (rd.Status.Equals("PENDING_COLLECTION"))
@@ -134,7 +140,7 @@
                 @if (Model.RequisitionStatus.Equals("PENDING"))
                 {
                     <div class="box-footer">
-                        <input type="button" class="btn btn-sm btn-danger" value="Cancel"
+                        <input type="button" class="btn btn-sm btn-danger pull-right" value="Cancel"
                                onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionId = Model.RequisitionFormId})'" />
                     </div>
                     <!-- /.For Staff if Status = Pending -->

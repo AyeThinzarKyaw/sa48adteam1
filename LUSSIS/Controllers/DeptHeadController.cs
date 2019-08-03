@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models.DTOs;
+﻿using LUSSIS.Models;
+using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
 using System;
@@ -28,8 +29,10 @@ namespace LUSSIS.Controllers
 
         public ActionResult ViewDepartmentRequisitions(LoginDTO loginDTO)
         {
+            List<Requisition> deptReqs = requisitionManagementService.GetDepartmentRequisitions(loginDTO.EmployeeId);
+            RequisitionsDTO model = new RequisitionsDTO() { LoginDTO = loginDTO, Requisitions = deptReqs };
 
-            return View();
+            return View(model);
         }
 
         public ActionResult ReviewRequisitionDetails(LoginDTO loginDTO, int requisitionId)
@@ -41,7 +44,8 @@ namespace LUSSIS.Controllers
 
         public ActionResult ApproveRejectPendingRequisition(string button, RequisitionDetailsDTO viewModel)
         {
-            requisitionManagementService
+            requisitionManagementService.ApproveRejectPendingRequisition(viewModel.RequisitionFormId, button, viewModel.Remarks);
+            return RedirectToAction("ViewDepartmentRequisitions", viewModel.LoginDTO);
         }
     }
 }
