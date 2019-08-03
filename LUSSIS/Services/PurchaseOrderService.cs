@@ -23,9 +23,18 @@ namespace LUSSIS.Services
             return PurchaseOrderRepo.Instance.FindAll().OrderByDescending(x=>x.OrderDateTime).ToList();
         }
 
-        public void RetrievePurchaseOrderCatalogue()
+        public PurchaseOrder getPurchaseOrderById(int poId)
         {
+            return PurchaseOrderRepo.Instance.FindById(poId);
+        }
 
+        public IEnumerable<PO_getPOCatalogue_Result> RetrievePurchaseOrderCatalogue()
+        {
+            return PurchaseOrderRepo.Instance.GetPOCatalogue();
+        }
+        public void UpdatePOStatus(PurchaseOrder po)
+        {
+            PurchaseOrderRepo.Instance.Update(po);
         }
     }
 }

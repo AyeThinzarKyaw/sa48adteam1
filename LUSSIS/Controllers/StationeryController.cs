@@ -46,7 +46,9 @@ namespace LUSSIS.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (stationery.Supplier1 == stationery.Supplier2 || stationery.Supplier1 == stationery.Supplier3 || stationery.Supplier2 == stationery.Supplier3)
+                if (stationery.Supplier1 == stationery.Supplier2 
+                    || stationery.Supplier1 == stationery.Supplier3 
+                    || stationery.Supplier2 == stationery.Supplier3)
                 {
                     stationery.Error = new ErrorDTO();
                     stationery.Error.HasError = true;
@@ -57,13 +59,6 @@ namespace LUSSIS.Controllers
                 }
 
                 Stationery newStationery = this.generateStationery(stationery);
-                //newStationery.Id = stationery.StationeryId;
-                //newStationery.Code = stationery.Code;
-                //newStationery.Description = stationery.Description;
-                //newStationery.CategoryId = stationery.CategoryId;
-                //newStationery.UnitOfMeasure = Enum.GetName(typeof(EnumDTO.UOM), stationery.UOM);
-                //newStationery.Bin = stationery.Bin;
-                //newStationery.Status = Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.ACTIVE);
                 StationeryService.Instance.CreateStationery(newStationery);
 
                 this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);

@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<LUSSIS.Models.Stationery>
-@using LUSSIS.Models.DTOs;
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Stationeries";
 }
@@ -60,7 +60,7 @@
                                 <td>
                                     @Html.ActionLink("Detail", "Detail", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
                                     @Html.ActionLink("Update", "Update", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-warning", @role = "button" })
-                                    @if (stationery.Status == Enum.GetName(typeof(EnumDTO.ActiveStatus), EnumDTO.ActiveStatus.INACTIVE))
+                                    @if (stationery.Status == Enum.GetName(typeof(ActiveStatus), ActiveStatus.INACTIVE))
                                     {
                                         @Html.ActionLink("Make Active", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
                                     }

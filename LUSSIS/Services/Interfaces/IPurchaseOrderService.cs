@@ -10,6 +10,9 @@ namespace LUSSIS.Services.Interfaces
     public interface IPurchaseOrderService
     {
         IEnumerable<PurchaseOrder> getAllPurchaseOrders();
-        void RetrievePurchaseOrderCatalogue();
+        PurchaseOrder getPurchaseOrderById(int poId);
+        IEnumerable<PO_getPOCatalogue_Result> RetrievePurchaseOrderCatalogue();
+
+        void UpdatePOStatus(PurchaseOrder po);
     }
 }

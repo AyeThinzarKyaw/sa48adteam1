@@ -183,7 +183,7 @@
     <Compile Include="Models\DTOs\FormLoginDTO.cs" />
     <Compile Include="Models\DTOs\FormRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
-    <Compile Include="Models\DTOs\POCatalogueDTO.cs" />
+    <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
@@ -207,6 +207,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PO_getPOCatalogue_Result.cs">
+      <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseOrder.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
@@ -462,6 +465,7 @@
     <Content Include="Views\Inventory\Detail.cshtml" />
     <Content Include="Views\Owed\Index.cshtml" />
     <Content Include="Views\Retrieval\Index.cshtml" />
+    <Content Include="Views\PurchaseOrder\Catalogue.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
