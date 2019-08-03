@@ -186,11 +186,8 @@
     <Compile Include="Models\DTOs\FormLoginDTO.cs" />
     <Compile Include="Models\DTOs\FormRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
-    <Compile Include="Models\DTOs\POCatalogueDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionsDTO.cs" />
     <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
-    <Compile Include="Models\DTOs\RequestedRequisitionDetailsDTO.cs" />
-    <Compile Include="Models\DTOs\RequestedRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
