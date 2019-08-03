@@ -191,7 +191,7 @@ namespace LUSSIS.Controllers
         {
             Category category = new Category();
             category.Type = type;
-            category.Id = 20;
+            //category.Id = 20;
             StationeryService.Instance.CreateCategory(category);
             var aa = StationeryService.Instance.GetAllCategories();
 
