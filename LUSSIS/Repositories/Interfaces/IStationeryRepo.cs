@@ -10,5 +10,7 @@ namespace LUSSIS.Repositories.Interfaces
     public interface IStationeryRepo: IGenericRepo<Stationery, int>
     {
         IEnumerable<Stationery> GetStationeriesBySupplierIdAndYear(int supplierId, int year);
+
+        List<Stationery> getAllStationeries();
     }
 }

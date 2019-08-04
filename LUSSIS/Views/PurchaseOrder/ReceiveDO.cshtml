@@ -1,0 +1,91 @@
+﻿@model LUSSIS.Models.DTOs.ReceiveDoDTO
+@{
+    ViewBag.Title = "ReceiveDO";
+}
+
+<section class="content-header">
+    <h1>
+        Confirm Delivery
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table>
+                        <tr>
+                            <td>PO Number</td>
+                            <td>: 200000063</td>
+                            <td></td>
+                            <td>Order Date</td>
+                            <td>: 15/07/2019</td>
+                        </tr>
+                        <tr>
+                            <td>Supplier</td>
+                            <td>: OMEGA Stationery</td>
+                            <td style="width: 400px;"></td>
+                            <td>Delivery Order No. </td>
+                            <td>: <input type="text" style="width: 150px;" /></td>
+                        </tr>
+                        <tr>
+                            <td>Contact Person</td>
+                            <td>: Mr. Tan Leng Eng</td>
+                            <td style="width: 400px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Contact Number</td>
+                            <td>: 62111181</td>
+                        </tr>
+                    </table>
+                    <br /><br />
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item Number</th>
+                                <th>Description</th>
+                                <th>To Disbursed Qty</th>
+                                <th>Delivered Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>F023</td>
+                                <td>File Brown w/o logo</td>
+                                <td>150</td>
+                                <td><input type="text" style="width: 100px;" /></td>
+                            </tr>
+                            <tr>
+                                <td>F036</td>
+                                <td>Permanent Marker Red</td>
+                                <td>150</td>
+                                <td><input type="text" style="width: 100px;" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <form>
+                        <div class="form-group">
+                            <label>Remark</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-success" href="#">Upload Deliver Order</a>
+                            <a class="btn btn-success" href="#">Upload Invoice</a>
+                        </div>
+                        <div class="form-group pull-right">
+                            <a class="btn btn-primary" href="#">Submit</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+

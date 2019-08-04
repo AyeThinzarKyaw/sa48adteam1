@@ -77,6 +77,39 @@ namespace LUSSIS.Controllers
             return View(purchaseOrder);
         }
 
+        // Approve/Reject PurchaseOrder
+        //By ATZK
+        public JsonResult ConfirmPO(int poId, string reply, string remark)
+        {
+            PurchaseOrder purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
+            
+            
+            if (purchaseOrder!=null)
+            {
+                if (purchaseOrder.Status== Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.OPEN))
+                {
+                    purchaseOrder.Status = reply;
+                    purchaseOrder.Remark = remark;
+                    PurchaseOrderService.Instance.UpdatePOStatus(purchaseOrder);
+                    return Json(new object[] { true, "" }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new object[] { false, "This purchase order is not in OPEN status." }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new object[] { false, "This purchase order does not exist." }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ReceiveDO(int poId)
+        {
+            ReceiveDoDTO receiveDO = new ReceiveDoDTO();
+            receiveDO.purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
+            return View(receiveDO);
+        }
+
+        [HttpPost]
+        public ActionResult ReceiveDO(ReceiveDoDTO receiveDO)
+        {
+            return View(receiveDO);
+        }
 
     }
 }

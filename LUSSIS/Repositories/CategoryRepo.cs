@@ -16,5 +16,16 @@ namespace LUSSIS.Repositories
         {
             get { return instance; }
         }
+
+        public String getCategoryType(int categoryId)
+        {
+            var categoryType = from a in Context.Categories
+                               where a.Id == categoryId
+                               select a.Type;
+
+            String returncategoryType = (String)categoryType.First();
+
+            return returncategoryType;
+        }
     }
 }

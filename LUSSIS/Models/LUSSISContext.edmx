@@ -118,8 +118,10 @@
           <Property Name="DeliveryOrderNo" Type="nvarchar" MaxLength="50" />
           <Property Name="DeliveryDateTime" Type="datetime" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="1000" />
           <Property Name="DO" Type="nvarchar" MaxLength="100" />
           <Property Name="Invoice" Type="nvarchar" MaxLength="100" />
+          <Property Name="DORemark" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="PurchaseOrderDetail">
           <Key>
@@ -201,6 +203,7 @@
           <Property Name="Address2" Type="nvarchar" MaxLength="50" />
           <Property Name="Address3" Type="nvarchar" MaxLength="50" />
           <Property Name="GST_No" Type="nvarchar" MaxLength="50" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SupplierTender">
           <Key>
@@ -792,8 +795,10 @@
           <Property Name="DeliveryOrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryDateTime" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="DO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Invoice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DORemark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_PurchaseOrder_Employee" FromRole="PurchaseOrder" ToRole="Employee" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_PurchaseOrder_Supplier" FromRole="PurchaseOrder" ToRole="Supplier" />
           <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetail_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseOrderDetail" />
@@ -893,6 +898,7 @@
           <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GST_No" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PurchaseOrder_Supplier" FromRole="Supplier" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SupplierTenders" Relationship="Self.FK_SupplierTender_Supplier" FromRole="Supplier" ToRole="SupplierTender" />
         </EntityType>
@@ -1481,8 +1487,10 @@
                 <ScalarProperty Name="DeliveryOrderNo" ColumnName="DeliveryOrderNo" />
                 <ScalarProperty Name="DeliveryDateTime" ColumnName="DeliveryDateTime" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="DO" ColumnName="DO" />
                 <ScalarProperty Name="Invoice" ColumnName="Invoice" />
+                <ScalarProperty Name="DORemark" ColumnName="DORemark" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1571,6 +1579,7 @@
                 <ScalarProperty Name="Address2" ColumnName="Address2" />
                 <ScalarProperty Name="Address3" ColumnName="Address3" />
                 <ScalarProperty Name="GST_No" ColumnName="GST_No" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
