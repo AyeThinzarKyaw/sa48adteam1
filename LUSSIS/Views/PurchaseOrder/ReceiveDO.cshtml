@@ -12,80 +12,154 @@
 <!-- Main content -->
 <section class="content">
     <div class="row">
+
+        @if (Model.Error != null && Model.Error.HasError == true && Model.Error.Message != null)
+        {
+            <div class="row">
+                <label class="text-danger">@Model.Error.Message</label>
+            </div>
+        }
+
         <div class="col-xs-12">
-            <div class="box">
-                <div class="box-body">
-                    <table>
-                        <tr>
+            @using (Html.BeginForm("ReceiveDO", "PurchaseOrder", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "receiveDO" }))
+            {
+                <div class="box">
+                    <div class="box-body">
+                        <table>
+                            <tr>
+                                @Html.HiddenFor(x => x.purchaseOrder.Id)
                             <td>PO Number</td>
-                            <td>: 200000063</td>
+                            <td>: @Html.DisplayFor(x => x.purchaseOrder.Id)</td>
                             <td></td>
                             <td>Order Date</td>
-                            <td>: 15/07/2019</td>
+                            <td>: @Model.purchaseOrder.OrderDateTime.ToString("dd/MM/yyyy")</td>
                         </tr>
                         <tr>
                             <td>Supplier</td>
-                            <td>: OMEGA Stationery</td>
+                            <td>: @Model.purchaseOrder.Supplier.Name</td>
                             <td style="width: 400px;"></td>
-                            <td>Delivery Order No. </td>
-                            <td>: <input type="text" style="width: 150px;" /></td>
+                            <td>Delivery Order No. <label class="text-danger">(*)</label> : </td>
+                            <td>
+                                @Html.TextBoxFor(x => x.purchaseOrder.DO, new { @Required = "Required", @style = "width: 150px;", @class = "form-control" })
+                                @*@Html.ValidationMessageFor(x=>x.purchaseOrder.DO)*@
+                                @*<input type="text" style="width: 150px;" />*@
+                            </td>
                         </tr>
                         <tr>
                             <td>Contact Person</td>
-                            <td>: Mr. Tan Leng Eng</td>
+                            <td>: @Model.purchaseOrder.Supplier.ContactName</td>
                             <td style="width: 400px;"></td>
                         </tr>
                         <tr>
                             <td>Contact Number</td>
-                            <td>: 62111181</td>
+                            <td>: @Model.purchaseOrder.Supplier.PhoneNo</td>
                         </tr>
                     </table>
                     <br /><br />
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Item Number</th>
+                                <th>Code</th>
                                 <th>Description</th>
-                                <th>To Disbursed Qty</th>
+                                <th>Ordered Qty</th>
                                 <th>Delivered Qty</th>
+                                <th>Qty Receive Now</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            <tr>
-                                <td>F023</td>
-                                <td>File Brown w/o logo</td>
-                                <td>150</td>
-                                <td><input type="text" style="width: 100px;" /></td>
-                            </tr>
-                            <tr>
-                                <td>F036</td>
-                                <td>Permanent Marker Red</td>
-                                <td>150</td>
-                                <td><input type="text" style="width: 100px;" /></td>
-                            </tr>
+                            @{int i = 0;}
+
+                            @foreach (var pod in Model.purchaseOrder.PurchaseOrderDetails)
+                            {
+                                <tr>
+                                    <td>@pod.Stationery.Code</td>
+                                    <td>@pod.Stationery.Description</td>
+                                    <td>@pod.QuantityOrdered</td>
+                                    @{ pod.QuantityDelivered = pod.QuantityDelivered == null ? 0 : (int)pod.QuantityDelivered;
+                                        int leftToReceive = pod.QuantityOrdered - (int)pod.QuantityDelivered;}
+                                    <td>@pod.QuantityDelivered</td>
+                                    <td>
+
+                                        @*@{string txtid = "Model.DOReceivedList[" + i + "]";}
+                                            <input type="text" id=@txtid value=@Model.DOReceivedList[i] style="width: 100px;" class="form-control" />*@
+
+                                        @*@Html.TextBoxFor(p => Model.DOReceivedList[i], new { @id = "DOReceivedList[" + i + "]", @style = "width: 10%;", @class = "form-control" })*@
+                                        @if (pod.Confirmed == true)
+                                        {
+                                            <input type="text" class="form-control" value=0 readonly />
+                                        }
+                                        else
+                                        {
+                                        <input type="text" class="form-control" required value=@leftToReceive onfocusout="updateQtyReceive(this,'@pod.Id','@pod.PurchaseOrderId');" />
+                                        }
+                                        @*@Html.TextBoxFor(p => pod.QuantityDelivered, new { @onfocusout = "updateQtyReceive(this,'" + pod.Id + "','" + pod.PurchaseOrderId + "');", @style = "width: 10%;", @class = "form-control" })*@
+                                        @*@Html.TextBoxFor(p => pod.QuantityDelivered, new { @onfocusout = "updateQtyReceive(this,'" + pod.Id + "','" + pod.PurchaseOrderId + "');", @style = "width: 10%;", @class = "form-control" })*@
+                                        @*<input type="text" onblur="" style="width: 100px;" />*@
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+
                         </tbody>
                     </table>
                     <br />
                     <form>
                         <div class="form-group">
                             <label>Remark</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                            @Html.TextAreaFor(x => x.purchaseOrder.Remark, new { @style = "max-width: 100% !important;", @class = "form-control", @placeholder = "Enter ..." })
+                            @*<textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>*@
                         </div>
                         <div class="form-group">
-                            <a class="btn btn-success" href="#">Upload Deliver Order</a>
-                            <a class="btn btn-success" href="#">Upload Invoice</a>
+                            <label>Upload Delivery Order</label>
+                            @Html.TextBoxFor(x => x.DO, new { @type = "file", @accept = "image/jpg, image/jpeg, image/png", @class = "btn btn-success" })
+                            @Html.ValidationMessageFor(x => x.DO, null, new { @class = "text-danger" })
+                            @*<a class="btn btn-success" href="#">Upload Deliver Order</a>
+                                <a class="btn btn-success" href="#">Upload Invoice</a>*@
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Invoice</label>
+                            @Html.TextBoxFor(x => x.Invoice, new { @type = "file", @accept = "image/jpg, image/jpeg, image/png", @class = "btn btn-success" })
+                            @Html.ValidationMessageFor(x => x.Invoice,null,new { @class="text-danger"})
                         </div>
                         <div class="form-group pull-right">
-                            <a class="btn btn-primary" href="#">Submit</a>
+                            <input type="submit" class="btn btn-primary" value="Submit" />
+                            @*<a class="btn btn-primary" href="#">Submit</a>*@
                         </div>
                     </form>
                 </div>
                 <!-- /.box-body -->
             </div>
+        }
             <!-- /.box -->
         </div>
         <!-- /.col -->
     </div>
     <!-- /.row -->
 </section>
+<script>
+    function updateQtyReceive(e, pod, po) {
+        debugger;
+        if (e.value != "") {
+
+
+            //alert(e.value);
+            var url = "/PurchaseOrder/UpdateReceivedQty?podId=" + pod + "&qty=" + e.value + "&poId=" + po;
+            $.ajax({
+                url: url,
+                type: "GET",
+                async: true,
+                success: function (data) {
+                    //if (data[0] == true) {
+                    //    window.location.href = '/PurchaseOrder/Index'
+                    //}
+                    //else {
+                    //    document.getElementById("errRemark").innerHTML = data[1];
+                    //}
+                },
+                error: function (data) { }
+            });
+        }
+    }
+</script>
 

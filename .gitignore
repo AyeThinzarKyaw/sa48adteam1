@@ -261,3 +261,7 @@ __pycache__/
 *.pyc
 /.project
 /LUSSIS/Controllers/EmployeesController.cs
+/LUSSIS/Images/DeliveryOrders/Invoice_2.png
+/LUSSIS/Images/DeliveryOrders/Invoice_0.png
+/LUSSIS/Images/DeliveryOrders/DO_2.png
+/LUSSIS/Images/DeliveryOrders/DO_0.png
