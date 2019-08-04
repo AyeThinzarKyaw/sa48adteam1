@@ -12,15 +12,14 @@ namespace LUSSIS.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class LUSSISContext : DbContext
     {
         public LUSSISContext()
             : base("name=LUSSISContext")
         {
-            //this solves the self-referencing loop
-            //Written by Charles
-            Configuration.ProxyCreationEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -48,5 +47,10 @@ namespace LUSSIS.Models
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierTender> SupplierTenders { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+    
+        public virtual ObjectResult<PO_getPOCatalogue_Result> PO_getPOCatalogue()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PO_getPOCatalogue_Result>("PO_getPOCatalogue");
+        }
     }
 }

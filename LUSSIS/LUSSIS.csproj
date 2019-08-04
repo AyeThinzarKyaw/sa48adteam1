@@ -180,14 +180,15 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\ReceiveDoDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
     <Compile Include="Models\DTOs\ErrorDTO.cs" />
     <Compile Include="Models\DTOs\FormLoginDTO.cs" />
     <Compile Include="Models\DTOs\FormRequisitionDTO.cs" />
     <Compile Include="Models\DTOs\LoginDTO.cs" />
-    <Compile Include="Models\DTOs\POCatalogueDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionsDTO.cs" />
+    <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
@@ -209,6 +210,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PO_getPOCatalogue_Result.cs">
+      <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseOrder.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
@@ -383,6 +387,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\logic.jpg" />
     <Content Include="Models\LUSSISContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
@@ -472,6 +477,8 @@
     <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />
     <Content Include="Views\DeptHead\ReviewRequisitionDetails.cshtml" />
     <Content Include="Views\DeptHead\ViewDepartmentRequisitions.cshtml" />
+    <Content Include="Views\PurchaseOrder\Catalogue.cshtml" />
+    <Content Include="Views\PurchaseOrder\ReceiveDO.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewSchoolRequisitions.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
   </ItemGroup>
@@ -479,6 +486,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\" />
+    <Folder Include="Views\ClerkRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -26,5 +26,9 @@ namespace LUSSIS.Repositories
                         select po;
             return result.ToList();
         }
+        public IEnumerable<PO_getPOCatalogue_Result> GetPOCatalogue()
+        {
+            return Context.PO_getPOCatalogue();
+        }
     }
 }

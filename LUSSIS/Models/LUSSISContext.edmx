@@ -118,8 +118,10 @@
           <Property Name="DeliveryOrderNo" Type="nvarchar" MaxLength="50" />
           <Property Name="DeliveryDateTime" Type="datetime" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="1000" />
           <Property Name="DO" Type="nvarchar" MaxLength="100" />
           <Property Name="Invoice" Type="nvarchar" MaxLength="100" />
+          <Property Name="DORemark" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="PurchaseOrderDetail">
           <Key>
@@ -201,6 +203,7 @@
           <Property Name="Address2" Type="nvarchar" MaxLength="50" />
           <Property Name="Address3" Type="nvarchar" MaxLength="50" />
           <Property Name="GST_No" Type="nvarchar" MaxLength="50" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SupplierTender">
           <Key>
@@ -523,6 +526,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="PO_getPOCatalogue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="LUSSISContextModelStoreContainer">
           <EntitySet Name="AdjustmentVoucher" EntityType="Self.AdjustmentVoucher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AdjustmentVoucherDetail" EntityType="Self.AdjustmentVoucherDetail" Schema="dbo" store:Type="Tables" />
@@ -791,8 +795,10 @@
           <Property Name="DeliveryOrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryDateTime" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="DO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Invoice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DORemark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_PurchaseOrder_Employee" FromRole="PurchaseOrder" ToRole="Employee" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_PurchaseOrder_Supplier" FromRole="PurchaseOrder" ToRole="Supplier" />
           <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetail_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseOrderDetail" />
@@ -892,6 +898,7 @@
           <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GST_No" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PurchaseOrder_Supplier" FromRole="Supplier" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SupplierTenders" Relationship="Self.FK_SupplierTender_Supplier" FromRole="Supplier" ToRole="SupplierTender" />
         </EntityType>
@@ -1339,7 +1346,19 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="SupplierTender" EntitySet="SupplierTenders" />
           </AssociationSet>
+          <FunctionImport Name="PO_getPOCatalogue" ReturnType="Collection(LUSSISContextModel.PO_getPOCatalogue_Result)" />
         </EntityContainer>
+        <ComplexType Name="PO_getPOCatalogue_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="StockQty" Nullable="false" />
+          <Property Type="Int32" Name="AvailableQty" Nullable="false" />
+          <Property Type="Int32" Name="WaitlistQty" Nullable="false" />
+          <Property Type="Int32" Name="Unsubmitted" Nullable="false" />
+          <Property Type="Int32" Name="ReorderLevel" Nullable="true" />
+          <Property Type="Int32" Name="ReorderQuantity" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1468,8 +1487,10 @@
                 <ScalarProperty Name="DeliveryOrderNo" ColumnName="DeliveryOrderNo" />
                 <ScalarProperty Name="DeliveryDateTime" ColumnName="DeliveryDateTime" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="DO" ColumnName="DO" />
                 <ScalarProperty Name="Invoice" ColumnName="Invoice" />
+                <ScalarProperty Name="DORemark" ColumnName="DORemark" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1558,6 +1579,7 @@
                 <ScalarProperty Name="Address2" ColumnName="Address2" />
                 <ScalarProperty Name="Address3" ColumnName="Address3" />
                 <ScalarProperty Name="GST_No" ColumnName="GST_No" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1584,6 +1606,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO_getPOCatalogue" FunctionName="LUSSISContextModel.Store.PO_getPOCatalogue">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LUSSISContextModel.PO_getPOCatalogue_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StockQty" ColumnName="StockQty" />
+                <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
+                <ScalarProperty Name="WaitlistQty" ColumnName="WaitlistQty" />
+                <ScalarProperty Name="Unsubmitted" ColumnName="Unsubmitted" />
+                <ScalarProperty Name="ReorderLevel" ColumnName="ReorderLevel" />
+                <ScalarProperty Name="ReorderQuantity" ColumnName="ReorderQuantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
