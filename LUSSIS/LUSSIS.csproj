@@ -194,6 +194,7 @@
     <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\DTOs\StockAndSupplierDTO.cs" />
+    <Compile Include="Models\DTOs\SupplierStockCardRankDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementBalanceDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementDTO.cs" />
     <Compile Include="Models\Employee.cs">
@@ -490,6 +491,7 @@
     <Content Include="Views\ClerkRequisitions\ViewSchoolRequisitions.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
     <Content Include="Views\Inventory\ViewInventoryList.cshtml" />
+    <Content Include="Views\Inventory\ViewStockCardAndSuppliers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

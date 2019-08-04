@@ -12,7 +12,7 @@ namespace LUSSIS.Services.Interfaces
     {
         List<InventoryListDTO> RetrieveStationeryAndCategory();
 
-        //List<StockMovementDTO> RetrieveStockMovement(int stationeryId);
+        StockAndSupplierDTO RetrieveStockMovement(int stationeryId);
 
     }
 }

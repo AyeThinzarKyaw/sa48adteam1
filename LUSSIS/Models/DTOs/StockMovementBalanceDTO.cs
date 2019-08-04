@@ -8,7 +8,7 @@ namespace LUSSIS.Models.DTOs
 {
     public class StockMovementBalanceDTO
     {
-        public List<StockMovementDTO> StockMovement { get; set; }
+        public StockMovementDTO StockMovement { get; set; }
         // hidden in View
         public int Balance { get; set; }
     }

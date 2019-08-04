@@ -41,7 +41,8 @@
                                 <td>@inventoryList.UnitOfMeasure</td>
                                 <td>@inventoryList.QuantityInStock</td>
                                 <td>
-                                    <a href="inventory-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    <input type="button" class="btn btn-sm btn-primary" value="Details"
+                                           onclick="location.href='@Url.Action("ViewStockCardAndSuppliers", "Inventory", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @stationeryId = inventoryList.StationeryId})'" />
                                 </td>
                             </tr>
                             }

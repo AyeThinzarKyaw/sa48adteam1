@@ -30,5 +30,16 @@ namespace LUSSIS.Repositories
         {
             return Context.PO_getPOCatalogue();
         }
+
+        //Edwin - need to change test to Acknowledged
+        public List<int> getPurchaseOrderIdsWithClosedStatus()
+        {
+            var purOrders = from a in Context.PurchaseOrders
+                              where a.Status.Equals("Closed")
+                              select a.Id;
+
+            List<int> purOrdersList = purOrders.ToList();
+            return purOrdersList;
+        }
     }
 }
