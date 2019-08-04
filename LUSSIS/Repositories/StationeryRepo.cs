@@ -21,6 +21,10 @@ namespace LUSSIS.Repositories
             return Context.Stationeries.Where(s => s.Id == s.SupplierTenders.Single(t => t.SupplierId == supplierId && t.Year == year).StationeryId).Distinct().ToList();
         }
 
-
+        public List<Stationery> getAllStationeries()
+        {
+            List<Stationery> stationeries = Context.Stationeries.ToList();
+            return stationeries;
+        }
     }
 }
