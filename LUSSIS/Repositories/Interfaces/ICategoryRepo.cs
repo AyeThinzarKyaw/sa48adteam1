@@ -8,6 +8,6 @@ namespace LUSSIS.Repositories.Interfaces
 {
     public interface ICategoryRepo: IGenericRepo<Category, int>
     {
-        
+        String getCategoryType(int categoryId);
     }
 }
