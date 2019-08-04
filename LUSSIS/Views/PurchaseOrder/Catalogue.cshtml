@@ -20,7 +20,7 @@
                         <input id="showConfirmed" type="checkbox" />Show all confirmed items
                     </div>
                     <div class="col-md-6 box-tools pull-right" style="position: relative;">
-                        @Html.ActionLink("Select Supplier", "Create", null, new { @class = "btn btn-success right", @role = "button" })
+                        @Html.ActionLink("Select Supplier", "SelectSupplier", null, new { @class = "btn btn-success right", @role = "button" })
                     </div>
                 </div>
                 <div class="box-body">
@@ -52,7 +52,7 @@
                                     @Html.DisplayFor(modelItem => stationery.Description)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => stationery.AvailabilityQty)
+                                    @Html.DisplayFor(modelItem => stationery.AvailableQty)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => stationery.WaitlistQty)
@@ -62,7 +62,7 @@
 
                                 }
                                 <td>
-                                    <input id=@inputBoxId type="text" style="width: 80px;" />
+                                    <input id=@inputBoxId value=@stationery.Unsubmitted type="text" style="width: 80px;" />
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => stationery.ReorderLevel)
@@ -95,7 +95,7 @@
                 'columnDefs': [
                     { 'orderable': false, 'targets': 7}
                 ],
-                'paging': true,
+                'paging': false,
                 'lengthChange': false,
                 'searching': true,
                 'ordering': true,
