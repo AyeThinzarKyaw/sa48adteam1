@@ -1,88 +1,116 @@
-﻿
+﻿@model LUSSIS.Models.DTOs.SupplierDetailsDTO
 @{
     ViewBag.Title = "Create";
 }
 
 <section class="content-header">
     <h1>
-        Manage Supplier
+        Create Supplier
     </h1>
 </section>
 
 <!-- Main content -->
 <section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-body">
-                    <div class="row">
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        @if (Model.Error != null && Model.Error.HasError == true && !String.IsNullOrEmpty(Model.Error.Message))
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="text-danger">
+                                            @Model.Error.Message
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Supplier Code</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Supplier Code">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Supplier Code</label>
+                                    @Html.TextBoxFor(x => x.Code, new { @class = "form-control", @placeholder = "Enter Supplier Code" })
+                                    @Html.ValidationMessageFor(x => x.Code, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                           
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Supplier Name</label>
+                                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @placeholder = "Enter Supplier Name" })
+                                    @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
+                                </div>
                             </div>
                         </div>
-                        <!-- select box -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Supplier Name</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Supplier Name">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Contact Name</label>
+                                    @Html.TextBoxFor(x => x.ContactName, new { @class = "form-control", @placeholder = "Enter Contact Name" })
+                                    @Html.ValidationMessageFor(x => x.ContactName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    @Html.TextBoxFor(x => x.PhoneNo, new { @class = "form-control", @placeholder = "Enter Phone Number" })
+                                    @Html.ValidationMessageFor(x => x.PhoneNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Fax Number</label>
+                                    @Html.TextBoxFor(x => x.FaxNo, new { @class = "form-control", @placeholder = "Enter Fax Number" })
+                                    @Html.ValidationMessageFor(x => x.FaxNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>GST Registration No</label>
+                                    @Html.TextBoxFor(x => x.GST_No, new { @class = "form-control", @placeholder = "Enter GST Registration No" })
+                                    @Html.ValidationMessageFor(x => x.GST_No, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Address1</label>
+                                    @Html.TextAreaFor(x => x.Address1, new { @class = "form-control", cols = 200, @rows = 3 })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Address2</label>
+                                    @Html.TextAreaFor(x => x.Address2, new { @class = "form-control", cols = 200, @rows = 3 })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Address3</label>
+                                    @Html.TextAreaFor(x => x.Address3, new { @class = "form-control", cols = 200, @rows = 3 })
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- END CURRENCY box -->
-
-                    <div class="row">
-                        <!-- PRICE box -->
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Contact Name</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Contact Name">
-                            </div>
-                        </div>
-
-                        <!-- QUANTITY box -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Phone No</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Phone No">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <!-- CURRENCY box -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Fax No</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Fax No">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>GST Registration No</label>
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Enter GST Registration No">
-                            </div>
-                        </div>
-                        <!-- END CURRENCY box -->
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Address</label>
-                                <textarea class="form-control" rows="3" placeholder="Enter Address..."></textarea>
-                            </div>
-                        </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button class="btn btn-success pull-right">Create</button>
                     </div>
                 </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <button class="btn btn-success pull-right">Create</button>
-                </div>
+                <!-- /.box -->
             </div>
-            <!-- /.box -->
+            <!-- /.col -->
         </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
+        <!-- /.row -->
+    }
 </section>
 
