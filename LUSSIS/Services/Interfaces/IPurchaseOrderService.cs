@@ -12,7 +12,9 @@ namespace LUSSIS.Services.Interfaces
         IEnumerable<PurchaseOrder> getAllPurchaseOrders();
         PurchaseOrder getPurchaseOrderById(int poId);
         IEnumerable<PO_getPOCatalogue_Result> RetrievePurchaseOrderCatalogue();
-
-        void UpdatePOStatus(PurchaseOrder po);
+        void UpdatePO(PurchaseOrder po);
+        void CreatePODetail(PurchaseOrderDetail pod);
+        void UpdatePODetail(PurchaseOrderDetail pod);
+        
     }
 }
