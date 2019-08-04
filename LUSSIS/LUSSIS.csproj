@@ -292,6 +292,7 @@
     <Compile Include="Services\StationeryService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
     <Compile Include="Util\MD5Hash.cs" />
+    <Compile Include="Util\RequisitionDetailComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin-lte\css\AdminLTE.css" />
@@ -471,12 +472,13 @@
     <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />
     <Content Include="Views\DeptHead\ReviewRequisitionDetails.cshtml" />
     <Content Include="Views\DeptHead\ViewDepartmentRequisitions.cshtml" />
+    <Content Include="Views\ClerkRequisitions\ViewSchoolRequisitions.cshtml" />
+    <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\" />
-    <Folder Include="Views\ClerkRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

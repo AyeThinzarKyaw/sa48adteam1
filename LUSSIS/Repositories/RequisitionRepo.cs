@@ -24,5 +24,17 @@ namespace LUSSIS.Repositories
 
         }
 
+        public List<Requisition> SchoolRequisitionsEagerLoadEmployeeIncDepartment()
+        {
+            return Context.Requisitions.Include(r => r.Employee.Department).ToList();
+        }
+
+        public Requisition OneRequisitionEagerLoadEmployeeIncDepartment(int requisitionId)
+        {
+            return Context.Requisitions
+                .Where(r => r.Id == requisitionId)
+                .Include(r => r.Employee.Department)
+                .SingleOrDefault();
+        }
     }
 }
