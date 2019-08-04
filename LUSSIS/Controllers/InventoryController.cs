@@ -33,6 +33,13 @@ namespace LUSSIS.Controllers
             return View(model);
         }
 
+        public ActionResult ViewStockCardAndSuppliers(LoginDTO loginDTO, int stationeryId)
+        {
+            StockAndSupplierDTO model = inventoryService.RetrieveStockMovement(stationeryId);
+            model.LoginDTO = loginDTO;
+            return View(model);
+        }
+
 
     }
 }

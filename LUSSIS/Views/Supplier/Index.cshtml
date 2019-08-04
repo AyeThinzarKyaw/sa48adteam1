@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<LUSSIS.Models.Supplier>
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Index";
 }
@@ -46,9 +47,20 @@
                                     <td>
                                         @Html.ActionLink("Detail", "Detail", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
                                         @Html.ActionLink("Update", "Update", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-warning", @role = "button" })
+
+                                        @if (supplier.Active == Convert.ToBoolean(ActiveStatus.INACTIVE))
+                                        {
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+                                            Active
+                                        </button>
+                                        }
+                                        else
+                                        {
                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-default">
                                             Inactive
                                         </button>
+                                        }
+                                        
                                         <div class="modal fade" id="modal-default">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -63,8 +75,14 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-
-                                                        @*@Html.ActionLink("Inactive", "Inactive", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })*@
+                                                        @if (supplier.Active == Convert.ToBoolean(ActiveStatus.INACTIVE))
+                                                        {
+                                                            @Html.ActionLink("Active", "ChangeStatus", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-success", @role = "button" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.ActionLink("InActive", "ChangeStatus", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
+                                                        }
                                                     </div>
                                                 </div>
                                                 <!-- /.modal-content -->

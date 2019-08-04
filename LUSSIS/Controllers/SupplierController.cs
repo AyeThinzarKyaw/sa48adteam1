@@ -111,7 +111,23 @@ namespace LUSSIS.Controllers
             supplierDetails.Address3 = supplier.Address3;
 
             return supplierDetails;
+        }
 
+        //change status from active to inactive
+        //By NESS
+        public ActionResult ChangeStatus(int supplierId)
+        {
+            Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
+            if (supplier.Active == Convert.ToBoolean(Enums.ActiveStatus.ACTIVE))
+            {
+                supplier.Active = Convert.ToBoolean(Enums.ActiveStatus.INACTIVE);
+            }
+            else
+            {
+                supplier.Active = Convert.ToBoolean(Enums.ActiveStatus.ACTIVE);
+            }
+            SupplierService.Instance.UpdateSupplier(supplier);
+            return RedirectToAction("Index");
         }
     }
 }
