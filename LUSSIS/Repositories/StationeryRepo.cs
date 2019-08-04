@@ -26,5 +26,6 @@ namespace LUSSIS.Repositories
             List<Stationery> stationeries = Context.Stationeries.ToList();
             return stationeries;
         }
+
     }
 }
