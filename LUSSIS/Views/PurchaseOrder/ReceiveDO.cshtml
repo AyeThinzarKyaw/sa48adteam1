@@ -1,4 +1,5 @@
 ﻿@model LUSSIS.Models.DTOs.ReceiveDoDTO
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "ReceiveDO";
 }
@@ -85,7 +86,7 @@
                                             <input type="text" id=@txtid value=@Model.DOReceivedList[i] style="width: 100px;" class="form-control" />*@
 
                                         @*@Html.TextBoxFor(p => Model.DOReceivedList[i], new { @id = "DOReceivedList[" + i + "]", @style = "width: 10%;", @class = "form-control" })*@
-                                        @if (pod.Confirmed == true)
+                                        @if (Model.purchaseOrder.Status== Enum.GetName(typeof(POStatus), POStatus.CLOSED))
                                         {
                                             <input type="text" class="form-control" value=0 readonly />
                                         }

@@ -502,6 +502,7 @@
     <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
     <Content Include="Views\Inventory\ViewInventoryList.cshtml" />
     <Content Include="Views\Inventory\ViewStockCardAndSuppliers.cshtml" />
+    <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
     <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
   </ItemGroup>
   <ItemGroup>
