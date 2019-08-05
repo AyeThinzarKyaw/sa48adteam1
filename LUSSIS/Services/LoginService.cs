@@ -36,6 +36,9 @@ namespace LUSSIS.Services
             //else return a loginDTO with required details
 
             //Hash password first
+            if (password == null)
+                return null;
+
             string hashedPassword = HashPassword(password);
 
             Employee e = employeeRepo.FindBy(x => x.Username == username && x.Password == hashedPassword).SingleOrDefault();
