@@ -144,6 +144,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdjustmentVoucherController.cs" />
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Services\Interfaces\IRequisitionCatalogueService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionManagementService.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
+    <Compile Include="Services\Interfaces\IAjustmentVoucherService.cs" />
     <Compile Include="Services\Interfaces\ISupplierService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
     <Compile Include="Services\InventoryService.cs" />
@@ -305,6 +307,7 @@
     <Compile Include="Services\RequisitionCatalogueService.cs" />
     <Compile Include="Services\RequisitionManagementService.cs" />
     <Compile Include="Services\StationeryService.cs" />
+    <Compile Include="Services\AdjustmentVoucherService.cs" />
     <Compile Include="Services\SupplierService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
     <Compile Include="Util\MD5Hash.cs" />
@@ -499,7 +502,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\DeliveryOrders\" />
-    <Folder Include="Views\ClerkRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
