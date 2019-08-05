@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LUSSIS.Services.Interfaces
 {
-    interface IEmailNotificationService
+    public interface IEmailNotificationService
     {
         void NotifyDeptHeadToApprovePendingRequisition(Requisition newRequisition);
     }

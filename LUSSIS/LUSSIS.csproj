@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -144,12 +147,16 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdjustmentVoucherController.cs" />
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MobileDisbursementController.cs" />
+    <Compile Include="Controllers\RetrievalController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
+    <Compile Include="Controllers\MobileRequisitionController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
@@ -182,6 +189,11 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\OwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
+    <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
+    <Compile Include="Models\DTOs\RetrievalDTO.cs" />
     <Compile Include="Models\DTOs\InventoryListDTO.cs" />
     <Compile Include="Models\DTOs\InventoryListRecordsDTO.cs" />
     <Compile Include="Models\DTOs\POCreateDTO.cs" />
@@ -196,10 +208,12 @@
     <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\DTOs\StockAndSupplierDTO.cs" />
+    <Compile Include="Models\DTOs\AdjustmentVoucherDTO.cs" />
     <Compile Include="Models\DTOs\SupplierStockCardRankDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementBalanceDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementDTO.cs" />
     <Compile Include="Models\DTOs\SupplierDetailsDTO.cs" />
+    <Compile Include="Models\DTOs\VMOwedItemsDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -291,8 +305,11 @@
     <Compile Include="Repositories\StationeryRepo.cs" />
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
+    <Compile Include="Services\AdjustmentVoucherService.cs" />
     <Compile Include="Services\EmailNotificationService.cs" />
+    <Compile Include="Services\Interfaces\IAdjustmentVoucherService.cs" />
     <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
+    <Compile Include="Services\Interfaces\IRetrievalService.cs" />
     <Compile Include="Services\Interfaces\IInventoryService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\Interfaces\IPurchaseOrderService.cs" />
@@ -301,6 +318,7 @@
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
     <Compile Include="Services\Interfaces\ISupplierService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
+    <Compile Include="Services\RetrievalService.cs" />
     <Compile Include="Services\InventoryService.cs" />
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\PurchaseOrderService.cs" />
@@ -402,6 +420,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\logic.jpg" />
+    <Content Include="Images\manager.png" />
     <Content Include="Models\LUSSISContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
@@ -497,6 +516,7 @@
     <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
     <Content Include="Views\Inventory\ViewInventoryList.cshtml" />
     <Content Include="Views\Inventory\ViewStockCardAndSuppliers.cshtml" />
+    <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
     <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
     <Content Include="Views\PurchaseOrder\Catalogue_Partial.cshtml" />
   </ItemGroup>

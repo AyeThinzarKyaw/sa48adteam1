@@ -36,6 +36,9 @@ namespace LUSSIS.Services
             //else return a loginDTO with required details
 
             //Hash password first
+            if (password == null)
+                return null;
+
             string hashedPassword = HashPassword(password);
 
             Employee e = employeeRepo.FindBy(x => x.Username == username && x.Password == hashedPassword).SingleOrDefault();
@@ -62,6 +65,13 @@ namespace LUSSIS.Services
             }
         }
 
+        public void LogoutUser(string GUID)
+        {
+            Session s = sessionRepo.FindOneBy(x=>x.GUID.Equals(GUID));
+            s.LogOutDateTime = DateTime.Now;
+            sessionRepo.Update(s);
+
+        }
     }
 
 }

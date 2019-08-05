@@ -40,5 +40,13 @@ namespace LUSSIS.Controllers
 
             return View(model);
         }
+
+        public ActionResult ViewOwedItems(LoginDTO loginDTO)
+        {
+            List<DeptOwedItemDTO> deptOwedItems = requisitionCatalogueService.GetListOfDeptOwedItems();
+            return View(new VMOwedItemsDTO { LoginDTO = loginDTO, DeptOwedItems = deptOwedItems});
+        }
+
+
     }
 }

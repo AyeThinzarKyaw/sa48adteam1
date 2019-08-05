@@ -11,6 +11,7 @@ namespace LUSSIS.Services.Interfaces
     public interface IRequisitionCatalogueService
     {
         //Owed Items
+        List<DeptOwedItemDTO> GetListOfDeptOwedItems();
 
         void CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(int PurchaseOrderId);
 
