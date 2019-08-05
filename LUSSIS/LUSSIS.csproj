@@ -200,6 +200,7 @@
     <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\DTOs\StockAndSupplierDTO.cs" />
+    <Compile Include="Models\DTOs\AdjustmentVoucherDTO.cs" />
     <Compile Include="Models\DTOs\SupplierStockCardRankDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementBalanceDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementDTO.cs" />
