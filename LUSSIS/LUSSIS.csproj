@@ -147,11 +147,14 @@
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RetrievalController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
+    <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -182,6 +185,11 @@
     </Compile>
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
+    <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
+    <Compile Include="Models\DTOs\RetrievalDTO.cs" />
+    <Compile Include="Models\DTOs\InventoryListDTO.cs" />
+    <Compile Include="Models\DTOs\InventoryListRecordsDTO.cs" />
     <Compile Include="Models\DTOs\ReceiveDoDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
@@ -193,6 +201,11 @@
     <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
     <Compile Include="Models\DTOs\VMOwedItemsDTO.cs" />
+    <Compile Include="Models\DTOs\StockAndSupplierDTO.cs" />
+    <Compile Include="Models\DTOs\SupplierStockCardRankDTO.cs" />
+    <Compile Include="Models\DTOs\StockMovementBalanceDTO.cs" />
+    <Compile Include="Models\DTOs\StockMovementDTO.cs" />
+    <Compile Include="Models\DTOs\SupplierDetailsDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -286,17 +299,23 @@
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
     <Compile Include="Services\EmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
+    <Compile Include="Services\Interfaces\IRetrievalService.cs" />
+    <Compile Include="Services\Interfaces\IInventoryService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\Interfaces\IPurchaseOrderService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionCatalogueService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionManagementService.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
+    <Compile Include="Services\Interfaces\ISupplierService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
+    <Compile Include="Services\RetrievalService.cs" />
+    <Compile Include="Services\InventoryService.cs" />
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\PurchaseOrderService.cs" />
     <Compile Include="Services\RequisitionCatalogueService.cs" />
     <Compile Include="Services\RequisitionManagementService.cs" />
     <Compile Include="Services\StationeryService.cs" />
+    <Compile Include="Services\SupplierService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
     <Compile Include="Util\MD5Hash.cs" />
     <Compile Include="Util\RequisitionDetailComparer.cs" />
@@ -486,10 +505,15 @@
     <Content Include="Views\ClerkRequisitions\ViewSchoolRequisitions.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewOwedItems.cshtml" />
+    <Content Include="Views\Inventory\ViewInventoryList.cshtml" />
+    <Content Include="Views\Inventory\ViewStockCardAndSuppliers.cshtml" />
+    <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
+    <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Images\DeliveryOrders\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

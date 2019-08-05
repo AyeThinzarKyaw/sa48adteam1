@@ -32,9 +32,18 @@ namespace LUSSIS.Services
         {
             return PurchaseOrderRepo.Instance.GetPOCatalogue();
         }
-        public void UpdatePOStatus(PurchaseOrder po)
+        public void UpdatePO(PurchaseOrder po)
         {
             PurchaseOrderRepo.Instance.Update(po);
+        }
+        public void CreatePODetail(PurchaseOrderDetail pod)
+        {
+            PurchaseOrderDetailRepo.Instance.Create(pod);
+        }
+
+        public void UpdatePODetail(PurchaseOrderDetail pod)
+        {
+            PurchaseOrderDetailRepo.Instance.Update(pod);
         }
     }
 }

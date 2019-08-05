@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<LUSSIS.Models.Supplier>
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Index";
 }
@@ -16,9 +17,7 @@
             <div class="box">
                 <div class="box-header">
                     <div class="box-tools pull-right" style="position: relative;">
-                        <a href="supplier-create.html" class="btn btn-success right">
-                            Create New
-                        </a>
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success right", @role = "button" })
                     </div>
                 </div>
                 <div class="box-body">
@@ -36,58 +35,64 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>ALPHA</td>
-                                <td>MR-8500440-2</td>
-                                <td>ALPHA Office Supplies</td>
-                                <td>Ms Irene Tan</td>
-                                <td>4619928</td>
-                                <td>4612238</td>
-                                <td>
-                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
-                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>CHEP</td>
-                                <td>Nil</td>
-                                <td>Cheap Stationer</td>
-                                <td>Ms Soh Kway Koh</td>
-                                <td>3543234</td>
-                                <td>4742434</td>
-                                <td>
-                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
-                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>BANE</td>
-                                <td>MR-8200420-2</td>
-                                <td>BANES Shop</td>
-                                <td>Mr Loh Ah Pek</td>
-                                <td>4781234</td>
-                                <td>4612238</td>
-                                <td>
-                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
-                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>OMEG</td>
-                                <td>MR-85553330-1</td>
-                                <td>OMEGA Stationery Supplier</td>
-                                <td>Mr Ronnie Ho</td>
-                                <td>7671233</td>
-                                <td>7671234</td>
-                                <td>
-                                    <a href="supplier-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                    <a href="supplier-update.html" class="btn btn-sm btn-warning">Update</a>
-                                    <a href="strationary-detail.html" class="btn btn-sm btn-danger">Delete</a>
-                                </td>
-                            </tr>
+                            @foreach (var supplier in Model)
+                            {
+                                <tr>
+                                    <td>@supplier.Code</td>
+                                    <td>@supplier.GST_No</td>
+                                    <td>@supplier.Name</td>
+                                    <td>@supplier.ContactName</td>
+                                    <td>@supplier.PhoneNo</td>
+                                    <td>@supplier.FaxNo</td>
+                                    <td>
+                                        @Html.ActionLink("Detail", "Detail", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                        @Html.ActionLink("Update", "Update", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-warning", @role = "button" })
+
+                                        @if (supplier.Active == Convert.ToBoolean(ActiveStatus.INACTIVE))
+                                        {
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+                                            Active
+                                        </button>
+                                        }
+                                        else
+                                        {
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-default">
+                                            Inactive
+                                        </button>
+                                        }
+                                        
+                                        <div class="modal fade" id="modal-default">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <h4 class="modal-title">Confirmation!</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to InActive this Supplier?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                                                        @if (supplier.Active == Convert.ToBoolean(ActiveStatus.INACTIVE))
+                                                        {
+                                                            @Html.ActionLink("Active", "ChangeStatus", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-success", @role = "button" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.ActionLink("InActive", "ChangeStatus", new { supplierId = supplier.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- /.modal -->
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
