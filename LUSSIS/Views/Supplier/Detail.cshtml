@@ -1,4 +1,4 @@
-﻿
+﻿@model LUSSIS.Models.Supplier
 @{
     ViewBag.Title = "Detail";
 }
@@ -18,37 +18,46 @@
                     <table class="table">
                         <tr>
                             <td>Supplier Code</td>
-                            <td> : ALPHA</td>
+                            <td> : @Model.Code</td>
                             <td width="200"></td>
                             <td>GST Registration No</td>
-                            <td> : MR-8500440-2</td>
+                            <td> : @Model.GST_No</td>
                         </tr>
                         <tr>
                             <td>Supplier Name</td>
-                            <td> : ALPHA Office Supplies</td>
+                            <td> : @Model.Name</td>
                         </tr>
                         <tr>
                             <td>Contact Name</td>
-                            <td> : Ms Irene Tan</td>
+                            <td> : @Model.ContactName</td>
                         </tr>
                         <tr>
                             <td>Phone No</td>
-                            <td> : 4619928</td>
+                            <td> : @Model.PhoneNo</td>
                         </tr>
                         <tr>
                             <td>Fax No</td>
-                            <td> : 4612238</td>
+                            <td> : @Model.FaxNo</td>
                         </tr>
                         <tr>
-                            <td>Address</td>
-                            <td colspan="4">Blk 1128, Ang Mo Kio Industrial Park #02-1108 Ang Mo Kio Street 62 Singapore 622262</td>
+                            <td>Address1</td>
+                            <td colspan="4">: @Model.Address1</td>
+                        </tr>
+                        <tr>
+                            <td>Address2</td>
+                            <td colspan="4">: @Model.Address2</td>
+                        </tr>
+                        <tr>
+                            <td>Address3</td>
+                            <td colspan="4">: @Model.Address3</td>
                         </tr>
                     </table>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button class="btn btn-danger pull-right" style="margin-left: 20px;">Delete</button>
-                    <button class="btn btn-warning pull-right">Update</button>
+
+                    @Html.ActionLink("Update", "Update", new { supplierId = Model.Id }, new { @class = "btn btn-sm btn-warning pull-right", @role = "button" })
                 </div>
             </div>
             <!-- /.box -->

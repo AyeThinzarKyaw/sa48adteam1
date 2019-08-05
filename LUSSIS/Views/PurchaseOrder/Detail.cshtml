@@ -1,4 +1,5 @@
 ﻿@model LUSSIS.Models.PurchaseOrder
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Detail";
 }
@@ -41,7 +42,7 @@
                                     string estDate = ((DateTime)Model.EstDeliveryDate).ToString("dd/MM/yyyy");
                                     <td>: @estDate</td>
                                 }
-                             }
+                            }
                         </tr>
                         <tr>
                             <td>Status</td>
@@ -82,34 +83,41 @@
                                         <td>@amount</td>
                                     </tr>
                                 }
-                             }
-                                <tr>
-                                    <td colspan="5"></td>
-                                    <td> Total Amount : </td>
-                                    <td>@total</td>
-                                </tr>
-                            </tbody>
+                            }
+                            <tr>
+                                <td colspan="5"></td>
+                                <td> Total Amount : </td>
+                                <td>@total</td>
+                            </tr>
+                        </tbody>
                     </table>
                     <br />
+                    @if (Model.Status == Enum.GetName(typeof(POStatus), POStatus.PENDING))
+                    {
+                        <!-- If Supervisor -->
+                        <form>
+                            <div class="form-group">
+                                <label>Remark</label>
+                                @Html.TextAreaFor(x => x.Remark, new { @id = "txtRemark", @class = "form-control", @style = "max-width:100% !important;", @placeholder = "Enter ..." })
+                                @*<textarea id="txtRemark" class="form-control" style="width:100%;" rows="3" placeholder="Enter ..."></textarea>*@
+                                <label id="errRemark" class="text-danger"></label>
+                            </div>
+                        </form>
+                        <!-- If Supervisor -->
+                        <!-- /.box-body -->
+                        <!-- If Supervisor -->
+                        <div class="box-footer">
 
-                    <!-- If Supervisor -->
-                    @*<form>
-                        <div class="form-group">
-                            <label>Remark</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                            @Html.ActionLink("Approve", null, null, new { @href = "#", @onclick = "if (confirm('Are you sure you want to approve this PO?')) { return confirmPO('" + Model.Id + "','" + Enum.GetName(typeof(POStatus), POStatus.APPROVED) + "'); }", @id = "btnApprove", @class = "btn btn-success pull-right", @style = "margin-left: 20px;", @role = "button" })
+                            @Html.ActionLink("Reject", null, null, new { @href = "#", @onclick = "if (confirm('Are you sure you want to reject this PO?')) { return confirmPO('" + Model.Id + "','" + Enum.GetName(typeof(POStatus), POStatus.REJECTED) + "'); }", @id = "btnReject", @class = "btn btn-danger pull-right", @role = "button" })
+                            @*<button class="btn btn-success pull-right" style="margin-left: 20px;">Approve</button>*@
+                            @*<a class="btn btn-danger pull-right" href="product.html">Reject</a>*@
                         </div>
-                    </form>*@
-                    <!-- If Supervisor -->
+                        <!-- If Supervisor -->
+                    }
+                    
 
                 </div>
-                <!-- /.box-body -->
-
-                <!-- If Supervisor -->
-                @*<div class="box-footer">
-                    <button class="btn btn-success pull-right" style="margin-left: 20px;">Approve</button>
-                    <a class="btn btn-danger pull-right" href="product.html">Reject</a>
-                </div>*@
-                <!-- If Supervisor -->
             </div>
             <!-- /.box -->
         </div>
@@ -117,3 +125,32 @@
     </div>
     <!-- /.row -->
 </section>
+@section scripts {
+    <script>
+        function confirmPO(id, reply) {
+            debugger;
+            var remark = document.getElementById("txtRemark").value;
+            if (reply == "REJECTED" && remark == "") {
+                document.getElementById("errRemark").innerHTML = "Please enter the remark before rejecting!";
+                return;
+            }
+            else {
+                var url = "/PurchaseOrder/ConfirmPO?poId=" + id + "&reply=" + reply + "&remark=" + remark;
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    async: true,
+                    success: function (data) {
+                        if (data[0] == true) {
+                            window.location.href = '/PurchaseOrder/Index'
+                        }
+                        else {
+                            document.getElementById("errRemark").innerHTML = data[1];
+                        }
+                    },
+                    error: function (data) { }
+                });
+            }
+        }
+    </script>
+}

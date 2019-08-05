@@ -10,6 +10,20 @@ namespace LUSSIS.Services.Interfaces
 {
     public interface IRequisitionCatalogueService
     {
+        //Owed Items
+        List<DeptOwedItemDTO> GetListOfDeptOwedItems();
+
+        void CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(int PurchaseOrderId);
+
+        //update QtyDelivered and change status
+        //assign qties on fcfs basis
+        void UpdateRequisitionDetailsAfterRetrieval(int qtyRetrieved, List<int> requisitionDetailIds);
+
+        //update QtyDelivered and change status
+        //assign qties on fcfs basis
+        void UpdateRequisitionDetailsAfterDisbursement(int qtyCollected, List<int> requisitionDetailIds);
+
+        void CheckRequisitionCompletenessAfterDisbursement(int disbursementId);
 
         List<CatalogueItemDTO> GetCatalogueItems(int employeeId);
 
@@ -28,6 +42,10 @@ namespace LUSSIS.Services.Interfaces
         void CancelWaitlistedRequisitionDetail(int requisitionDetailId);
 
         void CancelPendingRequisition(int requisitionId);
+
+        List<Requisition> GetSchoolRequisitionsWithEmployeeAndDept();
+
+        RequisitionDetailsDTO GetRequisitionDetailsForClerk(int requisitionId);
 
     }
 }

@@ -7,6 +7,8 @@ namespace LUSSIS.Models.DTOs
 {
     public class RequisitionDetailsDTO
     {
+        public Requisition Requisition { get; set; }
+
         public LoginDTO LoginDTO {get; set;}
 
         public int RequisitionFormId { get; set; }

@@ -11,6 +11,14 @@ namespace LUSSIS.Repositories.Interfaces
     {
         int GetReservedCountForStationery(int stationeryId);
 
+        int GetRequisitionCountForUnfulfilledStationery(int requisitionDetailId);
+
         List<RequisitionDetail> RequisitionDetailsEagerLoadStationery(int requisitionId);
+
+        List<RequisitionDetail> RequisitionDetailsEagerLoadStationeryIncCategory(int requisitionId);
+
+        List<Requisition> GetUniqueRequisitionsForDisbursement(int disbursementId);
+
+        List<IGrouping<int, RequisitionDetail>> GetUnfulfilledRequisitionDetailsGroupedByDept();
     }
 }

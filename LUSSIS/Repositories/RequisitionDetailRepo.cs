@@ -20,17 +20,21 @@ namespace LUSSIS.Repositories
 
         public int GetReservedCountForStationery(int stationeryId)
         {
-            if (Context.RequisitionDetails.Any(x => x.StationeryId == stationeryId && x.Status.StartsWith("Reserved")))
-            {
-                return (int)(from rd in Context.RequisitionDetails
-                             where rd.StationeryId == stationeryId
-                             select rd.QuantityOrdered).Sum();
-            }
-            else
-            {
-                return 0;
-            }
-            
+            return (from rd in Context.RequisitionDetails
+                    where rd.StationeryId == stationeryId
+                    where (rd.Status.Equals("RESERVED_PENDING") || rd.Status.Equals("PREPARING") || rd.Status.Equals("PENDING_COLLECTION"))
+                    select (int?)rd.QuantityOrdered).Sum() ?? 0;
+        }
+
+        public int GetRequisitionCountForUnfulfilledStationery(int requisitionDetailId)
+        {
+            Requisition r = FindById(requisitionDetailId).Requisition;
+
+            return (from rd in Context.RequisitionDetails
+                    where rd.Id == requisitionDetailId
+                    where rd.Requisition.DateTime < r.DateTime
+                    where (rd.Status.Equals("RESERVED_PENDING") || rd.Status.Equals("PREPARING") || rd.Status.Equals("PENDING_COLLECTION"))
+                    select (int?)rd.QuantityOrdered).Sum() ?? 0;
         }
 
         public List<RequisitionDetail> RequisitionDetailsEagerLoadStationery(int requisitionId)
@@ -38,6 +42,24 @@ namespace LUSSIS.Repositories
             return Context.RequisitionDetails.Include(x => x.Stationery)
                 .Where(x => x.RequisitionId == requisitionId)
                 .ToList();
+        }
+
+        public List<RequisitionDetail> RequisitionDetailsEagerLoadStationeryIncCategory(int requisitionId)
+        {
+            return Context.RequisitionDetails.Include(x => x.Stationery.Category)
+                .Where(x => x.RequisitionId == requisitionId)
+                .ToList();
+        }
+
+        public List<Requisition> GetUniqueRequisitionsForDisbursement(int disbursementId)
+        {
+            return Context.RequisitionDetails.Select(x => x.Requisition).Distinct().ToList();
+
+        }
+
+        public List<IGrouping<int, RequisitionDetail>> GetUnfulfilledRequisitionDetailsGroupedByDept()
+        {
+            return Context.RequisitionDetails.Where(x => x.QuantityOrdered > x.QuantityDelivered && x.Status.Equals("COLLECTED")).GroupBy(x => x.Requisition.Employee.DepartmentId).ToList();
         }
     }
 }

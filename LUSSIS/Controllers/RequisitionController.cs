@@ -13,11 +13,12 @@ namespace LUSSIS.Controllers
     public class RequisitionController : Controller
     {
         IRequisitionCatalogueService requisitionCatalogueService;
-
+        IEmailNotificationService emailNotificationService;
 
         public RequisitionController()
         {
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
+            emailNotificationService = EmailNotificationService.Instance;
         }
 
         // GET: Requisition
@@ -60,6 +61,7 @@ namespace LUSSIS.Controllers
             Requisition newRequisition = requisitionCatalogueService.ConvertCartDetailsToRequisitionDetails(loginDTO.EmployeeId);
 
             //notify dept head for approval
+            emailNotificationService.NotifyDeptHeadToApprovePendingRequisition(newRequisition);
 
             return RedirectToAction("ViewCatalogue", loginDTO);
            //return to catalogue/dashboard view

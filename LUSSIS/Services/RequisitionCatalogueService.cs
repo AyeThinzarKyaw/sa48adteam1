@@ -1,9 +1,10 @@
-﻿using LUSSIS.Enums;
+﻿ using LUSSIS.Enums;
 using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Repositories;
 using LUSSIS.Repositories.Interfaces;
 using LUSSIS.Services.Interfaces;
+using LUSSIS.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace LUSSIS.Services
         private IRequisitionDetailRepo requisitionDetailRepo;
         private IAdjustmentVoucherRepo adjustmentVoucherRepo;
         private IEmployeeRepo employeeRepo;
+        private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
+
         private static RequisitionCatalogueService instance = new RequisitionCatalogueService();
 
         private RequisitionCatalogueService()
@@ -29,6 +32,8 @@ namespace LUSSIS.Services
             requisitionDetailRepo = RequisitionDetailRepo.Instance;
             adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
             employeeRepo = EmployeeRepo.Instance;
+            purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+
         }
 
         //returns single instance
@@ -94,7 +99,7 @@ namespace LUSSIS.Services
             int foqCartCount = cartDetailRepo.GetFrontOfQueueCartCountForStationery(cd.StationeryId, cd.DateTime);
             int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(cd.StationeryId);
             int totalCount = stationeryRepo.FindById(cd.StationeryId).Quantity;
-            int netCount = totalCount - reservedCount - foqCartCount - openAdjustmentCount;
+            int netCount = totalCount - reservedCount - foqCartCount + openAdjustmentCount;
 
             if (netCount <= 0)
             {
@@ -116,7 +121,7 @@ namespace LUSSIS.Services
             int cartCount = cartDetailRepo.GetCountOnHoldForStationery(s.Id); //could be 0
             int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(s.Id);
             int totalCount = stationeryRepo.FindById(s.Id).Quantity;
-            int netCount = totalCount - reservedCount - cartCount - openAdjustmentCount;
+            int netCount = totalCount - reservedCount - cartCount + openAdjustmentCount;
 
             if(netCount <= 0)
             {
@@ -219,6 +224,7 @@ namespace LUSSIS.Services
             Requisition newRequisition = new Requisition() {DateTime = DateTime.Now, EmployeeId = employeeId,
                 Status = RequisitionStatusEnum.PENDING.ToString() };
             newRequisition = requisitionRepo.Create(newRequisition);
+
             List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
 
             foreach(CartDetail cd in cartDetails)
@@ -228,41 +234,47 @@ namespace LUSSIS.Services
                 int reservedCount = getReservedBalanceForExistingCartItem(cd);
                 if(reservedCount < cd.Quantity)
                 {
-                    int waitllistCount = cd.Quantity - reservedCount;
+                    int waitlistCount = cd.Quantity - reservedCount;
                     //has waitlist, create 2 requisition details
-                    RequisitionDetail waitlistRequisitionDetail = new RequisitionDetail()
-                    {
-                        QuantityOrdered = waitllistCount,
-                        RequisitionId = newRequisition.Id,
-                        Status = RequisitionDetailStatusEnum.WAITLIST_PENDING.ToString(),
-                        StationeryId = cd.StationeryId
-                    };
-                    requisitionDetailRepo.Create(waitlistRequisitionDetail);
+                    createNewRequisitionDetail(waitlistCount, newRequisition.Id, cd.StationeryId, RequisitionDetailStatusEnum.WAITLIST_PENDING);
                     if(reservedCount > 0)
                     {
-                        createReservedPendingRequisitionDetail(reservedCount, newRequisition.Id, cd.StationeryId);
+                        createNewRequisitionDetail(reservedCount, newRequisition.Id, cd.StationeryId, RequisitionDetailStatusEnum.RESERVED_PENDING);
                     }                    
                 }
                 else
                 {
-                    createReservedPendingRequisitionDetail(cd.Quantity, newRequisition.Id, cd.StationeryId);
+                    createNewRequisitionDetail(cd.Quantity, newRequisition.Id, cd.StationeryId, RequisitionDetailStatusEnum.RESERVED_PENDING);
                 }
 
             }
             return newRequisition;
         }
 
-        private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId, int stationeryId)
+        private void createNewRequisitionDetail(int qty, int requisitionId, int stationeryId, RequisitionDetailStatusEnum status)
         {
             RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
             {
-                QuantityOrdered = reservedCount,
+                QuantityOrdered = qty,
                 RequisitionId = requisitionId,
-                Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString(),
+                Status = status.ToString(),
                 StationeryId = stationeryId
             };
+            //persist new RD record
             requisitionDetailRepo.Create(reservedRequisitionDetail);
         }
+
+        //private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId, int stationeryId)
+        //{
+        //    RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
+        //    {
+        //        QuantityOrdered = reservedCount,
+        //        RequisitionId = requisitionId,
+        //        Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString(),
+        //        StationeryId = stationeryId
+        //    };
+        //    requisitionDetailRepo.Create(reservedRequisitionDetail);
+        //}
 
         RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(int requisitionId, int employeeId)
         {
@@ -308,5 +320,245 @@ namespace LUSSIS.Services
             requisitionDetailRepo.Update(rd);
         }
 
+        public List<Requisition> GetSchoolRequisitionsWithEmployeeAndDept()
+        {
+            //call repo to eager fetch employee include dept
+            List<Requisition> requisitions = requisitionRepo.SchoolRequisitionsEagerLoadEmployeeIncDepartment();
+
+            return requisitions;
+        }
+
+        public RequisitionDetailsDTO GetRequisitionDetailsForClerk(int requisitionId)
+        {
+            Requisition r = requisitionRepo.OneRequisitionEagerLoadEmployeeIncDepartment(requisitionId);
+            List<RequisitionDetail> rds = requisitionDetailRepo.RequisitionDetailsEagerLoadStationeryIncCategory(requisitionId);
+
+            return new RequisitionDetailsDTO() { Requisition = r, RequisitionDetails = rds};
+        }
+
+        public void UpdateRequisitionDetailsAfterRetrieval(int qtyRetrieved, List<int> requisitionDetailIds)
+        {
+            List<RequisitionDetail> requisitionDetails = GetSortedRequisitionDetailsListFromListOfIds(requisitionDetailIds);
+
+            int qtyToDisburse = qtyRetrieved;
+            foreach (RequisitionDetail rd in requisitionDetails)
+            {
+                if (qtyToDisburse >= rd.QuantityOrdered)
+                {
+                    //can give all
+                    rd.QuantityDelivered = rd.QuantityOrdered;
+                    qtyToDisburse = qtyToDisburse - rd.QuantityOrdered;
+                }
+                else //qtyToDisburse < ordered
+                {
+                    //can give some
+                    rd.QuantityDelivered = qtyToDisburse;
+                    qtyToDisburse = 0;
+                }
+                //update status to PENDING COLLECTION and update db
+                rd.Status = RequisitionDetailStatusEnum.PENDING_COLLECTION.ToString();
+                requisitionDetailRepo.Update(rd);
+            }
+        }
+
+        private List<RequisitionDetail> GetSortedRequisitionDetailsListFromListOfIds(List<int> requisitionDetailIds)
+        {
+            List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
+            foreach (int id in requisitionDetailIds)
+            {
+                //Get RD
+                RequisitionDetail rd = requisitionDetailRepo.FindById(id);
+                requisitionDetails.Add(rd);
+            }
+            requisitionDetails.Sort(new RequisitionDetailComparer());
+
+            return requisitionDetails;
+        }
+
+        //only call AFTER GENERATING NEW RD FOR UNFULFILLED ITEMS
+        public void CheckRequisitionCompletenessAfterDisbursement(int disbursementId)
+        {
+            List<Requisition> uniqueReqs = requisitionDetailRepo.GetUniqueRequisitionsForDisbursement(disbursementId);
+
+            foreach(Requisition r in uniqueReqs)
+            {
+                int rowsReqDets = requisitionDetailRepo.FindBy(x=>x.RequisitionId == r.Id).Count();
+                int rowsFulfilled = requisitionDetailRepo.FindBy(x=>x.RequisitionId == r.Id 
+                && x.Status.Equals("COLLECTED")).Count();
+                if (rowsReqDets == rowsFulfilled)
+                {
+                    //update r to completed
+                    r.Status = RequisitionStatusEnum.COMPLETED.ToString();
+                    requisitionRepo.Update(r);
+                }
+            }
+        }
+
+        public void UpdateRequisitionDetailsAfterDisbursement(int qtyCollected, List<int> requisitionDetailIds)
+        {
+            List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
+
+            List<RequisitionDetail> unfulfilledRds = new List<RequisitionDetail>();
+
+            foreach (int id in requisitionDetailIds)
+            {
+                //Get RD
+                RequisitionDetail rd = requisitionDetailRepo.FindById(id);
+                requisitionDetails.Add(rd);
+            }
+
+            requisitionDetails.Sort(new RequisitionDetailComparer());
+
+            int qtyDisbursed = qtyCollected;
+            foreach(RequisitionDetail rd in requisitionDetails)
+            {
+                if (qtyDisbursed >= rd.QuantityOrdered)
+                {
+                    //can give all
+                    rd.QuantityDelivered = rd.QuantityOrdered;
+                    qtyDisbursed = qtyDisbursed - rd.QuantityOrdered;
+                }
+                else if (qtyDisbursed >0 && qtyDisbursed < rd.QuantityOrdered)
+                {
+                    //can give some
+                    rd.QuantityDelivered = qtyDisbursed;
+                    qtyDisbursed = 0;
+                    unfulfilledRds.Add(rd);
+                }
+                else
+                {
+                    //can give 0
+                    rd.QuantityDelivered = 0;
+                    unfulfilledRds.Add(rd);
+                }
+                //update status to collected and update db
+                rd.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
+                requisitionDetailRepo.Update(rd);
+            }
+
+            //generate new rd for unfulfilled items
+            GenerateNewRequisitionDetailsForUnfulfilledRds(unfulfilledRds);
+        }
+
+        private void GenerateNewRequisitionDetailsForUnfulfilledRds(List<RequisitionDetail> unfulfilledRds)
+        {
+            foreach (RequisitionDetail rd in unfulfilledRds)
+            {
+                int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
+                int availStockForUnfulfilled = GetAvailStockForUnfulfilledRd(rd.StationeryId);
+
+                if(availStockForUnfulfilled < diff) //insufficient stock
+                {
+                    int waitlistCount = diff - availStockForUnfulfilled;
+                    createNewRequisitionDetail(waitlistCount, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.WAITLIST_APPROVED);                   
+
+                    if (availStockForUnfulfilled > 0)
+                    {
+                        createNewRequisitionDetail(availStockForUnfulfilled, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.PREPARING);
+                    }
+                }
+                else
+                {
+                    createNewRequisitionDetail(diff, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.PREPARING);
+                }
+
+            }
+        }
+
+        private int GetAvailStockForUnfulfilledRd(int stationeryId)
+        {
+            int reqInTransitCount = requisitionDetailRepo.GetRequisitionCountForUnfulfilledStationery(stationeryId);
+
+            int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(stationeryId);
+
+            int totalCount = stationeryRepo.FindById(stationeryId).Quantity;
+
+            return totalCount + openAdjustmentCount - reqInTransitCount;
+        }
+
+        public void CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(int purchaseOrderId)
+        {
+            List<PurchaseOrderDetail> poDetails = (List<PurchaseOrderDetail>)purchaseOrderDetailRepo.FindBy(x=>x.PurchaseOrderId == purchaseOrderId);
+            //get each stationery from each podetail
+            foreach (PurchaseOrderDetail pod in poDetails)
+            {
+                int availstock =  getCurrentBalance(pod.Stationery);
+
+                List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=>x.StationeryId == pod.StationeryId && x.Status.Equals("WAITLIST_APPROVED"));
+                requisitionDetails.Sort(new RequisitionDetailComparer());
+
+                DistributeIncomingGoodsAmongWaitlistApprovedRds(availstock, requisitionDetails);
+            }
+        }
+
+        private void DistributeIncomingGoodsAmongWaitlistApprovedRds(int qty, List<RequisitionDetail> requisitionDetails)
+        {
+            int qtyToAllocate = qty;
+
+            int rdIndex = 0;
+
+            while(qtyToAllocate != 0 && rdIndex < requisitionDetails.Count())
+            {
+                RequisitionDetail rd = requisitionDetails[rdIndex];
+
+                if (qtyToAllocate >= rd.QuantityOrdered) //enough for this record
+                {
+                    qtyToAllocate = qtyToAllocate - rd.QuantityOrdered;
+                    rd.Status = RequisitionDetailStatusEnum.PREPARING.ToString();
+                }
+                else
+                {
+                    int diff = rd.QuantityOrdered - qtyToAllocate;
+                    rd.QuantityOrdered = qtyToAllocate; //update qtyOrdered column
+                    qtyToAllocate = 0; //after this item exits the loop
+                    rd.Status = RequisitionDetailStatusEnum.PREPARING.ToString();
+
+                    createNewRequisitionDetail(diff, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.WAITLIST_APPROVED);
+                }
+                requisitionDetailRepo.Update(rd); //persist chnages in db
+
+                rdIndex++;
+            }
+
+        }
+
+        public List<DeptOwedItemDTO> GetListOfDeptOwedItems()
+        {
+            List<DeptOwedItemDTO> deptOwedItems = new List<DeptOwedItemDTO>();
+            List<IGrouping<int, RequisitionDetail>> groups = requisitionDetailRepo.GetUnfulfilledRequisitionDetailsGroupedByDept();
+
+            foreach(var group in groups)
+            {              
+                //get the department
+                List<RequisitionDetail> rds = group.ToList();
+                Department d = rds.First().Requisition.Employee.Department;
+
+                //Create a list of owedItemDTOs
+                List<OwedItemDTO> stationeryGroups = GetListOfOwedItemDTOs(rds);
+                deptOwedItems.Add(new DeptOwedItemDTO {Department = d, OwedItems = stationeryGroups});
+            }
+
+            return deptOwedItems;
+        }
+
+        private List<OwedItemDTO> GetListOfOwedItemDTOs(List<RequisitionDetail> requisitionDetails)
+        {
+            List<OwedItemDTO> owedItems = new List<OwedItemDTO>();
+            List<IGrouping<int, RequisitionDetail>> groups = requisitionDetails.GroupBy(x => x.StationeryId).ToList();
+            foreach(var group in groups)
+            {
+                int sum = 0;
+                List<RequisitionDetail> rds = group.ToList();
+                foreach(RequisitionDetail rd in rds)
+                {
+                    int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
+                    sum += diff;
+                }
+                //get stationery
+                Stationery s = rds.First().Stationery;
+                owedItems.Add(new OwedItemDTO {Stationery = s, QtyOwed = sum });
+            }
+            return owedItems;
+        }
     }
 }

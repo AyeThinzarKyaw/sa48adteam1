@@ -16,5 +16,6 @@ namespace LUSSIS.Repositories
         {
             get { return instance; }
         }
+
     }
 }

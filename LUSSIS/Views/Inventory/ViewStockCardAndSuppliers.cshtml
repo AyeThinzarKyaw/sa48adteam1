@@ -1,0 +1,137 @@
+﻿@model LUSSIS.Models.DTOs.StockAndSupplierDTO
+@{
+    ViewBag.Title = "Detail";
+}
+
+<section class="content-header">
+    <h1>
+        Inventory Item Details
+    </h1>
+</section>
+
+<!-- Main content -->
+<input type="hidden" id="employeeId" name="employeeId" value=@Model.LoginDTO.EmployeeId>
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Supplier Information</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table>
+                            <tr>
+                                <td>Item Number</td>
+                                <td>: @Model.ItemNumber</td>
+                                <td style="width: 400px;"></td>
+                                <td>Unit of Measure</td>
+                                <td>: @Model.UnitOfMeasure</td>
+                            </tr>
+                            <tr>
+                                <td>Category</td>
+                                <td>: @Model.Category</td>
+                                <td></td>
+                                <td>Description</td>
+                                <td>: @Model.Description</td>
+                            </tr>
+                            <tr>
+                                <td>BIN</td>
+                                <td>: # @Model.Location</td>
+                            </tr>
+                        </table>
+                        <br />
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Sr No.</th>
+                                    <th>Supplier Code</th>
+                                    <th>Supplier Name</th>
+                                    <th>Contact Person</th>
+                                    <th>Contact No.</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var rankedsupplier in Model.SupplierStockRank)
+                                {
+                                    <tr>
+                                        <td>@rankedsupplier.Rank</td>
+                                        <td>@rankedsupplier.SupplierCode</td>
+                                        <td>@rankedsupplier.SupplierName</td>
+                                        <td>@rankedsupplier.ContactPerson</td>
+                                        <td>@rankedsupplier.ContactNumber</td>
+                                        <td>$ @rankedsupplier.Price</td>
+                                    </tr>
+                                }
+                                </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Stock Movements</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table id="table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Dept/Supplier</th>
+                                    <th>Qty</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var StkMovement in Model.StockMovementBalance)
+                                {
+                                        <tr>
+                                            <td>@StkMovement.StockMovement.MovementDate</td>
+                                            <td>@StkMovement.StockMovement.DepartmentOrSupplier</td>
+                                            <td>@StkMovement.StockMovement.Quantity</td>
+                                            <td>@StkMovement.Balance</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+
+    @section scripts {
+        <script>
+            $(function () {
+                $('#table').DataTable({
+                    'paging': true,
+                    'lengthChange': false,
+                    'searching': true,
+                    'ordering': true,
+                    'info': true,
+                    'autoWidth': false
+                })
+            })
+        </script>
+    }
