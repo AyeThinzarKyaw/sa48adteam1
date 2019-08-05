@@ -1,4 +1,4 @@
-﻿
+﻿@model LUSSIS.Models.AdjustmentVoucher
 @{
     ViewBag.Title = "Detail";
 }
@@ -18,18 +18,19 @@
                     <table>
                         <tr>
                             <td>Adjustment Voucher ID</td>
-                            <td>: ADJ0011</td>
+                            <td>: @Model.Id</td>
                             <td width="600"></td>
                             <td>Clerk Name</td>
-                            <td>: Johnny</td>
+                            <td>: @Model.Employee.Name</td>
                         </tr>
                         <tr>
                             <td>Voucher Date</td>
-                            <td>: 09/12/2019</td>
+                            @{ string adjDate = ((DateTime)Model.Date).ToString("dd/MM/yyyy"); }
+                            <td>: @adjDate</td>
                         </tr>
                         <tr>
                             <td>Voucher Status</td>
-                            <td class="text-blue">: Pending</td>
+                            <td class="text-blue">: @Model.Status</td>
                         </tr>
                         <tr></tr>
                     </table>
@@ -38,63 +39,36 @@
                         <thead>
                             <!--VLR001-->
                             <tr>
-                                <th style="width: 100px;">Item Number</th>
+                                <th style="width: 150px;">Item Number</th>
                                 <th style="width: 100px;">Category</th>
                                 <th style="width: 250px;">Description</th>
-                                <th style="width: 130px;">Unit of Measure</th>
-                                <th style="width: 100px;">Adjusted Qty</th>
+                                <th style="width: 150px;">Unit of Measure</th>
+                                <th style="width: 100px;">Price</th>
+                                <th style="width: 150px;">Adjusted Qty</th>
                                 <th>Reason</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (var item in Model.AdjustmentVoucherDetails)
+                            {
                             <tr>
-                                <td>P100</td>
-                                <td>Scissors</td>
-                                <td>Scissor</td>
-                                <td>Each</td>
-                                <td>-5</td>
-                                <td>Because of...</td>
+                                <td>@item.Stationery.Code</td>
+                                <td>@item.Stationery.Category.Type</td>
+                                <td>@item.Stationery.Description</td>
+                                <td>@item.Stationery.UnitOfMeasure</td>
+                                <td>@item.Stationery.Status</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Reason</td>
                             </tr>
-                            <tr>
-                                <td>P037</td>
-                                <td>Pen</td>
-                                <td>Pen Transparency Soluble</td>
-                                <td>Packet</td>
-                                <td>-15</td>
-                                <td>Because of...</td>
-                            </tr>
-                            <tr>
-                                <td>P038</td>
-                                <td>Pen</td>
-                                <td>Pen Whiteboard Marker Black</td>
-                                <td>Box</td>
-                                <td>-10</td>
-                                <td>Because of...</td>
-                            </tr>
-                            <tr>
-                                <td>P039</td>
-                                <td>Pen</td>
-                                <td>Pen Whiteboard Marker Blue</td>
-                                <td>Box</td>
-                                <td>-10</td>
-                                <td>Because of...</td>
-                            </tr>
-                            <tr>
-                                <td>P002</td>
-                                <td>Ruler</td>
-                                <td>Ruler 12'</td>
-                                <td>Dozen</td>
-                                <td>-6</td>
-                                <td>Because of...</td>
-                            </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
                 <!-- /.box-body -->
-
                 <!-- If Supervisor -->
                 <div class="box-footer">
-                    <button class="btn btn-success pull-right">Acknowledge</button>
+
+                    @Html.ActionLink("Acknowledge", "ChangeStatus", new { adjId = @Model.Id }, new { @class = "btn btn-sm btn-success pull-right", @role = "button" })
                 </div>
                 <!-- If Supervisor -->
 

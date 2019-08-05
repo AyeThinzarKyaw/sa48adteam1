@@ -19,12 +19,37 @@ namespace LUSSIS.Controllers
             return View(adjustmentvouchers);
         }
 
+        // GET: AdjustmentVoucherDetails
+        //By NESS
+        public ActionResult Detail(int adjId)
+        {
+            AdjustmentVoucher adjustmentVoucher = AdjustmentVoucherService.Instance.getAdjustmentVoucherById(adjId);
+            return View(adjustmentVoucher);
+        }
+
         //CRETE AdjustmentVoucher getMethod
         //By NESS
         public ActionResult Create()
         {
             AdjustmentVoucher adj = new AdjustmentVoucher();
             return View(adj);
+        }
+
+        //change status of Adjustment Voucher
+        //By NESS
+        public ActionResult ChangeStatus(int adjId)
+        {
+            AdjustmentVoucher adjustmentVoucher = AdjustmentVoucherService.Instance.getAdjustmentVoucherById(adjId);
+            if (adjustmentVoucher.Status == Enum.GetName(typeof(Enums.AdjustmentVoucherStatus), Enums.AdjustmentVoucherStatus.Open))
+            {
+                adjustmentVoucher.Status = Enum.GetName(typeof(Enums.AdjustmentVoucherStatus), Enums.AdjustmentVoucherStatus.Submitted);
+            }
+            else
+            {
+                adjustmentVoucher.Status = Enum.GetName(typeof(Enums.AdjustmentVoucherStatus), Enums.AdjustmentVoucherStatus.Acknowledged);
+            }
+            AdjustmentVoucherService.Instance.UpdateAdjustmentVoucher(adjustmentVoucher);
+            return RedirectToAction("Index");
         }
     }
 }
