@@ -85,4 +85,11 @@ namespace LUSSIS.Enums
         Cancelled
 
     }
+
+    public enum AdjustmentVoucherStatus
+    {
+        Open,
+        Submitted,
+        Acknowledged
+    }
 }

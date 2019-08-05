@@ -28,7 +28,13 @@ namespace LUSSIS.Repositories
 
         public List<int> getAdjustmentVoucherIdsWithAcknowledgedStatus()
         {
-            throw new NotImplementedException();
+            var adjustments = from a in Context.AdjustmentVouchers
+                              where a.Status.Equals("test")
+                              select a.Id;
+
+            List<int> adjustmentsList = adjustments.ToList();
+            return adjustmentsList;
         }
+
     }
 }
