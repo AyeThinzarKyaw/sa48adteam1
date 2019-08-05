@@ -151,6 +151,7 @@
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MobileDisbursementController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -521,7 +522,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\DeliveryOrders\" />
-    <Folder Include="Views\ClerkRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
