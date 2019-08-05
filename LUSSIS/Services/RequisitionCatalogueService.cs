@@ -224,6 +224,8 @@ namespace LUSSIS.Services
             Requisition newRequisition = new Requisition() {DateTime = DateTime.Now, EmployeeId = employeeId,
                 Status = RequisitionStatusEnum.PENDING.ToString() };
             newRequisition = requisitionRepo.Create(newRequisition);
+            Requisition r = requisitionRepo.FindById(25);
+
             List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
 
             foreach(CartDetail cd in cartDetails)
@@ -519,6 +521,45 @@ namespace LUSSIS.Services
                 rdIndex++;
             }
 
+        }
+
+        public List<DeptOwedItemDTO> GetListOfDeptOwedItems()
+        {
+            List<DeptOwedItemDTO> deptOwedItems = new List<DeptOwedItemDTO>();
+            List<IGrouping<int, RequisitionDetail>> groups = requisitionDetailRepo.GetUnfulfilledRequisitionDetailsGroupedByDept();
+
+            foreach(var group in groups)
+            {              
+                //get the department
+                List<RequisitionDetail> rds = group.ToList();
+                Department d = rds.First().Requisition.Employee.Department;
+
+                //Create a list of owedItemDTOs
+                List<OwedItemDTO> stationeryGroups = GetListOfOwedItemDTOs(rds);
+                deptOwedItems.Add(new DeptOwedItemDTO {Department = d, OwedItems = stationeryGroups});
+            }
+
+            return deptOwedItems;
+        }
+
+        private List<OwedItemDTO> GetListOfOwedItemDTOs(List<RequisitionDetail> requisitionDetails)
+        {
+            List<OwedItemDTO> owedItems = new List<OwedItemDTO>();
+            List<IGrouping<int, RequisitionDetail>> groups = requisitionDetails.GroupBy(x => x.StationeryId).ToList();
+            foreach(var group in groups)
+            {
+                int sum = 0;
+                List<RequisitionDetail> rds = group.ToList();
+                foreach(RequisitionDetail rd in rds)
+                {
+                    int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
+                    sum += diff;
+                }
+                //get stationery
+                Stationery s = rds.First().Stationery;
+                owedItems.Add(new OwedItemDTO {Stationery = s, QtyOwed = sum });
+            }
+            return owedItems;
         }
     }
 }

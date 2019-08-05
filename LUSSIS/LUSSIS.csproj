@@ -180,6 +180,8 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\OwedItemDTO.cs" />
     <Compile Include="Models\DTOs\ReceiveDoDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Models\DTOs\RequisitionsDTO.cs" />
     <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
+    <Compile Include="Models\DTOs\VMOwedItemsDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -388,6 +391,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\logic.jpg" />
+    <Content Include="Images\manager.png" />
     <Content Include="Models\LUSSISContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
@@ -481,12 +485,11 @@
     <Content Include="Views\PurchaseOrder\ReceiveDO.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewSchoolRequisitions.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
+    <Content Include="Views\ClerkRequisitions\ViewOwedItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
-    <Folder Include="Views\ClerkRequisitions\" />
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

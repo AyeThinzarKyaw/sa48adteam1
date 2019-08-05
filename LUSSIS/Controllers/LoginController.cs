@@ -49,10 +49,7 @@ namespace LUSSIS.Controllers
                 //check for role
                 if (loginDTO.RoleId >=1 && loginDTO.RoleId <= 4) //dept staff
                 {
-                    List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(loginDTO.EmployeeId);
-                    FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems, LoginDTO = loginDTO };
-
-                    return View("../Requisition/ViewCatalogue",  model);
+                    return RedirectToAction("ViewCatalogue", "Requisition", loginDTO);
                 }
                 else //clerks
                 {
