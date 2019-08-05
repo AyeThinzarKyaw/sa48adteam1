@@ -33,5 +33,15 @@ namespace LUSSIS.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult SubmitRetrieval(RetrievalDTO retrieval)
+        {
+            LoginDTO loginDTO = retrieval.LoginDTO;
+            retrievalService.completeRetrievalProcess(retrieval);
+
+            return RedirectToAction("ViewRetrieval", loginDTO);
+        }
+
+
     }
 }
