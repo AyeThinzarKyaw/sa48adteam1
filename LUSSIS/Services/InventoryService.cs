@@ -75,246 +75,144 @@ namespace LUSSIS.Services
             return inventory;
         }
 
-        //public List<StockMovementDTO> RetrieveStockMovement(int stationeryId)
-        //{
-        //    List<StockAndSupplierDTO> stockAndSuppliers = new List<StockAndSupplierDTO>()
-//
-       //     return 
-        //}
+        public StockAndSupplierDTO RetrieveStockMovement(int stationeryId)
+        {
+            List<StockMovementDTO> stockMovement = new List<StockMovementDTO>();
+            List<StockMovementBalanceDTO> stockMovementBalance = new List<StockMovementBalanceDTO>();
+            List<SupplierStockRankDTO> supplierStockRank = new List<SupplierStockRankDTO>();
+
+            Stationery s = stationeryRepo.FindById(stationeryId);
+            Category c = categoryRepo.FindById(s.CategoryId);
+            List<SupplierTender> st = (List<SupplierTender>) supplierTenderRepo.FindBy(x => x.StationeryId == stationeryId);
+
+            List<Supplier> sp = new List<Supplier>();
+            foreach (SupplierTender rankedsupplier in st)
+            {
+                Supplier supplier = (Supplier) supplierRepo.FindById(rankedsupplier.SupplierId);
+                sp.Add(supplier);
+            }
+
+            //add Suppliers To SupplierStockRankDTO
+            int limit = 3;
+            for (int i = 1; i <= limit; i++)
+            {
+                SupplierStockRankDTO supstockrank = new SupplierStockRankDTO();
+                {
+                    supstockrank.Rank = i;
+
+                    SupplierTender rankingsupplier = (SupplierTender) supplierTenderRepo.FindOneBy(x => x.StationeryId == stationeryId && x.Rank == i);
+                    supstockrank.SupplierCode = rankingsupplier.Supplier.Code;
+                    supstockrank.SupplierName = rankingsupplier.Supplier.Name;
+                    supstockrank.ContactPerson = rankingsupplier.Supplier.ContactName;
+                    supstockrank.ContactNumber = rankingsupplier.Supplier.PhoneNo;
+                    supstockrank.Price = rankingsupplier.Price;
+                  }
+                supplierStockRank.Add(supstockrank);
+            }
 
 
-        //public List<CatalogueItemDTO> GetCatalogueItems(int employeeId)
-        //{
-        //    List<CartDetail> cartDetails = GetAnyExistingCartDetails(employeeId);
-        //    List<Stationery> stationeries = (List<Stationery>)stationeryRepo.FindAll();
-        //    List<CatalogueItemDTO> catalogueItems = new List<CatalogueItemDTO>();
+            //retrieve all adjustment voucher Ids that are acknowledged
+            List<int> avId = adjustmentVoucherRepo.getAdjustmentVoucherIdsWithAcknowledgedStatus();
 
-        //    //for each stationery in stationeries create a catalogueItemDTO
-        //    foreach(Stationery s in stationeries)
-        //    {
-        //        CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO()
-        //        {
-        //            Item = s.Description,
-        //            UnitOfMeasure = s.UnitOfMeasure,
-        //            StationeryId = s.Id
-        //        };
-        //        getCatalogueItemAvailability(catalogueItemDTO, s);               
-        //        catalogueItems.Add(catalogueItemDTO);
-        //    }
+            //retrieve all adjustment voucher details with adjustment voucher Ids that are acknowledged and stationeryId
+            List<AdjustmentVoucherDetail> avDet = new List<AdjustmentVoucherDetail>();
+            foreach (int adjvouch in avId)
+            {
+                List<AdjustmentVoucherDetail> adjvouchDetail = (List<AdjustmentVoucherDetail>)adjustmentVoucherDetailRepo.FindBy(x => x.AdjustmentVoucherId == adjvouch && x.StationeryId == stationeryId);
+                foreach (AdjustmentVoucherDetail aVD in adjvouchDetail)
+                {
+                    avDet.Add(aVD);
+                }
+                    
+            }
 
-        //    if (cartDetails != null)
-        //    {
-        //        foreach(CartDetail cd in cartDetails)
-        //        {
-        //            CatalogueItemDTO catItemDTO = catalogueItems.Find(x => x.StationeryId == cd.StationeryId);
-        //            catItemDTO.OrderQtyInput = cd.Quantity;
-        //            catItemDTO.ReservedCount = getReservedBalanceForExistingCartItem(cd);
-        //            catItemDTO.WaitlistCount = cd.Quantity - catItemDTO.ReservedCount;
-        //            catItemDTO.Confirmation = true;
-        //        }
-        //    }
-        //    return catalogueItems;
-        //}
+            // set retrieved adjustmentvouchers into StockMovementDTO
+            foreach (AdjustmentVoucherDetail adjV in avDet)
+            {
+                StockMovementDTO stockMovList = new StockMovementDTO();
+                {
+                    stockMovList.MovementDate = adjV.DateTime;
+                    stockMovList.DepartmentOrSupplier = "Adjustment Voucher - " + adjV.AdjustmentVoucherId;
+                    stockMovList.Quantity = adjV.Quantity;
+                }
+                stockMovement.Add(stockMovList);
+            }
 
-        //private StockAvailabilityEnum getStockAvailabilityStatus(int currBalance, int? reorderLevel)
-        //{
-        //    if (currBalance <= 0)
-        //    {
-        //        return StockAvailabilityEnum.OutOfStock;
-        //    }
-        //    else if (reorderLevel != null && currBalance < reorderLevel)
-        //    {
-        //        return StockAvailabilityEnum.LowStock;
+            //retrieve all purchase Order Ids that are closed
+            List<int> poId = purchaseOrderRepo.getPurchaseOrderIdsWithClosedStatus();
 
-        //    }
-        //    else 
-        //    {
-        //        return StockAvailabilityEnum.InStock;
-        //    }
-        //}
+            //retrieve all PO details with PO Ids that are closed and stationeryId
+            List<PurchaseOrderDetail> purchaseOrderDet = new List<PurchaseOrderDetail>();
+            foreach (int a in poId)
+            {
+                PurchaseOrderDetail purOrderDetail = (PurchaseOrderDetail) purchaseOrderDetailRepo.FindOneBy(x => x.PurchaseOrderId == a && x.StationeryId == stationeryId);
+                purchaseOrderDet.Add(purOrderDetail);
+            }
 
-        //private int getReservedBalanceForExistingCartItem(CartDetail cd)
-        //{
-        //    //Q - requisition reserved - adjustment open - total in front of queue
-        //    int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(cd.StationeryId);
-        //    int foqCartCount = cartDetailRepo.GetFrontOfQueueCartCountForStationery(cd.StationeryId, cd.DateTime);
-        //    int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(cd.StationeryId);
-        //    int totalCount = stationeryRepo.FindById(cd.StationeryId).Quantity;
-        //    int netCount = totalCount - reservedCount - foqCartCount - openAdjustmentCount;
+            // set retrieved PODetails into StockMovementDTO
+            foreach (PurchaseOrderDetail poDetail in purchaseOrderDet)
+            {
+                StockMovementDTO stockMovList = new StockMovementDTO();
+                {
+                    stockMovList.MovementDate = purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).OrderDateTime;
+                    stockMovList.DepartmentOrSupplier = "Supplier - " + supplierRepo.FindById(purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).SupplierId).Name;
+                    stockMovList.Quantity = (int) poDetail.QuantityDelivered;
+                }
+                stockMovement.Add(stockMovList);
+            }
 
-        //    if (netCount <= 0)
-        //    {
-        //        return 0;
-        //    }
-        //    else if (netCount >= cd.Quantity)
-        //    {
-        //        return cd.Quantity;
-        //    }
-        //    else
-        //    {
-        //        return netCount;
-        //    }
-        //}
+            //retrieve all requisitiondetails that are delivered and are of the input stationeryId
+            List<RequisitionDetail> reqDet = (List<RequisitionDetail>) requisitionDetailRepo.FindBy(x => x.Status == "Collected" && x.StationeryId == stationeryId);
 
-        //private int getCurrentBalance(Stationery s)
-        //{
-        //    int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(s.Id);
-        //    int cartCount = cartDetailRepo.GetCountOnHoldForStationery(s.Id); //could be 0
-        //    int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(s.Id);
-        //    int totalCount = stationeryRepo.FindById(s.Id).Quantity;
-        //    int netCount = totalCount - reservedCount - cartCount - openAdjustmentCount;
+            // set retrieved PODetails into StockMovementDTO
+            foreach (RequisitionDetail reqDetails in reqDet)
+            {
+                StockMovementDTO stockMovList = new StockMovementDTO();
+                {
+                    stockMovList.MovementDate = (DateTime) reqDetails.Disbursement.DeliveryDateTime;
 
-        //    if(netCount <= 0)
-        //    {
-        //        return 0;
-        //    }
-        //    else
-        //    {
-        //        return netCount;
-        //    }
+                    int rcdEmployeeId = (int) disbursementRepo.FindOneBy(x => x.Id == reqDetails.DisbursementId).ReceivedEmployeeId;
+                    string deptName = departmentRepo.FindOneBy(x => x.Id == employeeRepo.FindOneBy(y => y.Id == rcdEmployeeId).DepartmentId).DepartmentName;
+                    stockMovList.DepartmentOrSupplier = deptName;
 
-        //}
+                    stockMovList.Quantity = (int) reqDetails.QuantityDelivered;
+                }
+                stockMovement.Add(stockMovList);
+            }
 
+            // order the list by date & alphabetically
+            stockMovement.OrderBy(x => x.MovementDate).OrderBy(x => x.DepartmentOrSupplier);
 
-        ////returns null if user's cart is empty
-        //private List<CartDetail> GetAnyExistingCartDetails(int employeeId)
-        //{
+            // set StockMovementDTO into StockMovementBalanceDTO
+            foreach (StockMovementDTO stkMovDTO in stockMovement)
+            {
+                int runningBal = 0;
+                StockMovementBalanceDTO stockMovBalList = new StockMovementBalanceDTO();
+                {
+                    stockMovBalList.StockMovement = stkMovDTO;
+                    runningBal = 0 + stkMovDTO.Quantity;
+                    stockMovBalList.Balance = runningBal;
+                }
+                stockMovementBalance.Add(stockMovBalList);
+            }
 
-        //    List<CartDetail> cartDetails = (List<CartDetail>)cartDetailRepo.FindBy(x => x.Employee.Id == employeeId);
-        //    if (cartDetails.Count == 0)
-        //    {
-        //        return null;
-        //    }
-        //    else
-        //    {
-        //        return cartDetails;
-        //    }
+            // set StockMovementBalanceDTO into StockAndSupplierDTO
 
-        //}     
+            StockAndSupplierDTO stockAndSuppliers = new StockAndSupplierDTO();
 
-        //public CatalogueItemDTO AddCartDetail(int employeeId, int stationeryId, int inputQty)
-        //{
-        //    Stationery s = stationeryRepo.FindById(stationeryId);
-        //    int currBalance = getCurrentBalance(s);
-        //    int reserved = 0;
-        //    int waitlist = 0;
-        //    if (inputQty > currBalance)
-        //    {
-        //        reserved = currBalance;
-        //        waitlist = inputQty - currBalance;
-        //    }
-        //    else{
-        //        reserved = inputQty;
-        //    }
-        //    CartDetail cd = new CartDetail { DateTime = DateTime.Now, EmployeeId = employeeId, Quantity = inputQty, StationeryId = stationeryId };
-        //    cartDetailRepo.Create(cd); //persist new cart detail
+            stockAndSuppliers.StationeryId = s.Id;
+            stockAndSuppliers.ItemNumber = s.Code;
+            stockAndSuppliers.Category = (String)categoryRepo.getCategoryType(s.CategoryId);
+            stockAndSuppliers.Description = s.Description;
+            stockAndSuppliers.Location = s.Bin;
+            stockAndSuppliers.UnitOfMeasure = s.UnitOfMeasure;
 
-        //    //can abstract into a method and share with above bbut must instantiate a new DTO first
-        //    CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO() { ReservedCount = reserved, WaitlistCount = waitlist };
-        //    getCatalogueItemAvailability(catalogueItemDTO, s);
+            stockAndSuppliers.SupplierStockRank = supplierStockRank;
 
-        //    return catalogueItemDTO;
+            stockAndSuppliers.StockMovementBalance = stockMovementBalance;
 
-        //}
+            return stockAndSuppliers;
+        }
 
-        //public CatalogueItemDTO RemoveCartDetail(int employeeId, int stationeryId)
-        //{
-        //    Stationery s = stationeryRepo.FindById(stationeryId);
-        //    //remove cd from db first
-        //    CartDetail cd = cartDetailRepo.FindOneBy(x => x.EmployeeId == employeeId && x.StationeryId == stationeryId);
-        //    if(cd != null)
-        //    {
-        //        cartDetailRepo.Delete(cd);
-        //        CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO();
-        //        getCatalogueItemAvailability(catalogueItemDTO, s);
-        //        return catalogueItemDTO;
-        //    }
-
-        //    return null;
-        //}
-
-        //private void getCatalogueItemAvailability(CatalogueItemDTO catalogueItemDTO, Stationery s)
-        //{
-        //    int currBalance = getCurrentBalance(s);
-        //    int? lowStockCount = null;
-        //    StockAvailabilityEnum stockAvailEnum = getStockAvailabilityStatus(currBalance, s.ReorderLevel);
-        //    if (stockAvailEnum == StockAvailabilityEnum.LowStock)
-        //    {
-        //        lowStockCount = currBalance;
-        //    }
-
-        //    catalogueItemDTO.StockAvailability = stockAvailEnum;
-        //    catalogueItemDTO.LowStockAvailability = lowStockCount;
-        //}
-
-        //public CatalogueItemDTO UpdateCartDetail(int employeeId, int stationeryId, int inputQty)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public List<Requisition> GetPersonalRequisitionHistory(int employeeId)
-        //{
-        //    return (List<Requisition>)requisitionRepo.FindBy(x=> x.EmployeeId == employeeId);  
-        //}
-
-        //public List<RequisitionDetail> GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId)
-        //{
-        //    return (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
-        //}
-
-        //public Requisition ConvertCartDetailsToRequisitionDetails(int employeeId)
-        //{
-        //    //erase records from cartDetails
-        //    List<CartDetail> cartDetails = (List<CartDetail>)cartDetailRepo.FindBy(x => x.EmployeeId == employeeId);
-        //    Requisition newRequisition = new Requisition() {DateTime = DateTime.Now, EmployeeId = employeeId,
-        //        Status = RequisitionStatusEnum.PENDING.ToString() };
-        //    newRequisition = requisitionRepo.Create(newRequisition);
-        //    List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
-
-        //    foreach(CartDetail cd in cartDetails)
-        //    {
-        //        cartDetailRepo.Delete(cd);
-
-        //        int reservedCount = getReservedBalanceForExistingCartItem(cd);
-        //        if(reservedCount < cd.Quantity)
-        //        {
-        //            int waitllistCount = cd.Quantity - reservedCount;
-        //            //has waitlist, create 2 requisition details
-        //            RequisitionDetail waitlistRequisitionDetail = new RequisitionDetail()
-        //            {
-        //                QuantityOrdered = waitllistCount,
-        //                RequisitionId = newRequisition.Id,
-        //                Status = RequisitionDetailStatusEnum.WAITLIST_PENDING.ToString()
-        //            };
-        //            requisitionDetailRepo.Create(waitlistRequisitionDetail);
-        //            if(reservedCount > 0)
-        //            {
-        //                createReservedPendingRequisitionDetail(reservedCount, newRequisition.Id);
-        //            }                    
-        //        }
-        //        else
-        //        {
-        //            createReservedPendingRequisitionDetail(cd.Quantity, newRequisition.Id);
-        //        }
-
-        //    }
-        //    return newRequisition;
-        //}
-
-        //private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId)
-        //{
-        //    RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
-        //    {
-        //        QuantityOrdered = reservedCount,
-        //        RequisitionId = requisitionId,
-        //        Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString()
-        //    };
-        //    requisitionDetailRepo.Create(reservedRequisitionDetail);
-        //}
-
-        //RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForPersonalRequisition(int requisitionId, int employeeId)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

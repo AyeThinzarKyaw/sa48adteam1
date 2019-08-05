@@ -8,11 +8,8 @@ using LUSSIS.Models.DTOs;
 
 namespace LUSSIS.Services.Interfaces
 {
-    public interface IInventoryService
+    public interface IRetrievalService
     {
-        List<InventoryListDTO> RetrieveStationeryAndCategory();
-
-        StockAndSupplierDTO RetrieveStockMovement(int stationeryId);
-
+        RetrievalDTO constructRetrievalDTO(LoginDTO loginDTO);
     }
 }

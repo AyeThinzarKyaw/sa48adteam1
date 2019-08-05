@@ -12,5 +12,7 @@ namespace LUSSIS.Repositories.Interfaces
         IEnumerable<PurchaseOrder> GetPurchaseOrderByStationeryId(int stationeryId);
 
         IEnumerable<PO_getPOCatalogue_Result> GetPOCatalogue();
+
+        List<int> getPurchaseOrderIdsWithClosedStatus();
     }
 }

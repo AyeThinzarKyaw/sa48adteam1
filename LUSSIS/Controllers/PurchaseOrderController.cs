@@ -164,7 +164,7 @@ namespace LUSSIS.Controllers
                         receiveDO.purchaseOrder.Invoice = filename;
                         updatedPO.Invoice = filename;
 
-                        
+                        bool poComplete = true;
                         //update POdetails deliveredQty
                         foreach (var detail in receivedQtyDTO.PurchaseOrderDetails)
                         {
@@ -176,12 +176,9 @@ namespace LUSSIS.Controllers
                             //check to complete PO
                             if (oldPODetail.QuantityOrdered > oldPODetail.QuantityDelivered)
                             {
-                                oldPODetail.Confirmed = false;
+                                poComplete = false;
                             }
-                            else
-                            {
-                                oldPODetail.Confirmed = true;
-                            }
+                            
 
                             PurchaseOrderService.Instance.UpdatePODetail(oldPODetail);
 
@@ -205,7 +202,7 @@ namespace LUSSIS.Controllers
                             
                             //Check to move waitlistApproved to Preparing
                         }
-                        if (PurchaseOrderService.Instance.getPurchaseOrderById(updatedPO.Id).PurchaseOrderDetails.Where(x=>x.Confirmed!=true).Count()==0)
+                        if (poComplete==true)
                         {
                             updatedPO.Status = Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.CLOSED);
                         }
@@ -300,6 +297,11 @@ namespace LUSSIS.Controllers
             //DOReceivedList.Add(new KeyValuePair<int, int>(0, 20));
             //int a=DOReceivedList[0].Value;
 
+        }
+
+        public ActionResult SelectSupplier()
+        {
+            return View();
         }
 
     }
