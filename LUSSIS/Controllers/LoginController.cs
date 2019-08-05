@@ -60,5 +60,12 @@ namespace LUSSIS.Controllers
             }
 
         }
+
+        public ActionResult Logout(LoginDTO loginDTO)
+        {
+            loginService.LogoutUser(loginDTO.SessionGuid);
+
+            return RedirectToAction("Index");
+        }
     }
 }

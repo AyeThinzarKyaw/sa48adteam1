@@ -25,5 +25,10 @@ namespace LUSSIS.Repositories
                         where avd.StationeryId == stationeryId
                         select (int?)avd.Quantity).Sum() ?? 0;
         }
+
+        public List<int> getAdjustmentVoucherIdsWithAcknowledgedStatus()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

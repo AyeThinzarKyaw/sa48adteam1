@@ -38,6 +38,19 @@ namespace LUSSIS.Enums
         CLOSED 
     }
 
+    public enum AdjustmentVoucherStatusEnum
+    {
+        OPEN,
+        CLOSED
+    }
+
+    public enum AdjustmentVoucherDefaultReasons
+    {
+        RETRIEVAL_SHORTAGE,
+        DISBURSEMENT_SHORTAGE
+
+    }
+
     public enum RequisitionDetailStatusEnum
     {
         RESERVED_PENDING,

@@ -297,7 +297,9 @@
     <Compile Include="Repositories\StationeryRepo.cs" />
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
+    <Compile Include="Services\AdjustmentVoucherService.cs" />
     <Compile Include="Services\EmailNotificationService.cs" />
+    <Compile Include="Services\Interfaces\IAdjustmentVoucherService.cs" />
     <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\IRetrievalService.cs" />
     <Compile Include="Services\Interfaces\IInventoryService.cs" />
