@@ -18,5 +18,7 @@ namespace LUSSIS.Repositories.Interfaces
         List<RequisitionDetail> RequisitionDetailsEagerLoadStationeryIncCategory(int requisitionId);
 
         List<Requisition> GetUniqueRequisitionsForDisbursement(int disbursementId);
+
+        List<IGrouping<int, RequisitionDetail>> GetUnfulfilledRequisitionDetailsGroupedByDept();
     }
 }

@@ -56,5 +56,10 @@ namespace LUSSIS.Repositories
             return Context.RequisitionDetails.Select(x => x.Requisition).Distinct().ToList();
 
         }
+
+        public List<IGrouping<int, RequisitionDetail>> GetUnfulfilledRequisitionDetailsGroupedByDept()
+        {
+            return Context.RequisitionDetails.Where(x => x.QuantityOrdered > x.QuantityDelivered && x.Status.Equals("COLLECTED")).GroupBy(x => x.Requisition.Employee.DepartmentId).ToList();
+        }
     }
 }
