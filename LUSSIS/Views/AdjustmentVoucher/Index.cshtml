@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<LUSSIS.Models.AdjustmentVoucher>
 @{
     ViewBag.Title = "Index";
 }
@@ -22,7 +22,7 @@
                 <!-- If Clerk -->
                 <div class="box-header">
                     <div class="box-tools pull-right" style="position: relative;">
-                        <a href="adjustment-voucher-create.html" class="btn btn-success right">Raise New Adjustment Voucher</a>
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success right", @role = "button" })
                     </div>
                 </div>
                 <!-- If Clerk -->
@@ -39,51 +39,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (var adjustmentVoucher in Model)
+                            {
                             <tr>
-                                <td>ADJ0009</td>
-                                <td>09/07/2019</td>
-                                <td>375</td>
-                                <td>Acknowledged</td>
+                                <td>@adjustmentVoucher.Id</td>
+                                @{ string adjDate = "";
+                                    if (adjustmentVoucher.Date != null)
+                                    {
+                                        adjDate = ((DateTime)adjustmentVoucher.Date).ToString("dd/MM/yyyy");
+                                    }
+
+                                }
+                                <td>@adjDate</td>
+                                <td>@adjustmentVoucher.Date</td>
+                                <td>@adjustmentVoucher.Status</td>
                                 <td>
-                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
+                                    @Html.ActionLink("Detail", "Detail", new { adjId = adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
                                 </td>
                             </tr>
-                            <tr>
-                                <td>ADJ0008</td>
-                                <td>22/06/2019</td>
-                                <td>127</td>
-                                <td>Acknowledged</td>
-                                <td>
-                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ADJ0007</td>
-                                <td>11/08/2019</td>
-                                <td>80</td>
-                                <td>Acknowledged</td>
-                                <td>
-                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ADJ0010</td>
-                                <td>29/10/2019</td>
-                                <td>290</td>
-                                <td>Acknowledged</td>
-                                <td>
-                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ADJ0011</td>
-                                <td>09/12/2019</td>
-                                <td>110</td>
-                                <td class="text-blue">Pending</td>
-                                <td>
-                                    <a href="adjustment-voucher-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
