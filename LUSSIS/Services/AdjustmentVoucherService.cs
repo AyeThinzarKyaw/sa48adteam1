@@ -29,6 +29,24 @@ namespace LUSSIS.Services
             get { return instance; }
         }
 
+        public IEnumerable<AdjustmentVoucher> getAllAdjustmentVoucher()
+        {
+            return AdjustmentVoucherRepo.Instance.FindAll().ToList();
+        }
+
+        public AdjustmentVoucher getAdjustmentVoucherById(int adjId)
+        {
+            return AdjustmentVoucherRepo.Instance.FindById(adjId);
+        }
+        public void CreateAdjustmentVoucher(AdjustmentVoucher adj)
+        {
+            AdjustmentVoucherRepo.Instance.Create(adj);
+        }
+        public void UpdateAdjustmentVoucher(AdjustmentVoucher adj)
+        {
+            AdjustmentVoucherRepo.Instance.Update(adj);
+        }
+
         public void AutoAdjustmentsForRetrieval(int clerkEmployeeId, List<RetrievalItemDTO> retrievalList)
         {
             //any existing open adjustment voucher for this clerk?

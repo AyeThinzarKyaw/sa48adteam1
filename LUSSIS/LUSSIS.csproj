@@ -184,6 +184,8 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\OwedItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalDTO.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="Models\DTOs\StockMovementBalanceDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementDTO.cs" />
     <Compile Include="Models\DTOs\SupplierDetailsDTO.cs" />
+    <Compile Include="Models\DTOs\VMOwedItemsDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -307,7 +310,6 @@
     <Compile Include="Services\Interfaces\IRequisitionCatalogueService.cs" />
     <Compile Include="Services\Interfaces\IRequisitionManagementService.cs" />
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
-    <Compile Include="Services\Interfaces\IAjustmentVoucherService.cs" />
     <Compile Include="Services\Interfaces\ISupplierService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
     <Compile Include="Services\RetrievalService.cs" />
@@ -317,7 +319,6 @@
     <Compile Include="Services\RequisitionCatalogueService.cs" />
     <Compile Include="Services\RequisitionManagementService.cs" />
     <Compile Include="Services\StationeryService.cs" />
-    <Compile Include="Services\AdjustmentVoucherService.cs" />
     <Compile Include="Services\SupplierService.cs" />
     <Compile Include="Services\SupplierTenderService.cs" />
     <Compile Include="Util\MD5Hash.cs" />
