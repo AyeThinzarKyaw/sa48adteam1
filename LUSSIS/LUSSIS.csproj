@@ -183,8 +183,6 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
-    <Compile Include="Models\DTOs\OwedItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalDTO.cs" />
@@ -200,7 +198,6 @@
     <Compile Include="Models\DTOs\RequisitionsDTO.cs" />
     <Compile Include="Models\DTOs\PurchaseOrderListDTO.cs" />
     <Compile Include="Models\DTOs\StationeryDetailsDTO.cs" />
-    <Compile Include="Models\DTOs\VMOwedItemsDTO.cs" />
     <Compile Include="Models\DTOs\StockAndSupplierDTO.cs" />
     <Compile Include="Models\DTOs\SupplierStockCardRankDTO.cs" />
     <Compile Include="Models\DTOs\StockMovementBalanceDTO.cs" />
@@ -410,7 +407,6 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\logic.jpg" />
-    <Content Include="Images\manager.png" />
     <Content Include="Models\LUSSISContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
@@ -504,11 +500,10 @@
     <Content Include="Views\PurchaseOrder\ReceiveDO.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewSchoolRequisitions.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewRequisitionDetails.cshtml" />
-    <Content Include="Views\ClerkRequisitions\ViewOwedItems.cshtml" />
     <Content Include="Views\Inventory\ViewInventoryList.cshtml" />
     <Content Include="Views\Inventory\ViewStockCardAndSuppliers.cshtml" />
-    <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
     <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
+    <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
