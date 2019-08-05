@@ -43,12 +43,7 @@ namespace LUSSIS.Controllers
             return View(purchaseOrderListDTO);
         }
 
-        // GET: View PurchaseOrder Catalogue to select items
-        //By ATZK
-        public ActionResult Catalogue()
-        {
-            return View(PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue());
-        }
+        
 
         // cancelPOStatus as cancelled
         //By ATZK
@@ -121,14 +116,6 @@ namespace LUSSIS.Controllers
         [HttpPost]
         public ActionResult ReceiveDO(ReceiveDoDTO receiveDO)
         {
-            //if (receiveDO.DO==null || receiveDO.Invoice==null )
-            //{
-            //    //receiveDO.Error = new ErrorDTO();
-            //    receiveDO.Error.HasError = true;
-            //    receiveDO.Error.Message = "Please attach both Delivery Order and Invoice.";
-            //    return View(receiveDO);
-            //}
-            //else
             if (ModelState.IsValid)
             {
                 if (receiveDO.DO.ContentLength > 10 * 1024 * 1024 || receiveDO.Invoice.ContentLength > 10 * 1024 * 1024)
@@ -244,59 +231,129 @@ namespace LUSSIS.Controllers
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
+            
+        }
 
+        
 
-            //ReceivedQtyDTO receivedQtyDTO=new ReceivedQtyDTO();
-            //if (TempData["DOReceivedQty"]!=null)
-            //{
-            //    receivedQtyDTO = (ReceivedQtyDTO)TempData["DOReceivedQty"];
-            //    TempData.Keep("DOReceivedQty");
-            //    if (receivedQtyDTO.DOReceivedList.Where(x => x.Key == podId).Count() == 1)
-            //    {
-            //        if (receivedQtyDTO.DOReceivedList.SingleOrDefault(x => x.Key == podId).Value!=qty)
-            //        {
-            //            receivedQtyDTO.DOReceivedList.Remove(receivedQtyDTO.DOReceivedList.SingleOrDefault(x => x.Key == podId));
-            //            receivedQtyDTO.DOReceivedList.Add(new KeyValuePair<int, int>(podId, qty));
-            //        }
-            //    }
-            //    else
-            //    {
-            //       receivedQtyDTO.DOReceivedList.Add(new KeyValuePair<int, int>(podId, qty));
-            //    }
-            //}
-            //else
-            //{
-            //    receivedQtyDTO.PurchaseOrderID = poId;
-            //    receivedQtyDTO.DOReceivedList = new List<KeyValuePair<int, int>>();
-            //    receivedQtyDTO.DOReceivedList.Add(new KeyValuePair<int, int>(podId, qty));
-            //}
+        // GET: View PurchaseOrder Catalogue to select items
+        //By ATZK
+        public ActionResult Catalogue()
+        {
+            POCreateDTO poCreateDTO = new POCreateDTO();
+            if (TempData["PO"] != null)
+            {
+                poCreateDTO = (POCreateDTO)TempData["PO"];
+                TempData.Keep("PO");
+            }
+            else
+            {
+                poCreateDTO.Catalogue = PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().ToList();
+            }
+            
+            return View(poCreateDTO);
+        }
 
+        //generate catalogue_partial view
+        //By ATZK
+        public ActionResult Catalogue_Partial()
+        {
+            if (TempData["PO"] != null)
+            {
 
-            //TempData["DOReceivedQty"] = receivedQtyDTO;
-            //return Json(true, JsonRequestBehavior.AllowGet);
+                POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
+                TempData.Keep("PO");
+                return PartialView(poCreateDTO);
+            }
+            else
+            {
+                return PartialView(PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue());
+            }
+            
+            //return View(PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue());
+        }
 
+        
+        public JsonResult updateSelectList(int stationeryId,int qty,bool selectOrNot,bool selectAllSelected)
+        {
+            POCreateDTO poCreateDTO = new POCreateDTO();
+            if (TempData["PO"] != null)
+            {
+                poCreateDTO = (POCreateDTO)TempData["PO"];
+                TempData.Keep("PO");                
+            }
+            else
+            {
+                poCreateDTO = new POCreateDTO();
+                poCreateDTO.Catalogue = PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().ToList();                
+            }
+            if (selectAllSelected==false)//if show all selected is not selected
+            {
+                if (stationeryId == 0 && qty == 0 && selectOrNot == false)
+                {
+                    TempData["PO"] = poCreateDTO;
+                    return Json(this.RenderRazorViewToString("~/Views/PurchaseOrder/Catalogue_Partial.cshtml", poCreateDTO), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    poCreateDTO.Catalogue.Single(x => x.Id == stationeryId).Unsubmitted = qty;
+                    if (selectOrNot)
+                    {
+                        if (poCreateDTO.SelectedItems == null)
+                        {
+                            poCreateDTO.SelectedItems = new List<Stationery>();
+                        }
+                        if (poCreateDTO.SelectedItems.Where(x => x.Id == stationeryId).Count() <= 0)
+                        {
+                            Stationery item = new Stationery();
+                            item.Id = stationeryId;
+                            poCreateDTO.SelectedItems.Add(item);
+                        }
 
+                    }
+                    else
+                    {
+                        if (poCreateDTO != null && poCreateDTO.SelectedItems.Where(x => x.Id == stationeryId).Count() > 0)
+                        {
+                            poCreateDTO.SelectedItems.Remove(poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId));
+                        }
 
-            //if (receivedQtyDTO.PurchaseOrderID==poId)
-            //{
-            //    if (receivedQtyDTO.DOReceivedList.Where(x=>x.Key==podId).Count()==1)
-            //    {
-            //        receivedQtyDTO.DOReceivedList.Remove(receivedQtyDTO.DOReceivedList.SingleOrDefault(x => x.Key == podId));
+                    }
+                    TempData["PO"] = poCreateDTO;
 
-            //    }
-            //    receivedQtyDTO.DOReceivedList.Add(new KeyValuePair<int, int>(podId, qty));
-            //    TempData["DOReceivedQty"] = receivedQtyDTO;
-            //    return Json(true, JsonRequestBehavior.AllowGet);
-            //}
-            //else
-            //{
-            //    this.receivedQtyDTO.PurchaseOrderID = poId;
-            //    this.receivedQtyDTO.DOReceivedList.Add(new KeyValuePair<int, int>(podId, qty));
-            //    return Json(true, JsonRequestBehavior.AllowGet);
-            //}
-            //DOReceivedList.Add(new KeyValuePair<int, int>(0, 20));
-            //int a=DOReceivedList[0].Value;
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
+                
+            }            
+            else
+            {
+                TempData["PO"] = poCreateDTO;
+                List<PO_getPOCatalogue_Result> catalogueSelected = new List<PO_getPOCatalogue_Result>();
+                foreach (var item in poCreateDTO.SelectedItems)
+                {
+                    catalogueSelected.Add(poCreateDTO.Catalogue.Single(x=>x.Id==item.Id));
+                }
+                POCreateDTO selectedCatalogueDTO = new POCreateDTO();
+                selectedCatalogueDTO.Catalogue = catalogueSelected;
+                return Json(this.RenderRazorViewToString("~/Views/PurchaseOrder/Catalogue_Partial.cshtml", selectedCatalogueDTO), JsonRequestBehavior.AllowGet);
+            }
+            
+            //return PartialView(PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue());
+            //return Json(this.RenderRazorViewToString("~/Views/PurchaseOrder/Catalogue_Partial.cshtml", poCreateDTO.Catalogue), JsonRequestBehavior.AllowGet);
+            //return Json(PartialView("Catalogue_Partial.cshtml", PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().First()),JsonRequestBehavior.AllowGet);
+        }
 
+        public string RenderRazorViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
 
         public ActionResult SelectSupplier()
