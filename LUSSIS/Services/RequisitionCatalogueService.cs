@@ -99,7 +99,7 @@ namespace LUSSIS.Services
             int foqCartCount = cartDetailRepo.GetFrontOfQueueCartCountForStationery(cd.StationeryId, cd.DateTime);
             int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(cd.StationeryId);
             int totalCount = stationeryRepo.FindById(cd.StationeryId).Quantity;
-            int netCount = totalCount - reservedCount - foqCartCount - openAdjustmentCount;
+            int netCount = totalCount - reservedCount - foqCartCount + openAdjustmentCount;
 
             if (netCount <= 0)
             {
@@ -121,7 +121,7 @@ namespace LUSSIS.Services
             int cartCount = cartDetailRepo.GetCountOnHoldForStationery(s.Id); //could be 0
             int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(s.Id);
             int totalCount = stationeryRepo.FindById(s.Id).Quantity;
-            int netCount = totalCount - reservedCount - cartCount - openAdjustmentCount;
+            int netCount = totalCount - reservedCount - cartCount + openAdjustmentCount;
 
             if(netCount <= 0)
             {
@@ -224,7 +224,6 @@ namespace LUSSIS.Services
             Requisition newRequisition = new Requisition() {DateTime = DateTime.Now, EmployeeId = employeeId,
                 Status = RequisitionStatusEnum.PENDING.ToString() };
             newRequisition = requisitionRepo.Create(newRequisition);
-            Requisition r = requisitionRepo.FindById(25);
 
             List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
 
@@ -474,7 +473,7 @@ namespace LUSSIS.Services
 
             int totalCount = stationeryRepo.FindById(stationeryId).Quantity;
 
-            return totalCount - openAdjustmentCount - reqInTransitCount;
+            return totalCount + openAdjustmentCount - reqInTransitCount;
         }
 
         public void CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(int purchaseOrderId)

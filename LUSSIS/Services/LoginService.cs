@@ -62,6 +62,13 @@ namespace LUSSIS.Services
             }
         }
 
+        public void LogoutUser(string GUID)
+        {
+            Session s = sessionRepo.FindOneBy(x=>x.GUID.Equals(GUID));
+            s.LogOutDateTime = DateTime.Now;
+            sessionRepo.Update(s);
+
+        }
     }
 
 }

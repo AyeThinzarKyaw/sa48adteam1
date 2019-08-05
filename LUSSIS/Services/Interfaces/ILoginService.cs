@@ -13,7 +13,7 @@ namespace LUSSIS.Services.Interfaces
         LoginDTO GetEmployeeLoginByUsernameAndPassword(string username, string password);
         string HashPassword(string password);
 
-
+        void LogoutUser(string GUID);
 
     }
 }

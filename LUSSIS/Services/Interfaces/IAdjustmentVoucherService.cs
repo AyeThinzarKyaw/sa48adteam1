@@ -1,8 +1,10 @@
-﻿using System;
+﻿using LUSSIS.Models;
+using LUSSIS.Models.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using LUSSIS.Models;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LUSSIS.Services.Interfaces
 {
@@ -15,5 +17,10 @@ namespace LUSSIS.Services.Interfaces
         void CreateAdjustmentVoucher(AdjustmentVoucher adj);
 
         void UpdateAdjustmentVoucher(AdjustmentVoucher adj);
+
+
+        void AutoAdjustmentsForRetrieval (int clerkEmployeeId, List<RetrievalItemDTO> retrievalList);
+
+        //void AutoAdjustmentsForDisbursement(int clerkEmployeeId, List<> disbursementList);
     }
 }
