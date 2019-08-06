@@ -24,6 +24,9 @@ namespace LUSSIS.Services
         private IPurchaseOrderRepo purchaseOrderRepo;
         private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
         private ICollectionPointRepo collectionPointRepo;
+        private IAdjustmentVoucherRepo adjustmentVoucherRepo;
+        private IAdjustmentVoucherDetailRepo adjustmentVoucherDetailRepo;
+        private IRequisitionCatalogueService requisitionCatalogueService;
         private static RetrievalService instance = new RetrievalService();
 
         private RetrievalService()
@@ -37,6 +40,9 @@ namespace LUSSIS.Services
             departmentRepo = DepartmentRepo.Instance;
             purchaseOrderRepo = PurchaseOrderRepo.Instance;
             collectionPointRepo = CollectionPointRepo.Instance;
+            adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
+            adjustmentVoucherDetailRepo = AdjustmentVoucherDetailRepo.Instance;
+            requisitionCatalogueService = RequisitionCatalogueService.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
         }
 
@@ -219,5 +225,151 @@ namespace LUSSIS.Services
         }
 
 
+        public void completeRetrievalProcess(RetrievalDTO retrieval)
+        {
+            int deliveredEmployeeId = retrieval.LoginDTO.EmployeeId;
+
+            List<RetrievalItemDTO> retrievalItems = retrieval.RetrievalItem;
+
+            foreach (RetrievalItemDTO rtItem in retrievalItems)
+            {
+                if (rtItem.RetrievedQty != rtItem.NeededQuantity)
+                {
+                    int qtyDifference = rtItem.NeededQuantity - rtItem.RetrievedQty;
+
+                    AdjustmentVoucher targetAdjustmentVoucher = retrieveNewOrAvailableAdjustmentVoucherForClerk(deliveredEmployeeId);
+                    createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rtItem.StationeryId, qtyDifference);
+
+                    List<RetrievalPrepItemDTO> orderedRPItemListByDate = (List<RetrievalPrepItemDTO>)rtItem.RetrievalPrepItemList.OrderBy(x => x.Req.DateTime);
+                    List<RequisitionDetail> orderedRequisitionDetailsList = (List<RequisitionDetail>)orderedRPItemListByDate.Select(x => x.ReqDetail);
+                    List<int> orderedRequisitionDetailsIdList = (List<int>)orderedRequisitionDetailsList.Select(x => x.Id);
+
+                    int availableBalance = rtItem.RetrievedQty;
+
+                    //updates status of affected requisition details and chain creates new one if partially retrieved --> written by shona
+                    requisitionCatalogueService.UpdateRequisitionDetailsAfterRetrieval(availableBalance, orderedRequisitionDetailsIdList);
+
+                    List<RequisitionDetail> pendingCollectionList = getRequisitionDetailListByPendingCollectionAndStationeryId(rtItem.StationeryId);
+
+                    createNewDisbursementsFromUpdatedRequisitionDetails(pendingCollectionList, deliveredEmployeeId);
+
+                } else
+                {
+                    List<RetrievalPrepItemDTO> orderedRPItemListByDate = (List<RetrievalPrepItemDTO>)rtItem.RetrievalPrepItemList.OrderBy(x => x.Req.DateTime);
+                    List<RequisitionDetail> orderedRequisitionDetailsList = (List<RequisitionDetail>)orderedRPItemListByDate.Select(x => x.ReqDetail);
+                    List<int> orderedRequisitionDetailsIdList = (List<int>)orderedRequisitionDetailsList.Select(x => x.Id);
+
+                    int availableBalance = rtItem.RetrievedQty;
+
+                    //updates status of affected requisition details and chain creates new one if partially retrieved --> written by shona
+                    requisitionCatalogueService.UpdateRequisitionDetailsAfterRetrieval(availableBalance, orderedRequisitionDetailsIdList);
+
+                    List<RequisitionDetail> pendingCollectionList = getRequisitionDetailListByPendingCollectionAndStationeryId(rtItem.StationeryId);
+
+                    createNewDisbursementsFromUpdatedRequisitionDetails(pendingCollectionList, deliveredEmployeeId);
+                }
+
+            }
+
         }
+
+
+        public void createNewDisbursementsFromUpdatedRequisitionDetails (List<RequisitionDetail> reqDetailList, int deliveredEmployeeId)
+        {
+            foreach (RequisitionDetail entry in reqDetailList)
+            {
+                Requisition affectedReq = (Requisition) requisitionRepo.FindBy(x => x.EmployeeId == entry.RequisitionId);
+                Employee targetEmployee = (Employee) employeeRepo.FindBy(x => x.Id == affectedReq.EmployeeId);
+                int targetDeptId = targetEmployee.DepartmentId;
+                int receivedEmployeeId = (int)employeeRepo.FindOneBy(x => x.DepartmentId == targetDeptId && x.RoleId == 3).Id;
+                
+                RequisitionDetail target = entry;
+                int targetDisId = retrieveNewOrAvailableDisbursementIdForDept(deliveredEmployeeId, receivedEmployeeId);
+
+                target.DisbursementId = targetDisId;
+                requisitionDetailRepo.Update(target);
+            }
+        }
+
+
+        public List<RequisitionDetail> getRequisitionDetailListByPendingCollectionAndStationeryId(int stationeryId)
+        {
+            List<RequisitionDetail> returnReqList = (List<RequisitionDetail>) requisitionDetailRepo.FindBy(x => x.StationeryId == stationeryId && x.Status == "Pending_Collection");
+
+            return returnReqList;
+
+        }
+
+
+        // create new adjustmentvoucher detail
+        public void createNewAdjustmentVoucherDetail(AdjustmentVoucher adjustmentVoucher, int stationeryId, int quantity)
+        {
+            AdjustmentVoucherDetail aVD = new AdjustmentVoucherDetail();
+
+            aVD.AdjustmentVoucherId = adjustmentVoucher.Id;
+            aVD.StationeryId = stationeryId;
+            aVD.Quantity = quantity;
+            aVD.DateTime = System.DateTime.Now;
+
+            adjustmentVoucherDetailRepo.Create(aVD);
+        }
+
+
+        // retrieve open Adj Voucher
+        public AdjustmentVoucher retrieveNewOrAvailableAdjustmentVoucherForClerk(int deliveredEmployeeId)
+        {
+            AdjustmentVoucher targetAdjustmentVoucher = (AdjustmentVoucher)adjustmentVoucherRepo.FindOneBy(x => x.EmployeeId == deliveredEmployeeId && x.Status == "Open");
+
+            AdjustmentVoucher returnTargetAdjustmentVoucherId;
+
+            if (targetAdjustmentVoucher == null)
+            {
+                AdjustmentVoucher newAdjustmentVoucher = new AdjustmentVoucher() { EmployeeId = deliveredEmployeeId, Status = "Open" };
+                adjustmentVoucherRepo.Create(newAdjustmentVoucher);
+
+                returnTargetAdjustmentVoucherId = adjustmentVoucherRepo.FindOneBy(x => x.EmployeeId == deliveredEmployeeId && x.Status == "Open");
+
+            }
+            else
+            {
+                returnTargetAdjustmentVoucherId = targetAdjustmentVoucher;
+            }
+
+            return returnTargetAdjustmentVoucherId;
+        }
+
+
+
+
+        public int retrieveNewOrAvailableDisbursementIdForDept(int deliveredEmployeeId, int receivedEmployeeId)
+        {
+            Disbursement availableDisbursement = disbursementRepo.FindOneBy(x => x.DeliveredEmployeeId == deliveredEmployeeId && x.ReceivedEmployeeId == receivedEmployeeId && x.Signature == null);
+
+            int targetDisbursementId;
+
+            if (availableDisbursement == null)
+            {
+                Disbursement newDisbursement = new Disbursement();
+
+                newDisbursement.DeliveredEmployeeId = deliveredEmployeeId;
+                newDisbursement.ReceivedEmployeeId = receivedEmployeeId;
+                newDisbursement.AdHoc = false;
+
+                int deptId = (int) employeeRepo.FindOneBy(x => x.Id == receivedEmployeeId).DepartmentId;
+                int cPId = (int)departmentRepo.FindOneBy(x => x.Id == deptId).CollectionPointId;
+                newDisbursement.CollectionPoint = collectionPointRepo.FindById(cPId).NameTime;
+
+                disbursementRepo.Create(newDisbursement);
+
+                targetDisbursementId = disbursementRepo.FindOneBy(x => x.DeliveredEmployeeId == deliveredEmployeeId && x.ReceivedEmployeeId == receivedEmployeeId && x.Signature == null).Id;
+            }
+            else
+            {
+                targetDisbursementId = availableDisbursement.Id;
+            }
+
+            return targetDisbursementId;
+        }
+
+    }
 }

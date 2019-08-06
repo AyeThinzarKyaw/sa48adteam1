@@ -196,6 +196,7 @@
     <Compile Include="Models\DTOs\RetrievalDTO.cs" />
     <Compile Include="Models\DTOs\InventoryListDTO.cs" />
     <Compile Include="Models\DTOs\InventoryListRecordsDTO.cs" />
+    <Compile Include="Models\DTOs\POCreateDTO.cs" />
     <Compile Include="Models\DTOs\ReceiveDoDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
@@ -517,6 +518,7 @@
     <Content Include="Views\Inventory\ViewStockCardAndSuppliers.cshtml" />
     <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
     <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
+    <Content Include="Views\PurchaseOrder\Catalogue_Partial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
