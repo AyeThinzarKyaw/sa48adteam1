@@ -57,7 +57,7 @@ namespace LUSSIS.Controllers
             return model;
         }
 
-        public string Post([FromBody]RequisitionApprovalDTO value)
+        public void Post([FromBody]RequisitionApprovalDTO value)
         {
             requisitionManagementService.ApproveRejectPendingRequisition(value.Id, value.Button, value.Comment);
         }
