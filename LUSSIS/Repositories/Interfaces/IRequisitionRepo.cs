@@ -11,6 +11,8 @@ namespace LUSSIS.Repositories.Interfaces
     {
         List<Requisition> DepartmentRequisitionsEagerLoadEmployee(int deptHeadEmployeeId);
 
+        List<Requisition> DepartmentPendingRequisitionsEagerLoadEmployee(int deptHeadEmployeeId);
+
         List<Requisition> SchoolRequisitionsEagerLoadEmployeeIncDepartment();
 
         Requisition OneRequisitionEagerLoadEmployeeIncDepartment(int requisitionId);

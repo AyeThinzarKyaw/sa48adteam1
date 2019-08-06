@@ -24,6 +24,12 @@ namespace LUSSIS.Repositories
 
         }
 
+        public List<Requisition> DepartmentPendingRequisitionsEagerLoadEmployee(int deptId)
+        {
+            return Context.Requisitions.Include(r => r.Employee).Where(x => x.Employee.DepartmentId == deptId && x.Status.Equals("PENDING")).ToList();
+
+        }
+
         public List<Requisition> SchoolRequisitionsEagerLoadEmployeeIncDepartment()
         {
             return Context.Requisitions.Include(r => r.Employee.Department).ToList();

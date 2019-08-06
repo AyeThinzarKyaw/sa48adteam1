@@ -15,11 +15,12 @@ namespace LUSSIS.Controllers
     public class MobileRequisitionController : ApiController
     {
         IRequisitionCatalogueService requisitionCatalogueService;
-
+        IRequisitionManagementService requisitionManagementService;
 
         public MobileRequisitionController()
         {
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
+            requisitionManagementService = RequisitionManagementService.Instance;
         }
 
         // GET: api/MobileRequisition/5
@@ -34,6 +35,24 @@ namespace LUSSIS.Controllers
             }
 
             RequisitionsDTO model = new RequisitionsDTO() { LoginDTO = null, Requisitions = requisitionHistory };
+
+            return model;
+        }
+
+        // GET: api/MobileRequisition/Pending/5
+        [Route("Pending/{Id}")]
+        public RequisitionsDTO GetPending(int id)
+        {
+            //Get all pending requsition from this employee's department
+
+            List<Requisition> departmentRequisitions = requisitionManagementService.GetPendingDepartmentRequisitions(id);
+            foreach (Requisition r in departmentRequisitions)
+            {
+                RequisitionDetailsDTO model1 = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(r.Id, 1);
+                r.RequisitionDetails = model1.RequisitionDetails;
+            }
+
+            RequisitionsDTO model = new RequisitionsDTO() { LoginDTO = null, Requisitions = departmentRequisitions };
 
             return model;
         }
