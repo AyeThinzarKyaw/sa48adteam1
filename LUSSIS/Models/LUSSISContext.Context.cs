@@ -18,7 +18,7 @@ namespace LUSSIS.Models
     public partial class LUSSISContext : DbContext
     {
         public LUSSISContext()
-            : base("name=(local)")
+            : base("name=LUSSISContext")
         {
             //this solves the self-referencing loop
             //Written by Charles

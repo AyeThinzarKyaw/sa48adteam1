@@ -57,6 +57,11 @@ namespace LUSSIS.Controllers
             return model;
         }
 
+        public string Post([FromBody]RequisitionApprovalDTO value)
+        {
+            requisitionManagementService.ApproveRejectPendingRequisition(value.Id, value.Button, value.Comment);
+        }
+
         // GET: api/MobileRequisition/Details/5/5
         [Route("Details/{Id}/{Id2}")]
         public RequisitionDetailsDTO GetDetails(int id, int id2)

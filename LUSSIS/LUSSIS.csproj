@@ -191,6 +191,7 @@
     </Compile>
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\RequisitionApprovalDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalDTO.cs" />
