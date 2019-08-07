@@ -43,7 +43,7 @@ namespace LUSSIS.Controllers
             return View(purchaseOrderListDTO);
         }
 
-        
+
 
         // cancelPOStatus as cancelled
         //By ATZK
@@ -137,9 +137,9 @@ namespace LUSSIS.Controllers
                         //save attachments
                         //var filename = Path.GetFileName(receiveDO.DO.FileName);
 
-                        var filename = "DO_" + receiveDO.purchaseOrder.Id+"_"+DateTime.Now.ToString("ddMMyyyy_hhmm")+ Path.GetExtension(receiveDO.DO.FileName);
+                        var filename = "DO_" + receiveDO.purchaseOrder.Id + "_" + DateTime.Now.ToString("ddMMyyyy_hhmm") + Path.GetExtension(receiveDO.DO.FileName);
                         var path = Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), filename);
-                        
+
                         receiveDO.DO.SaveAs(path);
                         receiveDO.purchaseOrder.DO = filename;
                         updatedPO.DO = filename;
@@ -155,26 +155,26 @@ namespace LUSSIS.Controllers
                         //update POdetails deliveredQty
                         foreach (var detail in receivedQtyDTO.PurchaseOrderDetails)
                         {
-                            
+
                             PurchaseOrderDetail oldPODetail = updatedPO.PurchaseOrderDetails.Single(x => x.Id == detail.Id);
                             int qtyDeliveredNow = detail.QuantityDelivered == null ? 0 : (int)detail.QuantityDelivered;
                             int oldQty = oldPODetail.QuantityDelivered == null ? 0 : (int)oldPODetail.QuantityDelivered;
-                            oldPODetail.QuantityDelivered = oldQty+qtyDeliveredNow;//qtyInDB+nowReceivedQty
+                            oldPODetail.QuantityDelivered = oldQty + qtyDeliveredNow;//qtyInDB+nowReceivedQty
                             //check to complete PO
                             if (oldPODetail.QuantityOrdered > oldPODetail.QuantityDelivered)
                             {
                                 poComplete = false;
                             }
-                            
+
 
                             PurchaseOrderService.Instance.UpdatePODetail(oldPODetail);
 
                             //update stationery qty
                             Stationery s = StationeryService.Instance.GetStationeryById(detail.StationeryId);
-                            s.Quantity = s.Quantity+qtyDeliveredNow;
+                            s.Quantity = s.Quantity + qtyDeliveredNow;
                             StationeryService.Instance.UpdateStationery(s);
-                            
-                            
+
+
                             //check whether to raise AdjVoucher (eg: gift, extra)
                             if (oldPODetail.QuantityOrdered < oldPODetail.QuantityDelivered)
                             {
@@ -186,10 +186,10 @@ namespace LUSSIS.Controllers
 
 
                             }
-                            
+
                             //Check to move waitlistApproved to Preparing
                         }
-                        if (poComplete==true)
+                        if (poComplete == true)
                         {
                             updatedPO.Status = Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.CLOSED);
                         }
@@ -197,13 +197,14 @@ namespace LUSSIS.Controllers
                         //save updatedPO
                         updatedPO.DeliveryDateTime = DateTime.Now;
                         PurchaseOrderService.Instance.UpdatePO(updatedPO);
-
+                        TempData["DOReceivedQty"] = null;
                         return RedirectToAction("Index");
 
                     }
 
                 }
             }
+
             PurchaseOrder po = PurchaseOrderService.Instance.getPurchaseOrderById(receiveDO.purchaseOrder.Id);
             po.Remark = receiveDO.purchaseOrder.Remark;
             po.DO = receiveDO.purchaseOrder.DO;
@@ -231,10 +232,10 @@ namespace LUSSIS.Controllers
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
-            
+
         }
 
-        
+
 
         // GET: View PurchaseOrder Catalogue to select items
         //By ATZK
@@ -250,44 +251,24 @@ namespace LUSSIS.Controllers
             {
                 poCreateDTO.Catalogue = PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().ToList();
             }
-            
+
             return View(poCreateDTO);
         }
 
-        //generate catalogue_partial view
-        //By ATZK
-        public ActionResult Catalogue_Partial()
-        {
-            if (TempData["PO"] != null)
-            {
-
-                POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
-                TempData.Keep("PO");
-                return PartialView(poCreateDTO);
-            }
-            else
-            {
-                return PartialView(PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue());
-            }
-            
-            //return View(PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue());
-        }
-
-        
-        public JsonResult updateSelectList(int stationeryId,int qty,bool selectOrNot,bool selectAllSelected)
+        public JsonResult updateSelectList(int stationeryId, int qty, bool selectOrNot, bool selectAllSelected)
         {
             POCreateDTO poCreateDTO = new POCreateDTO();
             if (TempData["PO"] != null)
             {
                 poCreateDTO = (POCreateDTO)TempData["PO"];
-                TempData.Keep("PO");                
+                TempData.Keep("PO");
             }
             else
             {
                 poCreateDTO = new POCreateDTO();
-                poCreateDTO.Catalogue = PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().ToList();                
+                poCreateDTO.Catalogue = PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().ToList();
             }
-            if (selectAllSelected==false)//if show all selected is not selected
+            if (selectAllSelected == false)//if show all selected is not selected
             {
                 if (stationeryId == 0 && qty == 0 && selectOrNot == false)
                 {
@@ -305,8 +286,8 @@ namespace LUSSIS.Controllers
                         }
                         if (poCreateDTO.SelectedItems.Where(x => x.Id == stationeryId).Count() <= 0)
                         {
-                            Stationery item = new Stationery();
-                            item.Id = stationeryId;
+                            Stationery item = StationeryService.Instance.GetStationeryById(stationeryId);
+                            item.CategoryId = 0;
                             poCreateDTO.SelectedItems.Add(item);
                         }
 
@@ -323,24 +304,21 @@ namespace LUSSIS.Controllers
 
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
-                
-            }            
+
+            }
             else
             {
                 TempData["PO"] = poCreateDTO;
                 List<PO_getPOCatalogue_Result> catalogueSelected = new List<PO_getPOCatalogue_Result>();
                 foreach (var item in poCreateDTO.SelectedItems)
                 {
-                    catalogueSelected.Add(poCreateDTO.Catalogue.Single(x=>x.Id==item.Id));
+                    catalogueSelected.Add(poCreateDTO.Catalogue.Single(x => x.Id == item.Id));
                 }
                 POCreateDTO selectedCatalogueDTO = new POCreateDTO();
                 selectedCatalogueDTO.Catalogue = catalogueSelected;
                 return Json(this.RenderRazorViewToString("~/Views/PurchaseOrder/Catalogue_Partial.cshtml", selectedCatalogueDTO), JsonRequestBehavior.AllowGet);
             }
-            
-            //return PartialView(PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue());
-            //return Json(this.RenderRazorViewToString("~/Views/PurchaseOrder/Catalogue_Partial.cshtml", poCreateDTO.Catalogue), JsonRequestBehavior.AllowGet);
-            //return Json(PartialView("Catalogue_Partial.cshtml", PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().First()),JsonRequestBehavior.AllowGet);
+
         }
 
         public string RenderRazorViewToString(string viewName, object model)
@@ -358,7 +336,101 @@ namespace LUSSIS.Controllers
 
         public ActionResult SelectSupplier()
         {
-            return View();
+            if (TempData["PO"] == null)
+            {
+                return RedirectToAction("Catalogue");
+            }
+            POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
+            TempData.Keep("PO");
+            return View(poCreateDTO);
+        }
+
+        [HttpPost]
+        public JsonResult RaisePO(bool removeZero)
+        {
+            POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
+            TempData.Keep("PO");
+            var ids = poCreateDTO.SelectedItems.Select(x => x.Id).ToList();
+            int zeroCount = poCreateDTO.Catalogue.Where(x =>ids.Contains(x.Id)).Where(o=>o.Unsubmitted == 0).Count();
+            if (zeroCount>0 && removeZero==false)
+            {
+               return Json(new object[] { true, "Currently, there are some stationery of Order Quantity fills as 0. Stationery with Order Quantity 0 will not raise PO. Click OK to continue raising PO for other stationeries. Click CANCEL to edit." }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (poCreateDTO.SelectedItems.Where(s => s.CategoryId != 0 && s.Status == "confirmed").Count() > 0)
+            {
+                PurchaseOrderService.Instance.RaisePO(poCreateDTO);
+                TempData["PO"] = null;
+                return Json(new object[] { true, null }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new object[] { false, "Currently, there is no confirmed stationery to raise PO. Please confirm first." }, JsonRequestBehavior.AllowGet);
+            }
+
+
+
+        }
+
+        [HttpPost]
+        public JsonResult UpdateSelectedSupplier(int stationeryId, int supplierId)
+        {
+
+            POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
+            TempData.Keep("PO");
+            poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId).CategoryId = supplierId;
+            TempData["PO"] = poCreateDTO;
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult UpdateEstimatedDate(DateTime estDate, int supplierId)
+        {
+            POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
+            TempData.Keep("PO");
+            if (poCreateDTO.EstimatedDates.Where(x => x.Key == supplierId).Count() == 1)
+            {
+                poCreateDTO.EstimatedDates.Remove(poCreateDTO.EstimatedDates.Single(x => x.Key == supplierId));
+            }
+            poCreateDTO.EstimatedDates.Add(new KeyValuePair<int, DateTime>(supplierId, estDate));
+
+            TempData["PO"] = poCreateDTO;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult RemoveItem(int stationeryId)
+        {
+            POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
+            TempData.Keep("PO");
+            int supplierId = poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId).CategoryId;
+            poCreateDTO.SelectedItems.Remove(poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId));
+            if (supplierId != 0)
+            {
+                if (poCreateDTO.SelectedItems.Where(x => x.CategoryId == supplierId).Count() <= 0)
+                {
+                    poCreateDTO.EstimatedDates.Remove(poCreateDTO.EstimatedDates.Single(x => x.Key == supplierId));
+                }
+            }
+            TempData["PO"] = poCreateDTO;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ConfirmItemToPO(int stationeryId, string confirmStatus)
+        {
+            if (TempData["PO"] != null)
+            {
+                POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
+                TempData.Keep("PO");
+                poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId).Status = confirmStatus;
+                TempData["PO"] = poCreateDTO;
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+
         }
 
     }
