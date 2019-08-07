@@ -462,10 +462,14 @@ namespace LUSSIS.Services
                     RetrievalPrepItemDTO rPID = new RetrievalPrepItemDTO();
                     rPID.ReqStationery = stationeryRepo.FindOneBy(x => x.Id == reDList.StationeryId);
                     rPID.ReqDetail = reDList;
-                    rPID.Req = requisitionRepo.FindById(requisitionId);
+                    rPID.Req = requisitionRepo.FindOneBy(x => x.Id == requisitionId);
                     rPID.ReqOwner = employeeRepo.FindOneBy(x => x.Id == rPID.Req.EmployeeId);
-                    rPID.ReqDepartmentRep = employeeRepo.FindOneBy(x => x.RoleId == 3 && x.DepartmentId == rPID.ReqOwner.DepartmentId);
-                    rPID.ReqDepartment = departmentRepo.FindOneBy(x => x.Id == rPID.ReqDepartmentRep.DepartmentId);
+
+                    int deptId = rPID.ReqOwner.DepartmentId;
+
+                    rPID.ReqDepartmentRep = employeeRepo.FindOneBy(x => x.RoleId == 3 && x.DepartmentId == deptId);
+
+                    rPID.ReqDepartment = departmentRepo.FindOneBy(x => x.Id == deptId);
                     rPID.ReqCollectionPoint = collectionPointRepo.FindOneBy(x => x.Id == rPID.ReqDepartment.CollectionPointId);
 
                     tempRPIDTO.Add(rPID);

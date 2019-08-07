@@ -102,8 +102,9 @@ namespace LUSSIS.Controllers
             RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
 
             LoginDTO loginDTO = rtM.LoginDTO;
+            loginDTO.EmployeeId = 11;
 
-            int requisitionId = 1;
+            int requisitionId = 2;
 
             RetrievalDTO model = retrievalService.constructAdHocRetrievalDTO(loginDTO, requisitionId);
 
