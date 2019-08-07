@@ -21,7 +21,7 @@
 
         }
         <td>
-            @if (Model.selectOnlyConfirm == true || Model.SelectedItems.Where(x => x.Id == stationery.Id).Count() > 0)
+            @if (Model.SelectOnlyConfirm == true || Model.SelectedItems.Where(x => x.Id == stationery.Id).Count() > 0)
             {
                 <input readonly id=@inputBoxId value=@stationery.Unsubmitted type="text" style="width: 80px;" />@*onfocusout="confirm();"*@
             }
@@ -37,7 +37,7 @@
             @Html.DisplayFor(modelItem => stationery.ReorderQuantity)
         </td>
         <td>
-            @if (Model.selectOnlyConfirm == true || Model.SelectedItems.Where(x => x.Id == stationery.Id).Count() > 0)
+            @if (Model.SelectOnlyConfirm == true || Model.SelectedItems.Where(x => x.Id == stationery.Id).Count() > 0)
             {
                 <input id=@stationery.Id type="checkbox" class="minimal" checked>
             }
