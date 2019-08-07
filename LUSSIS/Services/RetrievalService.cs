@@ -55,7 +55,7 @@ namespace LUSSIS.Services
         // method to get Collection Point Ids that Clerk is in charge of
         public List<CollectionPoint> RetrieveAssignedCollectionPoints(int employeeId)
         {
-            List<CollectionPoint> assignedCollectionPointList = (List<CollectionPoint>) collectionPointRepo.FindBy(x => x.EmployeeId == employeeId);
+            List<CollectionPoint> assignedCollectionPointList = (List<CollectionPoint>)collectionPointRepo.FindBy(x => x.EmployeeId == employeeId);
 
             return assignedCollectionPointList;
         }
@@ -140,7 +140,7 @@ namespace LUSSIS.Services
 
             foreach (RequisitionDetail reqDet in requisitionDetailList.GroupBy(x => x.StationeryId).Select(g => g.First()).Distinct().ToList())
             {
-                Stationery st = (Stationery) stationeryRepo.FindById(reqDet.StationeryId);
+                Stationery st = (Stationery)stationeryRepo.FindById(reqDet.StationeryId);
                 stationeryIdList.Add(st.Id);
 
             }
@@ -208,7 +208,7 @@ namespace LUSSIS.Services
             RetrievalDTO retrieval = new RetrievalDTO();
 
             retrieval.RetrievalDate = System.DateTime.Now.ToString("MM/dd/yyyy");
-            Employee clerk = (Employee) employeeRepo.FindOneBy(x => x.Id == loginDTO.EmployeeId);
+            Employee clerk = (Employee)employeeRepo.FindOneBy(x => x.Id == loginDTO.EmployeeId);
 
             if (clerk.Name == null)
             {
@@ -240,29 +240,30 @@ namespace LUSSIS.Services
                     AdjustmentVoucher targetAdjustmentVoucher = retrieveNewOrAvailableAdjustmentVoucherForClerk(deliveredEmployeeId);
                     createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rtItem.StationeryId, qtyDifference);
 
-                    List<RetrievalPrepItemDTO> orderedRPItemListByDate = (List<RetrievalPrepItemDTO>)rtItem.RetrievalPrepItemList.OrderBy(x => x.Req.DateTime);
-                    List<RequisitionDetail> orderedRequisitionDetailsList = (List<RequisitionDetail>)orderedRPItemListByDate.Select(x => x.ReqDetail);
-                    List<int> orderedRequisitionDetailsIdList = (List<int>)orderedRequisitionDetailsList.Select(x => x.Id);
+                    // List<RetrievalPrepItemDTO> orderedRPItemListByDate = (List<RetrievalPrepItemDTO>)rtItem.RetrievalPrepItemList.OrderBy(x => x.Req.DateTime);
+                    List<RequisitionDetail> requisitionDetailsList = (List<RequisitionDetail>)rtItem.RetrievalPrepItemList.Select(x => x.ReqDetail).ToList();
+                    List<int> requisitionDetailsIdList = (List<int>)requisitionDetailsList.Select(x => x.Id).ToList();
 
                     int availableBalance = rtItem.RetrievedQty;
 
                     //updates status of affected requisition details and chain creates new one if partially retrieved --> written by shona
-                    requisitionCatalogueService.UpdateRequisitionDetailsAfterRetrieval(availableBalance, orderedRequisitionDetailsIdList);
+                    requisitionCatalogueService.UpdateRequisitionDetailsAfterRetrieval(availableBalance, requisitionDetailsIdList);
 
                     List<RequisitionDetail> pendingCollectionList = getRequisitionDetailListByPendingCollectionAndStationeryId(rtItem.StationeryId);
 
                     createNewDisbursementsFromUpdatedRequisitionDetails(pendingCollectionList, deliveredEmployeeId);
 
-                } else
+                }
+                else
                 {
-                    List<RetrievalPrepItemDTO> orderedRPItemListByDate = (List<RetrievalPrepItemDTO>)rtItem.RetrievalPrepItemList.OrderBy(x => x.Req.DateTime);
-                    List<RequisitionDetail> orderedRequisitionDetailsList = (List<RequisitionDetail>)orderedRPItemListByDate.Select(x => x.ReqDetail);
-                    List<int> orderedRequisitionDetailsIdList = (List<int>)orderedRequisitionDetailsList.Select(x => x.Id);
+                    // List<RetrievalPrepItemDTO> orderedRPItemListByDate = (List<RetrievalPrepItemDTO>)rtItem.RetrievalPrepItemList.OrderBy(x => x.Req.DateTime);
+                    List<RequisitionDetail> requisitionDetailsList = (List<RequisitionDetail>)rtItem.RetrievalPrepItemList.Select(x => x.ReqDetail).ToList();
+                    List<int> requisitionDetailsIdList = (List<int>)requisitionDetailsList.Select(x => x.Id).ToList();
 
                     int availableBalance = rtItem.RetrievedQty;
 
                     //updates status of affected requisition details and chain creates new one if partially retrieved --> written by shona
-                    requisitionCatalogueService.UpdateRequisitionDetailsAfterRetrieval(availableBalance, orderedRequisitionDetailsIdList);
+                    requisitionCatalogueService.UpdateRequisitionDetailsAfterRetrieval(availableBalance, requisitionDetailsIdList);
 
                     List<RequisitionDetail> pendingCollectionList = getRequisitionDetailListByPendingCollectionAndStationeryId(rtItem.StationeryId);
 
@@ -274,15 +275,14 @@ namespace LUSSIS.Services
         }
 
 
-        public void createNewDisbursementsFromUpdatedRequisitionDetails (List<RequisitionDetail> reqDetailList, int deliveredEmployeeId)
+        public void createNewDisbursementsFromUpdatedRequisitionDetails(List<RequisitionDetail> reqDetailList, int deliveredEmployeeId)
         {
             foreach (RequisitionDetail entry in reqDetailList)
             {
-                Requisition affectedReq = (Requisition) requisitionRepo.FindBy(x => x.EmployeeId == entry.RequisitionId);
-                Employee targetEmployee = (Employee) employeeRepo.FindBy(x => x.Id == affectedReq.EmployeeId);
-                int targetDeptId = targetEmployee.DepartmentId;
+                Requisition affectedReq = (Requisition)requisitionRepo.FindOneBy(x => x.Id == entry.RequisitionId);
+                int targetDeptId = (int)employeeRepo.FindOneBy(x => x.Id == affectedReq.EmployeeId).DepartmentId;
                 int receivedEmployeeId = (int)employeeRepo.FindOneBy(x => x.DepartmentId == targetDeptId && x.RoleId == 3).Id;
-                
+
                 RequisitionDetail target = entry;
                 int targetDisId = retrieveNewOrAvailableDisbursementIdForDept(deliveredEmployeeId, receivedEmployeeId);
 
@@ -294,7 +294,7 @@ namespace LUSSIS.Services
 
         public List<RequisitionDetail> getRequisitionDetailListByPendingCollectionAndStationeryId(int stationeryId)
         {
-            List<RequisitionDetail> returnReqList = (List<RequisitionDetail>) requisitionDetailRepo.FindBy(x => x.StationeryId == stationeryId && x.Status == "Pending_Collection");
+            List<RequisitionDetail> returnReqList = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.StationeryId == stationeryId && x.Status == "Pending_Collection");
 
             return returnReqList;
 
@@ -311,7 +311,7 @@ namespace LUSSIS.Services
             aVD.Quantity = quantity;
             aVD.DateTime = System.DateTime.Now;
 
-            adjustmentVoucherDetailRepo.Create(aVD);
+            aVD = adjustmentVoucherDetailRepo.Create(aVD);
         }
 
 
@@ -325,7 +325,7 @@ namespace LUSSIS.Services
             if (targetAdjustmentVoucher == null)
             {
                 AdjustmentVoucher newAdjustmentVoucher = new AdjustmentVoucher() { EmployeeId = deliveredEmployeeId, Status = "Open" };
-                adjustmentVoucherRepo.Create(newAdjustmentVoucher);
+                newAdjustmentVoucher = adjustmentVoucherRepo.Create(newAdjustmentVoucher);
 
                 returnTargetAdjustmentVoucherId = adjustmentVoucherRepo.FindOneBy(x => x.EmployeeId == deliveredEmployeeId && x.Status == "Open");
 
@@ -355,11 +355,11 @@ namespace LUSSIS.Services
                 newDisbursement.ReceivedEmployeeId = receivedEmployeeId;
                 newDisbursement.AdHoc = false;
 
-                int deptId = (int) employeeRepo.FindOneBy(x => x.Id == receivedEmployeeId).DepartmentId;
+                int deptId = (int)employeeRepo.FindOneBy(x => x.Id == receivedEmployeeId).DepartmentId;
                 int cPId = (int)departmentRepo.FindOneBy(x => x.Id == deptId).CollectionPointId;
                 newDisbursement.CollectionPoint = collectionPointRepo.FindById(cPId).NameTime;
 
-                disbursementRepo.Create(newDisbursement);
+                newDisbursement = disbursementRepo.Create(newDisbursement);
 
                 targetDisbursementId = disbursementRepo.FindOneBy(x => x.DeliveredEmployeeId == deliveredEmployeeId && x.ReceivedEmployeeId == receivedEmployeeId && x.Signature == null).Id;
             }

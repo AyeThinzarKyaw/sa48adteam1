@@ -30,12 +30,28 @@ namespace LUSSIS.Controllers
             loginDTO.EmployeeId = 11;
             RetrievalDTO model = retrievalService.constructRetrievalDTO(loginDTO);
             model.LoginDTO = loginDTO;
+
+            TempData["RetrievalModel"] = model;
+
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult SubmitRetrieval(RetrievalDTO retrieval)
+
+        public JsonResult UpdateRetrievalQuantity(int stationeryId, int quantity)
         {
+            RetrievalDTO model = (RetrievalDTO)TempData["RetrievalModel"];
+
+            model.RetrievalItem.Single(x => x.StationeryId == stationeryId).RetrievedQty = quantity;
+
+            TempData["RetrievalModel"] = model;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult SubmitRetrieval()
+        {
+            RetrievalDTO retrieval = (RetrievalDTO)TempData["RetrievalModel"];
             LoginDTO loginDTO = retrieval.LoginDTO;
             retrievalService.completeRetrievalProcess(retrieval);
 
