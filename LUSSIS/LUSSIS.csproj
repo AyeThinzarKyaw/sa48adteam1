@@ -189,9 +189,11 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\AdHocDeptAndRetrievalDTO.cs" />
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionApprovalDTO.cs" />
+    <Compile Include="Models\DTOs\AdHocRetrievalMenuDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalDTO.cs" />
@@ -520,6 +522,8 @@
     <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
     <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
     <Content Include="Views\PurchaseOrder\Catalogue_Partial.cshtml" />
+    <Content Include="Views\Retrieval\ViewAdHocRetrievalMenu.cshtml" />
+    <Content Include="Views\Retrieval\ViewSelectedAdHocRetrieval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

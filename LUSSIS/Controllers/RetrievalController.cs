@@ -59,5 +59,62 @@ namespace LUSSIS.Controllers
         }
 
 
+        public ActionResult ViewAdHocRetrievalMenu(LoginDTO loginDTO)
+        {
+            loginDTO.EmployeeId = 11;
+            AdHocRetrievalMenuDTO model = retrievalService.generateAdHocRetrievalMenuDTO();
+
+            model.LoginDTO = loginDTO;
+
+            TempData["AdHocRetrievalMenuModel"] = model;
+
+            return View(model);
+        }
+
+
+        public JsonResult SelectRetrievalId(int requisitionId)
+        {
+            AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
+
+            model.requisitionId = requisitionId;
+
+            TempData["AdHocRetrievalMenuModel"] = model;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public ActionResult RetrieveSelectedAdHocRetrieval()
+        {
+            AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
+
+            RetrievalDTO rtM = new RetrievalDTO() { LoginDTO = model.LoginDTO, AdHocRetrievalId = model.requisitionId };
+            TempData["rtM"] = rtM;
+
+            return RedirectToAction("ViewSelectedAdHocRetrieval");
+        }
+
+        // to code
+
+        public ActionResult ViewSelectedAdHocRetrieval()
+        {
+            RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
+
+            LoginDTO loginDTO = rtM.LoginDTO;
+
+            int requisitionId = 1;
+
+            RetrievalDTO model = retrievalService.constructAdHocRetrievalDTO(loginDTO, requisitionId);
+
+            model.LoginDTO = loginDTO;
+
+            TempData["RetrievalModel"] = model;
+
+            return View(model);
+        }
+
+
+
     }
 }
