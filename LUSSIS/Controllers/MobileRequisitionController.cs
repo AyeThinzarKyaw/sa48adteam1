@@ -2,11 +2,13 @@
 using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 
 namespace LUSSIS.Controllers
@@ -28,14 +30,38 @@ namespace LUSSIS.Controllers
         {
             //Get all requsition from this employee
             List<Requisition> requisitionHistory = requisitionCatalogueService.GetPersonalRequisitionHistory(id);
-            foreach(Requisition r in requisitionHistory)
+            foreach (Requisition r in requisitionHistory)
             {
-                RequisitionDetailsDTO model1 = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(r.Id, 1);
-                r.RequisitionDetails = model1.RequisitionDetails;
+                var virtualProperties = typeof(Employee).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.GetSetMethod().IsVirtual && !x.PropertyType.IsPrimitive);
+                foreach (var propInfo in virtualProperties)
+                {
+                    propInfo.GetValue(r.Employee);
+                    propInfo.SetValue(r.Employee, null);
+                }
+
+                foreach (RequisitionDetail rd in r.RequisitionDetails)
+                {
+                    virtualProperties = typeof(RequisitionDetail).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.GetSetMethod().IsVirtual && !x.PropertyType.IsPrimitive);
+                    foreach (PropertyInfo propInfo in virtualProperties)
+                    {
+                        if (propInfo.PropertyType != typeof(Stationery))
+                        {
+                            propInfo.GetValue(rd);
+                            propInfo.SetValue(rd, null);
+                        }
+                    }
+
+                    virtualProperties = typeof(Stationery).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.GetSetMethod().IsVirtual && !x.PropertyType.IsPrimitive);
+                    foreach (var propInfo in virtualProperties)
+                    {
+                        propInfo.GetValue(rd.Stationery);
+                        propInfo.SetValue(rd.Stationery, null);
+                    }
+
+                }
+
             }
-
             RequisitionsDTO model = new RequisitionsDTO() { LoginDTO = null, Requisitions = requisitionHistory };
-
             return model;
         }
 
@@ -48,8 +74,34 @@ namespace LUSSIS.Controllers
             List<Requisition> departmentRequisitions = requisitionManagementService.GetPendingDepartmentRequisitions(id);
             foreach (Requisition r in departmentRequisitions)
             {
-                RequisitionDetailsDTO model1 = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(r.Id, 1);
-                r.RequisitionDetails = model1.RequisitionDetails;
+                var virtualProperties = typeof(Employee).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.GetSetMethod().IsVirtual && !x.PropertyType.IsPrimitive);
+                foreach (var propInfo in virtualProperties)
+                {
+                    propInfo.GetValue(r.Employee);
+                    propInfo.SetValue(r.Employee, null);
+                }
+
+                foreach (RequisitionDetail rd in r.RequisitionDetails)
+                {
+                    virtualProperties = typeof(RequisitionDetail).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.GetSetMethod().IsVirtual && !x.PropertyType.IsPrimitive);
+                    foreach (PropertyInfo propInfo in virtualProperties)
+                    {
+                        if (propInfo.PropertyType != typeof(Stationery))
+                        {
+                            propInfo.GetValue(rd);
+                            propInfo.SetValue(rd, null);
+                        }
+                    }
+
+                    virtualProperties = typeof(Stationery).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.GetSetMethod().IsVirtual && !x.PropertyType.IsPrimitive);
+                    foreach (var propInfo in virtualProperties)
+                    {
+                        propInfo.GetValue(rd.Stationery);
+                        propInfo.SetValue(rd.Stationery, null);
+                    }
+
+                }
+
             }
 
             RequisitionsDTO model = new RequisitionsDTO() { LoginDTO = null, Requisitions = departmentRequisitions };
@@ -63,15 +115,15 @@ namespace LUSSIS.Controllers
         }
 
         // GET: api/MobileRequisition/Details/5/5
-        [Route("Details/{Id}/{Id2}")]
-        public RequisitionDetailsDTO GetDetails(int id, int id2)
-        {
-            //Get all requsition from this employee
+        //[Route("Details/{Id}/{Id2}")]
+        //public RequisitionDetailsDTO GetDetails(int id, int id2)
+        //{
+        //    //Get all requsition from this employee
 
-            RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(id2, id);
+        //    RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(id2, id);
 
-            return model;
-        }
+        //    return model;
+        //}
  
     }
 }
