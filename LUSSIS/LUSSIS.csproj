@@ -148,7 +148,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdjustmentVoucherController.cs" />
+    <Compile Include="Controllers\AssignStaffController.cs" />
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
+    <Compile Include="Controllers\CollectionPointController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MobileDisbursementController.cs" />
@@ -190,6 +192,10 @@
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DTOs\AdHocDeptAndRetrievalDTO.cs" />
+    <Compile Include="Models\DTOs\AssignCoverDTO.cs" />
+    <Compile Include="Models\DTOs\AssignDeptRepDTO.cs" />
+    <Compile Include="Models\DTOs\ClerkCollectionPointDTO.cs" />
+    <Compile Include="Models\DTOs\DepartmentCollectionPointDTO.cs" />
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionApprovalDTO.cs" />
@@ -309,8 +315,12 @@
     <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
     <Compile Include="Services\AdjustmentVoucherService.cs" />
+    <Compile Include="Services\AssignStaffService.cs" />
+    <Compile Include="Services\CollectionPointService.cs" />
     <Compile Include="Services\EmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\IAdjustmentVoucherService.cs" />
+    <Compile Include="Services\Interfaces\IAssignStaffService.cs" />
+    <Compile Include="Services\Interfaces\ICollectionPointService.cs" />
     <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\IRetrievalService.cs" />
     <Compile Include="Services\Interfaces\IInventoryService.cs" />
@@ -525,6 +535,10 @@
     <Content Include="Views\PurchaseOrder\Catalogue_Partial.cshtml" />
     <Content Include="Views\Retrieval\ViewAdHocRetrievalMenu.cshtml" />
     <Content Include="Views\Retrieval\ViewSelectedAdHocRetrieval.cshtml" />
+    <Content Include="Views\AssignStaff\AssignCoverStaff.cshtml" />
+    <Content Include="Views\AssignStaff\AssignDeptRep.cshtml" />
+    <Content Include="Views\CollectionPoint\AssignClerk.cshtml" />
+    <Content Include="Views\CollectionPoint\AssignCollectionPoint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

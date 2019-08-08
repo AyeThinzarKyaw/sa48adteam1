@@ -16,5 +16,16 @@ namespace LUSSIS.Repositories
         {
             get { return instance; }
         }
+        public CollectionPoint GetDepartmentCollectionPointByEmployeeId(int id)
+        {
+            var result = from cp in Context.CollectionPoints
+                         join d in Context.Departments on cp.Id equals d.CollectionPointId
+                         join e in Context.Employees on d.Id equals e.DepartmentId
+                         where e.Id == id
+                         select cp;
+
+            return result.SingleOrDefault();
+        }
     }
+    
 }
