@@ -190,8 +190,14 @@
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
+    <Compile Include="Models\MobileDTOs\DisbursementDTO.cs" />
+    <Compile Include="Models\MobileDTOs\EmployeeDTO.cs" />
+    <Compile Include="Models\MobileDTOs\RequisitionDetailDTO.cs" />
+    <Compile Include="Models\MobileDTOs\RequisitionDTO.cs" />
+    <Compile Include="Models\MobileDTOs\RequisitionListDTO.cs" />
+    <Compile Include="Models\MobileDTOs\StationeryDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
-    <Compile Include="Models\DTOs\RequisitionApprovalDTO.cs" />
+    <Compile Include="Models\MobileDTOs\RequisitionApprovalDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalDTO.cs" />
