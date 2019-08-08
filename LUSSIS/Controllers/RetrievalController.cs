@@ -25,8 +25,9 @@ namespace LUSSIS.Controllers
             return View();
         }
 
-        public ActionResult ViewRetrieval(LoginDTO loginDTO)
+        public ActionResult ViewRetrieval()
         {
+            LoginDTO loginDTO = new LoginDTO();
             loginDTO.EmployeeId = 11;
             RetrievalDTO model = retrievalService.constructRetrievalDTO(loginDTO);
             model.LoginDTO = loginDTO;
@@ -55,7 +56,7 @@ namespace LUSSIS.Controllers
             LoginDTO loginDTO = retrieval.LoginDTO;
             retrievalService.completeRetrievalProcess(retrieval);
 
-            return RedirectToAction("ViewRetrieval", loginDTO);
+            return RedirectToAction("ViewRetrieval");
         }
 
 
@@ -90,24 +91,23 @@ namespace LUSSIS.Controllers
             AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
 
             RetrievalDTO rtM = new RetrievalDTO() { LoginDTO = model.LoginDTO, AdHocRetrievalId = model.requisitionId };
-            TempData["rtM"] = rtM;
+            //TempData["rtM"] = rtM;
 
-            return RedirectToAction("ViewSelectedAdHocRetrieval");
+            return RedirectToAction("ViewSelectedAdHocRetrieval",new { @requisitionId = model.requisitionId });
         }
 
         // to code
 
-        public ActionResult ViewSelectedAdHocRetrieval()
+        public ActionResult ViewSelectedAdHocRetrieval(int requisitionId)
         {
-            RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
+            //RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
 
-            LoginDTO loginDTO = rtM.LoginDTO;
+            LoginDTO loginDTO = new LoginDTO() ;
             loginDTO.EmployeeId = 11;
 
-            int requisitionId = 2;
+            //int requisitionId = requisitionId;
 
             RetrievalDTO model = retrievalService.constructAdHocRetrievalDTO(loginDTO, requisitionId);
-
             model.LoginDTO = loginDTO;
 
             TempData["RetrievalModel"] = model;
