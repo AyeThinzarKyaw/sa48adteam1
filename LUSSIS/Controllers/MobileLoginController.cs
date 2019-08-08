@@ -49,7 +49,7 @@ namespace LUSSIS.Controllers
                     //return clerk view
                 }
 
-                return null; ;
+                return null;
             }
 
             //if (db.Employees.Any(user => user.Username.Equals(employee.Username)))

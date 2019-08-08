@@ -511,11 +511,13 @@
     <Content Include="Views\Inventory\ViewStockCardAndSuppliers.cshtml" />
     <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
     <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
+    <Content Include="Views\ClerkRequisitions\ViewOwedItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\DeliveryOrders\" />
+    <Folder Include="Views\MobileRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
