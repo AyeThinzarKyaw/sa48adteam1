@@ -44,8 +44,6 @@
                                 <td>Delivery Order No. <label class="text-danger">(*)</label> : </td>
                                 <td>
                                     @Html.TextBoxFor(x => x.purchaseOrder.DeliveryOrderNo, new { @Required = "Required", @style = "width: 150px;", @class = "form-control" })
-                                    @*@Html.ValidationMessageFor(x=>x.purchaseOrder.DO)*@
-                                    @*<input type="text" style="width: 150px;" />*@
                                 </td>
                             </tr>
                             <tr>
@@ -65,8 +63,7 @@
                                     <th>Code</th>
                                     <th>Description</th>
                                     <th>Ordered Qty</th>
-                                    <th>Delivered Qty</th>
-                                    <th>Qty Receive Now</th>
+                                    <th>Receive Qty</th>
                                 </tr>
                             </thead>
 
@@ -79,26 +76,9 @@
                                         <td>@pod.Stationery.Code</td>
                                         <td>@pod.Stationery.Description</td>
                                         <td>@pod.QuantityOrdered</td>
-                                        @{ pod.QuantityDelivered = pod.QuantityDelivered == null ? 0 : (int)pod.QuantityDelivered;
-                                            int leftToReceive = pod.QuantityOrdered - (int)pod.QuantityDelivered;}
-                                        <td>@pod.QuantityDelivered</td>
-                                        <td>
-
-                                            @*@{string txtid = "Model.DOReceivedList[" + i + "]";}
-                                                <input type="text" id=@txtid value=@Model.DOReceivedList[i] style="width: 100px;" class="form-control" />*@
-
-                                            @*@Html.TextBoxFor(p => Model.DOReceivedList[i], new { @id = "DOReceivedList[" + i + "]", @style = "width: 10%;", @class = "form-control" })*@
-                                            @if (Model.purchaseOrder.Status == Enum.GetName(typeof(POStatus), POStatus.CLOSED))
-                                            {
-                                                <input type="text" class="form-control" value=0 readonly />
-                                            }
-                                            else
-                                            {
-                                                <input type="text" class="form-control" required value=@leftToReceive onfocusout="updateQtyReceive(this,'@pod.Id','@pod.PurchaseOrderId');" />
-                                            }
-                                            @*@Html.TextBoxFor(p => pod.QuantityDelivered, new { @onfocusout = "updateQtyReceive(this,'" + pod.Id + "','" + pod.PurchaseOrderId + "');", @style = "width: 10%;", @class = "form-control" })*@
-                                            @*@Html.TextBoxFor(p => pod.QuantityDelivered, new { @onfocusout = "updateQtyReceive(this,'" + pod.Id + "','" + pod.PurchaseOrderId + "');", @style = "width: 10%;", @class = "form-control" })*@
-                                            @*<input type="text" onblur="" style="width: 100px;" />*@
+                                       
+                                        <td>                                            
+                                            <input type="text" class="form-control" required value=@pod.QuantityDelivered onfocusout="updateQtyReceive(this,'@pod.Id','@pod.PurchaseOrderId');" />
                                         </td>
                                     </tr>
                                     i++;
@@ -110,15 +90,12 @@
                         <form>
                             <div class="form-group">
                                 <label>Remark</label>
-                                @Html.TextAreaFor(x => x.purchaseOrder.Remark, new { @style = "max-width: 100% !important;", @class = "form-control", @placeholder = "Enter ..." })
-                                @*<textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>*@
+                                @Html.TextAreaFor(x => x.purchaseOrder.DORemark, new { @style = "max-width: 100% !important;", @class = "form-control", @placeholder = "Enter ..." })
                             </div>
                             <div class="form-group">
                                 <label>Upload Delivery Order</label>
                                 @Html.TextBoxFor(x => x.DO, new { @type = "file", @accept = "image/jpg, image/jpeg, image/png", @class = "btn btn-success" })
                                 @Html.ValidationMessageFor(x => x.DO, null, new { @class = "text-danger" })
-                                @*<a class="btn btn-success" href="#">Upload Deliver Order</a>
-                                    <a class="btn btn-success" href="#">Upload Invoice</a>*@
                             </div>
                             <div class="form-group">
                                 <label>Upload Invoice</label>
@@ -127,7 +104,6 @@
                             </div>
                             <div class="form-group pull-right">
                                 <input type="submit" class="btn btn-primary" value="Submit" />
-                                @*<a class="btn btn-primary" href="#">Submit</a>*@
                             </div>
                         </form>
                     </div>
@@ -153,12 +129,7 @@
                 type: "GET",
                 async: true,
                 success: function (data) {
-                    //if (data[0] == true) {
-                    //    window.location.href = '/PurchaseOrder/Index'
-                    //}
-                    //else {
-                    //    document.getElementById("errRemark").innerHTML = data[1];
-                    //}
+                   
                 },
                 error: function (data) { }
             });

@@ -84,89 +84,15 @@ namespace LUSSIS.Services
 
                         poCreateDTO.ConfirmedPOs.Single(x => x.Id == po.Id).PurchaseOrderDetails.Add(pod);
                     }
-                }
-
-                
+                }                
             }
 
             foreach (PurchaseOrder purchaseOrder in poCreateDTO.ConfirmedPOs)
             {
                 PurchaseOrderService.Instance.CreatePO(purchaseOrder);
-                //if (purchaseOrder.Id != 0)
-                //{
-                //    foreach (PurchaseOrderDetail detail in purchaseOrder.PurchaseOrderDetails)
-                //    {
-                //        detail.PurchaseOrderId = purchaseOrder.Id;
-                //        PurchaseOrderService.Instance.CreatePODetail(detail);
-                //    }
-                //}
+                
             }
         }
 
-        //public void RecordReceiveDO(ReceiveDoDTO receiveDO)
-        //{
-        //    var filename = "DO_" + receiveDO.purchaseOrder.Id + "_" + DateTime.Now.ToString("ddMMyyyy_hhmm") + Path.GetExtension(receiveDO.DO.FileName);
-        //    var path = Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), filename);
-
-        //    receiveDO.DO.SaveAs(path);
-        //    receiveDO.purchaseOrder.DO = filename;
-        //    updatedPO.DO = filename;
-
-
-        //    filename = "Invoice_" + receiveDO.purchaseOrder.Id + "_" + DateTime.Now.ToString("ddMMyyyy_hhmm") + Path.GetExtension(receiveDO.Invoice.FileName);
-        //    path = Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), filename);
-        //    receiveDO.Invoice.SaveAs(path);
-        //    receiveDO.purchaseOrder.Invoice = filename;
-        //    updatedPO.Invoice = filename;
-
-        //    bool poComplete = true;
-        //    //update POdetails deliveredQty
-        //    foreach (var detail in receivedQtyDTO.PurchaseOrderDetails)
-        //    {
-
-        //        PurchaseOrderDetail oldPODetail = updatedPO.PurchaseOrderDetails.Single(x => x.Id == detail.Id);
-        //        int qtyDeliveredNow = detail.QuantityDelivered == null ? 0 : (int)detail.QuantityDelivered;
-        //        //int oldQty = oldPODetail.QuantityDelivered == null ? 0 : (int)oldPODetail.QuantityDelivered;
-        //        //int newQty= oldQty + qtyDeliveredNow;//qtyInDB+nowReceivedQty
-        //        //oldPODetail.QuantityDelivered = oldQty + qtyDeliveredNow;//qtyInDB+nowReceivedQty
-        //        //check to complete PO
-        //        if (oldPODetail.QuantityOrdered > oldPODetail.QuantityDelivered)
-        //        {
-        //            poComplete = false;
-        //        }
-
-
-        //        //PurchaseOrderService.Instance.UpdatePODetail(oldPODetail);
-
-        //        //update stationery qty
-        //        Stationery s = StationeryService.Instance.GetStationeryById(detail.StationeryId);
-        //        s.Quantity = s.Quantity + qtyDeliveredNow;
-        //        StationeryService.Instance.UpdateStationery(s);
-
-        //        //check whether to raise AdjVoucher (eg: gift, extra)
-        //        if (oldPODetail.QuantityOrdered < oldPODetail.QuantityDelivered)
-        //        {
-        //            //raise adjustment voucher
-        //            AdjustmentVoucherDetail adjustmentItem = new AdjustmentVoucherDetail();
-        //            adjustmentItem.DateTime = DateTime.Now;
-        //            adjustmentItem.Quantity = (int)(oldPODetail.QuantityDelivered - oldPODetail.QuantityOrdered);
-        //            adjustmentItem.Reason = "Received extra (eg: gift) on Delivery Order Receive";
-        //        }
-
-        //        //Check to move waitlistApproved to Preparing
-        //    }
-        //    if (poComplete == true)
-        //    {
-        //        updatedPO.Status = Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.CLOSED);
-        //    }
-
-        //    //save updatedPO
-        //    updatedPO.DeliveryDateTime = DateTime.Now;
-        //    updatedPO.Remark = receivedQtyDTO.Remark;
-        //    updatedPO.DeliveryOrderNo = receivedQtyDTO.DeliveryOrderNo;
-        //    PurchaseOrderService.Instance.UpdatePO(updatedPO);
-        //    EmailNotificationService.Instance.SendNotificationEmail("e0395895@u.nus.edu", "test test test AD", "successfully sent out", new string[] { Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), updatedPO.DO), Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), updatedPO.Invoice) });
-        //}
-        
     }
 }

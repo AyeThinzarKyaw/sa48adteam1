@@ -92,7 +92,7 @@ namespace LUSSIS.Services
             WebMail.From = "sa48team1@gmail.com";
 
             //Send email 
-            WebMail.Send(to: receipient, subject: subject, body: body,cc: cc,filesToAttach: attachments, isBodyHtml: false);
+            WebMail.Send(to: "sa48team1@gmail.com", subject: subject, body: body,cc: cc,filesToAttach: attachments, isBodyHtml: false);
         }
     }
 }
