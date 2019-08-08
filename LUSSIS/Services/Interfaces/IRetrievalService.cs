@@ -23,5 +23,13 @@ namespace LUSSIS.Services.Interfaces
         AdjustmentVoucher retrieveNewOrAvailableAdjustmentVoucherForClerk(int deliveredEmployeeId);
 
         int retrieveNewOrAvailableDisbursementIdForDept(int deliveredEmployeeId, int receivedEmployeeId);
+
+        List<Department> retrieveAllDepartmentsWithApprovedRequisitions();
+
+        List<Requisition> retrieveAllApprovedRequisitionIdsByDepartmentName(string departmentName);
+
+        AdHocRetrievalMenuDTO generateAdHocRetrievalMenuDTO();
+
+        RetrievalDTO constructAdHocRetrievalDTO(LoginDTO loginDTO, int requisitionId);
     }
 }

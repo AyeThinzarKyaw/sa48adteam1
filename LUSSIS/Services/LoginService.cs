@@ -30,6 +30,17 @@ namespace LUSSIS.Services
             get { return instance; }
         }
 
+        public Session GetExistingSessionFromGUID(string GUID)
+        {
+            Session s = sessionRepo.FindOneBy(x => x.GUID.Equals(GUID)); // AND ALSO if logouttime == null right??
+            if (s != null)
+            {
+                Employee e = employeeRepo.FindById(s.EmployeeId);
+                s.Employee = e;
+            }
+            return s;
+        }
+
         public LoginDTO GetEmployeeLoginByUsernameAndPassword(string username, string password)
         {
             //return null if not valid employee

@@ -40,7 +40,62 @@ namespace LUSSIS.Repositories
 
             return result.SingleOrDefault<Employee>();
         }
+        public IEnumerable<Employee> GetAllClerks()
+        {
+            var result = from e in Context.Employees
+                         where e.RoleId == 7
+                         select e;
 
-        
+            return result.ToList();
+
+        }
+
+        public IEnumerable<Employee> GetAllStaffAndRepInDept(int dId)
+        {
+
+            var result = from e in Context.Employees
+                         join d in Context.Departments on e.DepartmentId equals d.Id
+                         where d.Id == dId
+                         where e.RoleId == 2 || e.RoleId == 3
+                         select e;
+
+            return result.ToList();
+        }
+
+        public Employee GetClerkByCollectionPointId(int cpId)
+        {
+            var result = from e in Context.Employees
+                         join cp in Context.CollectionPoints on e.Id equals cp.EmployeeId
+                         where e.RoleId == 7
+                         where cp.Id == cpId
+                         select e;
+
+            return result.SingleOrDefault();
+        }
+
+        public Employee GetDeptRepByDepartmentId(int dId)
+        {
+            var result = from e in Context.Employees
+                         where e.RoleId == 3
+                         where e.DepartmentId == dId
+                         select e;
+
+            return result.SingleOrDefault();
+
+        }
+
+        public IEnumerable<Employee> GetAllStaffAndCoverHeadInDept(int dId)
+        {
+
+            var result = from e in Context.Employees
+                         where e.DepartmentId == dId
+                         where e.RoleId == 2 || e.RoleId == 4
+                         select e;
+
+            return result.ToList();
+        }
+
+
+
     }
 }

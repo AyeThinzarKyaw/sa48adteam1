@@ -13,6 +13,7 @@ namespace LUSSIS.Models.DTOs
 
         public string RetrievalDate { get; set; }
         public string GeneratedBy { get; set; }
+        public int AdHocRetrievalId { get; set; }
 
         public List<RetrievalItemDTO> RetrievalItem { get; set; }
     }

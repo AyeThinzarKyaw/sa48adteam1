@@ -16,5 +16,16 @@ namespace LUSSIS.Repositories
         {
             get { return instance; }
         }
+        public Department GetDepartmentByEmployeeId(int employeeId)
+        {
+            var result = from d in Context.Departments
+                         join e in Context.Employees on d.Id equals e.DepartmentId
+                         where e.Id == employeeId
+                         select d;
+
+            return result.SingleOrDefault();
+
+
+        }
     }
 }

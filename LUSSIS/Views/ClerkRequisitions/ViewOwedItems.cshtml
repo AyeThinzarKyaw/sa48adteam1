@@ -26,17 +26,18 @@
                             <tbody>
                                 @foreach (var dep in Model.DeptOwedItems)
                                 {
+                                    
                                     <tr>
                                         <td style="width: 20px;">
-                                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                                @dep.Department.DepartmentName <i class="fa fa-chevron-down"></i>
+                                            <button onclick="toggle(@dep.Department.Id)" class="btn btn-primary text-left" type="button" style="width: 500px" data-toggle="collapse" data-target="#collapseExample@{ @dep.Department.Id}" aria-expanded="false" aria-controls="collapseExample">
+                                                @dep.Department.DepartmentName <i id="@dep.Department.Id" class="fa fa-chevron-down"></i>
                                             </button>
                                         </td>
                                     </tr>
 
                                     <tr>
                                         <td colspan="4" style="padding: 0;">
-                                            <div class="collapse" id="collapseExample">
+                                            <div class="collapse" id="collapseExample@{ @dep.Department.Id}">
                                                 <table id="example2" class="table table-bordered table-hover">
                                                     <thead>
                                                         <tr>
@@ -73,6 +74,13 @@
         </div>
         <!-- /.row -->
     </section>
+
+<script>
+    function toggle(id) {
+        //alert(id);
+        $("#" + id).toggleClass("fa fa-chevron-down fa fa-chevron-up");
+    };
+</script>
 
 
 
