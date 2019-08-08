@@ -12,5 +12,15 @@ namespace LUSSIS.Repositories.Interfaces
         Employee GetCoverStaffByDepartmentIdAndDate(int depId, DateTime date);
 
         IEnumerable<Employee> GetAllClerksByCollectionPointId(int collectionPointId);
+
+        IEnumerable<Employee> GetAllClerks();
+
+        Employee GetClerkByCollectionPointId(int cpId);
+
+        Employee GetDeptRepByDepartmentId(int dId);
+
+        IEnumerable<Employee> GetAllStaffAndRepInDept(int dId);
+
+        IEnumerable<Employee> GetAllStaffAndCoverHeadInDept(int dId);
     }
 }

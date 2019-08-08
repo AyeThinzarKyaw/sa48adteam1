@@ -25,8 +25,9 @@ namespace LUSSIS.Controllers
             return View();
         }
 
-        public ActionResult ViewRetrieval(LoginDTO loginDTO)
+        public ActionResult ViewRetrieval()
         {
+            LoginDTO loginDTO = new LoginDTO();
             loginDTO.EmployeeId = 11;
             RetrievalDTO model = retrievalService.constructRetrievalDTO(loginDTO);
             model.LoginDTO = loginDTO;
@@ -55,8 +56,65 @@ namespace LUSSIS.Controllers
             LoginDTO loginDTO = retrieval.LoginDTO;
             retrievalService.completeRetrievalProcess(retrieval);
 
-            return RedirectToAction("ViewRetrieval", loginDTO);
+            return RedirectToAction("ViewRetrieval");
         }
+
+
+        public ActionResult ViewAdHocRetrievalMenu(LoginDTO loginDTO)
+        {
+            loginDTO.EmployeeId = 11;
+            AdHocRetrievalMenuDTO model = retrievalService.generateAdHocRetrievalMenuDTO();
+
+            model.LoginDTO = loginDTO;
+
+            TempData["AdHocRetrievalMenuModel"] = model;
+
+            return View(model);
+        }
+
+
+        public JsonResult SelectRetrievalId(int requisitionId)
+        {
+            AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
+
+            model.requisitionId = requisitionId;
+
+            TempData["AdHocRetrievalMenuModel"] = model;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public ActionResult RetrieveSelectedAdHocRetrieval()
+        {
+            AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
+
+            RetrievalDTO rtM = new RetrievalDTO() { LoginDTO = model.LoginDTO, AdHocRetrievalId = model.requisitionId };
+            //TempData["rtM"] = rtM;
+
+            return RedirectToAction("ViewSelectedAdHocRetrieval",new { @requisitionId = model.requisitionId });
+        }
+
+        // to code
+
+        public ActionResult ViewSelectedAdHocRetrieval(int requisitionId)
+        {
+            //RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
+
+            LoginDTO loginDTO = new LoginDTO() ;
+            loginDTO.EmployeeId = 11;
+
+            //int requisitionId = requisitionId;
+
+            RetrievalDTO model = retrievalService.constructAdHocRetrievalDTO(loginDTO, requisitionId);
+            model.LoginDTO = loginDTO;
+
+            TempData["RetrievalModel"] = model;
+
+            return View(model);
+        }
+
 
 
     }

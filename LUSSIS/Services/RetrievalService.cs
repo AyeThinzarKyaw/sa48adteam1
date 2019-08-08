@@ -371,5 +371,148 @@ namespace LUSSIS.Services
             return targetDisbursementId;
         }
 
+
+        public List<Department> retrieveAllDepartmentsWithApprovedRequisitions()
+        {
+            List<Department> departmentList = (List<Department>) departmentRepo.FindAll();
+            List<Employee> employeesAllDepartments = RetrieveAllEmployeesInAssignedDepartmentList(departmentList);
+            List<Requisition> approvedRequisitionsFromEmployeesInAssignedDepartments = RetrieveAllApprovedRequisitionsByEmployeeList(employeesAllDepartments);
+
+            List<Employee> distinctEmployeeId = new List<Employee>();
+
+            foreach (Requisition req in approvedRequisitionsFromEmployeesInAssignedDepartments.GroupBy(x => x.EmployeeId).Select(g => g.First()).Distinct().ToList())
+            {
+                Employee outputEmployee = employeeRepo.FindById(req.EmployeeId);
+                distinctEmployeeId.Add(outputEmployee);
+            }
+
+            List<Department> distinctDepartmentList = new List<Department>();
+
+            foreach (Employee x in distinctEmployeeId.GroupBy(x => x.DepartmentId).Select(g => g.First()).Distinct().ToList())
+            {
+                Department outputDepartment = departmentRepo.FindById(x.DepartmentId);
+                distinctDepartmentList.Add(outputDepartment);
+            }
+
+            return distinctDepartmentList;
+        }
+
+
+        public List<Requisition> retrieveAllApprovedRequisitionIdsByDepartmentName(string departmentName)
+        {
+            Department department = departmentRepo.FindOneBy(x => x.DepartmentName == departmentName);
+            List<Employee> employeesInAssignedDepartmentList = (List<Employee>)employeeRepo.FindBy(x => x.DepartmentId == department.Id).ToList();
+
+            List<Requisition> approvedRequisitionsFromEmployeesInAssignedDepartments = RetrieveAllApprovedRequisitionsByEmployeeList(employeesInAssignedDepartmentList);
+
+            return approvedRequisitionsFromEmployeesInAssignedDepartments;
+        }
+
+
+
+        public AdHocRetrievalMenuDTO generateAdHocRetrievalMenuDTO()
+        {
+            AdHocRetrievalMenuDTO output = new AdHocRetrievalMenuDTO();
+
+            List<Department> departmentList = retrieveAllDepartmentsWithApprovedRequisitions();
+
+            List<AdHocDeptAndRetrievalDTO> adDRList = new List<AdHocDeptAndRetrievalDTO>();
+
+
+            foreach (Department dept in departmentList)
+            {
+                
+                List<Requisition> rt =  retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
+                AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { department = dept, requisitions = rt };
+
+                adDRList.Add(adDR);
+            }
+
+            output.departmentAndRetrieval = adDRList;
+
+            AdHocDeptAndRetrievalDTO firstAdHocAndRetrieval = adDRList.FirstOrDefault();
+            
+
+            return output;
+        }
+
+
+        // PENDING MODIFICATION TO METHOD
+        public RetrievalDTO constructAdHocRetrievalDTO(LoginDTO loginDTO, int requisitionId)
+        {
+            List<RetrievalPrepItemDTO> retrievalPrepList = new List<RetrievalPrepItemDTO>();
+            List<RetrievalItemDTO> retrievalList = new List<RetrievalItemDTO>();
+
+            List<RequisitionDetail> preparingRequisitionDetailsFromSelectedRequisition = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == requisitionId).ToList();
+            List<int> stationeriesInPreparingRequisitionDetails = RetrieveStationeryDetailsByRequisitionDetailsList(preparingRequisitionDetailsFromSelectedRequisition).ToList();
+
+            foreach (int s in stationeriesInPreparingRequisitionDetails)
+            {
+                RetrievalItemDTO rID = new RetrievalItemDTO();
+
+                rID.StationeryId = s;
+                rID.Description = stationeryRepo.FindOneBy(x => x.Id == s).Description;
+                rID.Location = stationeryRepo.FindOneBy(x => x.Id == s).Bin;
+
+                List<RetrievalPrepItemDTO> tempRPIDTO = new List<RetrievalPrepItemDTO>();
+
+                List<RequisitionDetail> reqDetailList = (List<RequisitionDetail>)preparingRequisitionDetailsFromSelectedRequisition.FindAll(x => x.StationeryId == rID.StationeryId).ToList();
+                foreach (RequisitionDetail reDList in reqDetailList)
+                {
+                    RetrievalPrepItemDTO rPID = new RetrievalPrepItemDTO();
+                    rPID.ReqStationery = stationeryRepo.FindOneBy(x => x.Id == reDList.StationeryId);
+                    rPID.ReqDetail = reDList;
+                    rPID.Req = requisitionRepo.FindOneBy(x => x.Id == requisitionId);
+                    rPID.ReqOwner = employeeRepo.FindOneBy(x => x.Id == rPID.Req.EmployeeId);
+
+                    int deptId = rPID.ReqOwner.DepartmentId;
+
+                    rPID.ReqDepartmentRep = employeeRepo.FindOneBy(x => x.RoleId == 3 && x.DepartmentId == deptId);
+
+                    rPID.ReqDepartment = departmentRepo.FindOneBy(x => x.Id == deptId);
+                    rPID.ReqCollectionPoint = collectionPointRepo.FindOneBy(x => x.Id == rPID.ReqDepartment.CollectionPointId);
+
+                    tempRPIDTO.Add(rPID);
+                }
+
+                rID.RetrievalPrepItemList = tempRPIDTO;
+
+                int count = 0;
+
+                foreach (RetrievalPrepItemDTO retriPrepItem in tempRPIDTO)
+                {
+                    RequisitionDetail x = retriPrepItem.ReqDetail;
+                    int y = x.QuantityOrdered;
+                    count = count + y;
+                }
+
+                rID.NeededQuantity = count;
+                rID.RetrievedQty = count;
+
+
+                retrievalList.Add(rID);
+            }
+
+            RetrievalDTO retrieval = new RetrievalDTO();
+
+            retrieval.RetrievalDate = System.DateTime.Now.ToString("MM/dd/yyyy");
+            Employee clerk = (Employee)employeeRepo.FindOneBy(x => x.Id == loginDTO.EmployeeId);
+
+            if (clerk.Name == null)
+            {
+                retrieval.GeneratedBy = null;
+            }
+            else
+            {
+                retrieval.GeneratedBy = clerk.Name;
+            }
+
+            retrieval.RetrievalItem = retrievalList;
+
+            return retrieval;
+        }
+
+
+
     }
 }

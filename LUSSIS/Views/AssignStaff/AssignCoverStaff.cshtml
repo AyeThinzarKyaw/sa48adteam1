@@ -1,0 +1,147 @@
+﻿@model LUSSIS.Models.DTOs.AssignCoverDTO
+@{
+    ViewBag.Title = "AssignCoverStaff";
+}
+
+<section class="content-header">
+    <h1>
+        Assign Cover Staff
+    </h1>
+</section>
+
+<!-- Main content -->
+
+@using (Html.BeginForm("AssignCoverStaff", "AssignStaff", FormMethod.Post))
+{<section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>From Date:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="date" class="form-control pull-right" id="datepicker" name="FromDate">
+                                        @* @Html.ValidationMessageFor(x => x.FromDate, "", new { @class = "text-danger" })*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>To Date:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="date" class="form-control pull-right" id="datepicker" name="ToDate">
+                                        @*  @Html.ValidationMessageFor(x => x.ToDate, "", new { @class = "text-danger" })*@
+
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            @if (Model.Error != null && Model.Error.HasError == true && !String.IsNullOrEmpty(Model.Error.Message))
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="text-danger">
+                                               &nbsp;  @Model.Error.Message
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Assign To</label>
+                                    <select id="NewCoverHeadId" class="form-control" name="NewCoverHeadId">
+
+                                        @foreach (var employee in Model.StaffAndCoverHead)
+                                        {
+                                            if (employee.Id == @Model.NewCoverHeadId)
+                                            {
+                                                <option value="@employee.Id" selected> @employee.Name  </option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@employee.Id"> @employee.Name  </option>
+                                            }
+
+                                        }
+                                        @*@Html.DropDownListFor(x => x.NewCoverHeadId, new SelectList(Model.StaffAndCoverHead, "Id", "Name"), new { @class = "form-control select2", @style = "width: 100%;" })*@
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <input type="submit" value="Assign" class="btn btn-success" style="margin-top:25px;" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+                <div class="box">
+                    <div class="box-body">
+                        <table id="table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Assigned From Date</th>
+                                    <th>Assigned To Date</th>
+                                    <th>Employee Name</th>
+                                    <th>Designation</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var coverdetail in Model.ActiveCoverHeadDetails)
+                                {
+                                    <tr>
+                                        <td>@coverdetail.FromDate</td>
+                                        <td>@coverdetail.ToDate</td>
+                                        <td>@coverdetail.Employee.Name</td>
+                                        <td>@coverdetail.Employee.Title</td>
+                                        <td>
+                                            @Html.ActionLink("Cancel", "CancelCoverStaff", new { coverId = coverdetail.Id },
+                                           new { @class= "btn btn-sm btn-danger", @role= "button"})
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+
+    @section scripts {
+        <script>
+            $(function () {
+                $('#table').DataTable({
+                    'columnDefs': [
+                        { 'orderable': false, 'targets': 4 }
+                    ],
+                    'paging': true,
+                    'lengthChange': false,
+                    'searching': true,
+                    'ordering': true,
+                    'info': true,
+                    'autoWidth': false
+                })
+            })
+
+        </script>
+    }}
