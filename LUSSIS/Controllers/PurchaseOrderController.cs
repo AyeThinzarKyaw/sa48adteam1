@@ -17,6 +17,7 @@ namespace LUSSIS.Controllers
         //By ATZK
         public ActionResult Index()
         {
+            //EmailNotificationService.Instance.SendNotificationEmail(receipient:"athinzarkyaw@gmail.com",subject: "test test test AD", body: "successfully sent out");
             PurchaseOrderListDTO purchaseOrders = new PurchaseOrderListDTO();
             purchaseOrders.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders();
 
@@ -128,11 +129,9 @@ namespace LUSSIS.Controllers
                 {
                     if (TempData["DOReceivedQty"] != null)
                     {
+                        PurchaseOrder updatedPO = PurchaseOrderService.Instance.getPurchaseOrderById(receiveDO.purchaseOrder.Id);
                         PurchaseOrder receivedQtyDTO = (PurchaseOrder)TempData["DOReceivedQty"];
                         TempData.Keep("DOReceivedQty");
-
-
-                        PurchaseOrder updatedPO = PurchaseOrderService.Instance.getPurchaseOrderById(receiveDO.purchaseOrder.Id);
 
                         //save attachments
                         //var filename = Path.GetFileName(receiveDO.DO.FileName);
@@ -158,8 +157,9 @@ namespace LUSSIS.Controllers
 
                             PurchaseOrderDetail oldPODetail = updatedPO.PurchaseOrderDetails.Single(x => x.Id == detail.Id);
                             int qtyDeliveredNow = detail.QuantityDelivered == null ? 0 : (int)detail.QuantityDelivered;
-                            int oldQty = oldPODetail.QuantityDelivered == null ? 0 : (int)oldPODetail.QuantityDelivered;
-                            oldPODetail.QuantityDelivered = oldQty + qtyDeliveredNow;//qtyInDB+nowReceivedQty
+                            //int oldQty = oldPODetail.QuantityDelivered == null ? 0 : (int)oldPODetail.QuantityDelivered;
+                            //int newQty= oldQty + qtyDeliveredNow;//qtyInDB+nowReceivedQty
+                            //oldPODetail.QuantityDelivered = oldQty + qtyDeliveredNow;//qtyInDB+nowReceivedQty
                             //check to complete PO
                             if (oldPODetail.QuantityOrdered > oldPODetail.QuantityDelivered)
                             {
@@ -167,13 +167,12 @@ namespace LUSSIS.Controllers
                             }
 
 
-                            PurchaseOrderService.Instance.UpdatePODetail(oldPODetail);
+                            //PurchaseOrderService.Instance.UpdatePODetail(oldPODetail);
 
                             //update stationery qty
                             Stationery s = StationeryService.Instance.GetStationeryById(detail.StationeryId);
                             s.Quantity = s.Quantity + qtyDeliveredNow;
                             StationeryService.Instance.UpdateStationery(s);
-
 
                             //check whether to raise AdjVoucher (eg: gift, extra)
                             if (oldPODetail.QuantityOrdered < oldPODetail.QuantityDelivered)
@@ -183,8 +182,6 @@ namespace LUSSIS.Controllers
                                 adjustmentItem.DateTime = DateTime.Now;
                                 adjustmentItem.Quantity = (int)(oldPODetail.QuantityDelivered - oldPODetail.QuantityOrdered);
                                 adjustmentItem.Reason = "Received extra (eg: gift) on Delivery Order Receive";
-
-
                             }
 
                             //Check to move waitlistApproved to Preparing
@@ -196,7 +193,10 @@ namespace LUSSIS.Controllers
 
                         //save updatedPO
                         updatedPO.DeliveryDateTime = DateTime.Now;
+                        updatedPO.Remark = receivedQtyDTO.Remark;
+                        updatedPO.DeliveryOrderNo = receivedQtyDTO.DeliveryOrderNo;
                         PurchaseOrderService.Instance.UpdatePO(updatedPO);
+                        //EmailNotificationService.Instance.SendNotificationEmail("e0395895@u.nus.edu", "test test test AD", "successfully sent out", new string[] { Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), updatedPO.DO) , Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), updatedPO.Invoice) });
                         TempData["DOReceivedQty"] = null;
                         return RedirectToAction("Index");
 
@@ -226,13 +226,12 @@ namespace LUSSIS.Controllers
             }
             if (po.Id == poId)
             {
-                po.PurchaseOrderDetails.Single(x => x.Id == podId).QuantityDelivered = qty;
+                po.PurchaseOrderDetails.Single(x => x.Id == podId).QuantityDelivered += qty;
 
                 TempData["DOReceivedQty"] = po;
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
-
         }
 
 
