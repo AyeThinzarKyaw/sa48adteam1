@@ -401,7 +401,7 @@ namespace LUSSIS.Services
         public List<Requisition> retrieveAllApprovedRequisitionIdsByDepartmentName(string departmentName)
         {
             Department department = departmentRepo.FindOneBy(x => x.DepartmentName == departmentName);
-            List<Employee> employeesInAssignedDepartmentList = (List<Employee>)employeeRepo.FindBy(x => x.DepartmentId == department.Id);
+            List<Employee> employeesInAssignedDepartmentList = (List<Employee>)employeeRepo.FindBy(x => x.DepartmentId == department.Id).ToList();
 
             List<Requisition> approvedRequisitionsFromEmployeesInAssignedDepartments = RetrieveAllApprovedRequisitionsByEmployeeList(employeesInAssignedDepartmentList);
 
@@ -422,7 +422,7 @@ namespace LUSSIS.Services
             foreach (Department dept in departmentList)
             {
                 
-                List<Requisition> rt =  retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName);
+                List<Requisition> rt =  retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
                 AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { department = dept, requisitions = rt };
 
                 adDRList.Add(adDR);
@@ -444,7 +444,7 @@ namespace LUSSIS.Services
             List<RetrievalItemDTO> retrievalList = new List<RetrievalItemDTO>();
 
             List<RequisitionDetail> preparingRequisitionDetailsFromSelectedRequisition = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == requisitionId).ToList();
-            List<int> stationeriesInPreparingRequisitionDetails = RetrieveStationeryDetailsByRequisitionDetailsList(preparingRequisitionDetailsFromSelectedRequisition);
+            List<int> stationeriesInPreparingRequisitionDetails = RetrieveStationeryDetailsByRequisitionDetailsList(preparingRequisitionDetailsFromSelectedRequisition).ToList();
 
             foreach (int s in stationeriesInPreparingRequisitionDetails)
             {
@@ -456,7 +456,7 @@ namespace LUSSIS.Services
 
                 List<RetrievalPrepItemDTO> tempRPIDTO = new List<RetrievalPrepItemDTO>();
 
-                List<RequisitionDetail> reqDetailList = (List<RequisitionDetail>)preparingRequisitionDetailsFromSelectedRequisition.FindAll(x => x.StationeryId == rID.StationeryId);
+                List<RequisitionDetail> reqDetailList = (List<RequisitionDetail>)preparingRequisitionDetailsFromSelectedRequisition.FindAll(x => x.StationeryId == rID.StationeryId).ToList();
                 foreach (RequisitionDetail reDList in reqDetailList)
                 {
                     RetrievalPrepItemDTO rPID = new RetrievalPrepItemDTO();

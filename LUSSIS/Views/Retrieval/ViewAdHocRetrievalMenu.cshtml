@@ -102,9 +102,10 @@
         $("#departmentName").on("change", function () {
             var ids = $(this).find("option:selected").data("id").split(",");
             var dropdown = "";
+            dropdown += "<option selected disabled hidden>Select a Requisition Id</option>"
             for (var i = 0; i < ids.length; i++) {
                 var id = ids[i];
-                dropdown += "<option value='"+id+"'>"+id+"</option>";
+                dropdown += "<option value='" + id + "'>" + id + "</option>";
                 console.log(ids[i]);
             }
             $("#requisitionId").html(dropdown).removeAttr("disabled").css("background", "white");
