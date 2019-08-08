@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -148,10 +151,12 @@
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MobileDisbursementController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
+    <Compile Include="Controllers\MobileRequisitionController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StationeryController.cs" />
@@ -184,13 +189,17 @@
     <Compile Include="Models\Disbursement.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\AdHocDeptAndRetrievalDTO.cs" />
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\RequisitionApprovalDTO.cs" />
+    <Compile Include="Models\DTOs\AdHocRetrievalMenuDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalItemDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalDTO.cs" />
     <Compile Include="Models\DTOs\InventoryListDTO.cs" />
     <Compile Include="Models\DTOs\InventoryListRecordsDTO.cs" />
+    <Compile Include="Models\DTOs\POCreateDTO.cs" />
     <Compile Include="Models\DTOs\ReceiveDoDTO.cs" />
     <Compile Include="Models\DTOs\RequisitionDetailsDTO.cs" />
     <Compile Include="Models\DTOs\CatalogueItemDTO.cs" />
@@ -414,6 +423,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\logic.jpg" />
+    <Content Include="Images\manager.png" />
     <Content Include="Models\LUSSISContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LUSSISContext.edmx</DependentUpon>
@@ -512,12 +522,14 @@
     <Content Include="Views\Retrieval\ViewRetrieval.cshtml" />
     <Content Include="Views\PurchaseOrder\SelectSupplier.cshtml" />
     <Content Include="Views\ClerkRequisitions\ViewOwedItems.cshtml" />
+    <Content Include="Views\PurchaseOrder\Catalogue_Partial.cshtml" />
+    <Content Include="Views\Retrieval\ViewAdHocRetrievalMenu.cshtml" />
+    <Content Include="Views\Retrieval\ViewSelectedAdHocRetrieval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\DeliveryOrders\" />
-    <Folder Include="Views\MobileRequisitions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
