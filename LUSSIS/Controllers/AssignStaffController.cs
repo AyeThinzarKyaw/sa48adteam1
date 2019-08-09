@@ -64,7 +64,7 @@ namespace LUSSIS.Controllers
             assignstaff.StaffAndCoverHead = AssignStaffService.Instance.GetAllStaffAndCoverHeadInDept(e.DepartmentId);
             assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
             
-
+            //assuming Head can only assign earliest fromdate from next day
             if (existing.Count() > 0 || assignstaff.ToDate < assignstaff.FromDate || assignstaff.FromDate < DateTime.Now || assignstaff.ToDate < DateTime.Now || assignstaff.ToDate == assignstaff.FromDate)
             {
                 assignstaff.Error = new ErrorDTO();
@@ -75,7 +75,7 @@ namespace LUSSIS.Controllers
                 {
                     assignstaff.Error.Message += "Valid From and To Dates required. ";
                 }
-                if (existing.Count() > 0 && assignstaff.ToDate != assignstaff.FromDate)
+                if (existing.Count() > 0 && assignstaff.ToDate != assignstaff.FromDate && assignstaff.FromDate < assignstaff.ToDate && assignstaff.FromDate > DateTime.Now)
                 {
                     assignstaff.Error.Message += "There is already a cover staff assigned within this date range.";
                 }
