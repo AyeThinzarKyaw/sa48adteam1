@@ -1,6 +1,21 @@
-﻿
+﻿@model LUSSIS.Models.DTOs.DisbursementListDTO
+
 @{
     ViewBag.Title = "Detail";
+    var ClerkItemDetails = Model.disbursementDTOList.GroupBy(g => new { g.DisbursementId, g.StationeryId, g.ItemCode, g.Category, g.ItemName, g.UnitOfMeasure }).Select(
+        s => new
+        {
+            s.Key.DisbursementId,
+            s.Key.StationeryId,
+            s.Key.ItemCode,
+            s.Key.Category,
+            s.Key.ItemName,
+            s.Key.UnitOfMeasure,
+            SumOrderQty = s.Sum(x => x.QuantityOrdered),
+            SumDeliverQty = s.Sum(
+            x => x.QuantityDelivered),
+            SumOutstandingQty = s.Sum(x => x.QuantityOrdered - x.QuantityDelivered)
+        });
 }
 
 <section class="content-header">
@@ -15,244 +30,236 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <table>
-                                <tr>
-                                    <td>Disbursement ID</td>
-                                    <td>: DD005</td>
-                                </tr>
-                                <tr>
-                                    <td>Collection Date</td>
-                                    <td>: 20/11/2019</td>
-                                </tr>
-                                <tr>
-                                    <td>Collection Point</td>
-                                    <td>: Medical School (11:00am)</td>
-                                </tr>
-                                <tr>
-                                    <td>Collection Status</td>
-                                    <td>: <span class="text-blue">Pending Collection</span></td>
-                                </tr>
-                            </table>
+                    @if (Model.LoginDTO.EmployeeId == Model.DeliveredEmployeeId)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table>
+                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    {
+                                        <tr>
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Disbursement ID</td>
+                                                <td>:@dl.DisbursementId</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Collection Date</td>
+                                                <td>:@dl.DeliveryDateTime</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Collection Point</td>
+                                                <td>:@dl.CollectionPoint</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Collection Status</td>
+                                                <td>: <span class="text-blue">@dl.Status</span></td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <table>
+                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    {
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Dept Name</td>
+                                                <td>:@dl.DepartmentName</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Dept Code</td>
+                                                <td>:@dl.DepartmentCode</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Dept Representative</td>
+                                                <td>:@dl.DepartmentContactName</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Contact No.</td>
+                                                <td>:@dl.DepartmentContactNumber</td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
                         </div>
+                        <br /><br />
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Item Number</th>
+                                    <th>Category</th>
+                                    <th>Item Name</th>
+                                    <th>Unit of Measure</th>
+                                    <th>Disbursed Qty</th>
+                                    <th>Outstanding Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        <!-- If Clerk -->
-                        <div class="col-md-6">
-                            <table>
-                                <tr>
-                                    <td>Dept Name</td>
-                                    <td>: Department of Registrar</td>
-                                </tr>
-                                <tr>
-                                    <td>Dept Code</td>
-                                    <td>: DDS</td>
-                                </tr>
-                                <tr>
-                                    <td>Dept Representative</td>
-                                    <td>: Steve</td>
-                                </tr>
-                                <tr>
-                                    <td>Contact No.</td>
-                                    <td>: 68711907</td>
-                                </tr>
-                            </table>
+                                @foreach (var dl in ClerkItemDetails)
+                                {
+                                    if (dl.DisbursementId == Model.DisbursementId)
+                                    {
+                                        <tr>
+                                            <td>@dl.ItemCode</td>
+                                            <td>@dl.Category)</td>
+                                            <td>@dl.ItemName</td>
+                                            <td>@dl.UnitOfMeasure</td>
+                                            <td>@dl.SumDeliverQty</td>
+                                            <td>@dl.SumOutstandingQty</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else if (Model.LoginDTO.EmployeeId == Model.ReceivedEmployeeId)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table>
+                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    {
+                                        <tr>
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Disbursement ID</td>
+                                                <td>:@dl.DisbursementId</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Collection Date</td>
+                                                <td>:@dl.DeliveryDateTime</td>
+                                            }
+                                        </tr>
+                                        <tr>
+
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Collection Point</td>
+                                                <td>:@dl.CollectionPoint</td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+
+                            <div class="col-md-6">
+                                <table>
+                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    {
+                                        <tr>
+                                            @if (dl.DisbursementId == Model.DisbursementId)
+                                            {
+                                                <td>Collection Status</td>
+                                                <td>: <span class="text-blue">@dl.Status</span></td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
                         </div>
-                        <!-- If Clerk -->
-                    </div>
-                    <br /><br />
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <!-- If Clerk -->
-                                <th>Item Number</th>
-                                <th>Category</th>
-                                <!-- If Clerk -->
-                                <th>Item Name</th>
-                                <th>Unit of Measure</th>
-                                <th>Requested Qty</th>
-                                <th>Disbursed Qty</th>
-                                <th>Outstanding Qty</th>
+                        <br /><br />
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
 
-                                <!-- If Dept Representative -->
-                                <th>Action</th>
-                                <!-- If Dept Representative -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <!-- If Clerk -->
-                                <td>P100</td>
-                                <td>Scissors</td>
-                                <!-- If Clerk -->
+                                    <th>Item Name</th>
+                                    <th>Unit of Measure</th>
+                                    <th>Requested Qty</th>
+                                    <th>Action</th>
 
-                                <td>Scissor</td>
-                                <td>Each</td>
-                                <td>5</td>
-                                <td>5</td>
-                                <td>0</td>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                                <!-- If Dept Representative -->
-                                <td style="width: 20px;">
-                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                        View Detail <i class="fa fa-chevron-up"></i>
-                                    </button>
-                                </td>
-                                <!-- If Dept Representative -->
+                                @foreach (var dl in ClerkItemDetails)
+                                {
 
-                            </tr>
+                                    if (dl.DisbursementId == Model.DisbursementId)
+                                    {
+                                        <tr>
+                                            <td>@dl.ItemName</td>
+                                            <td>@dl.UnitOfMeasure</td>
+                                            <td>@dl.SumOrderQty</td>
+                                            <td style="width: 20px;">
+                                                <button onclick="toggle(@dl.StationeryId)" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample@{@dl.StationeryId}" aria-expanded="false" aria-controls="collapseExample">
+                                                    View Detail <i id="@dl.StationeryId" class="fa fa-chevron-up"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
 
-                            <!-- If Dept Representative -->
-                            <tr>
-                                <td colspan="4" style="padding: 0;">
-                                    <div class="collapse" id="collapseExample">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Requisition Form</th>
-                                                    <th>Requested Date</th>
-                                                    <th>Employee Name</th>
-                                                    <th>Requested Qty</th>
-                                                    <th>Disbursed Qty</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>DDS/11/99</td>
-                                                    <td>20/08/2019</td>
-                                                    <td>David</td>
-                                                    <td>10</td>
-                                                    <td>10</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>DDS/130/12</td>
-                                                    <td>21/08/2019</td>
-                                                    <td>Arial</td>
-                                                    <td>5</td>
-                                                    <td>4</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- If Dept Representative -->
-                            <tr>
-                                <!-- If Clerk -->
-                                <td>P037</td>
-                                <td>Pen</td>
-                                <!-- If Clerk -->
+                                    }
+                                    <tr>
+                                        <td colspan="4" style="padding: 0;">
+                                            <div class="collapse" id="collapseExample@{@dl.StationeryId}">
+                                                <table id="example2" class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Requisition Form</th>
+                                                            <th>Requested Date</th>
+                                                            <th>Employee Name</th>
+                                                            <th>Disbursed Qty</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var dlpi in Model.disbursementDTOList)
+                                                        {
+                                                            if (dlpi.ItemCode == dl.ItemCode)
+                                                            {
+                                                                <tr>
+                                                                    <td>@dlpi.RequisitionID</td>
+                                                                    <td>@dlpi.RequisitionDateTime</td>
+                                                                    <td>@dlpi.EmployeeName</td>
+                                                                    <td>@dlpi.QuantityDelivered</td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                                <td>Pen Transparency Soluble</td>
-                                <td>Packet</td>
-                                <td>15</td>
-                                <td>14</td>
-                                <td>0</td>
+                                        </td>
+                                    </tr>
 
-                                <!-- If Dept Representative -->
-                                <td style="width: 20px;">
-                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                        View Detail <i class="fa fa-chevron-up"></i>
-                                    </button>
-                                </td>
-                                <!-- If Dept Representative -->
-
-                            </tr>
-
-                            <!-- If Dept Representative -->
-                            <tr>
-                                <td colspan="4" style="padding: 0;">
-                                    <div class="collapse" id="collapseExample">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Requisition Form</th>
-                                                    <th>Requested Date</th>
-                                                    <th>Employee Name</th>
-                                                    <th>Requested Qty</th>
-                                                    <th>Disbursed Qty</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>DDS/11/99</td>
-                                                    <td>20/08/2019</td>
-                                                    <td>David</td>
-                                                    <td>10</td>
-                                                    <td>10</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>DDS/130/12</td>
-                                                    <td>21/08/2019</td>
-                                                    <td>Arial</td>
-                                                    <td>5</td>
-                                                    <td>4</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- If Dept Representative -->
-                            <tr>
-                                <!-- If Clerk -->
-                                <td>P002</td>
-                                <td>Ruler</td>
-                                <!-- If Clerk -->
-
-                                <td>Ruler 12'</td>
-                                <td>Dozen</td>
-                                <td>30</td>
-                                <td>30</td>
-                                <td>0</td>
-
-                                <!-- If Dept Representative -->
-                                <td style="width: 20px;">
-                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                        View Detail <i class="fa fa-chevron-up"></i>
-                                    </button>
-                                </td>
-                                <!-- If Dept Representative -->
-
-                            </tr>
-
-                            <!-- If Dept Representative -->
-                            <tr>
-                                <td colspan="4" style="padding: 0;">
-                                    <div class="collapse" id="collapseExample">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Requisition Form</th>
-                                                    <th>Requested Date</th>
-                                                    <th>Employee Name</th>
-                                                    <th>Requested Qty</th>
-                                                    <th>Disbursed Qty</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>DDS/11/99</td>
-                                                    <td>20/08/2019</td>
-                                                    <td>David</td>
-                                                    <td>10</td>
-                                                    <td>10</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>DDS/130/12</td>
-                                                    <td>21/08/2019</td>
-                                                    <td>Arial</td>
-                                                    <td>5</td>
-                                                    <td>4</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- If Dept Representative -->
-                        </tbody>
-                    </table>
+                                }
+                            </tbody>
+                        </table>
+                    }
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -262,3 +269,9 @@
     </div>
     <!-- /.row -->
 </section>
+
+<script>
+function toggle(id) {
+        //alert(id);
+        $("#" + id).toggleClass("fa fa-chevron-down fa fa-chevron-up");
+    };</script>

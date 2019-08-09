@@ -152,6 +152,7 @@
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\CollectionPointController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
+    <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MobileDisbursementController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Models\DTOs\ClerkCollectionPointDTO.cs" />
     <Compile Include="Models\DTOs\DepartmentCollectionPointDTO.cs" />
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
+    <Compile Include="Models\DTOs\DisbursementListDTO.cs" />
     <Compile Include="Models\MobileDTOs\DisbursementDTO.cs" />
     <Compile Include="Models\MobileDTOs\EmployeeDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionDetailDTO.cs" />
@@ -323,10 +325,12 @@
     <Compile Include="Services\AdjustmentVoucherService.cs" />
     <Compile Include="Services\AssignStaffService.cs" />
     <Compile Include="Services\CollectionPointService.cs" />
+    <Compile Include="Services\DisbursementService.cs" />
     <Compile Include="Services\EmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\IAdjustmentVoucherService.cs" />
     <Compile Include="Services\Interfaces\IAssignStaffService.cs" />
     <Compile Include="Services\Interfaces\ICollectionPointService.cs" />
+    <Compile Include="Services\Interfaces\IDisbursementService.cs" />
     <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\IRetrievalService.cs" />
     <Compile Include="Services\Interfaces\IInventoryService.cs" />
