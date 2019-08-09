@@ -204,7 +204,6 @@
     <Compile Include="Models\MobileDTOs\RequisitionListDTO.cs" />
     <Compile Include="Models\MobileDTOs\StationeryDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
-    <Compile Include="Models\DTOs\RequisitionApprovalDTO.cs" />
     <Compile Include="Models\DTOs\AdHocRetrievalMenuDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionApprovalDTO.cs" />
     <Compile Include="Models\DTOs\RetrievalPrepItemDTO.cs" />
