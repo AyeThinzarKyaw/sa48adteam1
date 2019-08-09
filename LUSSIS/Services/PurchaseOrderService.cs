@@ -84,24 +84,15 @@ namespace LUSSIS.Services
 
                         poCreateDTO.ConfirmedPOs.Single(x => x.Id == po.Id).PurchaseOrderDetails.Add(pod);
                     }
-                }
-
-                
+                }                
             }
 
             foreach (PurchaseOrder purchaseOrder in poCreateDTO.ConfirmedPOs)
             {
                 PurchaseOrderService.Instance.CreatePO(purchaseOrder);
-                //if (purchaseOrder.Id != 0)
-                //{
-                //    foreach (PurchaseOrderDetail detail in purchaseOrder.PurchaseOrderDetails)
-                //    {
-                //        detail.PurchaseOrderId = purchaseOrder.Id;
-                //        PurchaseOrderService.Instance.CreatePODetail(detail);
-                //    }
-                //}
+                
             }
         }
-        
+
     }
 }

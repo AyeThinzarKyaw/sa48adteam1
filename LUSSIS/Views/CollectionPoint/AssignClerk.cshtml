@@ -14,184 +14,201 @@
 @using (Html.BeginForm("AssignClerk", "CollectionPoint", FormMethod.Post))
 {
 
+<section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-sm-1"><b>ID</b></div>
-                        <div class="col-sm-6"><b>Collection Point (Pickup Time)</b></div>
-                        <div class="col-sm-4"><b>Assign Staff</b></div>
+
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Collection Point (Pickup Time)</th>
+                                <th>Assign Staff</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Model.CollectionPoint1.Id</td>
+                                <td>@Model.CollectionPoint1.NameTime</td>
+                                <td>
+                                    <select id="Employee1" class="form-control" name="Employee1">
+
+                                        @foreach (var employee in Model.Clerks)
+                                        {
+                                            if (employee.Id == @Model.CollectionPoint1.EmployeeId)
+                                            {
+                                                <option value="@employee.Id" selected> @employee.Name  </option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@employee.Id"> @employee.Name  </option>
+                                            }
+
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>@Model.CollectionPoint2.Id</td>
+                                <td>@Model.CollectionPoint2.NameTime</td>
+                                <td>
+                                    <select id="Employee2" class="form-control" name="Employee2">
+
+                                        @foreach (var employee in Model.Clerks)
+                                        {
+                                            if (employee.Id == @Model.CollectionPoint2.EmployeeId)
+                                            {
+                                                <option value="@employee.Id" selected> @employee.Name  </option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@employee.Id"> @employee.Name  </option>
+                                            }
+
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>@Model.CollectionPoint3.Id</td>
+                                <td>@Model.CollectionPoint3.NameTime</td>
+                                <td>
+                                    <select id="Employee3" class="form-control" name="Employee3">
+
+                                        @foreach (var employee in Model.Clerks)
+                                        {
+                                            if (employee.Id == @Model.CollectionPoint3.EmployeeId)
+                                            {
+                                                <option value="@employee.Id" selected> @employee.Name  </option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@employee.Id"> @employee.Name  </option>
+                                            }
+
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Model.CollectionPoint4.Id</td>
+                                <td>@Model.CollectionPoint4.NameTime</td>
+                                <td>
+                                    <select id="Employee4" class="form-control" name="Employee4">
+
+                                        @foreach (var employee in Model.Clerks)
+                                        {
+                                            if (employee.Id == @Model.CollectionPoint4.EmployeeId)
+                                            {
+                                                <option value="@employee.Id" selected> @employee.Name  </option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@employee.Id"> @employee.Name  </option>
+                                            }
+
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Model.CollectionPoint5.Id</td>
+                                <td>@Model.CollectionPoint5.NameTime</td>
+                                <td>
+                                    <select id="Employee5" class="form-control" name="Employee5">
+
+                                        @foreach (var employee in Model.Clerks)
+                                        {
+                                            if (employee.Id == @Model.CollectionPoint5.EmployeeId)
+                                            {
+                                                <option value="@employee.Id" selected> @employee.Name  </option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@employee.Id"> @employee.Name  </option>
+                                            }
+
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Model.CollectionPoint6.Id</td>
+                                <td>@Model.CollectionPoint6.NameTime</td>
+                                <td>
+                                    <select id="Employee6" class="form-control" name="Employee6">
+
+                                        @foreach (var employee in Model.Clerks)
+                                        {
+                                            if (employee.Id == @Model.CollectionPoint6.EmployeeId)
+                                            {
+                                                <option value="@employee.Id" selected> @employee.Name  </option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@employee.Id"> @employee.Name  </option>
+                                            }
+
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="submit" value="Assign" class="btn btn-success pull-right" />
                     </div>
-                    <br />
-
-                    <div class="row">
-                        <div class="col-sm-1">@Model.CollectionPoint1.Id</div>
-                        <div class="col-sm-6">@Model.CollectionPoint1.NameTime</div>
-                        <select id="Employee1" class="form-control" name="Employee1">
-
-                            @foreach (var employee in Model.Clerks)
-                            {
-                                if (employee.Id == @Model.CollectionPoint1.EmployeeId)
-                                {
-                                    <option value="@employee.Id" selected> @employee.Name  </option>
-
-                                }
-                                else
-                                {
-                                    <option value="@employee.Id"> @employee.Name  </option>
-                                }
-
-                            }
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-1">@Model.CollectionPoint2.Id</div>
-                        <div class="col-sm-6">@Model.CollectionPoint2.NameTime</div>
-                        <select id="Employee2" class="form-control" name="Employee2">
-
-                            @foreach (var employee in Model.Clerks)
-                            {
-                                if (employee.Id == @Model.CollectionPoint2.EmployeeId)
-                                {
-                                    <option value="@employee.Id" selected> @employee.Name  </option>
-
-                                }
-                                else
-                                {
-                                    <option value="@employee.Id"> @employee.Name  </option>
-                                }
-
-                            }
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-1">@Model.CollectionPoint3.Id</div>
-                        <div class="col-sm-6">@Model.CollectionPoint3.NameTime</div>
-                        <select id="Employee3" class="form-control" name="Employee3">
-
-                            @foreach (var employee in Model.Clerks)
-                            {
-                                if (employee.Id == @Model.CollectionPoint3.EmployeeId)
-                                {
-                                    <option value="@employee.Id" selected> @employee.Name  </option>
-
-                                }
-                                else
-                                {
-                                    <option value="@employee.Id"> @employee.Name  </option>
-                                }
-
-                            }
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-1">@Model.CollectionPoint4.Id</div>
-                        <div class="col-sm-6">@Model.CollectionPoint4.NameTime</div>
-                        <select id="Employee4" class="form-control" name="Employee4">
-
-                            @foreach (var employee in Model.Clerks)
-                            {
-                                if (employee.Id == @Model.CollectionPoint4.EmployeeId)
-                                {
-                                    <option value="@employee.Id" selected> @employee.Name  </option>
-
-                                }
-                                else
-                                {
-                                    <option value="@employee.Id"> @employee.Name  </option>
-                                }
-
-                            }
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-1">@Model.CollectionPoint5.Id</div>
-                        <div class="col-sm-6">@Model.CollectionPoint5.NameTime</div>
-                        <select id="Employee5" class="form-control" name="Employee5">
-
-                            @foreach (var employee in Model.Clerks)
-                            {
-                                if (employee.Id == @Model.CollectionPoint5.EmployeeId)
-                                {
-                                    <option value="@employee.Id" selected> @employee.Name  </option>
-
-                                }
-                                else
-                                {
-                                    <option value="@employee.Id"> @employee.Name  </option>
-                                }
-
-                            }
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-1">@Model.CollectionPoint6.Id</div>
-                        <div class="col-sm-6">@Model.CollectionPoint6.NameTime</div>
-                        <select id="Employee6" class="form-control" name="Employee6">
-
-                            @foreach (var employee in Model.Clerks)
-                            {
-                                if (employee.Id == @Model.CollectionPoint6.EmployeeId)
-                                {
-                                    <option value="@employee.Id" selected> @employee.Name  </option>
-
-                                }
-                                else
-                                {
-                                    <option value="@employee.Id"> @employee.Name  </option>
-                                }
-
-                            }
-                        </select>
-                    </div>
-
                 </div>
+                <!-- /.box -->
             </div>
 
-
-            @*@foreach (var cp in Model.CollectionPoints)
-                {
-                    <tr>
-                        <td>@cp.Id</td>
-                        <td>@cp.NameTime</td>
-                        <td>
-                            @Html.DropDownListFor(x => x.CollectionPointId, new SelectList(Model.Clerks, "Id", "Name"), new { @class = "form-control select2", @style = "width: 100%;" })
-
-                        </td>
-                    </tr>
-                }
-
-
-                @foreach (var cp in Model.CollectionPoints)
-                {
-                    <tr>
-                        <td>@cp.Id</td>
-                        <td>@cp.NameTime</td>
-                        <td>
-                            @foreach (var e in Model.Clerks)
-                            {
-                                <option value="e.Id" selected> e.Name </option>
-                            }
-                        </td>
-                    </tr>
-                }*@
-
-
-            <!-- /.box-body -->
-            <div class="box-footer">
-                <input type="submit" value="Assign" class="btn btn-success pull-right" />
-            </div>
         </div>
-        <!-- /.box -->
     </div>
+</section>
+
+
+        @*@foreach (var cp in Model.CollectionPoints)
+            {
+                <tr>
+                    <td>@cp.Id</td>
+                    <td>@cp.NameTime</td>
+                    <td>
+                        @Html.DropDownListFor(x => x.CollectionPointId, new SelectList(Model.Clerks, "Id", "Name"), new { @class = "form-control select2", @style = "width: 100%;" })
+
+                    </td>
+                </tr>
+            }
+
+
+            @foreach (var cp in Model.CollectionPoints)
+            {
+                <tr>
+                    <td>@cp.Id</td>
+                    <td>@cp.NameTime</td>
+                    <td>
+                        @foreach (var e in Model.Clerks)
+                        {
+                            <option value="e.Id" selected> e.Name </option>
+                        }
+                    </td>
+                </tr>
+            }*@
 
 
 
 
-}
+
+
+
+        }

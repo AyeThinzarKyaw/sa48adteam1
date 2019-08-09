@@ -10,5 +10,6 @@ namespace LUSSIS.Services.Interfaces
     public interface IEmailNotificationService
     {
         void NotifyDeptHeadToApprovePendingRequisition(Requisition newRequisition);
+        void SendNotificationEmail(string receipient, string subject, string body, IEnumerable<string> attachments = null, string cc = null);
     }
 }
