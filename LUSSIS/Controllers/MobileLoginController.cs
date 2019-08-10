@@ -15,7 +15,7 @@ namespace LUSSIS.Controllers
 {
     public class MobileLoginController : ApiController
     {
-        private LUSSISContext db = new LUSSISContext();
+        //private LUSSISContext db = new LUSSISContext();
         ILoginService loginService;
 
         public MobileLoginController()
@@ -25,6 +25,7 @@ namespace LUSSIS.Controllers
 
         //POST: api/MobileLogin
         //Written by Charles
+        //public LoginDTO Post([FromBody]Employee employee)
         public LoginDTO Post([FromBody]Employee employee)
         {
             LoginDTO loginDTO = loginService.GetEmployeeLoginByUsernameAndPassword(employee.Username, employee.Password);
@@ -36,20 +37,8 @@ namespace LUSSIS.Controllers
             }
             else
             {
-                //check for role
-                if (loginDTO.RoleId >= 1 && loginDTO.RoleId <= 4)
-                {
-                    //List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(loginDTO.EmployeeId);
-                    //FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems, LoginDTO = loginDTO };
-
-                    return loginDTO;
-                }
-                else
-                {
-                    //return clerk view
-                }
-
-                return null; ;
+                //return loginDTO;
+                return loginDTO;
             }
 
             //if (db.Employees.Any(user => user.Username.Equals(employee.Username)))

@@ -1,4 +1,5 @@
 ﻿@model LUSSIS.Models.DTOs.FormLoginDTO
+@using LUSSIS.Models.DTOs;
 
 @{
     Layout = null;
@@ -25,7 +26,12 @@
         <!-- /.login-logo -->
         <div class="login-box-body">
             <p class="login-box-msg">Sign in to start your work</p>
-
+            @if (!String.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="form-group has-feedback">
+                    <i class="text-yellow glyphicon glyphicon-alert form-control"> @ViewBag.ErrorMessage</i>
+                </div>
+            }
             @using (Html.BeginForm("VerifyUser", "Login", FormMethod.Post))
             {
                 <div class="form-group has-feedback">
@@ -33,9 +39,10 @@
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control"})
+                    @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control" })
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
+
                 <div class="row">
                     <div class="col-xs-12">
                         <input type="submit" value="Log In" class="btn btn-primary btn-block btn-flat" style="margin-top: 20px;" />

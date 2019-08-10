@@ -14,11 +14,18 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
+                <div class="box-header">
+                    <div class="box-tools pull-right" style="position: relative;">
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default" value="Ad-Hoc Requisition" onclick="location.href='@Url.Action("ViewAdHocRetrievalMenu", "Retrieval")'">
+                            Ad-Hoc Requisition
+                        </button>
+                    </div>
+                </div>
                 <div class="box-body">
                     <table>
                         <!-- <tr>
-                            <td>Retrieval Form Id</td>
-                            <td>: @Model.</td>
+                        <td>Retrieval Form Id</td>
+                        <td>: @Model.</td>
                         </tr> -->
                         <tr>
                             <td>Retrival Date</td>
@@ -47,15 +54,16 @@
                                     <td>@item.Description</td>
                                     <td>@item.Location</td>
                                     <td>@item.NeededQuantity</td>
-                                    <td><input type="text" value="@item.RetrievedQty" style="width: 100px;" /></td>
+                                    <td><input type="text" class="form-control" required value=@item.RetrievedQty style="width: 100px" onfocusout="updateRetrievalQuantity('@item.StationeryId', this);" /></td>
+
                                 </tr>
                             }
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button class="btn btn-success pull-right">Submit</button>
+                    <input type="button" class="btn btn-success pull-right" value="Submit!" onclick="location.href='@Url.Action("SubmitRetrieval", "Retrieval")'" />
                 </div>
             </div>
             <!-- /.box -->
@@ -64,3 +72,28 @@
     </div>
     <!-- /.row -->
 </section>
+
+
+@section scripts {
+    <script>
+        function updateRetrievalQuantity(sId, e) {
+
+            //alert(e.value);
+            var url = "/Retrieval/UpdateRetrievalQuantity?stationeryId=" + sId + "&quantity=" + e.value;
+            $.ajax({
+                url: url,
+                type: "GET",
+                async: true,
+                success: function (data) {
+                    //if (data[0] == true) {
+                    //    window.location.href = '/PurchaseOrder/Index'
+                    //}
+                    //else {
+                    //    document.getElementById("errRemark").innerHTML = data[1];
+                    //}
+                },
+                error: function (data) { }
+            });
+        }
+    </script>
+}   

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LUSSIS.Models.PO_getPOCatalogue_Result>
+﻿@model LUSSIS.Models.DTOs.POCreateDTO
 
 @{
     ViewBag.Title = "Select PO Item";
@@ -17,7 +17,7 @@
             <div class="box" style="height:550px; overflow-y:scroll;">
                 <div class="box-header">
                     <div class="col-md-6 box-tools " style="position: relative;">
-                        <input id="showConfirmed" type="checkbox" />Show all confirmed items
+                        <input id="showConfirmed" type="checkbox"  class="minimal"/>Show all confirmed items
                     </div>
                     <div class="col-md-6 box-tools pull-right" style="position: relative;">
                         @Html.ActionLink("Select Supplier", "SelectSupplier", null, new { @class = "btn btn-success right", @role = "button" })
@@ -41,40 +41,11 @@
                                 <th width="10%">Select</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach (var stationery in Model)
-                            {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.Description)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.AvailableQty)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.WaitlistQty)
-                                </td>
-                                @{
-                                    string inputBoxId = "txtQty" + stationery.Id;
-
-                                }
-                                <td>
-                                    <input id=@inputBoxId value=@stationery.Unsubmitted type="text" style="width: 80px;" />
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.ReorderLevel)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.ReorderQuantity)
-                                </td>
-                                <td>
-                                    <input id=@stationery.Id type="checkbox" class="minimal">
-                                </td>
-                            </tr>
-                            }
+                        <tbody id="partial">
+                            
+                            @Html.Partial("Catalogue_Partial")
+                            
+                            
 
                         </tbody>
                     </table>
@@ -90,6 +61,62 @@
 
 @section scripts {
     <script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+
+        $('.minimal').on('ifChecked', function (event) {
+            debugger;
+            var aa = $(this).attr('id');
+            if ($(this).attr('id')!='showConfirmed') {
+                var stationeryId = $(this).attr('id');
+                document.getElementById("txtQty" + stationeryId).readOnly = true;
+                var updatedQty = document.getElementById("txtQty" + stationeryId).value;
+                updateSelectList(stationeryId, updatedQty, true, false);
+                
+            }
+            else {
+                updateSelectList(0, 0, false,true);
+            }
+            
+        });
+        $('.minimal').on('ifUnchecked', function (event) {
+            if ($(this).attr('id') != 'showConfirmed') {
+                var stationeryId = $(this).attr('id');
+                document.getElementById("txtQty" + stationeryId).readOnly = false;
+                var updatedQty = document.getElementById("txtQty" + stationeryId).value;
+                updateSelectList(stationeryId, updatedQty, false, false);
+            } 
+            else {
+                updateSelectList(0, 0, false, false);
+            }
+        });
+        function updateSelectList(stationeryId, qty, selectOrNot, selectAllSelected) {
+            var data = JSON.stringify({
+                'stationeryId': stationeryId,
+                'qty': qty,
+                'selectOrNot': selectOrNot,
+                'selectAllSelected': selectAllSelected
+            });
+            $.ajax({
+                type: "POST",
+                url: "/PurchaseOrder/updateSelectList",
+                async: true,
+                data: data,
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data != true) {
+                        $("#partial").html(data);
+                    }
+                    
+                }
+            });
+        }
+
+       
+
         $(function () {
             $('#table').DataTable({
                 'columnDefs': [
@@ -104,5 +131,23 @@
             })
         })
 
+        //function confirm() {
+            
+        //    var url = "/PurchaseOrder/updateSelectList"//?sid=" + sid + "&qty=" + reply ;
+        //    $.ajax({
+        //        url: url,
+        //        type: "GET",
+        //        async: true,
+        //        success: function (data) {
+        //            //if (data != null) {
+        //            debugger;
+        //            //$("#partial").load('Catalogue_Partial');
+        //                $("#partial").html(data);
+        //            //}
+                    
+        //        },
+        //        error: function (data) { }
+        //    });
+        //}
     </script>
 }

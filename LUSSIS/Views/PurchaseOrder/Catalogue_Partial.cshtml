@@ -1,0 +1,51 @@
+﻿@*@model IEnumerable<LUSSIS.Models.PO_getPOCatalogue_Result>*@
+@model LUSSIS.Models.DTOs.POCreateDTO
+
+@foreach (var stationery in Model.Catalogue)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => stationery.Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => stationery.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => stationery.AvailableQty)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => stationery.WaitlistQty)
+        </td>
+        @{
+            string inputBoxId = "txtQty" + stationery.Id;
+
+        }
+        <td>
+            @if (Model.SelectOnlyConfirm == true || Model.SelectedItems.Where(x => x.Id == stationery.Id).Count() > 0)
+            {
+                <input readonly id=@inputBoxId value=@stationery.Unsubmitted type="text" style="width: 80px;" />@*onfocusout="confirm();"*@
+            }
+            else
+            {
+                <input id=@inputBoxId value=@stationery.Unsubmitted type="text" style="width: 80px;" />
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => stationery.ReorderLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => stationery.ReorderQuantity)
+        </td>
+        <td>
+            @if (Model.SelectOnlyConfirm == true || Model.SelectedItems.Where(x => x.Id == stationery.Id).Count() > 0)
+            {
+                <input id=@stationery.Id type="checkbox" class="minimal" checked>
+            }
+            else
+            {
+                <input id=@stationery.Id type="checkbox" class="minimal">
+            }
+
+        </td>
+    </tr>
+}

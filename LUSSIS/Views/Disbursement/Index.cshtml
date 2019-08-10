@@ -1,4 +1,5 @@
-﻿
+﻿@model LUSSIS.Models.DTOs.DisbursementListDTO
+
 @{
     ViewBag.Title = "Index";
 }
@@ -15,58 +16,87 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <table id="table" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Collection Date</th>
-                                <th>Collection Point (Collection Time)</th>
-                                <th>Collection Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>20/12/2019</td>
-                                <td>Science School (9:30am)</td>
-                                <td class="text-blue">Pending Collection</td>
-                                <td>
-                                    <a href="disbursement-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>20/11/2019</td>
-                                <td>Science School (9:30am)</td>
-                                <td>Delivered</td>
-                                <td>
-                                    <a href="disbursement-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>05/11/2019</td>
-                                <td>Science School (9:30am)</td>
-                                <td>Delivered</td>
-                                <td>
-                                    <a href="disbursement-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>25/10/2019</td>
-                                <td>Medical School (11:00am)</td>
-                                <td>Delivered</td>
-                                <td>
-                                    <a href="disbursement-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>11/10/2019</td>
-                                <td>Medical School (11:00am)</td>
-                                <td>Delivered</td>
-                                <td>
-                                    <a href="disbursement-detail.html" class="btn btn-sm btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    @if (Model.LoginDTO.EmployeeId == Model.ReceivedEmployeeId)
+                    {
+                        <table id="table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Collection Date</th>
+                                    <th>Collection Point (Collection Time)</th>
+                                    <th>Collection Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                {
+                                    <tr>
+                                        <td>@dl.DeliveryDateTime</td>
+                                        <td>@dl.CollectionPoint</td>
+                                        @if (dl.Status.Contains("PENDING_COLLECTION"))
+                                        {
+                                            <td class="text-blue">Pending Collection</td>
+                                        }
+                                        else if (dl.Status.Contains("CANCELLED"))
+                                        {
+                                            <td>Cancelled</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Delivered</td>
+                                        }
+                                        <td>
+                                            <input type="button" class="btn btn-sm btn-primary" value="Detail"
+                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.Id})'" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else if (Model.LoginDTO.EmployeeId == Model.DeliveredEmployeeId)
+                    {
+                        <table id="table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Disbursement ID</th>
+                                    <th>Department</th>
+                                    <th>Collection Point (Collection Time)</th>
+                                    <th>Collection Date</th>
+                                    <th>Collection Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                {
+                                    <tr>
+                                        <td>@dl.DisbursementId</td>
+                                        <td>@dl.DepartmentName</td>
+                                        <td>@dl.CollectionPoint</td>
+                                        <td>@dl.DeliveryDateTime.Date</td>
+                                        @if (dl.Status.Contains("PENDING_COLLECTION"))
+                                        {
+                                            <td class="text-blue">Pending Collection</td>
+                                        }
+                                        else if (dl.Status.Contains("CANCELLED"))
+                                        {
+                                            <td>Cancelled</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Delivered</td>
+                                        }
+                                        <td>
+                                            <input type="button" class="btn btn-sm btn-primary" value="Detail"
+                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.DisbursementId})'" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+
                 </div>
                 <!-- /.box-body -->
             </div>

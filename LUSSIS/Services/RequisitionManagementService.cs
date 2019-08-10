@@ -43,6 +43,14 @@ namespace LUSSIS.Services
             return requisitionRepo.DepartmentRequisitionsEagerLoadEmployee(deptHead.DepartmentId);
         }
 
+        public List<Requisition> GetPendingDepartmentRequisitions(int deptHeadEmployeeId)
+        {
+            //get dept Id
+            Employee deptHead = employeeRepo.FindById(deptHeadEmployeeId);
+
+            return requisitionRepo.DepartmentPendingRequisitionsEagerLoadEmployee(deptHead.DepartmentId);
+        }
+
         public void ApproveRejectPendingRequisition(int requisitionId, string action, string remarks)
         {
             Requisition r = requisitionRepo.FindById(requisitionId);

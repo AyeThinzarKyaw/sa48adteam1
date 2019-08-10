@@ -12,5 +12,9 @@ namespace LUSSIS.Repositories.Interfaces
         IEnumerable<DepartmentCoverEmployee> GetDepartmentCoverEmployeesByDepartmentId(int departmentId);
 
         DepartmentCoverEmployee GetDepartmentCoverEmployeeByDepartmentIdAndDate(int departmentId, DateTime date);
+
+        IEnumerable<DepartmentCoverEmployee> GetCurrentDepartmentCoverEmployeesByDepartmentId(int departmentId, DateTime date);
+
+        IEnumerable<DepartmentCoverEmployee> GetExistingDepartmentCoverEmployeesWithinDateRange(DateTime FromDate, DateTime ToDate);
     }
 }
