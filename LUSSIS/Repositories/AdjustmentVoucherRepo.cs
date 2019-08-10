@@ -36,5 +36,24 @@ namespace LUSSIS.Repositories
             return adjustmentsList;
         }
 
+        public float GetTotalAmount(int adjId)
+        {
+            float total = (float) (from avd in Context.AdjustmentVoucherDetails
+                    join s in Context.Stationeries on avd.StationeryId equals s.Id
+                    join st in Context.SupplierTenders on s.Id equals st.StationeryId
+                    where avd.AdjustmentVoucherId == adjId
+                    where st.Rank == 1
+                    select st.Price).Sum();
+            return total;
+        }
+
+        //public AdjustmentVoucher FindByStatusAndEmployeeId(int clerkId)
+        //{
+        //    AdjustmentVoucher adj = from a in Context.AdjustmentVouchers
+        //                            where a.Status.Equals("Open")
+        //                            where a.EmployeeId == clerkId
+                                    
+        //    return adj;
+        //}
     }
 }

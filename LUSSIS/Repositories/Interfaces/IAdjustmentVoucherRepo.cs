@@ -10,6 +10,9 @@ namespace LUSSIS.Repositories.Interfaces
     public interface IAdjustmentVoucherRepo : IGenericRepo<AdjustmentVoucher, int>
     {
         int GetOpenAdjustmentVoucherCountForStationery(int stationeryId);
-     
+
+        float GetTotalAmount(int adjId);
+
+        //AdjustmentVoucher FindByStatusAndEmployeeId(int clerkId);
     }
 }

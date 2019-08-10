@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LUSSIS.Models.AdjustmentVoucher>
+﻿@model List<LUSSIS.Models.DTOs.AdjustmentVoucherDTO>
 @{
     ViewBag.Title = "Index";
 }
@@ -39,24 +39,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var adjustmentVoucher in Model)
+                            @foreach (var item in Model)
                             {
-                            <tr>
-                                <td>@adjustmentVoucher.Id</td>
-                                @{ string adjDate = "";
-                                    if (adjustmentVoucher.Date != null)
-                                    {
-                                        adjDate = ((DateTime)adjustmentVoucher.Date).ToString("dd/MM/yyyy");
-                                    }
+                                <tr>
+                                    <td>@item.adjustmentVoucher.Id</td>
+                                    @{ string adjDate = "";
+                                        if (item.adjustmentVoucher.Date != null)
+                                        {
+                                            adjDate = ((DateTime)item.adjustmentVoucher.Date).ToString("dd/MM/yyyy");
+                                        }
 
-                                }
-                                <td>@adjDate</td>
-                                <td>@adjustmentVoucher.Date</td>
-                                <td>@adjustmentVoucher.Status</td>
-                                <td>
-                                    @Html.ActionLink("Detail", "Detail", new { adjId = adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
-                                </td>
-                            </tr>
+                                    }
+                                    <td>@adjDate</td>
+                                    <td>$ @item.TotalAmount</td>
+                                    <td>@item.adjustmentVoucher.Status</td>
+                                    <td>
+                                        @Html.ActionLink("Detail", "Detail", new { adjId = item.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>

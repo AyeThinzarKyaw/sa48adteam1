@@ -1,4 +1,5 @@
-﻿@model LUSSIS.Models.AdjustmentVoucher
+﻿@model LUSSIS.Models.DTOs.AdjustmentVoucherDTO
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Detail";
 }
@@ -11,71 +12,117 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-body">
-                    <table>
-                        <tr>
-                            <td>Adjustment Voucher ID</td>
-                            <td>: @Model.Id</td>
-                            <td width="600"></td>
-                            <td>Clerk Name</td>
-                            <td>: @Model.Employee.Name</td>
-                        </tr>
-                        <tr>
-                            <td>Voucher Date</td>
-                            @{ string adjDate = ((DateTime)Model.Date).ToString("dd/MM/yyyy"); }
-                            <td>: @adjDate</td>
-                        </tr>
-                        <tr>
-                            <td>Voucher Status</td>
-                            <td class="text-blue">: @Model.Status</td>
-                        </tr>
-                        <tr></tr>
-                    </table>
-                    <br /><br />
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                            <!--VLR001-->
+    @using (Html.BeginForm("SubmitVoucher", "AdjustmentVoucher", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <table>
                             <tr>
-                                <th style="width: 150px;">Item Number</th>
-                                <th style="width: 100px;">Category</th>
-                                <th style="width: 250px;">Description</th>
-                                <th style="width: 150px;">Unit of Measure</th>
-                                <th style="width: 100px;">Price</th>
-                                <th style="width: 150px;">Adjusted Qty</th>
-                                <th>Reason</th>
+                                @Html.HiddenFor(x => x.adjustmentVoucher.Id)
+                                <td>Adjustment Voucher ID</td>
+                                <td>: @Model.adjustmentVoucher.Id</td>
+                                <td width="600"></td>
+                                <td>Clerk Name</td>
+                                <td>: @Model.adjustmentVoucher.Employee.Name</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.AdjustmentVoucherDetails)
-                            {
                             <tr>
-                                <td>@item.Stationery.Code</td>
-                                <td>@item.Stationery.Category.Type</td>
-                                <td>@item.Stationery.Description</td>
-                                <td>@item.Stationery.UnitOfMeasure</td>
-                                <td>@item.Stationery.Status</td>
-                                <td>@item.Quantity</td>
-                                <td>@item.Reason</td>
+                                <td>Voucher Date</td>
+                                @{ string adjDate = ((DateTime)Model.adjustmentVoucher.Date).ToString("dd/MM/yyyy"); }
+                                <td>: @adjDate</td>
                             </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.box-body -->
-                <!-- If Supervisor -->
-                <div class="box-footer">
+                            <tr>
+                                <td>Voucher Status</td>
+                                <td class="text-blue">: @Model.adjustmentVoucher.Status</td>
+                            </tr>
+                            <tr></tr>
+                        </table>
+                        <br /><br />
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <!--VLR001-->
+                                <tr>
+                                    <th style="width: 150px;">Item Number</th>
+                                    <th style="width: 100px;">Category</th>
+                                    <th style="width: 250px;">Description</th>
+                                    <th style="width: 150px;">Unit of Measure</th>
+                                    <th style="width: 100px;">Price</th>
+                                    <th style="width: 150px;">Adjusted Qty</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.adjustmentVoucher.AdjustmentVoucherDetails)
+                                {
+                                    <tr>
+                                        <td>@item.Stationery.Code</td>
+                                        <td>@item.Stationery.Category.Type</td>
+                                        <td>@item.Stationery.Description</td>
+                                        <td>@item.Stationery.UnitOfMeasure</td>
+                                        <td>@item.Stationery.Status</td>
+                                        @{
+                                            if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                            {
+                                                <th style="width: 150px;"><input type="text" class="form-control" value="@item.Quantity" onfocusout="updateQtyReceive(this,'@item.Id','@item.AdjustmentVoucherId');" /></th>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.Quantity</td>
+                                            }
+                                        }
+                                        <td>@item.Reason</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <!-- If Supervisor -->
+                    <div class="box-footer">
+                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                        {
+                            <input type="submit" class="btn btn-success pull-right" value="Submit" />
+                        }
+                        else if (Model.adjustmentVoucher.Status != Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Acknowledged))
+                        {
+                            @Html.ActionLink("Acknowledge", "ChangeStatus", new { adjId = @Model.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-success pull-right", @role = "button" })
+                        }
+                    </div>
+                    <!-- If Supervisor -->
 
-                    @Html.ActionLink("Acknowledge", "ChangeStatus", new { adjId = @Model.Id }, new { @class = "btn btn-sm btn-success pull-right", @role = "button" })
                 </div>
-                <!-- If Supervisor -->
-
+                <!-- /.box -->
             </div>
-            <!-- /.box -->
+            <!-- /.col -->
         </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
+        <!-- /.row -->
+    }
 </section>
+
+@section scripts {
+    <script>
+        function updateQtyReceive(e, adjd, adj) {
+            debugger;
+            if (e.value != "") {
+
+                //alert(e.value);
+                var url = "/AdjustmentVoucher/UpdateReceivedQty?adjdId=" + adjd + "&qty=" + e.value + "&adjId=" + adj;
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    async: true,
+                    success: function (data) {
+                        //if (data[0] == true) {
+                        //    window.location.href = '/PurchaseOrder/Index'
+                        //}
+                        //else {
+                        //    document.getElementById("errRemark").innerHTML = data[1];
+                        //}
+                    },
+                    error: function (data) { }
+                });
+            }
+        }
+    </script>
+}
