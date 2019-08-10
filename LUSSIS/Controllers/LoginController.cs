@@ -44,7 +44,7 @@ namespace LUSSIS.Controllers
 
         public ActionResult RedirectToClerkOrDepartmentView(LoginDTO loginDTO)
         {
-            if (loginDTO.RoleId >= 1 && loginDTO.RoleId <= 4) //dept staff
+            if (loginDTO.RoleId >=(int)Enums.Roles.DepartmentHead && loginDTO.RoleId <= (int)Enums.Roles.DepartmentCoverHead) //dept staff
             {
                 return RedirectToAction("ViewCatalogue", "Requisition", loginDTO);
             }
@@ -74,6 +74,7 @@ namespace LUSSIS.Controllers
             {
                 //store in browser session also
                 Session["existinguser"] = loginDTO;
+                Session["role"] = loginDTO.RoleId;
                 return RedirectToAction("RedirectToClerkOrDepartmentView", loginDTO);
             }
 
@@ -83,6 +84,7 @@ namespace LUSSIS.Controllers
         {
             loginService.LogoutUser(loginDTO.SessionGuid);
             Session["existinguser"] = null;
+            Session["role"] = null;
             return RedirectToAction("Index");
         }
     }

@@ -223,14 +223,14 @@
         $('.minimal').on('ifChecked', function (event) {
             debugger;
             var stationeryId = $(this).attr('id').substring(3);
-
+            document.getElementById(stationeryId).disabled = true;
             ConfirmItemToPO(stationeryId, "confirmed");
 
         });
         $('.minimal').on('ifUnchecked', function (event) {
             debugger;
             var stationeryId = $(this).attr('id').substring(3);
-
+            document.getElementById(stationeryId).disabled = false;
             ConfirmItemToPO(stationeryId, "unconfirmed");
         });
 
