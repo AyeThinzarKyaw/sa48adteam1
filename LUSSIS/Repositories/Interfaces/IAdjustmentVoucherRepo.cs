@@ -11,6 +11,8 @@ namespace LUSSIS.Repositories.Interfaces
     {
         int GetOpenAdjustmentVoucherCountForStationery(int stationeryId);
 
-        List<int> getAdjustmentVoucherIdsWithAcknowledgedStatus();
+        float GetTotalAmount(int adjId);
+
+        //AdjustmentVoucher FindByStatusAndEmployeeId(int clerkId);
     }
 }

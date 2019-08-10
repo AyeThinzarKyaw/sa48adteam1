@@ -23,6 +23,7 @@ namespace LUSSIS.Services
             adjustmentVoucherDetailRepo = AdjustmentVoucherDetailRepo.Instance;
         }
 
+
         //returns single instance
         public static IAdjustmentVoucherService Instance
         {
@@ -31,20 +32,50 @@ namespace LUSSIS.Services
 
         public IEnumerable<AdjustmentVoucher> getAllAdjustmentVoucher()
         {
-            return AdjustmentVoucherRepo.Instance.FindAll().ToList();
+            return adjustmentVoucherRepo.FindAll().ToList();
         }
 
         public AdjustmentVoucher getAdjustmentVoucherById(int adjId)
         {
-            return AdjustmentVoucherRepo.Instance.FindById(adjId);
+            return adjustmentVoucherRepo.FindById(adjId);
         }
+
+        public AdjustmentVoucher getOpenAdjustmentVoucherByClerk(int clerkId)
+        {
+            return adjustmentVoucherRepo.FindOneBy(x => x.Status == "Open" && x.EmployeeId == clerkId);
+                //FindByStatusAndEmployeeId(clerkId);
+        }
+
         public void CreateAdjustmentVoucher(AdjustmentVoucher adj)
         {
-            AdjustmentVoucherRepo.Instance.Create(adj);
+            adjustmentVoucherRepo.Create(adj);
         }
         public void UpdateAdjustmentVoucher(AdjustmentVoucher adj)
         {
-            AdjustmentVoucherRepo.Instance.Update(adj);
+            adjustmentVoucherRepo.Update(adj);
+        }
+
+        public void CreateAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail)
+        {
+            adjustmentVoucherDetailRepo.Create(adjdetail);
+        }
+        public void UpdateAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail)
+        {
+            adjustmentVoucherDetailRepo.Update(adjdetail);
+        }
+
+        public List<AdjustmentVoucherDTO> getTotalAmountDTO()
+        {
+            List<AdjustmentVoucherDTO> voucherDTO = new List<AdjustmentVoucherDTO>();
+            IEnumerable<AdjustmentVoucher> adjs = adjustmentVoucherRepo.FindAll();
+            foreach (var adj in adjs)
+            {
+                AdjustmentVoucherDTO newVoucher = new AdjustmentVoucherDTO();
+                newVoucher.adjustmentVoucher = adj;
+                newVoucher.TotalAmount=adjustmentVoucherRepo.GetTotalAmount(adj.Id);
+                voucherDTO.Add(newVoucher);
+            }
+            return voucherDTO;
         }
 
         public void AutoAdjustmentsForRetrieval(int clerkEmployeeId, List<RetrievalItemDTO> retrievalList)

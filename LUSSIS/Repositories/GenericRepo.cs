@@ -53,7 +53,7 @@ namespace LUSSIS.Repositories
         public void Update(T entity)
         {
             //is this line necessary?
-            context.Set<T>().Attach(entity);
+            //context.Set<T>().Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
             Save();
         }
