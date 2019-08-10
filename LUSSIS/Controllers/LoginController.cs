@@ -28,13 +28,14 @@ namespace LUSSIS.Controllers
             //is this user already logged into this browser?
             if (Session["existinguser"] != null)
             {
-                string GUID = (string)Session["existinguser"];
+                LoginDTO loginDto = (LoginDTO)Session["existinguser"];
                 //search for this employee in db
-                Session s = loginService.GetExistingSessionFromGUID(GUID);
+                Session s = loginService.GetExistingSessionFromGUID(loginDto.SessionGuid);
                 if(s != null) //valid GUID in db
                 {
-                    LoginDTO loginDTO = new LoginDTO {EmployeeId = s.EmployeeId, RoleId = s.Employee.RoleId, SessionGuid = GUID };
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", loginDTO);
+                    //LoginDTO loginDTO = new LoginDTO {EmployeeId = s.EmployeeId, RoleId = s.Employee.RoleId, SessionGuid = GUID };
+                    
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", loginDto);
                 }
             }
             //else need to present the login page
@@ -65,13 +66,14 @@ namespace LUSSIS.Controllers
             if (loginDTO == null)
             {
                 //invalid user
+                ViewBag.ErrorMessage = "Incorrect Username or Password!";
                 return View("Index"); //with error message
 
             }
             else
             {
                 //store in browser session also
-                Session["existinguser"] = loginDTO.SessionGuid;
+                Session["existinguser"] = loginDTO;
                 return RedirectToAction("RedirectToClerkOrDepartmentView", loginDTO);
             }
 

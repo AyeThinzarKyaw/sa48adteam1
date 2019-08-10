@@ -16,12 +16,14 @@ namespace LUSSIS.Services
     {
         private IEmployeeRepo employeeRepo;
         private ISessionRepo sessionRepo;
+        private IDepartmentCoverEmployeeRepo departmentCoverEmployeeRepo;
         private static LoginService instance = new LoginService();
 
         private LoginService()
         {
             employeeRepo = EmployeeRepo.Instance;
             sessionRepo = SessionRepo.Instance;
+            departmentCoverEmployeeRepo = DepartmentCoverEmployeeRepo.Instance;
         }
 
         //returns single instance
@@ -61,9 +63,12 @@ namespace LUSSIS.Services
             {                
                 Session newSession = new Session() { EmployeeId = e.Id, GUID = Guid.NewGuid().ToString(), LogInDateTime = DateTime.Now };
                 sessionRepo.Create(newSession);
-                //set attributes
 
-                LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, RoleId = e.RoleId, SessionGuid = newSession.GUID };
+                //check if cover head?
+                int role = departmentCoverEmployeeRepo.FindOneBy(x => x.EmployeeId == e.Id && x.FromDate.Date <= DateTime.Now.Date && x.ToDate.Date >= DateTime.Now.Date) != null ? (int)Enums.Roles.DepartmentCoverHead : e.RoleId;
+
+                //set attributes
+                LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, RoleId = role, SessionGuid = newSession.GUID };
                 return loginDTO;
             }
         }
