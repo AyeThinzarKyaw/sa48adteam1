@@ -6,6 +6,7 @@ using LUSSIS.Services.Interfaces;
 using LUSSIS.Util;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
@@ -65,7 +66,7 @@ namespace LUSSIS.Services
                 sessionRepo.Create(newSession);
 
                 //check if cover head?
-                int role = departmentCoverEmployeeRepo.FindOneBy(x => x.EmployeeId == e.Id && x.FromDate.Date <= DateTime.Now.Date && x.ToDate.Date >= DateTime.Now.Date) != null ? (int)Enums.Roles.DepartmentCoverHead : e.RoleId;
+                int role = departmentCoverEmployeeRepo.FindOneBy(x => x.EmployeeId == e.Id && DbFunctions.TruncateTime(x.FromDate) <= DateTime.Now && DbFunctions.TruncateTime(x.ToDate) >= DateTime.Now) != null ? (int)Enums.Roles.DepartmentCoverHead : e.RoleId;
 
                 //set attributes
                 LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, RoleId = role, SessionGuid = newSession.GUID };
