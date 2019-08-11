@@ -59,11 +59,11 @@
                                         }
                                     <td>
                                         <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                               onclick="location.href='@Url.Action("ViewRequisitionDetail", "Requisition", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionId = r.Id})'" />
+                                               onclick="location.href='@Url.Action("ViewRequisitionDetail", "Requisition", new {@requisitionId = r.Id})'" />
                                         @if (r.Status.Equals("PENDING"))
                                         {
                                             <input type="button" class="btn btn-sm btn-danger" value="Cancel"
-                                                   onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionId = r.Id})'" />
+                                                   onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new {@requisitionId = r.Id})'" />
                                         }
 
                                     </td>

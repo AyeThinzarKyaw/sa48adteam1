@@ -29,14 +29,14 @@ namespace LUSSIS.Controllers
         {
             List<Requisition> requisitions = requisitionCatalogueService.GetSchoolRequisitionsWithEmployeeAndDept();
             //return requisitionsDTO model
-            RequisitionsDTO model = new RequisitionsDTO() { LoginDTO = loginDTO, Requisitions = requisitions };
+            RequisitionsDTO model = new RequisitionsDTO() { Requisitions = requisitions };
             return View(model);
         }
 
         public ActionResult ViewRequisitionDetails(LoginDTO loginDTO, int requisitionId)
         {
             RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForClerk(requisitionId);
-            model.LoginDTO = loginDTO;
+            //model.LoginDTO = loginDTO;
 
             return View(model);
         }

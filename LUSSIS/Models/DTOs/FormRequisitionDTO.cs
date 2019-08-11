@@ -8,7 +8,6 @@ namespace LUSSIS.Models.DTOs
     public class FormRequisitionDTO
     {
         public List<CatalogueItemDTO> CatalogueItems { get; set; }
-
-        public LoginDTO LoginDTO { get; set; }
+        
     }
 }

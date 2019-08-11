@@ -49,7 +49,7 @@ namespace LUSSIS.Controllers
                 LoginDTO loginDTO = (LoginDTO)Session["existinguser"];
                 if (loginDTO.RoleId >= (int)Enums.Roles.DepartmentHead && loginDTO.RoleId <= (int)Enums.Roles.DepartmentCoverHead) //dept staff
                 {
-                    return RedirectToAction("ViewCatalogue", "Requisition", loginDTO);
+                    return RedirectToAction("ViewCatalogue", "Requisition");
                 }
                 else //clerks
                 {

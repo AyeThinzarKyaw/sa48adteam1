@@ -9,8 +9,6 @@ namespace LUSSIS.Models.DTOs
     {
         public Requisition Requisition { get; set; }
 
-        public LoginDTO LoginDTO {get; set;}
-
         public int RequisitionFormId { get; set; }
 
         public string RequestedDate { get; set; }
