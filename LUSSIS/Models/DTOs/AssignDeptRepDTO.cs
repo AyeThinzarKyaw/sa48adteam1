@@ -11,6 +11,6 @@ namespace LUSSIS.Models.DTOs
         public Employee DeptRep { get; set; }
         public int NewDeptRepId { get; set; }
         public IEnumerable<Employee> StaffAndDeptRep { get; set; }
-        public LoginDTO LoginDTO { get; set; }
+        
     }
 }

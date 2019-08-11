@@ -177,6 +177,9 @@
                         if (data == true) {
                             document.getElementById("lblStatus" + r).innerHTML = "CANCELLED";
                         }
+                        else {
+                            alert("Oops..Something went wrong! Please try again...")
+                        }
                     },
                     error: function (data) { }
                 });

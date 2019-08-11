@@ -31,10 +31,10 @@ namespace LUSSIS.Controllers
                 LoginDTO loginDto = (LoginDTO)Session["existinguser"];
                 //search for this employee in db
                 Session s = loginService.GetExistingSessionFromGUID(loginDto.SessionGuid);
-                if(s != null) //valid GUID in db
+                if (s != null) //valid GUID in db
                 {
                     //LoginDTO loginDTO = new LoginDTO {EmployeeId = s.EmployeeId, RoleId = s.Employee.RoleId, SessionGuid = GUID };
-                    
+
                     return RedirectToAction("RedirectToClerkOrDepartmentView", loginDto);
                 }
             }
@@ -42,17 +42,22 @@ namespace LUSSIS.Controllers
             return View();
         }
 
-        public ActionResult RedirectToClerkOrDepartmentView(LoginDTO loginDTO)
+        public ActionResult RedirectToClerkOrDepartmentView()
         {
-            if (loginDTO.RoleId >=(int)Enums.Roles.DepartmentHead && loginDTO.RoleId <= (int)Enums.Roles.DepartmentCoverHead) //dept staff
+            if (Session["existinguser"] != null)
             {
-                return RedirectToAction("ViewCatalogue", "Requisition", loginDTO);
+                LoginDTO loginDTO = (LoginDTO)Session["existinguser"];
+                if (loginDTO.RoleId >= (int)Enums.Roles.DepartmentHead && loginDTO.RoleId <= (int)Enums.Roles.DepartmentCoverHead) //dept staff
+                {
+                    return RedirectToAction("ViewCatalogue", "Requisition", loginDTO);
+                }
+                else //clerks
+                {
+                    //return clerk view
+                    return RedirectToAction("", "", loginDTO);
+                }
             }
-            else //clerks
-            {
-                //return clerk view
-                return RedirectToAction("","", loginDTO);
-            }
+            return RedirectToAction("Index", "Login");
         }
 
         public ActionResult VerifyUser(FormLoginDTO loginForm)
@@ -80,12 +85,17 @@ namespace LUSSIS.Controllers
 
         }
 
-        public ActionResult Logout(LoginDTO loginDTO)
+        public ActionResult Logout()
         {
-            loginService.LogoutUser(loginDTO.SessionGuid);
-            Session["existinguser"] = null;
-            Session["role"] = null;
-            return RedirectToAction("Index");
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO loginDTO = (LoginDTO)Session["existinguser"];
+                loginService.LogoutUser(loginDTO.SessionGuid);
+                Session["existinguser"] = null;
+                Session["role"] = null;
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index", "Login");
         }
     }
 }

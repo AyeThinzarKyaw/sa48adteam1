@@ -18,7 +18,7 @@ namespace LUSSIS.Services.Interfaces
         void CreatePODetail(PurchaseOrderDetail pod);
         void UpdatePODetail(PurchaseOrderDetail pod);
 
-        void RaisePO(POCreateDTO poCreateDTO);
+        void RaisePO(POCreateDTO poCreateDTO,int createdBy);
 
 
     }

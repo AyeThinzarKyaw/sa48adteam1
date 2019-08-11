@@ -34,10 +34,9 @@ namespace LUSSIS.Services
             return PurchaseOrderRepo.Instance.GetPOCatalogue();
         }
         public void CreatePO(PurchaseOrder po)
-        {
-            po.OrderDateTime = DateTime.Now;
-            po.EmployeeId = 1;//TODO: to change dynamic data
-            PurchaseOrderRepo.Instance.Create(po);
+        {            
+                po.OrderDateTime = DateTime.Now;                
+                PurchaseOrderRepo.Instance.Create(po);           
         }
         public void UpdatePO(PurchaseOrder po)
         {
@@ -53,7 +52,7 @@ namespace LUSSIS.Services
             PurchaseOrderDetailRepo.Instance.Update(pod);
         }
 
-        public void RaisePO(POCreateDTO poCreateDTO)
+        public void RaisePO(POCreateDTO poCreateDTO,int createdBy)
         {
             foreach (Stationery item in poCreateDTO.SelectedItems.Where(s=>s.CategoryId!=0 && s.Status=="confirmed"))
             {
@@ -89,6 +88,7 @@ namespace LUSSIS.Services
 
             foreach (PurchaseOrder purchaseOrder in poCreateDTO.ConfirmedPOs)
             {
+                purchaseOrder.EmployeeId = createdBy;
                 PurchaseOrderService.Instance.CreatePO(purchaseOrder);
                 
             }

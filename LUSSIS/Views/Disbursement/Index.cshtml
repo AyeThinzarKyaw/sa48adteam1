@@ -47,7 +47,7 @@
                                         }
                                         <td>
                                             <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.Id})'" />
+                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.DisbursementId})'" />
                                         </td>
                                     </tr>
                                 }
