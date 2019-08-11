@@ -25,7 +25,8 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="date" class="form-control pull-right" id="datepicker" name="FromDate">
+                                        @Html.TextBoxFor(x => x.FromDate, new { @type = "date", @class="form-control pull-right"})
+                                        @*<input type="date" class="form-control pull-right" id="datepicker" name="FromDate">*@
                                         @* @Html.ValidationMessageFor(x => x.FromDate, "", new { @class = "text-danger" })*@
                                     </div>
                                 </div>
@@ -37,7 +38,8 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="date" class="form-control pull-right" id="datepicker" name="ToDate">
+                                        @Html.TextBoxFor(x => x.ToDate, new { @type = "date", @class = "form-control pull-right" })
+                                        @*<input type="date" class="form-control pull-right" id="datepicker" name="ToDate">*@
                                         @*  @Html.ValidationMessageFor(x => x.ToDate, "", new { @class = "text-danger" })*@
 
                                     </div>
@@ -105,8 +107,8 @@
                                 @foreach (var coverdetail in Model.ActiveCoverHeadDetails)
                                 {
                                     <tr>
-                                        <td>@coverdetail.FromDate</td>
-                                        <td>@coverdetail.ToDate</td>
+                                        <td>@coverdetail.FromDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@coverdetail.ToDate.ToString("dd/MM/yyyy")</td>
                                         <td>@coverdetail.Employee.Name</td>
                                         <td>@coverdetail.Employee.Title</td>
                                         <td>

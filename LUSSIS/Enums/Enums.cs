@@ -92,4 +92,15 @@ namespace LUSSIS.Enums
         Submitted,
         Acknowledged
     }
+
+    public enum Roles
+    {
+        DepartmentHead=1,
+        DepartmentStaff=2,
+        DepartmentRepresentative=3,
+        DepartmentCoverHead=4,
+        StoreManager=5,
+        StoreSupervisor=6,
+        StoreClerk=7
+    }
 }

@@ -61,5 +61,35 @@ namespace LUSSIS.Repositories
         {
             return Context.RequisitionDetails.Where(x => x.QuantityOrdered > x.QuantityDelivered && x.Status.Equals("COLLECTED")).GroupBy(x => x.Requisition.Employee.DepartmentId).ToList();
         }
+
+        
+
+        public List<RequisitionDetail> GetRequisitionDetailsByClerkDisbursementId(int EmployeeId)
+        {
+            var result = from rd in Context.RequisitionDetails
+                         join d in Context.Disbursements on rd.DisbursementId equals d.Id
+                         join s in Context.Stationeries on rd.StationeryId equals s.Id
+                         join r in Context.Requisitions on rd.RequisitionId equals r.Id
+                         join e in Context.Employees on d.ReceivedEmployeeId equals e.Id
+                         join dep in Context.Departments on e.DepartmentId equals dep.Id
+                         join cp in Context.CollectionPoints on dep.CollectionPointId equals cp.Id
+                         where d.DeliveredEmployeeId == EmployeeId
+                         select rd;
+            return result.ToList();
+        }
+
+        public List<RequisitionDetail> GetRequisitionDetailsByDepRepDisbursementId(int EmployeeId)
+        {
+            var result = from rd in Context.RequisitionDetails
+                         join d in Context.Disbursements on rd.DisbursementId equals d.Id
+                         join s in Context.Stationeries on rd.StationeryId equals s.Id
+                         join r in Context.Requisitions on rd.RequisitionId equals r.Id
+                         join e in Context.Employees on d.ReceivedEmployeeId equals e.Id
+                         join dep in Context.Departments on e.DepartmentId equals dep.Id
+                         join cp in Context.CollectionPoints on dep.CollectionPointId equals cp.Id
+                         where d.ReceivedEmployeeId == EmployeeId
+                         select rd;
+            return result.ToList();
+        }
     }
 }

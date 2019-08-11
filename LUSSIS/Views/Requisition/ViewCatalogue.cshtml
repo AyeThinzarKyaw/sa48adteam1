@@ -1,9 +1,12 @@
 ﻿@model LUSSIS.Models.DTOs.FormRequisitionDTO
-
+@using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Home Page";
 }
-
+@if (Session["existinguser"] != null)
+{
+    LoginDTO loginDto = (LoginDTO)Session["existinguser"];
+}
 @section styles {
     <style type="text/css">
         input[type="text"] {
@@ -40,52 +43,52 @@
                                 <th>Confirmation</th>
                             </tr>
                         </thead>
-                        <tbody>                           
+                        <tbody>
                             @foreach (var catalogueItem in Model.CatalogueItems)
                             {
-                                
-                            <tr>
-                                <td>@catalogueItem.Item</td>
-                                <td>@catalogueItem.UnitOfMeasure</td>
-                                @{
-                                    string availStatusId = "availStatus" + catalogueItem.StationeryId;
 
-                                }
-                                @if (catalogueItem.StockAvailability == LUSSIS.Enums.StockAvailabilityEnum.InStock)
-                                {
-                                    <td id=@availStatusId class="text-green">In stock</td>
-                                }
-                                else if (catalogueItem.StockAvailability == LUSSIS.Enums.StockAvailabilityEnum.OutOfStock)
-                                {
-                                    <td id=@availStatusId class="text-gray">Out of stock</td>
-                                }
-                                else //low stock
-                                {
-                                    <td id=@availStatusId class="text-orange">Low stock(@catalogueItem.LowStockAvailability)</td>
-                                }
-                                @{
-                                    string reservedBoxId = "reservedBox" + catalogueItem.StationeryId;
-                                    string waitlistBoxId = "waitlistBox" + catalogueItem.StationeryId;
+                                <tr>
+                                    <td>@catalogueItem.Item</td>
+                                    <td>@catalogueItem.UnitOfMeasure</td>
+                                    @{
+                                        string availStatusId = "availStatus" + catalogueItem.StationeryId;
 
-                                }
-                                <td id=@reservedBoxId class="text-green text-center">@catalogueItem.ReservedCount</td>
-                                <td id=@waitlistBoxId class="text-orange text-center">@catalogueItem.WaitlistCount</td>
-                                @{
-                                    string inputBoxId = "inputBox" + catalogueItem.StationeryId;
+                                    }
+                                    @if (catalogueItem.StockAvailability == LUSSIS.Enums.StockAvailabilityEnum.InStock)
+                                    {
+                                        <td id=@availStatusId class="text-green">In stock</td>
+                                    }
+                                    else if (catalogueItem.StockAvailability == LUSSIS.Enums.StockAvailabilityEnum.OutOfStock)
+                                    {
+                                        <td id=@availStatusId class="text-gray">Out of stock</td>
+                                    }
+                                    else //low stock
+                                    {
+                                        <td id=@availStatusId class="text-orange">Low stock(@catalogueItem.LowStockAvailability)</td>
+                                    }
+                                    @{
+                                        string reservedBoxId = "reservedBox" + catalogueItem.StationeryId;
+                                        string waitlistBoxId = "waitlistBox" + catalogueItem.StationeryId;
 
-                                }
-                                @if (catalogueItem.Confirmation == true)
-                                {
-                                    <td><input id=@inputBoxId type="text" style="width: 80px;" value=@catalogueItem.OrderQtyInput /></td>
-                                    <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal" checked></td>
-                                }
-                                else
-                                {
-                                    <td><input id=@inputBoxId type="text" style="width: 80px;" /></td>
-                                    <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal"></td>
-                                }
+                                    }
+                                    <td id=@reservedBoxId class="text-green text-center">@catalogueItem.ReservedCount</td>
+                                    <td id=@waitlistBoxId class="text-orange text-center">@catalogueItem.WaitlistCount</td>
+                                    @{
+                                        string inputBoxId = "inputBox" + catalogueItem.StationeryId;
 
-                            </tr>
+                                    }
+                                    @if (catalogueItem.Confirmation == true)
+                                    {
+                                        <td><input id=@inputBoxId type="text" style="width: 80px;" value=@catalogueItem.OrderQtyInput /></td>
+                                        <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal" checked></td>
+                                    }
+                                    else
+                                    {
+                                        <td><input id=@inputBoxId type="text" style="width: 80px;" /></td>
+                                        <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal"></td>
+                                    }
+
+                                </tr>
                             }
 
                         </tbody>
@@ -150,7 +153,7 @@
             var stationeryId = $(this).attr('id');
             var input = document.getElementById("inputBox" + stationeryId).value;
 
-            if (input) {               
+            if (input) {
                 var employeeId = document.getElementById("employeeId").value;
                 var data = JSON.stringify({
                     'employeeId': employeeId,
@@ -177,10 +180,10 @@
             else {
                 //no input, do nothing
             }
-        
+
         });
 
-        
+
         //iCheck for checkbox and radio inputs
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',

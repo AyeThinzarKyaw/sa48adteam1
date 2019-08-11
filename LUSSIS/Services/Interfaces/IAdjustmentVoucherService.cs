@@ -14,10 +14,17 @@ namespace LUSSIS.Services.Interfaces
 
         AdjustmentVoucher getAdjustmentVoucherById(int adjId);
 
+        AdjustmentVoucher getOpenAdjustmentVoucherByClerk(int clerkId);
+
         void CreateAdjustmentVoucher(AdjustmentVoucher adj);
+
+        void CreateAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail);
+
+        void UpdateAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail);
 
         void UpdateAdjustmentVoucher(AdjustmentVoucher adj);
 
+        List<AdjustmentVoucherDTO> getTotalAmountDTO();
 
         void AutoAdjustmentsForRetrieval (int clerkEmployeeId, List<RetrievalItemDTO> retrievalList);
 

@@ -20,5 +20,8 @@ namespace LUSSIS.Repositories.Interfaces
         List<Requisition> GetUniqueRequisitionsForDisbursement(int disbursementId);
 
         List<IGrouping<int, RequisitionDetail>> GetUnfulfilledRequisitionDetailsGroupedByDept();
+
+        List<RequisitionDetail> GetRequisitionDetailsByClerkDisbursementId(int EmployeeId);
+        List<RequisitionDetail> GetRequisitionDetailsByDepRepDisbursementId(int EmployeeId);
     }
 }
