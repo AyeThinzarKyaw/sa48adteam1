@@ -154,6 +154,7 @@
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MachineLearningController.cs" />
     <Compile Include="Controllers\MobileDisbursementController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Models\DTOs\DepartmentCollectionPointDTO.cs" />
     <Compile Include="Models\DTOs\DeptOwedItemDTO.cs" />
     <Compile Include="Models\DTOs\DisbursementListDTO.cs" />
+    <Compile Include="Models\DTOs\MachineLearningDTO.cs" />
     <Compile Include="Models\MobileDTOs\DisbursementDTO.cs" />
     <Compile Include="Models\MobileDTOs\EmployeeDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionDetailDTO.cs" />
@@ -544,6 +546,7 @@
     <Content Include="Views\AssignStaff\AssignDeptRep.cshtml" />
     <Content Include="Views\CollectionPoint\AssignClerk.cshtml" />
     <Content Include="Views\CollectionPoint\AssignCollectionPoint.cshtml" />
+    <Content Include="Views\MachineLearning\MachineLearning.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
