@@ -121,9 +121,7 @@
                     {
                         using (Html.BeginForm("ApproveRejectPendingRequisition", "DeptHead", FormMethod.Post))
                         {
-                            @Html.HiddenFor(m => m.LoginDTO.EmployeeId);
-                            @Html.HiddenFor(m => m.LoginDTO.SessionGuid);
-                            @Html.HiddenFor(m => m.LoginDTO.RoleId);
+                            
                             @Html.HiddenFor(m => m.RequisitionFormId);
                             <div class="form-group">
                                 <label>Remark(Optional)</label>
@@ -141,9 +139,6 @@
                     {
                         using (Html.BeginForm("ViewDepartmentRequisitions", "DeptHead", FormMethod.Post))
                         {
-                            @Html.HiddenFor(m => m.LoginDTO.EmployeeId);
-                            @Html.HiddenFor(m => m.LoginDTO.SessionGuid);
-                            @Html.HiddenFor(m => m.LoginDTO.RoleId);
                             @Html.HiddenFor(m => m.RequisitionFormId);
 
                             <div class="box-footer">

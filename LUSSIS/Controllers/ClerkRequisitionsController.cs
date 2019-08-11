@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Filters;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
@@ -19,32 +20,54 @@ namespace LUSSIS.Controllers
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
         }
 
-        // GET: ClerkRequisitions
-        public ActionResult Index()
+
+        [Authorizer]
+        public ActionResult ViewSchoolRequisitions()
         {
-            return View();
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                }
+                List<Requisition> requisitions = requisitionCatalogueService.GetSchoolRequisitionsWithEmployeeAndDept();
+                //return requisitionsDTO model
+                RequisitionsDTO model = new RequisitionsDTO() { Requisitions = requisitions };
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
-
-        public ActionResult ViewSchoolRequisitions(LoginDTO loginDTO)
+        [Authorizer]
+        public ActionResult ViewRequisitionDetails(int requisitionId)
         {
-            List<Requisition> requisitions = requisitionCatalogueService.GetSchoolRequisitionsWithEmployeeAndDept();
-            //return requisitionsDTO model
-            RequisitionsDTO model = new RequisitionsDTO() { Requisitions = requisitions };
-            return View(model);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                }
+                RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForClerk(requisitionId);
+                //model.LoginDTO = loginDTO;
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
-
-        public ActionResult ViewRequisitionDetails(LoginDTO loginDTO, int requisitionId)
+        [Authorizer]
+        public ActionResult ViewOwedItems()
         {
-            RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForClerk(requisitionId);
-            //model.LoginDTO = loginDTO;
-
-            return View(model);
-        }
-
-        public ActionResult ViewOwedItems(LoginDTO loginDTO)
-        {
-            List<DeptOwedItemDTO> deptOwedItems = requisitionCatalogueService.GetListOfDeptOwedItems();
-            return View(new VMOwedItemsDTO { LoginDTO = loginDTO, DeptOwedItems = deptOwedItems});
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                }
+                List<DeptOwedItemDTO> deptOwedItems = requisitionCatalogueService.GetListOfDeptOwedItems();
+                return View(new VMOwedItemsDTO { DeptOwedItems = deptOwedItems });
+            }
+            return RedirectToAction("Index", "Login");
         }
 
 
