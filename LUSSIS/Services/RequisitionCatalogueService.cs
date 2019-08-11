@@ -290,13 +290,17 @@ namespace LUSSIS.Services
                 RequisitionDetails = requisitionDetails};
         }
 
-        public void CancelPendingRequisition(int requisitionId)
+        public bool CancelPendingRequisition(int requisitionId,int cancelledBy)
         {
             Requisition r = requisitionRepo.FindById(requisitionId);
+            if (r.EmployeeId!=cancelledBy)
+            {
+                return false;
+            }
             r.Status = RequisitionStatusEnum.CANCELLED.ToString();
             requisitionRepo.Update(r);
             CascadeToRequisitionDetails("cancel", requisitionId);
-
+            return true;
         }
 
         private void CascadeToRequisitionDetails(string action, int requisitionId)
@@ -313,11 +317,15 @@ namespace LUSSIS.Services
             }
         }
 
-        public void CancelWaitlistedRequisitionDetail(int requisitionDetailId)
+        public void CancelWaitlistedRequisitionDetail(int requisitionDetailId, int cancelledBy)
         {
             RequisitionDetail rd = requisitionDetailRepo.FindById(requisitionDetailId);
-            rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
-            requisitionDetailRepo.Update(rd);
+            if (rd.Requisition.EmployeeId==cancelledBy)
+            {
+                rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
+                requisitionDetailRepo.Update(rd);
+            }
+            
         }
 
         public List<Requisition> GetSchoolRequisitionsWithEmployeeAndDept()

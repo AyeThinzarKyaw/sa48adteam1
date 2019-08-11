@@ -139,7 +139,10 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
                 }
-                requisitionCatalogueService.CancelPendingRequisition(requisitionId);
+                if (requisitionCatalogueService.CancelPendingRequisition(requisitionId, currentUser.EmployeeId))
+                {
+                    return RedirectToAction("ViewRequisitionList");
+                }
                 return RedirectToAction("ViewRequisitionList");
             }
             return RedirectToAction("Index", "Login");
@@ -154,7 +157,7 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
                 }
-                requisitionCatalogueService.CancelWaitlistedRequisitionDetail(requisitionDetailId);
+                requisitionCatalogueService.CancelWaitlistedRequisitionDetail(requisitionDetailId, currentUser.EmployeeId);
                 return RedirectToAction("ViewRequisitionDetail",
                     new
                     {

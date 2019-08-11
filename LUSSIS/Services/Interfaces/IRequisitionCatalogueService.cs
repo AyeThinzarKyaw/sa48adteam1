@@ -39,9 +39,9 @@ namespace LUSSIS.Services.Interfaces
 
         Requisition ConvertCartDetailsToRequisitionDetails(int employeeId);
 
-        void CancelWaitlistedRequisitionDetail(int requisitionDetailId);
+        void CancelWaitlistedRequisitionDetail(int requisitionDetailId,int cancelledBy);
 
-        void CancelPendingRequisition(int requisitionId);
+        bool CancelPendingRequisition(int requisitionId, int cancelledBy);
 
         List<Requisition> GetSchoolRequisitionsWithEmployeeAndDept();
 
