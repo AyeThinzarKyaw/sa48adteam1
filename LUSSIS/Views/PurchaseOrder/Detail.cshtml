@@ -16,6 +16,9 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
+                    <div class="row">
+                        <label id="errMsg" class="text-danger"></label>
+                    </div>
                     <table>
                         <tr>
                             <td>Purchase Order ID</td>
@@ -115,7 +118,7 @@
                         </div>
                         <!-- If Supervisor -->
                     }
-                    
+
 
                 </div>
             </div>
@@ -145,7 +148,7 @@
                             window.location.href = '/PurchaseOrder/Index'
                         }
                         else {
-                            document.getElementById("errRemark").innerHTML = data[1];
+                            document.getElementById("errMsg").innerHTML = data[1];
                         }
                     },
                     error: function (data) { }

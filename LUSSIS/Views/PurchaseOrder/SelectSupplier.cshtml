@@ -151,7 +151,12 @@
                 async: true,
                 data: data,
                 success: function (result) {
-
+                    if (result == false) {
+                        document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
+                    }
+                    else {
+                        document.getElementById("errMsg").innerHTML = "";
+                    }
                 },
                 contentType: 'application/json'
             });
@@ -171,7 +176,12 @@
                 async: true,
                 data: data,
                 success: function (result) {
-
+                    if (result == false) {
+                        document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
+                    }
+                    else {
+                        document.getElementById("errMsg").innerHTML = "";
+                    }
                 },
                 contentType: 'application/json'
             });
@@ -196,7 +206,12 @@
                 async: true,
                 data: data,
                 success: function (result) {
-
+                    if (result == false) {
+                        document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
+                    }
+                    else {
+                        document.getElementById("errMsg").innerHTML = "";
+                    }
                 },
                 contentType: 'application/json'
             });
@@ -214,7 +229,12 @@
                 async: true,
                 data: data,
                 success: function (result) {
-
+                    if (result==false) {
+                        document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
+                    }
+                    else {
+                        document.getElementById("errMsg").innerHTML = "";
+                    }
                 },
                 contentType: 'application/json'
             });

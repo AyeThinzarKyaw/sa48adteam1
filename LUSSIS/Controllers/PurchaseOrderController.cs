@@ -142,7 +142,6 @@ namespace LUSSIS.Controllers
                     }
                     return Json(new object[] { false, "This purchase order does not exist." }, JsonRequestBehavior.AllowGet);
                 }
-
             }
             return Json(new object[] { false, "You don't have permission." }, JsonRequestBehavior.AllowGet);
         }
@@ -277,24 +276,32 @@ namespace LUSSIS.Controllers
         [Authorizer]
         public JsonResult UpdateReceivedQty(int podId, int qty, int poId)
         {
-            PurchaseOrder po = new PurchaseOrder();
-            if (TempData["DOReceivedQty"] == null)
+            if (Session["existinguser"] != null)
             {
-                po = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
-            }
-            else if (TempData["DOReceivedQty"] != null)
-            {
-                po = (PurchaseOrder)TempData["DOReceivedQty"];
-                TempData.Keep("DOReceivedQty");
-            }
-            if (po.Id == poId)
-            {
-                po.PurchaseOrderDetails.Single(x => x.Id == podId).QuantityDelivered = qty;
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk)
+                {
+                    PurchaseOrder po = new PurchaseOrder();
+                    if (TempData["DOReceivedQty"] == null)
+                    {
+                        po = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
+                    }
+                    else if (TempData["DOReceivedQty"] != null)
+                    {
+                        po = (PurchaseOrder)TempData["DOReceivedQty"];
+                        TempData.Keep("DOReceivedQty");
+                    }
+                    if (po.Id == poId)
+                    {
+                        po.PurchaseOrderDetails.Single(x => x.Id == podId).QuantityDelivered = qty;
 
-                TempData["DOReceivedQty"] = po;
-            }
+                        TempData["DOReceivedQty"] = po;
+                    }
 
-            return Json(true, JsonRequestBehavior.AllowGet);
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -442,7 +449,7 @@ namespace LUSSIS.Controllers
         }
 
 
-        
+
         //By ATZK
         [Authorizer]
         [HttpPost]
@@ -464,7 +471,7 @@ namespace LUSSIS.Controllers
 
                     if (poCreateDTO.SelectedItems.Where(s => s.CategoryId != 0 && s.Status == "confirmed").Count() > 0)
                     {
-                        PurchaseOrderService.Instance.RaisePO(poCreateDTO,currentUser.EmployeeId);
+                        PurchaseOrderService.Instance.RaisePO(poCreateDTO, currentUser.EmployeeId);
                         TempData["PO"] = null;
                         return Json(new object[] { true, null }, JsonRequestBehavior.AllowGet);
                     }
@@ -479,7 +486,7 @@ namespace LUSSIS.Controllers
 
         }
 
-        
+
         //By ATZK
         [Authorizer]
         [HttpPost]
@@ -501,7 +508,7 @@ namespace LUSSIS.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         //By ATZK
         [Authorizer]
         [HttpPost]
@@ -528,7 +535,7 @@ namespace LUSSIS.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         //By ATZK
         [Authorizer]
         [HttpPost]
@@ -558,7 +565,7 @@ namespace LUSSIS.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         //By ATZK
         [Authorizer]
         [HttpPost]

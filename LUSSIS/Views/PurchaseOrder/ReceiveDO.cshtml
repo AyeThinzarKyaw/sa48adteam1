@@ -19,7 +19,7 @@
         @if (Model.Error != null && Model.Error.HasError == true && Model.Error.Message != null)
         {
             <div class="row">
-                <label class="text-danger">@Model.Error.Message</label>
+                <label id="errMsg" class="text-danger">@Model.Error.Message</label>
             </div>
         }
 
@@ -129,7 +129,12 @@
                 type: "GET",
                 async: true,
                 success: function (data) {
-                   
+                    if (data == false) {
+                        document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
+                    }
+                    else {
+                        document.getElementById("errMsg").innerHTML = "";
+                    }
                 },
                 error: function (data) { }
             });
