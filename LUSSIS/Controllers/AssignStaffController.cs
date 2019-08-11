@@ -20,7 +20,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId == (int)Enums.Roles.DepartmentCoverHead)
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead && currentUser.RoleId == (int)Enums.Roles.DepartmentCoverHead)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
                 }
@@ -135,6 +135,7 @@ namespace LUSSIS.Controllers
             return RedirectToAction("Index", "Login");
         }
 
+        [Authorizer]
         public ActionResult CancelCoverStaff(int coverId)
         {
             if (Session["existinguser"] != null)
@@ -151,7 +152,7 @@ namespace LUSSIS.Controllers
             }
             return RedirectToAction("Index", "Login");
         }
-
+        [Authorizer]
         private DepartmentCoverEmployee generateCoverEmployeeDetails(AssignCoverDTO assignstaff)
         {
             DepartmentCoverEmployee coverdetails = new DepartmentCoverEmployee();
