@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Filters;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using System;
@@ -12,95 +13,143 @@ namespace LUSSIS.Controllers
 {
     public class AssignStaffController : Controller
     {
+        [Authorizer]
         // GET: AssignDeptRep
-        public ActionResult AssignDeptRep(LoginDTO loginDTO)
+        public ActionResult AssignDeptRep()
         {
-            int eId = loginDTO.EmployeeId;
-            AssignDeptRepDTO assignstaff = new AssignDeptRepDTO();
-            assignstaff.LoginDTO = loginDTO;
-            //to change 1 to eId
-            Employee deptrep = AssignStaffService.Instance.GetDeptRep(1);
-            assignstaff.DeptRep = deptrep;
-            assignstaff.StaffAndDeptRep = AssignStaffService.Instance.GetAllStaffAndRepInDept(deptrep.DepartmentId);
-            return View(assignstaff);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId == (int)Enums.Roles.DepartmentCoverHead)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                }
+
+                int eId = currentUser.EmployeeId;
+                AssignDeptRepDTO assignstaff = new AssignDeptRepDTO();
+                //assignstaff.LoginDTO = loginDTO;
+                //to change 1 to eId
+                Employee deptrep = AssignStaffService.Instance.GetDeptRep(eId);
+                assignstaff.DeptRep = deptrep;
+                assignstaff.StaffAndDeptRep = AssignStaffService.Instance.GetAllStaffAndRepInDept(deptrep.DepartmentId);
+                return View(assignstaff);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         [HttpPost]
         public ActionResult AssignDeptRep(AssignDeptRepDTO assignstaff)
         {
-            //int eId = assignstaff.LoginDTO.EmployeeId;
-            //to change 1 to eId
-            Employee oldrep = AssignStaffService.Instance.GetDeptRep(1);
-            AssignStaffService.Instance.UpdateStaff(oldrep);
-            Employee newrep = AssignStaffService.Instance.GetStaff(assignstaff.NewDeptRepId);
-            AssignStaffService.Instance.UpdateDeptRep(newrep);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId==(int)Enums.Roles.DepartmentCoverHead)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                }
+                int eId = currentUser.EmployeeId;
+                Employee oldrep = AssignStaffService.Instance.GetDeptRep(eId);
+                AssignStaffService.Instance.UpdateStaff(oldrep);
+                Employee newrep = AssignStaffService.Instance.GetStaff(assignstaff.NewDeptRepId);
+                AssignStaffService.Instance.UpdateDeptRep(newrep);
 
-            return RedirectToAction("AssignDeptRep", "AssignStaff");
+                return RedirectToAction("AssignDeptRep", "AssignStaff");
+            }
+            return RedirectToAction("Index", "Login");
         }
 
+        [Authorizer]
         // GET: AssignCoverStaff
-        public ActionResult AssignCoverStaff(LoginDTO loginDTO)
+        public ActionResult AssignCoverStaff()
         {
-            int eId = loginDTO.EmployeeId;
-            AssignCoverDTO assignstaff = new AssignCoverDTO();
-            assignstaff.LoginDTO = loginDTO;
-            //to change 1 to eId
-            Employee e = AssignStaffService.Instance.GetStaff(1);
-            assignstaff.StaffAndCoverHead = AssignStaffService.Instance.GetAllStaffAndCoverHeadInDept(e.DepartmentId);
-            assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
-            
-            return View(assignstaff);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                }
+                int eId = currentUser.EmployeeId;
+                AssignCoverDTO assignstaff = new AssignCoverDTO();
+
+                Employee e = AssignStaffService.Instance.GetStaff(eId);
+                assignstaff.StaffAndCoverHead = AssignStaffService.Instance.GetAllStaffAndCoverHeadInDept(e.DepartmentId);
+                assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
+
+                return View(assignstaff);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         [HttpPost]
         public ActionResult AssignCoverStaff(AssignCoverDTO assignstaff)
         {
-            IEnumerable<DepartmentCoverEmployee> existing = AssignStaffService.Instance.GetExistingDepartmentCoverEmployeesWithinDateRange(assignstaff.FromDate, assignstaff.ToDate);
-            DepartmentCoverEmployee newcoverdetails = generateCoverEmployeeDetails(assignstaff);
 
-           //int eId = assignstaff.LoginDTO.EmployeeId;
-            //to change 1 to eId
-            Employee e = AssignStaffService.Instance.GetStaff(1);
-            assignstaff.StaffAndCoverHead = AssignStaffService.Instance.GetAllStaffAndCoverHeadInDept(e.DepartmentId);
-            assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
-            
-            //assuming Head can only assign earliest fromdate from next day
-            if (existing.Count() > 0 || assignstaff.ToDate < assignstaff.FromDate || assignstaff.FromDate < DateTime.Now || assignstaff.ToDate < DateTime.Now || assignstaff.ToDate == assignstaff.FromDate)
+
+            if (Session["existinguser"] != null)
             {
-                assignstaff.Error = new ErrorDTO();
-                assignstaff.Error.HasError = true;
-                assignstaff.Error.Message = "";
-
-                if (assignstaff.ToDate < assignstaff.FromDate || assignstaff.FromDate < DateTime.Now || assignstaff.ToDate < DateTime.Now || assignstaff.ToDate == assignstaff.FromDate)
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
                 {
-                    assignstaff.Error.Message += "Valid From and To Dates required. ";
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
                 }
-                if (existing.Count() > 0 && assignstaff.ToDate != assignstaff.FromDate && assignstaff.FromDate < assignstaff.ToDate && assignstaff.FromDate > DateTime.Now)
+                IEnumerable<DepartmentCoverEmployee> existing = AssignStaffService.Instance.GetExistingDepartmentCoverEmployeesWithinDateRange(assignstaff.FromDate, assignstaff.ToDate);
+                DepartmentCoverEmployee newcoverdetails = generateCoverEmployeeDetails(assignstaff);
+
+                Employee e = AssignStaffService.Instance.GetStaff(currentUser.EmployeeId);
+                assignstaff.StaffAndCoverHead = AssignStaffService.Instance.GetAllStaffAndCoverHeadInDept(e.DepartmentId);
+                assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
+
+                //assuming Head can only assign earliest fromdate from next day
+                if (existing.Count() > 0 || assignstaff.ToDate < assignstaff.FromDate || assignstaff.FromDate < DateTime.Now || assignstaff.ToDate < DateTime.Now)
                 {
-                    assignstaff.Error.Message += "There is already a cover staff assigned within this date range.";
+                    assignstaff.Error = new ErrorDTO();
+                    assignstaff.Error.HasError = true;
+                    assignstaff.Error.Message = "";
+
+                    if (assignstaff.ToDate < assignstaff.FromDate || assignstaff.FromDate < DateTime.Now || assignstaff.ToDate < DateTime.Now)
+                    {
+                        assignstaff.Error.Message += "Valid From and To Dates required. ";
+                    }
+                    if (existing.Count() > 0 && assignstaff.ToDate != assignstaff.FromDate && assignstaff.FromDate < assignstaff.ToDate && assignstaff.FromDate > DateTime.Now)
+                    {
+                        assignstaff.Error.Message += "There is already a cover staff assigned within this date range.";
+                    }
+
+
+                    return View(assignstaff);
                 }
 
+                else
+                {
+                    AssignStaffService.Instance.CreateDepartmentCoverEmployee(newcoverdetails);
+                    newcoverdetails.Employee = AssignStaffService.Instance.GetStaff(newcoverdetails.EmployeeId);
+                    assignstaff.StaffAndCoverHead = AssignStaffService.Instance.GetAllStaffAndCoverHeadInDept(e.DepartmentId);
+                    assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
 
-                return View(assignstaff);
+                    return View(assignstaff);
+
+                }
+
             }
-
-            else
-            {
-                AssignStaffService.Instance.CreateDepartmentCoverEmployee(newcoverdetails);
-
-                return RedirectToAction("AssignCoverStaff", "AssignStaff");
-
-            }
-
-
+            return RedirectToAction("Index", "Login");
         }
 
         public ActionResult CancelCoverStaff(int coverId)
         {
-            DepartmentCoverEmployee cover = AssignStaffService.Instance.GetDepartmentCoverEmployeeById(coverId);
-            AssignStaffService.Instance.CancelDepartmentCoverEmployee(cover);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                }
+                DepartmentCoverEmployee cover = AssignStaffService.Instance.GetDepartmentCoverEmployeeById(coverId);
+                AssignStaffService.Instance.CancelDepartmentCoverEmployee(cover);
 
-            return RedirectToAction("AssignCoverStaff", "AssignStaff");
+                return RedirectToAction("AssignCoverStaff", "AssignStaff");
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         private DepartmentCoverEmployee generateCoverEmployeeDetails(AssignCoverDTO assignstaff)

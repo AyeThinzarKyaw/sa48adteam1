@@ -509,17 +509,13 @@
     <Content Include="Views\AdjustmentVoucher\Create.cshtml" />
     <Content Include="Views\AdjustmentVoucher\Detail.cshtml" />
     <Content Include="Views\AdjustmentVoucher\Index.cshtml" />
-    <Content Include="Views\Assign\AssignClerk.cshtml" />
     <Content Include="Views\PurchaseOrder\Detail.cshtml" />
     <Content Include="Views\PurchaseOrder\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Requisition\ViewCatalogue.cshtml" />
-    <Content Include="Views\Assign\AssignCollectionPoint.cshtml" />
     <Content Include="Views\Disbursement\Index.cshtml" />
     <Content Include="Views\Disbursement\Detail.cshtml" />
     <Content Include="Views\Chart\InventoryHistoricalData.cshtml" />
-    <Content Include="Views\Assign\AssignCoverStaff.cshtml" />
-    <Content Include="Views\Assign\AssignDeptRep.cshtml" />
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Detail.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />

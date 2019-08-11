@@ -40,12 +40,12 @@ namespace LUSSIS.Services
 
         public void UpdateStaff(Employee e)
         {
-            e.RoleId = 2;
+            e.RoleId = (int)Enums.Roles.DepartmentStaff;
             EmployeeRepo.Instance.Update(e);
         }
         public void UpdateDeptRep(Employee e)
         {
-            e.RoleId = 3;
+            e.RoleId = (int)Enums.Roles.DepartmentRepresentative;
             EmployeeRepo.Instance.Update(e);
         }
 

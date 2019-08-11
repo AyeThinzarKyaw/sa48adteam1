@@ -7,7 +7,7 @@ namespace LUSSIS.Models.DTOs
 {
     public class AssignCoverDTO
     {
-        public LoginDTO LoginDTO { get; set; }
+        
         public ErrorDTO Error { get; set; }
 
         public IEnumerable<Employee> StaffAndCoverHead { get; set; }
