@@ -19,7 +19,7 @@ namespace LUSSIS.Services
         private IEmployeeRepo employeeRepo;
         private static EmailNotificationService instance = new EmailNotificationService();
 
-        private EmailNotificationService()
+        public EmailNotificationService()
         {
             employeeRepo = EmployeeRepo.Instance;
         }
