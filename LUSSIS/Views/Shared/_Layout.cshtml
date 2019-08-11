@@ -11,7 +11,13 @@
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", required: false)
 </head>
-
+@{
+    int role = 0;
+    if (Session["role"] != null)
+    {
+        role = (int)Session["role"];
+    }
+}
 <body class="hold-transition skin-blue sidebar-mini" style="padding: 0 !important;">
     <div class="wrapper">
         <header class="main-header">
@@ -80,21 +86,56 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVICATION</li>
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                    <li class="active">
-                        <a href="../Staff/catalog.html">
+                    <li>
+                        <a href="/Requisition/ViewCatalogue">
                             <i class="fa fa-book"></i> <span>Catalogue</span>
                         </a>
                     </li>
                     <li>
-                        <a href="requisition-history.html">
+                        <a href="/Requisition/Index">
                             <i class="fa fa-list"></i> <span>My Requisition History</span>
                         </a>
                     </li>
+                    @if (role == 3)
+                    {
+                        <li class="header">DEP REP FUNCTION</li>
+                        <li>
+                            <a href="/Disbursement/Index">
+                                <i class="fa fa-shopping-cart"></i> <span>Disbursement List</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (role == 1 || role == 4)
+                    {
+                        <li class="header">ADMINISTRATION</li>
+                        <li>
+                            <a href="/Requisition/ViewRequisitionList">
+                                <i class="fa fa-list"></i> <span>Requested Requisition</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/CollectionPoint/AssignCollectionPoint">
+                                <i class="fa fa-building"></i> <span>Collection Point</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/AssignStaff/AssignDeptRep">
+                                <i class="fa fa-user"></i> <span>Assign Dept Representative</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 1)
+                    {
+                        <li>
+                            <a href="/AssignStaff/AssignCoverStaff">
+                                <i class="fa fa-user"></i> <span>Assign Cover Staff</span>
+                            </a>
+                        </li>
+                    }
+                    <li class="header">OTHERS</li>
                     <li>
-                        <a href="login.html">
+                        <a href="/Login/Logout">
                             <i class="fa fa-sign-out"></i> <span>Logout</span>
                         </a>
                     </li>

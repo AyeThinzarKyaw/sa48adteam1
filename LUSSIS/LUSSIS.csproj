@@ -156,6 +156,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MachineLearningController.cs" />
     <Compile Include="Controllers\MobileDisbursementController.cs" />
+    <Compile Include="Controllers\MobileRetrievalController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MobileLoginController.cs" />
@@ -206,6 +207,9 @@
     <Compile Include="Models\MobileDTOs\RequisitionDetailDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionListDTO.cs" />
+    <Compile Include="Models\MobileDTOs\RetrievalDTO.cs" />
+    <Compile Include="Models\MobileDTOs\RetrievalItemDTO.cs" />
+    <Compile Include="Models\MobileDTOs\RetrievalPrepItemDTO.cs" />
     <Compile Include="Models\MobileDTOs\StationeryDTO.cs" />
     <Compile Include="Models\DTOs\OwedItemDTO.cs" />
     <Compile Include="Models\DTOs\AdHocRetrievalMenuDTO.cs" />
