@@ -84,8 +84,6 @@ namespace LUSSIS.Controllers
         [HttpPost]
         public ActionResult AssignCoverStaff(AssignCoverDTO assignstaff)
         {
-
-
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
@@ -115,11 +113,8 @@ namespace LUSSIS.Controllers
                     {
                         assignstaff.Error.Message += "There is already a cover staff assigned within this date range.";
                     }
-
-
                     return View(assignstaff);
                 }
-
                 else
                 {
                     AssignStaffService.Instance.CreateDepartmentCoverEmployee(newcoverdetails);
@@ -128,9 +123,7 @@ namespace LUSSIS.Controllers
                     assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
 
                     return View(assignstaff);
-
                 }
-
             }
             return RedirectToAction("Index", "Login");
         }
@@ -162,8 +155,6 @@ namespace LUSSIS.Controllers
             coverdetails.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
 
             return coverdetails;
-
-
         }
     }
 }
