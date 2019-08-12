@@ -86,16 +86,19 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVICATION</li>
-                    <li>
-                        <a href="/Requisition/ViewCatalogue">
-                            <i class="fa fa-book"></i> <span>Catalogue</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Requisition/Index">
-                            <i class="fa fa-list"></i> <span>My Requisition History</span>
-                        </a>
-                    </li>
+                    @if (role == 1 || role == 2 || role == 3 || role == 4)
+                    {
+                        <li>
+                            <a href="/Requisition/ViewCatalogue">
+                                <i class="fa fa-book"></i> <span>Catalogue</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Requisition/Index">
+                                <i class="fa fa-list"></i> <span>My Requisition History</span>
+                            </a>
+                        </li>
+                    }
                     @if (role == 3)
                     {
                         <li class="header">DEP REP FUNCTION</li>
@@ -130,6 +133,86 @@
                         <li>
                             <a href="/AssignStaff/AssignCoverStaff">
                                 <i class="fa fa-user"></i> <span>Assign Cover Staff</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 5)
+                    {
+                        <li>
+                            <a href="/Stationery/Index">
+                                <i class="fa fa-book"></i> <span>Manage Catalogue</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Supplier/Index">
+                                <i class="fa fa-gavel"></i> <span>Manage Supplier</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 5 || role == 6)
+                    {
+                        <li>
+                            <a href="/AdjustmentVoucher/Index">
+                                <i class="fa fa-clone"></i> <span>Adjustment Voucher</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/PurchaseOrder/Index">
+                                <i class="fa fa-shopping-cart"></i> <span>Purchase Order</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/CollectionPoint/AssignClerk">
+                                <i class="fa fa-user"></i> <span>Assign Clerk</span>
+                            </a>
+                        </li>
+                        <li class="header">ANALYSIS</li>
+                        <li>
+                            <a href="store-inventory-historial-data.html">
+                                <i class="fa fa-bar-chart"></i> <span>Store Inventory Historial Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="requisition-trend.html">
+                                <i class="fa fa-bar-chart"></i> <span>Requisition Trend</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 7)
+                    {
+                        <li>
+                            <a href="/Retrieval/Index">
+                                <i class="fa fa-building"></i> <span>Retrieval List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Disbursement/Index">
+                                <i class="fa fa-building"></i> <span>Disbursement List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/ClerkRequisitions/ViewOwedItems">
+                                <i class="fa fa-font-awesome"></i> <span>Owed Items</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Inventory/ViewInventoryList">
+                                <i class="fa fa-book"></i> <span>View Inventory Items</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/ClerkRequisitions/ViewSchoolRequisitions">
+                                <i class="fa fa-list"></i> <span>View Requisitions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/PurchaseOrder/Index">
+                                <i class="fa fa-shopping-cart"></i> <span>Purchase Order</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/AdjustmentVoucher/Index">
+                                <i class="fa fa-clone"></i> <span>My Adjustment Vouchers</span>
                             </a>
                         </li>
                     }
