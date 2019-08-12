@@ -1,5 +1,5 @@
 ﻿@model LUSSIS.Models.DTOs.DisbursementListDTO
-
+@using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Index";
 }
@@ -9,14 +9,14 @@
         Disbursement List
     </h1>
 </section>
-
+@{LoginDTO loginDto = (LoginDTO)Session["existinguser"];}
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <div class="col-xs-12"> 
+        <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    @if (Model.LoginDTO.EmployeeId == Model.ReceivedEmployeeId)
+                    @if (loginDto.EmployeeId == Model.ReceivedEmployeeId)
                     {
                         <table id="table" class="table table-bordered table-hover">
                             <thead>
@@ -47,14 +47,14 @@
                                         }
                                         <td>
                                             <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.DisbursementId})'" />
+                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new {@DisbursementId = dl.DisbursementId})'" />
                                         </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     }
-                    else if (Model.LoginDTO.EmployeeId == Model.DeliveredEmployeeId)
+                    else if (loginDto.EmployeeId == Model.DeliveredEmployeeId)
                     {
                         <table id="table" class="table table-bordered table-hover">
                             <thead>
@@ -89,7 +89,7 @@
                                         }
                                         <td>
                                             <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.DisbursementId})'" />
+                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @DisbursementId = dl.DisbursementId})'" />
                                         </td>
                                     </tr>
                                 }

@@ -1,5 +1,5 @@
 ﻿@model LUSSIS.Models.DTOs.DisbursementListDTO
-
+@using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Detail";
     var ClerkItemDetails = Model.disbursementDTOList.GroupBy(g => new { g.DisbursementId, g.StationeryId, g.ItemCode, g.Category, g.ItemName, g.UnitOfMeasure }).Select(
@@ -23,14 +23,14 @@
         Disbursement Details
     </h1>
 </section>
-
+@{LoginDTO loginDto = (LoginDTO)Session["existinguser"];}
 <!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    @if (Model.LoginDTO.EmployeeId == Model.DeliveredEmployeeId)
+                    @if (loginDto.EmployeeId == Model.DeliveredEmployeeId)
                     {
                         <div class="row">
                             <div class="col-md-6">
@@ -144,7 +144,7 @@
                             </tbody>
                         </table>
                     }
-                    else if (Model.LoginDTO.EmployeeId == Model.ReceivedEmployeeId)
+                    else if (loginDto.EmployeeId == Model.ReceivedEmployeeId)
                     {
                         <div class="row">
                             <div class="col-md-6">

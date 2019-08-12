@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LUSSIS.Filters;
 
 namespace LUSSIS.Controllers
 {
@@ -17,47 +18,67 @@ namespace LUSSIS.Controllers
         DisbursementService disbursementService;
 
         // GET: Disbursement
-        public ActionResult Index(LoginDTO LoginDTO)
+        [Authorizer]
+        public ActionResult Index()
         {
-            LoginDTO.EmployeeId = 15; //hard coded ID
-            disbursementService = new DisbursementService();
-            List<DisbursementListDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(LoginDTO.EmployeeId);
-            List<DisbursementListDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(LoginDTO.EmployeeId);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.DepartmentRepresentative)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
 
-            if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == LoginDTO.EmployeeId))
-            {
-                DisbursementListDTO model = new DisbursementListDTO { LoginDTO = LoginDTO, disbursementDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = LoginDTO.EmployeeId };
-                return View(model);
+                disbursementService = new DisbursementService();
+                List<DisbursementListDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementListDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
+
+                if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == currentUser.EmployeeId))
+                {
+                    DisbursementListDTO model = new DisbursementListDTO { disbursementDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId };
+                    return View(model);
+                }
+                else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
+                {
+                    DisbursementListDTO model = new DisbursementListDTO { disbursementDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId };
+                    return View(model);
+                }
+                else return View();
             }
-            else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == LoginDTO.EmployeeId))
-            {
-                DisbursementListDTO model = new DisbursementListDTO { LoginDTO = LoginDTO, disbursementDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = LoginDTO.EmployeeId };
-                return View(model);
-            }
-            else return View();
+            return RedirectToAction("Index", "Login");
         }
 
-        public ActionResult Detail(LoginDTO LoginDTO, int DisbursementId)
+        [Authorizer]
+        public ActionResult Detail(int DisbursementId)
         {
-            LoginDTO.EmployeeId = 15; //hard coded ID
-            disbursementService = new DisbursementService();
-            List<DisbursementListDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(LoginDTO.EmployeeId);
-            List<DisbursementListDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(LoginDTO.EmployeeId);
-
-
-            if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == LoginDTO.EmployeeId))
+            if (Session["existinguser"] != null)
             {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.DepartmentRepresentative)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+               
+                disbursementService = new DisbursementService();
+                List<DisbursementListDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementListDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
 
-                DisbursementListDTO model = new DisbursementListDTO { LoginDTO = LoginDTO, disbursementDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = LoginDTO.EmployeeId, DisbursementId = DisbursementId };
-                return View(model);
-            }
-            else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == LoginDTO.EmployeeId))
-            {
 
-                DisbursementListDTO model = new DisbursementListDTO { LoginDTO = LoginDTO, disbursementDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = LoginDTO.EmployeeId, DisbursementId = DisbursementId };
-                return View(model);
+                if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == currentUser.EmployeeId))
+                {
+
+                    DisbursementListDTO model = new DisbursementListDTO {  disbursementDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId, DisbursementId = DisbursementId };
+                    return View(model);
+                }
+                else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
+                {
+
+                    DisbursementListDTO model = new DisbursementListDTO {disbursementDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId, DisbursementId = DisbursementId };
+                    return View(model);
+                }
+                else return View();
             }
-            else return View();
+            return RedirectToAction("Index", "Login");
         }
     }
 }
