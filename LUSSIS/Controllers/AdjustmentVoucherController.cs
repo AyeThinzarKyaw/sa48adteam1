@@ -107,7 +107,7 @@ namespace LUSSIS.Controllers
                 }
 
                 adjDTO.Stationeries = StationeryService.Instance.GetAllStationeries();
-                return View(adjDTO);
+                return RedirectToAction("Detail", "AdjustmentVoucher", new { @adjId = adjDTO.adjustmentVoucher.Id });
             }
             return RedirectToAction("Index", "Login");
         }
@@ -225,6 +225,24 @@ namespace LUSSIS.Controllers
             return RedirectToAction("Index", "Login");
         }
 
+        [Authorizer]
+        public ActionResult Remove(int adjdId)
+        {
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor && currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                AdjustmentVoucherDetail adjd = AdjustmentVoucherService.Instance.getAdjustmentVoucherDetailById(adjdId);
+
+                AdjustmentVoucherService.Instance.DeleteAdjustmentVoucherDetail(adjd);
+
+                return RedirectToAction("Detail", "AdjustmentVoucher", new { @adjId = adjd.AdjustmentVoucherId });
+            }
+            return RedirectToAction("Index", "Login");
+        }
     }
 
 }

@@ -43,8 +43,8 @@ namespace LUSSIS.Repositories
                     join st in Context.SupplierTenders on s.Id equals st.StationeryId
                     where avd.AdjustmentVoucherId == adjId
                     where st.Rank == 1
-                    select st.Price).Sum();
-            return total;
+                    select st.Price * avd.Quantity).Sum();
+                return total;
         }
 
         //public AdjustmentVoucher FindByStatusAndEmployeeId(int clerkId)

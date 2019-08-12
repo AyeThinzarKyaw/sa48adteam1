@@ -45,21 +45,95 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="../images/manager.png" class="user-image" alt="User Image" style="object-fit: cover;">
-                                <span class="hidden-xs">Staff</span>
+                                @if (role == 1)
+                                {
+                                    <span class="hidden-xs">Department Head</span>
+                                }
+                                else if (role == 2)
+                                {
+                                    <span class="hidden-xs">Staff</span>
+                                }
+                                else if (role == 3)
+                                {
+                                    <span class="hidden-xs">Department Representative</span>
+                                }
+                                else if (role == 4)
+                                {
+                                    <span class="hidden-xs">Cover Staff</span>
+                                }
+                                else if (role == 5)
+                                {
+                                    <span class="hidden-xs">Store Manager</span>
+                                }
+                                else if (role == 6)
+                                {
+                                    <span class="hidden-xs">Store Supervisor</span>
+                                }
+                                else if (role == 7)
+                                {
+                                    <span class="hidden-xs">Store Clerk</span>
+                                }
+
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
                                     <img src="../images/manager.png" class="img-circle" alt="User Image" style="object-fit: cover;">
-                                    <p>
-                                        Staff<br />
-                                        (Department of Registrar)
-                                    </p>
+
+                                    @if (role == 1)
+                                    {
+                                        <p>
+                                            Department Head<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 2)
+                                    {
+                                        <p>
+                                            Staff<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 3)
+                                    {
+                                        <p>
+                                            Department Representative<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 4)
+                                    {
+                                        <p>
+                                            Cover Staff<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 5)
+                                    {
+                                        <p>
+                                            Store Manager<br />
+                                            (Department of Store)
+                                        </p>
+                                    }
+                                    else if (role == 6)
+                                    {
+                                        <p>
+                                            Store Supervisor<br />
+                                            (Department of Store)
+                                        </p>
+                                    }
+                                    else if (role == 7)
+                                    {
+                                        <p>
+                                            Store Clerk<br />
+                                            (Department of Store)
+                                        </p>
+                                    }
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="login.html" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="/Login/Logout" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>
@@ -78,8 +152,42 @@
                         <img src="../images/manager.png" class="img-circle" alt="User Image" style="object-fit: cover; width: 35px; height: 35px;">
                     </div>
                     <div class="pull-left info">
-                        <p>Staff</p>
-                        <p style="font-size: 12px;">Department of Registrar</p>
+                        @if (role == 1)
+                        {
+                            <p>Department Head</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 2)
+                        {
+                            <p>Staff</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 3)
+                        {
+                            <p>Department Representative</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 4)
+                        {
+                            <p>Cover Staff</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 5)
+                        {
+                            <p>Store Manager</p>
+                            <p style="font-size: 12px;">Department of Store</p>
+                        }
+                        else if (role == 6)
+                        {
+                            <p>Store Supervisor</p>
+                            <p style="font-size: 12px;">Department of Store</p>
+                        }
+                        else if (role == 7)
+                        {
+                            <p>Store Clerk</p>
+                            <p style="font-size: 12px;">Department of Store</p>
+                        }
+
                     </div>
                 </div>
                 <br>

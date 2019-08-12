@@ -36,12 +36,14 @@ namespace LUSSIS.Repositories
 
         public T FindById(ID id)
         {
+            context = new LUSSISContext();
             return context.Set<T>().Find(id);
            
         }
 
         public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
+            context = new LUSSISContext();
             return context.Set<T>().Where(predicate).ToList();
         }
 
@@ -60,6 +62,7 @@ namespace LUSSIS.Repositories
 
         public T FindOneBy(Expression<Func<T, bool>> predicate)
         {
+            context = new LUSSISContext();
             return context.Set<T>().Where(predicate).SingleOrDefault();
 
         }
