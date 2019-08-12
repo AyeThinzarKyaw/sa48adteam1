@@ -22,7 +22,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 var suppliers = SupplierService.Instance.getAllSupplier().ToList();
                 return View(suppliers);
@@ -40,7 +40,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
                 return View(supplier);
@@ -58,7 +58,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 SupplierDetailsDTO supplier = new SupplierDetailsDTO();
                 return View(supplier);
@@ -77,7 +77,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 if (ModelState.IsValid)
                 {
@@ -101,7 +101,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 SupplierDetailsDTO supplierDetails = this.generateSupplierDetailsDTO(supplierId);
 
@@ -121,7 +121,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 if (ModelState.IsValid)
                 {
@@ -186,7 +186,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
                 if (supplier.Active == Convert.ToBoolean(Enums.ActiveStatus.ACTIVE))

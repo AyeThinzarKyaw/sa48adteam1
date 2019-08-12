@@ -22,7 +22,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead && currentUser.RoleId == (int)Enums.Roles.DepartmentCoverHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
 
                 int eId = currentUser.EmployeeId;
@@ -45,7 +45,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId==(int)Enums.Roles.DepartmentCoverHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 int eId = currentUser.EmployeeId;
                 Employee oldrep = AssignStaffService.Instance.GetDeptRep(eId);
@@ -67,7 +67,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 int eId = currentUser.EmployeeId;
                 AssignCoverDTO assignstaff = new AssignCoverDTO();
@@ -91,7 +91,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 IEnumerable<DepartmentCoverEmployee> existing = AssignStaffService.Instance.GetExistingDepartmentCoverEmployeesWithinDateRange(assignstaff.FromDate, assignstaff.ToDate);
                 DepartmentCoverEmployee newcoverdetails = generateCoverEmployeeDetails(assignstaff);
@@ -143,7 +143,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 DepartmentCoverEmployee cover = AssignStaffService.Instance.GetDepartmentCoverEmployeeById(coverId);
                 AssignStaffService.Instance.CancelDepartmentCoverEmployee(cover);

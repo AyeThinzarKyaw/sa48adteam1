@@ -21,7 +21,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
 
                 DepartmentCollectionPointDTO cpdetails = new DepartmentCollectionPointDTO();
@@ -48,7 +48,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 Department department = CollectionPointService.Instance.GetDepartmentByEmployeeId(currentUser.EmployeeId);
                 department.CollectionPointId = cpdetails.DepartmentCollectionPointId;
@@ -68,7 +68,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 ClerkCollectionPointDTO cpdetails = new ClerkCollectionPointDTO();
 
@@ -94,7 +94,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 IEnumerable<CollectionPoint> collectionPoints = CollectionPointService.Instance.GetAllCollectionPoints();
                 CollectionPoint cp1 = collectionPoints.Single(x => x.Id == 1);
