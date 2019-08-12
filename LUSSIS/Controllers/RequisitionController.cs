@@ -38,7 +38,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(currentUser.EmployeeId);
                 FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems };
@@ -78,7 +78,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 //convert all cart items into requsitiondetails for this requisition
                 Requisition newRequisition = requisitionCatalogueService.ConvertCartDetailsToRequisitionDetails(currentUser.EmployeeId);
@@ -100,7 +100,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 //Get all requsition from this employee
                 List<Requisition> requisitionHistory = requisitionCatalogueService.GetPersonalRequisitionHistory(currentUser.EmployeeId);
@@ -121,7 +121,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, currentUser.EmployeeId);
                 return View(model);
@@ -137,7 +137,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 if (requisitionCatalogueService.CancelPendingRequisition(requisitionId, currentUser.EmployeeId))
                 {
@@ -155,7 +155,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 requisitionCatalogueService.CancelWaitlistedRequisitionDetail(requisitionDetailId, currentUser.EmployeeId);
                 return RedirectToAction("ViewRequisitionDetail",

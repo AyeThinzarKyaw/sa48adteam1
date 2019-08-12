@@ -29,7 +29,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<Requisition> requisitions = requisitionCatalogueService.GetSchoolRequisitionsWithEmployeeAndDept();
                 //return requisitionsDTO model
@@ -46,7 +46,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForClerk(requisitionId);
                 //model.LoginDTO = loginDTO;
@@ -62,7 +62,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<DeptOwedItemDTO> deptOwedItems = requisitionCatalogueService.GetListOfDeptOwedItems();
                 return View(new VMOwedItemsDTO { DeptOwedItems = deptOwedItems });
