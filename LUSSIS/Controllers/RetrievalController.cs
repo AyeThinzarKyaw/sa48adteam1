@@ -65,7 +65,7 @@ namespace LUSSIS.Controllers
                 }
                 RetrievalDTO retrieval = (RetrievalDTO)TempData["RetrievalModel"];
                 LoginDTO loginDTO = currentUser;
-                retrievalService.completeRetrievalProcess(retrieval);
+                retrievalService.completeRetrievalProcess(retrieval,currentUser.EmployeeId);
 
                 return RedirectToAction("ViewRetrieval");
             }
