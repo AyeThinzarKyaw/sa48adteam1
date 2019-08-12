@@ -348,6 +348,7 @@
     <Compile Include="Services\Interfaces\IStationeryService.cs" />
     <Compile Include="Services\Interfaces\ISupplierService.cs" />
     <Compile Include="Services\Interfaces\ISupplierTenderService.cs" />
+    <Compile Include="Services\InventoryService.cs" />
     <Compile Include="Services\RetrievalService.cs" />
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\PurchaseOrderService.cs" />
@@ -526,8 +527,6 @@
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Detail.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />
-    <Content Include="Views\Inventory\Index.cshtml" />
-    <Content Include="Views\Inventory\Detail.cshtml" />
     <Content Include="Views\Owed\Index.cshtml" />
     <Content Include="Views\Requisition\ViewRequisitionList.cshtml" />
     <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />

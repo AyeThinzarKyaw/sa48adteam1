@@ -10,7 +10,6 @@ namespace LUSSIS.Models.DTOs
     {
         // hidden in View
         public int StationeryId { get; set; }
-        public LoginDTO LoginDTO { get; set; }
 
         public string ItemNumber { get; set; }
         public string Category { get; set; }

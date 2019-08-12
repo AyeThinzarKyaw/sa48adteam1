@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Filters;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
@@ -20,24 +21,40 @@ namespace LUSSIS.Controllers
             inventoryService = InventoryService.Instance;
         }
 
-        public ActionResult Index()
+
+        [Authorizer]
+        public ActionResult ViewInventoryList()
         {
-            return View();
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                List<InventoryListDTO> inventoryList = inventoryService.RetrieveStationeryAndCategory();
+                InventoryListRecordsDTO model = new InventoryListRecordsDTO { InventoryList = inventoryList };
+
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
-        public ActionResult ViewInventoryList(LoginDTO loginDTO)
+        [Authorizer]
+        public ActionResult ViewStockCardAndSuppliers(int stationeryId)
         {
-            List<InventoryListDTO> inventoryList = inventoryService.RetrieveStationeryAndCategory();
-            InventoryListRecordsDTO model = new InventoryListRecordsDTO { InventoryList = inventoryList, LoginDTO = loginDTO };
-
-            return View(model);
-        }
-
-        public ActionResult ViewStockCardAndSuppliers(LoginDTO loginDTO, int stationeryId)
-        {
-            StockAndSupplierDTO model = inventoryService.RetrieveStockMovement(stationeryId);
-            model.LoginDTO = loginDTO;
-            return View(model);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                StockAndSupplierDTO model = inventoryService.RetrieveStockMovement(stationeryId);
+               
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
 
