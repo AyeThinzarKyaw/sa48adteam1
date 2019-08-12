@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Filters;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
@@ -20,24 +21,26 @@ namespace LUSSIS.Controllers
             retrievalService = RetrievalService.Instance;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        [Authorizer]
         public ActionResult ViewRetrieval()
         {
-            LoginDTO loginDTO = new LoginDTO();
-            loginDTO.EmployeeId = 11;
-            RetrievalDTO model = retrievalService.constructRetrievalDTO(loginDTO);
-            model.LoginDTO = loginDTO;
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
 
-            TempData["RetrievalModel"] = model;
-
-            return View(model);
+                RetrievalDTO model = retrievalService.constructRetrievalDTO(currentUser);
+                TempData["RetrievalModel"] = model;
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
 
+        [Authorizer]
         public JsonResult UpdateRetrievalQuantity(int stationeryId, int quantity)
         {
             RetrievalDTO model = (RetrievalDTO)TempData["RetrievalModel"];
@@ -49,30 +52,49 @@ namespace LUSSIS.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorizer]
         [HttpGet]
         public ActionResult SubmitRetrieval()
         {
-            RetrievalDTO retrieval = (RetrievalDTO)TempData["RetrievalModel"];
-            LoginDTO loginDTO = retrieval.LoginDTO;
-            retrievalService.completeRetrievalProcess(retrieval);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                RetrievalDTO retrieval = (RetrievalDTO)TempData["RetrievalModel"];
+                LoginDTO loginDTO = currentUser;
+                retrievalService.completeRetrievalProcess(retrieval);
 
-            return RedirectToAction("ViewRetrieval");
+                return RedirectToAction("ViewRetrieval");
+            }
+            return RedirectToAction("Index", "Login");
         }
 
 
-        public ActionResult ViewAdHocRetrievalMenu(LoginDTO loginDTO)
+        [Authorizer]
+        public ActionResult ViewAdHocRetrievalMenu()
         {
-            loginDTO.EmployeeId = 11;
-            AdHocRetrievalMenuDTO model = retrievalService.generateAdHocRetrievalMenuDTO();
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
 
-            model.LoginDTO = loginDTO;
+                AdHocRetrievalMenuDTO model = retrievalService.generateAdHocRetrievalMenuDTO();
 
-            TempData["AdHocRetrievalMenuModel"] = model;
+                TempData["AdHocRetrievalMenuModel"] = model;
 
-            return View(model);
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
 
+        [Authorizer]
         public JsonResult SelectRetrievalId(int requisitionId)
         {
             AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
@@ -85,34 +107,50 @@ namespace LUSSIS.Controllers
         }
 
 
+        [Authorizer]
         [HttpGet]
         public ActionResult RetrieveSelectedAdHocRetrieval()
         {
-            AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
 
-            RetrievalDTO rtM = new RetrievalDTO() { LoginDTO = model.LoginDTO, AdHocRetrievalId = model.requisitionId };
-            //TempData["rtM"] = rtM;
+                RetrievalDTO rtM = new RetrievalDTO() { AdHocRetrievalId = model.requisitionId };
+                //TempData["rtM"] = rtM;
 
-            return RedirectToAction("ViewSelectedAdHocRetrieval",new { @requisitionId = model.requisitionId });
+                return RedirectToAction("ViewSelectedAdHocRetrieval", new { @requisitionId = model.requisitionId });
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         // to code
 
+        [Authorizer]
         public ActionResult ViewSelectedAdHocRetrieval(int requisitionId)
         {
-            //RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                //RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
 
-            LoginDTO loginDTO = new LoginDTO() ;
-            loginDTO.EmployeeId = 11;
+                //int requisitionId = requisitionId;
 
-            //int requisitionId = requisitionId;
+                RetrievalDTO model = retrievalService.constructAdHocRetrievalDTO(currentUser, requisitionId);
+                
+                TempData["RetrievalModel"] = model;
 
-            RetrievalDTO model = retrievalService.constructAdHocRetrievalDTO(loginDTO, requisitionId);
-            model.LoginDTO = loginDTO;
-
-            TempData["RetrievalModel"] = model;
-
-            return View(model);
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
 

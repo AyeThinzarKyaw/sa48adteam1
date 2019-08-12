@@ -154,6 +154,7 @@
     <Compile Include="Controllers\DeptHeadController.cs" />
     <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\MachineLearningController.cs" />
     <Compile Include="Controllers\MobileDisbursementController.cs" />
     <Compile Include="Controllers\MobileRetrievalController.cs" />
@@ -528,8 +529,6 @@
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Inventory\Detail.cshtml" />
     <Content Include="Views\Owed\Index.cshtml" />
-    <Content Include="Views\Retrieval\Index.cshtml" />
-    <Content Include="Views\Retrieval\Detail.cshtml" />
     <Content Include="Views\Requisition\ViewRequisitionList.cshtml" />
     <Content Include="Views\Requisition\ViewRequisitionDetail.cshtml" />
     <Content Include="Views\DeptHead\ReviewRequisitionDetails.cshtml" />
