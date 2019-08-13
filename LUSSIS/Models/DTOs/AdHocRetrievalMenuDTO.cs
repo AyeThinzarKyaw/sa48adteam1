@@ -9,7 +9,6 @@ namespace LUSSIS.Models.DTOs
     public class AdHocRetrievalMenuDTO
     {
         //hidden
-        public LoginDTO LoginDTO { get; set; }
 
         public List<AdHocDeptAndRetrievalDTO> departmentAndRetrieval { get; set; }
 

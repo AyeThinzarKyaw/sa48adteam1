@@ -14,6 +14,8 @@ namespace LUSSIS.Services.Interfaces
 
         AdjustmentVoucher getAdjustmentVoucherById(int adjId);
 
+        AdjustmentVoucherDetail getAdjustmentVoucherDetailById(int adjdId);
+
         AdjustmentVoucher getOpenAdjustmentVoucherByClerk(int clerkId);
 
         void CreateAdjustmentVoucher(AdjustmentVoucher adj);
@@ -21,6 +23,8 @@ namespace LUSSIS.Services.Interfaces
         void CreateAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail);
 
         void UpdateAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail);
+
+        void DeleteAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail);
 
         void UpdateAdjustmentVoucher(AdjustmentVoucher adj);
 

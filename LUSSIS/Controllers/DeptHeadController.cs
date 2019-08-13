@@ -30,7 +30,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<Requisition> deptReqs = requisitionManagementService.GetDepartmentRequisitions(currentUser.EmployeeId);
                 RequisitionsDTO model = new RequisitionsDTO() { Requisitions = deptReqs };
@@ -48,7 +48,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, currentUser.EmployeeId);
                 //model.LoginDTO = loginDTO;
@@ -65,7 +65,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 requisitionManagementService.ApproveRejectPendingRequisition(viewModel.RequisitionFormId, button, viewModel.Remarks);
                 return RedirectToAction("ViewDepartmentRequisitions");

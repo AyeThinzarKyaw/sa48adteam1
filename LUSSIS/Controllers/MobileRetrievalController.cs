@@ -107,7 +107,7 @@ namespace LUSSIS.Controllers
                 r.RetrievalItem.Add(ri);
             }
 
-            retrievalService.completeRetrievalProcess(r);
+            retrievalService.completeRetrievalProcess(r,r.LoginDTO.EmployeeId);
         }
 
     }

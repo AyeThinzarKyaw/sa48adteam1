@@ -8,9 +8,7 @@ namespace LUSSIS.Models.DTOs
 {
     public class RetrievalDTO
     {
-        //hidden
         public LoginDTO LoginDTO { get; set; }
-
         public string RetrievalDate { get; set; }
         public string GeneratedBy { get; set; }
         public int AdHocRetrievalId { get; set; }

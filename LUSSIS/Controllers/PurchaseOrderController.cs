@@ -24,7 +24,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView","Login");
                 }
                 PurchaseOrderListDTO purchaseOrders = new PurchaseOrderListDTO();
                 purchaseOrders.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders();
@@ -45,7 +45,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
 
                 if (purchaseOrderListDTO.FromDate != null && purchaseOrderListDTO.ToDate != null)
@@ -107,7 +107,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 PurchaseOrder purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
 
@@ -154,7 +154,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 ReceiveDoDTO receiveDO = new ReceiveDoDTO();
                 receiveDO.purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
@@ -184,7 +184,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 if (ModelState.IsValid)
                 {
@@ -316,7 +316,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 POCreateDTO poCreateDTO = new POCreateDTO();
                 if (TempData["PO"] != null)
@@ -435,7 +435,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 if (TempData["PO"] == null)
                 {

@@ -9,7 +9,6 @@ namespace LUSSIS.Models.DTOs
     public class DisbursementListDTO
     {
         public List<DisbursementListDTO> disbursementDTOList { get; set; }
-        public LoginDTO LoginDTO { get; set; }
         public int Id { get; set; }
         public int DisbursementId { get; set; }
         public int DeliveredEmployeeId { get; set; }

@@ -1,4 +1,5 @@
 ﻿@model LUSSIS.Models.Supplier
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Detail";
 }
@@ -55,9 +56,17 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button class="btn btn-danger pull-right" style="margin-left: 20px;">Delete</button>
 
                     @Html.ActionLink("Update", "Update", new { supplierId = Model.Id }, new { @class = "btn btn-sm btn-warning pull-right", @role = "button" })
+
+                    @if (Model.Active == Convert.ToBoolean(ActiveStatus.INACTIVE))
+                    {
+                        @Html.ActionLink("Active", "ChangeStatus", new { supplierId = Model.Id }, new { @class = "btn btn-sm btn-success pull-right", @role = "button", @style = "margin-right: 20px;" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("InActive", "ChangeStatus", new { supplierId = Model.Id }, new { @class = "btn btn-sm btn-danger pull-right", @role = "button", @style = "margin-right: 20px;" })
+                    }
                 </div>
             </div>
             <!-- /.box -->

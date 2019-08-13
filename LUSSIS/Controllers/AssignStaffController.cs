@@ -22,7 +22,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead && currentUser.RoleId == (int)Enums.Roles.DepartmentCoverHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
 
                 int eId = currentUser.EmployeeId;
@@ -45,7 +45,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId==(int)Enums.Roles.DepartmentCoverHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 int eId = currentUser.EmployeeId;
                 Employee oldrep = AssignStaffService.Instance.GetDeptRep(eId);
@@ -67,7 +67,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 int eId = currentUser.EmployeeId;
                 AssignCoverDTO assignstaff = new AssignCoverDTO();
@@ -84,14 +84,12 @@ namespace LUSSIS.Controllers
         [HttpPost]
         public ActionResult AssignCoverStaff(AssignCoverDTO assignstaff)
         {
-
-
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 IEnumerable<DepartmentCoverEmployee> existing = AssignStaffService.Instance.GetExistingDepartmentCoverEmployeesWithinDateRange(assignstaff.FromDate, assignstaff.ToDate);
                 DepartmentCoverEmployee newcoverdetails = generateCoverEmployeeDetails(assignstaff);
@@ -115,11 +113,8 @@ namespace LUSSIS.Controllers
                     {
                         assignstaff.Error.Message += "There is already a cover staff assigned within this date range.";
                     }
-
-
                     return View(assignstaff);
                 }
-
                 else
                 {
                     AssignStaffService.Instance.CreateDepartmentCoverEmployee(newcoverdetails);
@@ -128,9 +123,7 @@ namespace LUSSIS.Controllers
                     assignstaff.ActiveCoverHeadDetails = AssignStaffService.Instance.GetCurrentDepartmentCoverEmployeesByDepartmentId(e.DepartmentId);
 
                     return View(assignstaff);
-
                 }
-
             }
             return RedirectToAction("Index", "Login");
         }
@@ -143,7 +136,7 @@ namespace LUSSIS.Controllers
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
                 if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", currentUser);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 DepartmentCoverEmployee cover = AssignStaffService.Instance.GetDepartmentCoverEmployeeById(coverId);
                 AssignStaffService.Instance.CancelDepartmentCoverEmployee(cover);
@@ -162,8 +155,6 @@ namespace LUSSIS.Controllers
             coverdetails.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
 
             return coverdetails;
-
-
         }
     }
 }

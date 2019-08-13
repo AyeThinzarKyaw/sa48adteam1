@@ -36,12 +36,14 @@ namespace LUSSIS.Repositories
 
         public T FindById(ID id)
         {
+            context = new LUSSISContext();
             return context.Set<T>().Find(id);
            
         }
 
         public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
+            context = new LUSSISContext();
             return context.Set<T>().Where(predicate).ToList();
         }
 
@@ -53,13 +55,14 @@ namespace LUSSIS.Repositories
         public void Update(T entity)
         {
             //is this line necessary?
-            //context.Set<T>().Attach(entity);
+            context.Set<T>().Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
             Save();
         }
 
         public T FindOneBy(Expression<Func<T, bool>> predicate)
         {
+            context = new LUSSISContext();
             return context.Set<T>().Where(predicate).SingleOrDefault();
 
         }
