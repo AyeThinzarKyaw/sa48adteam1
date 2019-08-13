@@ -62,9 +62,13 @@
                     </table>
                 </div>
                 <!-- /.box-body -->
+                @if (Model.RetrievalItem.Count>0)
+                {
                 <div class="box-footer">
                     <input type="button" class="btn btn-success pull-right" value="Submit!" onclick="location.href='@Url.Action("SubmitRetrieval", "Retrieval")'" />
                 </div>
+                }
+                
             </div>
             <!-- /.box -->
         </div>

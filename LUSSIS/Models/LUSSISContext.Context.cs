@@ -20,9 +20,6 @@ namespace LUSSIS.Models
         public LUSSISContext()
             : base("name=LUSSISContext")
         {
-            //this solves the self-referencing loop
-            //Written by Charles
-            //Configuration.ProxyCreationEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -39,7 +36,7 @@ namespace LUSSIS.Models
         public virtual DbSet<DepartmentCoverEmployee> DepartmentCoverEmployees { get; set; }
         public virtual DbSet<Disbursement> Disbursements { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<EmployeeNotification> EmployeeNotifications { get; set; }
+        public virtual DbSet<PublicHoliday> PublicHolidays { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
         public virtual DbSet<Requisition> Requisitions { get; set; }

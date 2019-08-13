@@ -17,7 +17,7 @@ namespace LUSSIS.Models
         public string Code { get; set; }
         public string Description { get; set; }
         public int StockQty { get; set; }
-        public int AvailableQty { get; set; }
+        public Nullable<int> AvailableQty { get; set; }
         public int WaitlistQty { get; set; }
         public int Unsubmitted { get; set; }
         public Nullable<int> ReorderLevel { get; set; }

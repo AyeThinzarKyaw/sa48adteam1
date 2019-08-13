@@ -27,6 +27,7 @@ namespace LUSSIS.Services
         private IAdjustmentVoucherRepo adjustmentVoucherRepo;
         private IAdjustmentVoucherDetailRepo adjustmentVoucherDetailRepo;
         private IRequisitionCatalogueService requisitionCatalogueService;
+        private IPublicHolidayRepo publicHolidayRepo;
         private static RetrievalService instance = new RetrievalService();
 
         private RetrievalService()
@@ -44,6 +45,7 @@ namespace LUSSIS.Services
             adjustmentVoucherDetailRepo = AdjustmentVoucherDetailRepo.Instance;
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+            publicHolidayRepo = PublicHolidayRepo.Instance;
         }
 
         //returns single instance
@@ -358,6 +360,23 @@ namespace LUSSIS.Services
                 int deptId = (int)employeeRepo.FindOneBy(x => x.Id == receivedEmployeeId).DepartmentId;
                 int cPId = (int)departmentRepo.FindOneBy(x => x.Id == deptId).CollectionPointId;
                 newDisbursement.CollectionPoint = collectionPointRepo.FindById(cPId).NameTime;
+
+                DateTime tomorrow = DateTime.Today.AddDays(1);
+                int daysUntilMonday = ((int)DayOfWeek.Monday - (int)tomorrow.DayOfWeek + 7) % 7;
+                DateTime nextMonday = tomorrow.AddDays(daysUntilMonday);
+
+                PublicHoliday holidayConflict = publicHolidayRepo.FindOneBy(x => x.Date == nextMonday);
+
+                while (holidayConflict != null)
+                {
+                    daysUntilMonday = daysUntilMonday + 7;
+                    nextMonday = tomorrow.AddDays(daysUntilMonday);
+
+                    holidayConflict = publicHolidayRepo.FindOneBy(x => x.Date == nextMonday);
+
+                }
+
+                newDisbursement.DeliveryDateTime = nextMonday;
 
                 newDisbursement = disbursementRepo.Create(newDisbursement);
 
