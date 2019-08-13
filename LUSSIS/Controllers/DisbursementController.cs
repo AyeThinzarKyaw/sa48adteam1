@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using LUSSIS.Filters;
 
 namespace LUSSIS.Controllers
 {
@@ -19,59 +20,78 @@ namespace LUSSIS.Controllers
         EmailNotificationService emailNotificationService;
 
         // GET: Disbursement
-        public ActionResult Index(LoginDTO LoginDTO)
+        [Authorizer]
+        public ActionResult Index()
         {
-            LoginDTO.EmployeeId = 9; //hard coded ID
-            disbursementService = new DisbursementService();
-            List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(LoginDTO.EmployeeId);
-            List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(LoginDTO.EmployeeId);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
 
-            if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == LoginDTO.EmployeeId))
-            {
-                DisbursementDTO model = new DisbursementDTO { LoginDTO = LoginDTO, DisbursementDetailsDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = LoginDTO.EmployeeId };
-                return View(model);
+                disbursementService = new DisbursementService();
+                List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
+
+                if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == currentUser.EmployeeId))
+                {
+                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId };
+                    return View(model);
+                }
+                else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
+                {
+                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId };
+                    return View(model);
+                }
+                else return View();
             }
-            else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == LoginDTO.EmployeeId))
-            {
-                DisbursementDTO model = new DisbursementDTO { LoginDTO = LoginDTO, DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = LoginDTO.EmployeeId };
-                return View(model);
-            }
-            else return View();
+            return RedirectToAction("Index", "Login");
         }
 
-        public ActionResult Detail(LoginDTO LoginDTO, int DisbursementId, string DisbursementStatus)
+        public ActionResult Detail(int DisbursementId, string DisbursementStatus)
         {
-            LoginDTO.EmployeeId = 9; //hard coded ID
-            disbursementService = new DisbursementService();
-            List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(LoginDTO.EmployeeId);
-            List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(LoginDTO.EmployeeId);
-
-
-            if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == LoginDTO.EmployeeId))
+            if (Session["existinguser"] != null)
             {
-
-                DisbursementDTO model = new DisbursementDTO { LoginDTO = LoginDTO, DisbursementDetailsDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = LoginDTO.EmployeeId, DisbursementId = DisbursementId };
-                return View(model);
-            }
-            else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == LoginDTO.EmployeeId))
-            {
-                DisbursementDTO model = new DisbursementDTO { LoginDTO = LoginDTO, DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = LoginDTO.EmployeeId, DisbursementId = DisbursementId };
-
-                if (DisbursementStatus == "PENDING_COLLECTION")
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk)
                 {
-                    foreach (var vcdl in ViewClerkDisbursementList)
-                    {
-
-                        emailNotificationService = new EmailNotificationService();
-                        emailNotificationService.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Disbursement Details for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Please collect your department items.", attachments: null);
-
-                        return View(model);
-
-                    }
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-                return View(model);
+
+                disbursementService = new DisbursementService();
+                List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
+
+
+                if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == currentUser.EmployeeId))
+                {
+
+                    DisbursementDTO model = new DisbursementDTO {  DisbursementDetailsDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId, DisbursementId = DisbursementId };
+                    return View(model);
+                }
+                else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
+                {
+                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId, DisbursementId = DisbursementId };
+
+                    if (DisbursementStatus == "PENDING_COLLECTION")
+                    {
+                        foreach (var vcdl in ViewClerkDisbursementList)
+                        {
+
+                            emailNotificationService = new EmailNotificationService();
+                            emailNotificationService.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Disbursement Details for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Please collect your department items.", attachments: null);
+
+                            return View(model);
+
+                        }
+                    }
+                    return View(model);
+                }
+                else return View();
             }
-            else return View();
+            return RedirectToAction("Index", "Login");
         }
 
 

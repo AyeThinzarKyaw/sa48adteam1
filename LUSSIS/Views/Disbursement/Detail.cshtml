@@ -118,7 +118,7 @@
 
 
                                                         <input type="button" class="btn btn-sm btn-primary" value="Send E-mail"
-                                                               onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.DisbursementId, @DisbursementStatus = dl.Status })'" data-form-method="post" />
+                                                               onclick="location.href='@Url.Action("Detail", "Disbursement", new {  @DisbursementId = dl.DisbursementId, @DisbursementStatus = dl.Status })'" data-form-method="post" />
                                                     }
 
                                                 </td>
