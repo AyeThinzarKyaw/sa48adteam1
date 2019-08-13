@@ -61,7 +61,7 @@
                                         }
                                         <td>
                                             <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                                   onclick="location.href='@Url.Action("ReviewRequisitionDetails", "DeptHead", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionId = r.Id})'" />                                            
+                                                   onclick="location.href='@Url.Action("ReviewRequisitionDetails", "DeptHead", new {  @requisitionId = r.Id})'" />                                            
                                         </td>
                                     </tr>
                                 }

@@ -4,6 +4,13 @@
     ViewBag.Title = "Detail";
 }
 
+@{
+    int role = 0;
+    if (Session["role"] != null)
+    {
+        role = (int)Session["role"];
+    }
+}
 <section class="content-header">
     <h1>
         Adjustment Voucher Details
@@ -17,6 +24,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
+
                     <div class="box-body">
                         <table>
                             <tr>
@@ -38,6 +46,11 @@
                             </tr>
                             <tr></tr>
                         </table>
+                        <br />
+                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open) && role == 7)
+                        {
+                            @Html.ActionLink("Add New Item", "Create", null, new { @class = "btn btn-primary pull-right", @role = "button" })
+                        }
                         <br /><br />
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -50,7 +63,11 @@
                                     <th style="width: 100px;">Price</th>
                                     <th style="width: 150px;">Adjusted Qty</th>
                                     <th>Reason</th>
-                                </tr>
+                                    @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                    {
+                                        <th>Action</th>
+                                    }
+                                    </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.adjustmentVoucher.AdjustmentVoucherDetails)
@@ -72,6 +89,10 @@
                                             }
                                         }
                                         <td>@item.Reason</td>
+                                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                        {
+                                            <td>@Html.ActionLink("Remove", "Remove", new { adjdId = item.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })</td>
+                                        }
                                     </tr>
                                 }
                             </tbody>
@@ -80,11 +101,11 @@
                     <!-- /.box-body -->
                     <!-- If Supervisor -->
                     <div class="box-footer">
-                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open) && role == 7)
                         {
                             <input type="submit" class="btn btn-success pull-right" value="Submit" />
                         }
-                        else if (Model.adjustmentVoucher.Status != Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Acknowledged))
+                        else if (Model.adjustmentVoucher.Status != Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Acknowledged) && role == 6)
                         {
                             @Html.ActionLink("Acknowledge", "ChangeStatus", new { adjId = @Model.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-success pull-right", @role = "button" })
                         }

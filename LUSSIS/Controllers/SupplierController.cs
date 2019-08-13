@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using LUSSIS.Services;
 using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
+using LUSSIS.Filters;
 
 namespace LUSSIS.Controllers
 {
@@ -13,69 +14,130 @@ namespace LUSSIS.Controllers
     {
         // GET: SupplierList
         //By NESS
+        [Authorizer]
         public ActionResult Index()
         {
-            var suppliers = SupplierService.Instance.getAllSupplier().ToList();
-            return View(suppliers);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                var suppliers = SupplierService.Instance.getAllSupplier().ToList();
+                return View(suppliers);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         // GET: SupplierDetails
         //By NESS
+        [Authorizer]
         public ActionResult Detail(int supplierId)
         {
-            Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
-            return View(supplier);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
+                return View(supplier);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         //CRETE Supplier getMethod
         //By NESS
+        [Authorizer]
         public ActionResult Create()
         {
-            SupplierDetailsDTO supplier = new SupplierDetailsDTO();
-            return View(supplier);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                SupplierDetailsDTO supplier = new SupplierDetailsDTO();
+                return View(supplier);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         //CRETE Supplier postMethod 
         //By NESS
+        [Authorizer]
         [HttpPost]
         public ActionResult Create(SupplierDetailsDTO supplier)
         {
-            if (ModelState.IsValid)
+            if (Session["existinguser"] != null)
             {
-                Supplier newSupplier = this.generateSupplier(supplier);
-                SupplierService.Instance.CreateSupplier(newSupplier);
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                if (ModelState.IsValid)
+                {
+                    Supplier newSupplier = this.generateSupplier(supplier);
+                    SupplierService.Instance.CreateSupplier(newSupplier);
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
+                return View(supplier);
             }
-            return View(supplier);
+            return RedirectToAction("Index", "Login");
         }
 
         //UPDATE Supplier getMethod
         //By NESS
+        [Authorizer]
         public ActionResult Update(int supplierId)
         {
-            SupplierDetailsDTO supplierDetails = this.generateSupplierDetailsDTO(supplierId);
-            
-            return View(supplierDetails);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                SupplierDetailsDTO supplierDetails = this.generateSupplierDetailsDTO(supplierId);
+
+                return View(supplierDetails);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         //UPDATE Supplier postMethod 
         //By NESS
+        [Authorizer]
         [HttpPost]
         public ActionResult Update(SupplierDetailsDTO supplier)
         {
-            if (ModelState.IsValid)
+            if (Session["existinguser"] != null)
             {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                if (ModelState.IsValid)
+                {
 
-                Supplier newSupplier = this.generateSupplier(supplier);
-                SupplierService.Instance.UpdateSupplier(newSupplier);
-                return RedirectToAction("Index");
+                    Supplier newSupplier = this.generateSupplier(supplier);
+                    SupplierService.Instance.UpdateSupplier(newSupplier);
+                    return RedirectToAction("Index");
+                }
+
+                return View(supplier);
             }
-
-            return View(supplier);
+            return RedirectToAction("Index", "Login");
         }
 
         //By NESS
+        [Authorizer]
         private Supplier generateSupplier(SupplierDetailsDTO supplier)
         {
             Supplier newSupplier = SupplierService.Instance.getSupplierById(supplier.SupplierId);
@@ -94,6 +156,7 @@ namespace LUSSIS.Controllers
         }
 
         //By NESS
+        [Authorizer]
         private SupplierDetailsDTO generateSupplierDetailsDTO(int supplierId)
         {
             Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
@@ -115,19 +178,29 @@ namespace LUSSIS.Controllers
 
         //change status from active to inactive
         //By NESS
+        [Authorizer]
         public ActionResult ChangeStatus(int supplierId)
         {
-            Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
-            if (supplier.Active == Convert.ToBoolean(Enums.ActiveStatus.ACTIVE))
+            if (Session["existinguser"] != null)
             {
-                supplier.Active = Convert.ToBoolean(Enums.ActiveStatus.INACTIVE);
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
+                if (supplier.Active == Convert.ToBoolean(Enums.ActiveStatus.ACTIVE))
+                {
+                    supplier.Active = Convert.ToBoolean(Enums.ActiveStatus.INACTIVE);
+                }
+                else
+                {
+                    supplier.Active = Convert.ToBoolean(Enums.ActiveStatus.ACTIVE);
+                }
+                SupplierService.Instance.UpdateSupplier(supplier);
+                return RedirectToAction("Index");
             }
-            else
-            {
-                supplier.Active = Convert.ToBoolean(Enums.ActiveStatus.ACTIVE);
-            }
-            SupplierService.Instance.UpdateSupplier(supplier);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Login");
         }
     }
 }

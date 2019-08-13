@@ -12,7 +12,7 @@ namespace LUSSIS.Services.Interfaces
     {
         RetrievalDTO constructRetrievalDTO(LoginDTO loginDTO);
 
-        void completeRetrievalProcess(RetrievalDTO retrieval);
+        void completeRetrievalProcess(RetrievalDTO retrieval, int employeeId);
 
         void createNewDisbursementsFromUpdatedRequisitionDetails(List<RequisitionDetail> reqDetailList, int deliveredEmployeeId);
 

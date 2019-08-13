@@ -13,7 +13,6 @@ namespace LUSSIS.Repositories.Interfaces
 
         float GetTotalAmount(int adjId);
         List<int> getAdjustmentVoucherIdsWithAcknowledgedStatus();
-
         //AdjustmentVoucher FindByStatusAndEmployeeId(int clerkId);
     }
 }

@@ -8,6 +8,7 @@ using LUSSIS.Models.DTOs;
 using LUSSIS.Enums;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
+using LUSSIS.Filters;
 
 namespace LUSSIS.Controllers
 {
@@ -15,65 +16,109 @@ namespace LUSSIS.Controllers
     {
         // GET: Stationery List
         //By ATZK
+        [Authorizer]
         public ActionResult Index()
         {
-            var stationeries = StationeryService.Instance.GetAllStationeries().OrderBy(x => x.Code).ToList();
-            return View(stationeries);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                var stationeries = StationeryService.Instance.GetAllStationeries().OrderBy(x => x.Code).ToList();
+                return View(stationeries);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         // GET: StationeryDetails
         //By ATZK
+        [Authorizer]
         public ActionResult Detail(int stationeryId)
         {
-            Stationery stationery= StationeryService.Instance.GetStationeryById(stationeryId);
-            return View(stationery);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+
+                Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
+                return View(stationery);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         //CRETE stationery getMethod
         //By ATZK
+        [Authorizer]
         public ActionResult Create()
         {
-            StationeryDetailsDTO stationery = new StationeryDetailsDTO();
-            stationery.Categories = StationeryService.Instance.GetAllCategories();
-            stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
-            return View(stationery);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+
+                StationeryDetailsDTO stationery = new StationeryDetailsDTO();
+                stationery.Categories = StationeryService.Instance.GetAllCategories();
+                stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                return View(stationery);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         //CRETE stationery postMethod 
         //By ATZK
+        [Authorizer]
         [HttpPost]
         public ActionResult Create(StationeryDetailsDTO stationery)
         {
-            if (ModelState.IsValid)
+            if (Session["existinguser"] != null)
             {
-                if (stationery.Supplier1 == stationery.Supplier2 
-                    || stationery.Supplier1 == stationery.Supplier3 
-                    || stationery.Supplier2 == stationery.Supplier3)
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    stationery.Error = new ErrorDTO();
-                    stationery.Error.HasError = true;
-                    stationery.Error.Message = "Suppliers must be three different suppliers!";
-                    stationery.Categories = StationeryService.Instance.GetAllCategories();
-                    stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
-                    return View(stationery);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
 
-                Stationery newStationery = this.generateStationery(stationery);
-                StationeryService.Instance.CreateStationery(newStationery);
+                if (ModelState.IsValid)
+                {
+                    if (stationery.Supplier1 == stationery.Supplier2
+                        || stationery.Supplier1 == stationery.Supplier3
+                        || stationery.Supplier2 == stationery.Supplier3)
+                    {
+                        stationery.Error = new ErrorDTO();
+                        stationery.Error.HasError = true;
+                        stationery.Error.Message = "Suppliers must be three different suppliers!";
+                        stationery.Categories = StationeryService.Instance.GetAllCategories();
+                        stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                        return View(stationery);
+                    }
 
-                this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
-                this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
-                this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
+                    Stationery newStationery = this.generateStationery(stationery);
+                    StationeryService.Instance.CreateStationery(newStationery);
 
-                return RedirectToAction("Index");
+                    this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
+                    this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
+                    this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
+
+                    return RedirectToAction("Index");
+                }
+                stationery.Categories = StationeryService.Instance.GetAllCategories();
+                stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                return View(stationery);
             }
-            stationery.Categories = StationeryService.Instance.GetAllCategories();
-            stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
-            return View(stationery);
+            return RedirectToAction("Index", "Login");
         }
 
-        
+
         //By ATZK
+        [Authorizer]
         private Stationery generateStationery(StationeryDetailsDTO stationery)
         {
             Stationery newStationery = StationeryService.Instance.GetStationeryById(stationery.StationeryId);
@@ -86,17 +131,19 @@ namespace LUSSIS.Controllers
             newStationery.Bin = stationery.Bin;
             newStationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
             return newStationery;
+
         }
 
-        
+
         //By ATZK
-        private void generateSupplierTender(int supplierId, int rank, int stationeryId,decimal price)
+        [Authorizer]
+        private void generateSupplierTender(int supplierId, int rank, int stationeryId, decimal price)
         {
             SupplierTender supplierTender = new SupplierTender();
-            
+
             supplierTender = SupplierTenderService.Instance.GetSupplierTendersOfCurrentYearByStationeryId(stationeryId).SingleOrDefault(s => s.Rank == rank);
-            
-            if(supplierTender==null)
+
+            if (supplierTender == null)
             {
                 supplierTender = new SupplierTender();
                 supplierTender.StationeryId = stationeryId;
@@ -113,13 +160,11 @@ namespace LUSSIS.Controllers
                 supplierTender.Price = price;
                 SupplierTenderService.Instance.UpdateSupplierTender(supplierTender);
             }
-            
-            //return supplierTender;
-            
-           
+
         }
 
         //By ATZK
+        [Authorizer]
         private StationeryDetailsDTO generateStationeryDetailsDTO(int stationeryId)
         {
             Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
@@ -143,55 +188,76 @@ namespace LUSSIS.Controllers
 
         //UPDATE stationery getMethod
         //By ATZK
+        [Authorizer]
         public ActionResult Update(int stationeryId)
         {
-            StationeryDetailsDTO stationeryDetails = this.generateStationeryDetailsDTO(stationeryId);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
 
-            stationeryDetails.Categories = StationeryService.Instance.GetAllCategories();
-            stationeryDetails.Suppliers = StationeryService.Instance.GetAllSuppliers();
-            return View(stationeryDetails);
+                StationeryDetailsDTO stationeryDetails = this.generateStationeryDetailsDTO(stationeryId);
+
+                stationeryDetails.Categories = StationeryService.Instance.GetAllCategories();
+                stationeryDetails.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                return View(stationeryDetails);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
         //UPDATE stationery postMethod 
         //By ATZK
+        [Authorizer]
         [HttpPost]
         public ActionResult Update(StationeryDetailsDTO stationery)
         {
-            if (ModelState.IsValid)
+            if (Session["existinguser"] != null)
             {
-                if(stationery.Supplier1==stationery.Supplier2 || stationery.Supplier1 == stationery.Supplier3 || stationery.Supplier2 == stationery.Supplier3)
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
-                    stationery.Error = new ErrorDTO();
-                    stationery.Error.HasError = true;
-                    stationery.Error.Message = "Suppliers must be three different suppliers!";
-                    stationery.Categories = StationeryService.Instance.GetAllCategories();
-                    stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
-                    return View(stationery);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
 
-                Stationery newStationery = this.generateStationery(stationery);
-                StationeryService.Instance.UpdateStationery(newStationery);
+                if (ModelState.IsValid)
+                {
+                    if (stationery.Supplier1 == stationery.Supplier2 || stationery.Supplier1 == stationery.Supplier3 || stationery.Supplier2 == stationery.Supplier3)
+                    {
+                        stationery.Error = new ErrorDTO();
+                        stationery.Error.HasError = true;
+                        stationery.Error.Message = "Suppliers must be three different suppliers!";
+                        stationery.Categories = StationeryService.Instance.GetAllCategories();
+                        stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                        return View(stationery);
+                    }
 
-                this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
-                this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
-                this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
+                    Stationery newStationery = this.generateStationery(stationery);
+                    StationeryService.Instance.UpdateStationery(newStationery);
 
-                return RedirectToAction("Index");
+                    this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
+                    this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
+                    this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
+
+                    return RedirectToAction("Index");
+                }
+                stationery.Categories = StationeryService.Instance.GetAllCategories();
+                stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
+                return View(stationery);
             }
-            stationery.Categories = StationeryService.Instance.GetAllCategories();
-            stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
-            return View(stationery);
+            return RedirectToAction("Index", "Login");
         }
 
 
         //CREATE category postMethod call from ajax
         //By ATZK
-        
+        [Authorizer]
         public JsonResult CreateCategory(string type)
         {
             Category category = new Category();
             category.Type = type;
-            //category.Id = 20;
             StationeryService.Instance.CreateCategory(category);
             var aa = StationeryService.Instance.GetAllCategories();
 
@@ -203,24 +269,35 @@ namespace LUSSIS.Controllers
                     Id = c.Id,
                     Type = c.Type
                 };
-            return Json( bb, JsonRequestBehavior.AllowGet);
+            return Json(bb, JsonRequestBehavior.AllowGet);
         }
 
         //change status from current status to other
         //By ATZK
+        [Authorizer]
         public ActionResult ChangeStatus(int stationeryId)
         {
-            Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
-            if (stationery.Status== Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE))
+            if (Session["existinguser"] != null)
             {
-                stationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.INACTIVE);
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+
+                Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
+                if (stationery.Status == Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE))
+                {
+                    stationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.INACTIVE);
+                }
+                else
+                {
+                    stationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
+                }
+                StationeryService.Instance.UpdateStationery(stationery);
+                return RedirectToAction("Index");
             }
-            else
-            {
-                stationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
-            }
-            StationeryService.Instance.UpdateStationery(stationery);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Login");
         }
 
     }

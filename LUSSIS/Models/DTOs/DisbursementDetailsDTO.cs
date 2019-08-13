@@ -12,7 +12,6 @@ namespace LUSSIS.Models.DTOs
         public int DisbursementId { get; set; }
         public int DeliveredEmployeeId { get; set; }
         public int ReceivedEmployeeId { get; set; }
-        public string RepName { get; set; }
         public DateTime DeliveryDateTime { get; set; }
         public string CollectionPoint { get; set; }
         public int QuantityOrdered { get; set; }

@@ -225,9 +225,9 @@ namespace LUSSIS.Services
         }
 
 
-        public void completeRetrievalProcess(RetrievalDTO retrieval)
+        public void completeRetrievalProcess(RetrievalDTO retrieval,int employeeId)
         {
-            int deliveredEmployeeId = retrieval.LoginDTO.EmployeeId;
+            int deliveredEmployeeId = employeeId;
 
             List<RetrievalItemDTO> retrievalItems = retrieval.RetrievalItem;
 

@@ -7,7 +7,6 @@ namespace LUSSIS.Models.DTOs
 {
     public class ClerkCollectionPointDTO
     {
-        public LoginDTO LoginDTO { get; set; }
         public CollectionPoint CollectionPoint1 { get; set; }
         public CollectionPoint CollectionPoint2 { get; set; }
         public CollectionPoint CollectionPoint3 { get; set; }

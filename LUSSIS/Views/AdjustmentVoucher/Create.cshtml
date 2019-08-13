@@ -79,43 +79,6 @@
                         </div>
                     </div>
                 </div>
-                @if (Model.adjustmentVoucher != null)
-                {
-                    <div class="box">
-                        <div class="box-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Item Number</th>
-                                        <th>Category</th>
-                                        <th>Description</th>
-                                        <th>Unit of Measure</th>
-                                        <th>Adjusted Qty</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.adjustmentVoucher.AdjustmentVoucherDetails)
-                                    {
-                                        <tr>
-                                            <td>@item.StationeryId</td>
-                                            <td>@item.Stationery.Category.Type</td>
-                                            <td>@item.Stationery.Description</td>
-                                            <td>@item.Stationery.UnitOfMeasure</td>
-                                            <td>@item.Quantity</td>
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
-                        <div class="box-footer">
-                            <button class="btn btn-success pull-right">Submit</button>
-                        </div>
-                    </div>
-                }
-                <!-- /.box -->
             </div>
             <!-- /.col -->
         </div>

@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Filters;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
@@ -21,86 +22,149 @@ namespace LUSSIS.Controllers
             emailNotificationService = EmailNotificationService.Instance;
         }
 
+
         // GET: Requisition
-        public ActionResult Index()
+        //[Authorizer]
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        [Authorizer]
+        public ActionResult ViewCatalogue()
         {
-            return View();
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(currentUser.EmployeeId);
+                FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems };
+
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
-
-        public ActionResult ViewCatalogue(LoginDTO loginDTO)
-        {
-            List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(loginDTO.EmployeeId);
-            FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems, LoginDTO = loginDTO };
-
-            return View(model);
-        }
-
+        [Authorizer]
         public JsonResult AddItemToCart(int employeeId, int stationeryId, int inputQty)
         {
             CatalogueItemDTO catalogueItemDTO = requisitionCatalogueService.AddCartDetail(employeeId, stationeryId, inputQty);
-            return Json(new { availstatus = catalogueItemDTO.StockAvailability.ToString(),
+            return Json(new
+            {
+                availstatus = catalogueItemDTO.StockAvailability.ToString(),
                 lowstockcount = catalogueItemDTO.LowStockAvailability,
                 reserved = catalogueItemDTO.ReservedCount,
-                waitlist = catalogueItemDTO.WaitlistCount }, JsonRequestBehavior.AllowGet);
+                waitlist = catalogueItemDTO.WaitlistCount
+            }, JsonRequestBehavior.AllowGet);
 
         }
-
+        [Authorizer]
         public JsonResult RemoveItemFromCart(int employeeId, int stationeryId)
         {
             CatalogueItemDTO catalogueItemDTO = requisitionCatalogueService.RemoveCartDetail(employeeId, stationeryId);
-            return Json(new {
+            return Json(new
+            {
                 availstatus = catalogueItemDTO.StockAvailability.ToString(),
                 lowstockcount = catalogueItemDTO.LowStockAvailability
             }, JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult SubmitRequisitionForm(LoginDTO loginDTO)
+        [Authorizer]
+        public ActionResult SubmitRequisitionForm()
         {
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                //convert all cart items into requsitiondetails for this requisition
+                Requisition newRequisition = requisitionCatalogueService.ConvertCartDetailsToRequisitionDetails(currentUser.EmployeeId);
 
-            //convert all cart items into requsitiondetails for this requisition
-            Requisition newRequisition = requisitionCatalogueService.ConvertCartDetailsToRequisitionDetails(loginDTO.EmployeeId);
+                //notify dept head for approval
+                emailNotificationService.NotifyDeptHeadToApprovePendingRequisition(newRequisition);
 
-            //notify dept head for approval
-            emailNotificationService.NotifyDeptHeadToApprovePendingRequisition(newRequisition);
+                return RedirectToAction("ViewCatalogue");
+                //return to catalogue/dashboard view
+                //ViewCatalogue(loginDTO); 
+            }
+            return RedirectToAction("Index", "Login");
+        }
+        [Authorizer]
+        public ActionResult ViewRequisitionList()
+        {
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                //Get all requsition from this employee
+                List<Requisition> requisitionHistory = requisitionCatalogueService.GetPersonalRequisitionHistory(currentUser.EmployeeId);
 
-            return RedirectToAction("ViewCatalogue", loginDTO);
-           //return to catalogue/dashboard view
-           //ViewCatalogue(loginDTO); 
+                RequisitionsDTO model = new RequisitionsDTO() { Requisitions = requisitionHistory };
+
+                //viewData add additional data
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
-        public ActionResult ViewRequisitionList(LoginDTO loginDTO)
+        [Authorizer]
+        public ActionResult ViewRequisitionDetail(int requisitionId)
         {
-            //Get all requsition from this employee
-            List<Requisition> requisitionHistory = requisitionCatalogueService.GetPersonalRequisitionHistory(loginDTO.EmployeeId);
-
-            RequisitionsDTO model = new RequisitionsDTO() {LoginDTO = loginDTO, Requisitions = requisitionHistory };
-            
-            //viewData add additional data
-            return View(model);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, currentUser.EmployeeId);
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
-        public ActionResult ViewRequisitionDetail(LoginDTO loginDTO, int requisitionId)
+        [Authorizer]
+        public ActionResult CancelPendingRequisition(int requisitionId)
         {
-            RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, loginDTO.EmployeeId);
-            model.LoginDTO = loginDTO;
-            return View(model);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                if (requisitionCatalogueService.CancelPendingRequisition(requisitionId, currentUser.EmployeeId))
+                {
+                    return RedirectToAction("ViewRequisitionList");
+                }
+                return RedirectToAction("ViewRequisitionList");
+            }
+            return RedirectToAction("Index", "Login");
         }
-
-        public ActionResult CancelPendingRequisition(LoginDTO loginDTO, int requisitionId)
+        [Authorizer]
+        public ActionResult CancelWaitlistedRequisitionDetail(int requisitionDetailId, int requisitionId)
         {
-            requisitionCatalogueService.CancelPendingRequisition(requisitionId);
-            return RedirectToAction("ViewRequisitionList", loginDTO);
-        }
-
-        public ActionResult CancelWaitlistedRequisitionDetail(LoginDTO loginDTO, int requisitionDetailId, int requisitionId)
-        {
-            requisitionCatalogueService.CancelWaitlistedRequisitionDetail(requisitionDetailId);
-            return RedirectToAction("ViewRequisitionDetail", 
-                new {SessionGUID = loginDTO.SessionGuid,
-                    EmployeeId = loginDTO.EmployeeId,
-                    RoleId = loginDTO.RoleId,
-                    requisitionId = requisitionId
-                });
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                requisitionCatalogueService.CancelWaitlistedRequisitionDetail(requisitionDetailId, currentUser.EmployeeId);
+                return RedirectToAction("ViewRequisitionDetail",
+                    new
+                    {
+                        @requisitionId = requisitionId
+                    });
+            }
+            return RedirectToAction("Index", "Login");
         }
 
     }

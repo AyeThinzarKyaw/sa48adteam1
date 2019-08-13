@@ -35,7 +35,7 @@ namespace LUSSIS.Controllers
                 {
                     //LoginDTO loginDTO = new LoginDTO {EmployeeId = s.EmployeeId, RoleId = s.Employee.RoleId, SessionGuid = GUID };
 
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", loginDto);
+                    return RedirectToAction("RedirectToClerkOrDepartmentView");
                 }
             }
             //else need to present the login page
@@ -47,14 +47,22 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO loginDTO = (LoginDTO)Session["existinguser"];
-                if (loginDTO.RoleId >= (int)Enums.Roles.DepartmentHead && loginDTO.RoleId <= (int)Enums.Roles.DepartmentCoverHead) //dept staff
+                
+                if (loginDTO.RoleId == (int)Enums.Roles.StoreClerk)
                 {
-                    return RedirectToAction("ViewCatalogue", "Requisition", loginDTO);
+                   return RedirectToAction("Index", "PurchaseOrder");
                 }
-                else //clerks
+                else if (loginDTO.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    //return clerk view
-                    return RedirectToAction("", "", loginDTO);
+                    return RedirectToAction("Index", "Stationery");
+                }
+                else if (loginDTO.RoleId == (int)Enums.Roles.StoreSupervisor)
+                {
+                    return RedirectToAction("Index", "PurchaseOrder");
+                }
+                else
+                {
+                    return RedirectToAction("ViewCatalogue", "Requisition");
                 }
             }
             return RedirectToAction("Index", "Login");
@@ -80,7 +88,7 @@ namespace LUSSIS.Controllers
                 //store in browser session also
                 Session["existinguser"] = loginDTO;
                 Session["role"] = loginDTO.RoleId;
-                return RedirectToAction("RedirectToClerkOrDepartmentView", loginDTO);
+                return RedirectToAction("RedirectToClerkOrDepartmentView");
             }
 
         }

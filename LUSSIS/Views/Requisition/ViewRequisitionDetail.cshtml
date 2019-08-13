@@ -97,10 +97,7 @@
                                                 <input type="button" class="btn btn-sm btn-danger" value="Cancel"
                                                        onclick="location.href='@Url.Action("CancelWaitlistedRequisitionDetail",
                                                                               "Requisition",
-                                                                              new { @SessionGUID = Model.LoginDTO.SessionGuid,
-                                                                                  @EmployeeId = Model.LoginDTO.EmployeeId,
-                                                                                  @RoleId = Model.LoginDTO.RoleId,
-                                                                                  @requisitionDetailId = rd.Id,
+                                                                              new {@requisitionDetailId = rd.Id,
                                                                                   @requisitionId = Model.RequisitionFormId})'" />
                                             </td>
                                         }
@@ -141,7 +138,7 @@
                 {
                     <div class="box-footer">
                         <input type="button" class="btn btn-sm btn-danger pull-right" value="Cancel"
-                               onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @requisitionId = Model.RequisitionFormId})'" />
+                               onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new {@requisitionId = Model.RequisitionFormId})'" />
                     </div>
                     <!-- /.For Staff if Status = Pending -->
                 }

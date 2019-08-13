@@ -11,7 +11,13 @@
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", required: false)
 </head>
-
+@{
+    int role = 0;
+    if (Session["role"] != null)
+    {
+        role = (int)Session["role"];
+    }
+}
 <body class="hold-transition skin-blue sidebar-mini" style="padding: 0 !important;">
     <div class="wrapper">
         <header class="main-header">
@@ -39,21 +45,95 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="../images/manager.png" class="user-image" alt="User Image" style="object-fit: cover;">
-                                <span class="hidden-xs">Staff</span>
+                                @if (role == 1)
+                                {
+                                    <span class="hidden-xs">Department Head</span>
+                                }
+                                else if (role == 2)
+                                {
+                                    <span class="hidden-xs">Staff</span>
+                                }
+                                else if (role == 3)
+                                {
+                                    <span class="hidden-xs">Department Representative</span>
+                                }
+                                else if (role == 4)
+                                {
+                                    <span class="hidden-xs">Cover Staff</span>
+                                }
+                                else if (role == 5)
+                                {
+                                    <span class="hidden-xs">Store Manager</span>
+                                }
+                                else if (role == 6)
+                                {
+                                    <span class="hidden-xs">Store Supervisor</span>
+                                }
+                                else if (role == 7)
+                                {
+                                    <span class="hidden-xs">Store Clerk</span>
+                                }
+
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
                                     <img src="../images/manager.png" class="img-circle" alt="User Image" style="object-fit: cover;">
-                                    <p>
-                                        Staff<br />
-                                        (Department of Registrar)
-                                    </p>
+
+                                    @if (role == 1)
+                                    {
+                                        <p>
+                                            Department Head<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 2)
+                                    {
+                                        <p>
+                                            Staff<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 3)
+                                    {
+                                        <p>
+                                            Department Representative<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 4)
+                                    {
+                                        <p>
+                                            Cover Staff<br />
+                                            (Department of Registrar)
+                                        </p>
+                                    }
+                                    else if (role == 5)
+                                    {
+                                        <p>
+                                            Store Manager<br />
+                                            (Department of Store)
+                                        </p>
+                                    }
+                                    else if (role == 6)
+                                    {
+                                        <p>
+                                            Store Supervisor<br />
+                                            (Department of Store)
+                                        </p>
+                                    }
+                                    else if (role == 7)
+                                    {
+                                        <p>
+                                            Store Clerk<br />
+                                            (Department of Store)
+                                        </p>
+                                    }
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="login.html" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="/Login/Logout" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>
@@ -72,29 +152,181 @@
                         <img src="../images/manager.png" class="img-circle" alt="User Image" style="object-fit: cover; width: 35px; height: 35px;">
                     </div>
                     <div class="pull-left info">
-                        <p>Staff</p>
-                        <p style="font-size: 12px;">Department of Registrar</p>
+                        @if (role == 1)
+                        {
+                            <p>Department Head</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 2)
+                        {
+                            <p>Staff</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 3)
+                        {
+                            <p>Department Representative</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 4)
+                        {
+                            <p>Cover Staff</p>
+                            <p style="font-size: 12px;">Department of Registrar</p>
+                        }
+                        else if (role == 5)
+                        {
+                            <p>Store Manager</p>
+                            <p style="font-size: 12px;">Department of Store</p>
+                        }
+                        else if (role == 6)
+                        {
+                            <p>Store Supervisor</p>
+                            <p style="font-size: 12px;">Department of Store</p>
+                        }
+                        else if (role == 7)
+                        {
+                            <p>Store Clerk</p>
+                            <p style="font-size: 12px;">Department of Store</p>
+                        }
+
                     </div>
                 </div>
                 <br>
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVICATION</li>
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                    <li class="active">
-                        <a href="../Staff/catalog.html">
-                            <i class="fa fa-book"></i> <span>Catalogue</span>
-                        </a>
-                    </li>
+                    @if (role == 1 || role == 2 || role == 3 || role == 4)
+                    {
+                        <li>
+                            <a href="/Requisition/ViewCatalogue">
+                                <i class="fa fa-book"></i> <span>Catalogue</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Requisition/Index">
+                                <i class="fa fa-list"></i> <span>My Requisition History</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 3)
+                    {
+                        <li class="header">DEP REP FUNCTION</li>
+                        <li>
+                            <a href="/Disbursement/Index">
+                                <i class="fa fa-shopping-cart"></i> <span>Disbursement List</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (role == 1 || role == 4)
+                    {
+                        <li class="header">ADMINISTRATION</li>
+                        <li>
+                            <a href="/Requisition/ViewRequisitionList">
+                                <i class="fa fa-list"></i> <span>Requested Requisition</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/CollectionPoint/AssignCollectionPoint">
+                                <i class="fa fa-building"></i> <span>Collection Point</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/AssignStaff/AssignDeptRep">
+                                <i class="fa fa-user"></i> <span>Assign Dept Representative</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 1)
+                    {
+                        <li>
+                            <a href="/AssignStaff/AssignCoverStaff">
+                                <i class="fa fa-user"></i> <span>Assign Cover Staff</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 5)
+                    {
+                        <li>
+                            <a href="/Stationery/Index">
+                                <i class="fa fa-book"></i> <span>Manage Catalogue</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Supplier/Index">
+                                <i class="fa fa-gavel"></i> <span>Manage Supplier</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 5 || role == 6)
+                    {
+                        <li>
+                            <a href="/AdjustmentVoucher/Index">
+                                <i class="fa fa-clone"></i> <span>Adjustment Voucher</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/PurchaseOrder/Index">
+                                <i class="fa fa-shopping-cart"></i> <span>Purchase Order</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/CollectionPoint/AssignClerk">
+                                <i class="fa fa-user"></i> <span>Assign Clerk</span>
+                            </a>
+                        </li>
+                        <li class="header">ANALYSIS</li>
+                        <li>
+                            <a href="store-inventory-historial-data.html">
+                                <i class="fa fa-bar-chart"></i> <span>Store Inventory Historial Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="requisition-trend.html">
+                                <i class="fa fa-bar-chart"></i> <span>Requisition Trend</span>
+                            </a>
+                        </li>
+                    }
+                    @if (role == 7)
+                    {
+                        <li>
+                            <a href="/Retrieval/Index">
+                                <i class="fa fa-building"></i> <span>Retrieval List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Disbursement/Index">
+                                <i class="fa fa-building"></i> <span>Disbursement List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/ClerkRequisitions/ViewOwedItems">
+                                <i class="fa fa-font-awesome"></i> <span>Owed Items</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Inventory/ViewInventoryList">
+                                <i class="fa fa-book"></i> <span>View Inventory Items</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/ClerkRequisitions/ViewSchoolRequisitions">
+                                <i class="fa fa-list"></i> <span>View Requisitions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/PurchaseOrder/Index">
+                                <i class="fa fa-shopping-cart"></i> <span>Purchase Order</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/AdjustmentVoucher/Index">
+                                <i class="fa fa-clone"></i> <span>My Adjustment Vouchers</span>
+                            </a>
+                        </li>
+                    }
+                    <li class="header">OTHERS</li>
                     <li>
-                        <a href="requisition-history.html">
-                            <i class="fa fa-list"></i> <span>My Requisition History</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="login.html">
+                        <a href="/Login/Logout">
                             <i class="fa fa-sign-out"></i> <span>Logout</span>
                         </a>
                     </li>

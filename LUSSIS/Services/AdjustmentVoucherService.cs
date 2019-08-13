@@ -40,6 +40,11 @@ namespace LUSSIS.Services
             return adjustmentVoucherRepo.FindById(adjId);
         }
 
+        public AdjustmentVoucherDetail getAdjustmentVoucherDetailById(int adjdId)
+        {
+            return adjustmentVoucherDetailRepo.FindById(adjdId);
+        }
+
         public AdjustmentVoucher getOpenAdjustmentVoucherByClerk(int clerkId)
         {
             return adjustmentVoucherRepo.FindOneBy(x => x.Status == "Open" && x.EmployeeId == clerkId);
@@ -64,6 +69,11 @@ namespace LUSSIS.Services
             adjustmentVoucherDetailRepo.Update(adjdetail);
         }
 
+        public void DeleteAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail)
+        {
+            adjustmentVoucherDetailRepo.Delete(adjdetail);
+        }
+
         public List<AdjustmentVoucherDTO> getTotalAmountDTO()
         {
             List<AdjustmentVoucherDTO> voucherDTO = new List<AdjustmentVoucherDTO>();
@@ -72,7 +82,14 @@ namespace LUSSIS.Services
             {
                 AdjustmentVoucherDTO newVoucher = new AdjustmentVoucherDTO();
                 newVoucher.adjustmentVoucher = adj;
-                newVoucher.TotalAmount=adjustmentVoucherRepo.GetTotalAmount(adj.Id);
+                if(adj.AdjustmentVoucherDetails.Count > 0)
+                {
+                    newVoucher.TotalAmount = adjustmentVoucherRepo.GetTotalAmount(adj.Id);
+                }
+                else
+                {
+                    newVoucher.TotalAmount = 0;
+                }
                 voucherDTO.Add(newVoucher);
             }
             return voucherDTO;

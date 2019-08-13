@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Filters;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Services;
 using LUSSIS.Services.Interfaces;
@@ -21,31 +22,55 @@ namespace LUSSIS.Controllers
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
         }
 
-        // GET: DeptHead
-        public ActionResult Index()
+        [Authorizer]
+        public ActionResult ViewDepartmentRequisitions()
         {
-            return View();
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                List<Requisition> deptReqs = requisitionManagementService.GetDepartmentRequisitions(currentUser.EmployeeId);
+                RequisitionsDTO model = new RequisitionsDTO() { Requisitions = deptReqs };
+
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
-        public ActionResult ViewDepartmentRequisitions(LoginDTO loginDTO)
+        [Authorizer]
+        public ActionResult ReviewRequisitionDetails(int requisitionId)
         {
-            List<Requisition> deptReqs = requisitionManagementService.GetDepartmentRequisitions(loginDTO.EmployeeId);
-            RequisitionsDTO model = new RequisitionsDTO() { LoginDTO = loginDTO, Requisitions = deptReqs };
-
-            return View(model);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, currentUser.EmployeeId);
+                //model.LoginDTO = loginDTO;
+                return View(model);
+            }
+            return RedirectToAction("Index", "Login");
         }
 
-        public ActionResult ReviewRequisitionDetails(LoginDTO loginDTO, int requisitionId)
-        {
-            RequisitionDetailsDTO model = requisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(requisitionId, loginDTO.EmployeeId);
-            model.LoginDTO = loginDTO;
-            return View(model);
-        }
-
+        [Authorizer]
         public ActionResult ApproveRejectPendingRequisition(string button, RequisitionDetailsDTO viewModel)
         {
-            requisitionManagementService.ApproveRejectPendingRequisition(viewModel.RequisitionFormId, button, viewModel.Remarks);
-            return RedirectToAction("ViewDepartmentRequisitions", viewModel.LoginDTO);
+            if (Session["existinguser"] != null)
+            {
+                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
+                {
+                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                }
+                requisitionManagementService.ApproveRejectPendingRequisition(viewModel.RequisitionFormId, button, viewModel.Remarks);
+                return RedirectToAction("ViewDepartmentRequisitions");
+            }
+            return RedirectToAction("Index", "Login");
         }
     }
 }
