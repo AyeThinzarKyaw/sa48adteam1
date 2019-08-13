@@ -6,9 +6,8 @@ using LUSSIS.Enums;
 
 namespace LUSSIS.Models.DTOs
 {
-    public class DisbursementListDTO
+    public class DisbursementDetailsDTO
     {
-        public List<DisbursementListDTO> disbursementDTOList { get; set; }
         public int Id { get; set; }
         public int DisbursementId { get; set; }
         public int DeliveredEmployeeId { get; set; }
@@ -36,6 +35,5 @@ namespace LUSSIS.Models.DTOs
         public int RequisitionID { get; set; }
         public DateTime RequisitionDateTime { get; set; }
         public List<RequisitionDetail> RequisitionDetails { get; set; }
-
     }
 }

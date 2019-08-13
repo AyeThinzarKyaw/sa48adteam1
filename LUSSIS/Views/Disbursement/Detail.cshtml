@@ -1,8 +1,8 @@
-﻿@model LUSSIS.Models.DTOs.DisbursementListDTO
+﻿@model LUSSIS.Models.DTOs.DisbursementDTO
 @using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Detail";
-    var ClerkItemDetails = Model.disbursementDTOList.GroupBy(g => new { g.DisbursementId, g.StationeryId, g.ItemCode, g.Category, g.ItemName, g.UnitOfMeasure }).Select(
+    var ClerkItemDetails = Model.DisbursementDetailsDTOList.GroupBy(g => new { g.DisbursementId, g.StationeryId, g.ItemCode, g.Category, g.ItemName, g.UnitOfMeasure }).Select(
         s => new
         {
             s.Key.DisbursementId,
@@ -35,7 +35,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <table>
-                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                     {
                                         <tr>
                                             @if (dl.DisbursementId == Model.DisbursementId)
@@ -75,7 +75,7 @@
 
                             <div class="col-md-6">
                                 <table>
-                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                     {
                                         <tr>
 
@@ -171,7 +171,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <table>
-                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                     {
                                         <tr>
                                             @if (dl.DisbursementId == Model.DisbursementId)
@@ -202,7 +202,7 @@
 
                             <div class="col-md-6">
                                 <table>
-                                    @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                    @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                     {
                                         <tr>
                                             @if (dl.DisbursementId == Model.DisbursementId)
@@ -259,7 +259,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var dlpi in Model.disbursementDTOList)
+                                                        @foreach (var dlpi in Model.DisbursementDetailsDTOList)
                                                         {
                                                             if (dlpi.ItemCode == dl.ItemCode)
                                                             {
@@ -293,7 +293,7 @@
 </section>
 
 <script>
-function toggle(id) {
+    function toggle(id) {
         //alert(id);
         $("#" + id).toggleClass("fa fa-chevron-down fa fa-chevron-up");
     };</script>
