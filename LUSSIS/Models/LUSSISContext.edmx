@@ -98,13 +98,12 @@
           <Property Name="RoleId" Type="int" Nullable="false" />
           <Property Name="Image" Type="image" />
         </EntityType>
-        <EntityType Name="EmployeeNotification">
+        <EntityType Name="PublicHoliday">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="EmployeeId" Type="int" Nullable="false" />
-          <Property Name="Meassage" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -119,9 +118,9 @@
           <Property Name="DeliveryDateTime" Type="datetime" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Remark" Type="nvarchar" MaxLength="1000" />
+          <Property Name="DORemark" Type="nvarchar" MaxLength="1000" />
           <Property Name="DO" Type="nvarchar" MaxLength="100" />
           <Property Name="Invoice" Type="nvarchar" MaxLength="100" />
-          <Property Name="DORemark" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="PurchaseOrderDetail">
           <Key>
@@ -142,7 +141,7 @@
           <Property Name="EmployeeId" Type="int" Nullable="false" />
           <Property Name="DateTime" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="RequisitionDetail">
           <Key>
@@ -346,18 +345,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DeptEmpNotification_DepartmentEmployee">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
-          <End Role="EmployeeNotification" Type="Self.EmployeeNotification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="EmployeeNotification">
-              <PropertyRef Name="EmployeeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Disbursement_Disbursement">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="Disbursement" Type="Self.Disbursement" Multiplicity="*" />
@@ -537,7 +524,7 @@
           <EntitySet Name="DepartmentCoverEmployee" EntityType="Self.DepartmentCoverEmployee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Disbursement" EntityType="Self.Disbursement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmployeeNotification" EntityType="Self.EmployeeNotification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PublicHoliday" EntityType="Self.PublicHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseOrderDetail" EntityType="Self.PurchaseOrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Requisition" EntityType="Self.Requisition" Schema="dbo" store:Type="Tables" />
@@ -587,10 +574,6 @@
           <AssociationSet Name="FK_DepartmentEmployee_DepartmentRole" Association="Self.FK_DepartmentEmployee_DepartmentRole">
             <End Role="Role" EntitySet="Role" />
             <End Role="Employee" EntitySet="Employee" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DeptEmpNotification_DepartmentEmployee" Association="Self.FK_DeptEmpNotification_DepartmentEmployee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="EmployeeNotification" EntitySet="EmployeeNotification" />
           </AssociationSet>
           <AssociationSet Name="FK_Disbursement_Disbursement" Association="Self.FK_Disbursement_Disbursement">
             <End Role="Employee" EntitySet="Employee" />
@@ -769,19 +752,16 @@
           <NavigationProperty Name="Disbursements" Relationship="Self.FK_Disbursement_Disbursement" FromRole="Employee" ToRole="Disbursement" />
           <NavigationProperty Name="Disbursements1" Relationship="Self.FK_Disbursement_Employee" FromRole="Employee" ToRole="Disbursement" />
           <NavigationProperty Name="Role" Relationship="Self.FK_DepartmentEmployee_DepartmentRole" FromRole="Employee" ToRole="Role" />
-          <NavigationProperty Name="EmployeeNotifications" Relationship="Self.FK_DeptEmpNotification_DepartmentEmployee" FromRole="Employee" ToRole="EmployeeNotification" />
           <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PurchaseOrder_Employee" FromRole="Employee" ToRole="PurchaseOrder" />
           <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_DepartmentEmployee" FromRole="Employee" ToRole="Requisition" />
           <NavigationProperty Name="Sessions" Relationship="Self.FK_Session_DepartmentEmployee" FromRole="Employee" ToRole="Session" />
         </EntityType>
-        <EntityType Name="EmployeeNotification">
+        <EntityType Name="PublicHoliday">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
-          <Property Name="Meassage" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_DeptEmpNotification_DepartmentEmployee" FromRole="EmployeeNotification" ToRole="Employee" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -796,9 +776,9 @@
           <Property Name="DeliveryDateTime" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Remark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="DORemark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="DO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Invoice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DORemark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_PurchaseOrder_Employee" FromRole="PurchaseOrder" ToRole="Employee" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_PurchaseOrder_Supplier" FromRole="PurchaseOrder" ToRole="Supplier" />
           <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetail_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseOrderDetail" />
@@ -824,7 +804,7 @@
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Requisition_DepartmentEmployee" FromRole="Requisition" ToRole="Employee" />
           <NavigationProperty Name="RequisitionDetails" Relationship="Self.FK_RequisitionDetail_Requisition" FromRole="Requisition" ToRole="RequisitionDetail" />
         </EntityType>
@@ -1093,18 +1073,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DeptEmpNotification_DepartmentEmployee">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
-          <End Role="EmployeeNotification" Type="Self.EmployeeNotification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="EmployeeNotification">
-              <PropertyRef Name="EmployeeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PurchaseOrder_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
@@ -1235,7 +1203,7 @@
           <EntitySet Name="DepartmentCoverEmployees" EntityType="Self.DepartmentCoverEmployee" />
           <EntitySet Name="Disbursements" EntityType="Self.Disbursement" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
-          <EntitySet Name="EmployeeNotifications" EntityType="Self.EmployeeNotification" />
+          <EntitySet Name="PublicHolidays" EntityType="Self.PublicHoliday" />
           <EntitySet Name="PurchaseOrders" EntityType="Self.PurchaseOrder" />
           <EntitySet Name="PurchaseOrderDetails" EntityType="Self.PurchaseOrderDetail" />
           <EntitySet Name="Requisitions" EntityType="Self.Requisition" />
@@ -1302,10 +1270,6 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
-          <AssociationSet Name="FK_DeptEmpNotification_DepartmentEmployee" Association="Self.FK_DeptEmpNotification_DepartmentEmployee">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="EmployeeNotification" EntitySet="EmployeeNotifications" />
-          </AssociationSet>
           <AssociationSet Name="FK_PurchaseOrder_Employee" Association="Self.FK_PurchaseOrder_Employee">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
@@ -1353,7 +1317,7 @@
           <Property Type="String" Name="Code" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="Description" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="StockQty" Nullable="false" />
-          <Property Type="Int32" Name="AvailableQty" Nullable="false" />
+          <Property Type="Int32" Name="AvailableQty" Nullable="true" />
           <Property Type="Int32" Name="WaitlistQty" Nullable="false" />
           <Property Type="Int32" Name="Unsubmitted" Nullable="false" />
           <Property Type="Int32" Name="ReorderLevel" Nullable="true" />
@@ -1467,12 +1431,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="EmployeeNotifications">
-            <EntityTypeMapping TypeName="LUSSISContextModel.EmployeeNotification">
-              <MappingFragment StoreEntitySet="EmployeeNotification">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
-                <ScalarProperty Name="Meassage" ColumnName="Meassage" />
+          <EntitySetMapping Name="PublicHolidays">
+            <EntityTypeMapping TypeName="LUSSISContextModel.PublicHoliday">
+              <MappingFragment StoreEntitySet="PublicHoliday">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1488,9 +1451,9 @@
                 <ScalarProperty Name="DeliveryDateTime" ColumnName="DeliveryDateTime" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="DORemark" ColumnName="DORemark" />
                 <ScalarProperty Name="DO" ColumnName="DO" />
                 <ScalarProperty Name="Invoice" ColumnName="Invoice" />
-                <ScalarProperty Name="DORemark" ColumnName="DORemark" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
