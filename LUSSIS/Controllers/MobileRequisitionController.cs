@@ -22,7 +22,7 @@ namespace LUSSIS.Controllers
 
         public MobileRequisitionController()
         {
-            requisitionCatalogueService = RequisitionCatalogueService.Instance; ;
+            requisitionCatalogueService = RequisitionCatalogueService.Instance;
             requisitionManagementService = RequisitionManagementService.Instance;
         }
 
@@ -167,10 +167,10 @@ namespace LUSSIS.Controllers
                     {
                         Id = rd.Id,
                         RequisitionId = rd.RequisitionId,
-                        DisbursementId = rd.DisbursementId,
+                        //DisbursementId = (int) rd.DisbursementId,
                         StationeryId = rd.StationeryId,
                         QuantityOrdered = rd.QuantityOrdered,
-                        QuantityDelivered = rd.QuantityDelivered,
+                        //QuantityDelivered = (int) rd.QuantityDelivered,
                         Status = rd.Status,
 
                         Stationery = new StationeryDTO
