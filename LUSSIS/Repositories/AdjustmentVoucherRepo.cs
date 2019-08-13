@@ -46,14 +46,5 @@ namespace LUSSIS.Repositories
                     select st.Price * avd.Quantity).Sum();
                 return total;
         }
-
-        //public AdjustmentVoucher FindByStatusAndEmployeeId(int clerkId)
-        //{
-        //    AdjustmentVoucher adj = from a in Context.AdjustmentVouchers
-        //                            where a.Status.Equals("Open")
-        //                            where a.EmployeeId == clerkId
-                                    
-        //    return adj;
-        //}
     }
 }

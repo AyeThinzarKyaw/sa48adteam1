@@ -26,6 +26,10 @@ namespace LUSSIS.Controllers
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<AdjustmentVoucherDTO> adjustmentvouchers = AdjustmentVoucherService.Instance.getTotalAmountDTO();
+                if(currentUser.RoleId == 6)
+                {
+                    adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status ==  "Acknowledged").ToList();
+                }
                 return View(adjustmentvouchers);
             }
             return RedirectToAction("Index", "Login");
@@ -85,7 +89,7 @@ namespace LUSSIS.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    int clerkId = 1;
+                    int clerkId = currentUser.EmployeeId;
                     adjDTO.adjustmentVoucher = new AdjustmentVoucher();
 
                     AdjustmentVoucher existVoucher = AdjustmentVoucherService.Instance.getOpenAdjustmentVoucherByClerk(clerkId);
