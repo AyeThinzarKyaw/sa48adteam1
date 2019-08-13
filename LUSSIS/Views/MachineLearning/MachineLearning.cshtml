@@ -35,22 +35,22 @@
                 @if (ViewBag.data != null)
                 {
                     <tr>
-                        <th>Stationery Name</th>
-                        <th>Most Recent Requisition Date</th>
-                        <th>Next Day of Most Recent</th>
+                        <th>Stationery Id</th>
+                        <th>Reorder level and quantity</th>
+                        @*<th>Next Day of Most Recent</th>
                         <th>Estimated One Day Requisition Quantity</th>
                         <th>Selected Requisition day</th>
-                        <th>Estimated Requisition Quantity</th>
+                        <th>Estimated Requisition Quantity</th>*@
                     </tr>
                     foreach (var eleArr in ViewBag.data)
                     {
                         <tr>
                             <td>@eleArr[0]</td>
                             <td>@eleArr[1]</td>
-                            <td>@eleArr[2]</td>
+                            @*<td>@eleArr[2]</td>
                             <td>@eleArr[3]</td>
                             <td>@eleArr[4]</td>
-                            <td>@eleArr[5]</td>
+                            <td>@eleArr[5]</td>*@
                         </tr>
                     }
                 }
