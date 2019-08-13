@@ -298,6 +298,7 @@
     <Compile Include="Repositories\AdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\AdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\CartDetailRepo.cs" />
+    <Compile Include="Repositories\PublicHolidayRepo.cs" />
     <Compile Include="Repositories\CategoryRepo.cs" />
     <Compile Include="Repositories\CollectionPointRepo.cs" />
     <Compile Include="Repositories\DepartmentCoverEmployeeRepo.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Repositories\DisbursementRepo.cs" />
     <Compile Include="Repositories\EmployeeRepo.cs" />
     <Compile Include="Repositories\GenericRepo.cs" />
+    <Compile Include="Repositories\Interfaces\IPublicHolidayRepo.cs" />
     <Compile Include="Repositories\Interfaces\IAdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\Interfaces\IAdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\Interfaces\ICartDetailRepo.cs" />
