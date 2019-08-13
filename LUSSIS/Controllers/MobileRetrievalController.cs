@@ -13,7 +13,7 @@ namespace LUSSIS.Controllers
     public class MobileRetrievalController : ApiController
     {
 
-        IRetrievalService retrievalService;    
+        private IRetrievalService retrievalService;    
 
         public MobileRetrievalController()
         {

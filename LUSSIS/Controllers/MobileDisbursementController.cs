@@ -40,5 +40,11 @@ namespace LUSSIS.Controllers
             return disbursements;
         }
 
+        public void Post([FromBody]DisbursementDTO disbursement)
+        {
+            disbursementService.CompleteDisbursementProcess(disbursement);
+
+        }
+
     }
 }
