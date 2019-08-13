@@ -52,14 +52,14 @@ namespace LUSSIS.Controllers
                                 ElementArray[0] = a;
                             if (i == 1)
                                 ElementArray[1] = a;
-                            if (i == 2)
-                                ElementArray[2] = a;
-                            if (i == 3)
-                                ElementArray[3] = a;
-                            if (i == 4)
-                                ElementArray[4] = a;
-                            if (i == 5)
-                                ElementArray[5] = a;
+                            //if (i == 2)
+                            //    ElementArray[2] = a;
+                            //if (i == 3)
+                            //    ElementArray[3] = a;
+                            //if (i == 4)
+                            //    ElementArray[4] = a;
+                            //if (i == 5)
+                            //    ElementArray[5] = a;
                             i = i + 1;
                         }
                         arrayList1.Add(ja);
