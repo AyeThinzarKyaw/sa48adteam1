@@ -109,6 +109,28 @@
                                                 <td>:@dl.DepartmentContactNumber</td>
                                             }
                                         </tr>
+                                        <tr>
+                                            @if (dl.DisbursementId == Model.DisbursementId && dl.Status == "PENDING_COLLECTION")
+                                            {
+                                                <td>
+                                                    @using (Html.BeginForm("Detail"))
+                                                    {
+
+
+                                                        <input type="button" class="btn btn-sm btn-primary" value="Send E-mail"
+                                                               onclick="location.href='@Url.Action("Detail", "Disbursement", new { @SessionGUID = Model.LoginDTO.SessionGuid, @EmployeeId = Model.LoginDTO.EmployeeId, @RoleId = Model.LoginDTO.RoleId, @DisbursementId = dl.DisbursementId, @DisbursementStatus = dl.Status })'" data-form-method="post" />
+                                                    }
+
+                                                </td>
+                                            }
+                                            else if (dl.DisbursementId == Model.DisbursementId && dl.Status != "PENDING_COLLECTION")
+                                            {
+                                                <td>
+                                                    <input type="button" disabled class="btn btn-sm btn-danger" value="E-mailed" />
+                                                </td>
+
+                                            }
+                                        </tr>
                                     }
                                 </table>
                             </div>
