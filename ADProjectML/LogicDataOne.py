@@ -52,7 +52,7 @@ df
 
 
 #extract the necessary columns
-df_extracted = df.iloc[:,[3,4,9,10,12,13,14]]
+df_extracted = df.iloc[:,[1,2,3,4,9,10,12,13,14]]
 df_extracted.head()
 
 
@@ -191,52 +191,156 @@ class LRTraining:
 
     @classmethod
     def EstimateAllRequisitionQuantity(cls, InputYear, InputMonth, InputDay):
-        itemName_array = df_extracted['StationeryName'].unique()
+        itemId_array = df_extracted['TempIndex'].unique()
+        itemCode_array = df_extracted['ItemNumber'].unique()
         itemSelectDateRQ_list = []
-        itemOneDayRQ_list = []
+        itemOneMonthRQ_list = []
         itemDate_list = []
-        itemNextDate_list = []
+        itemMonthEndDate_list = []
         itemSelectedDate_list =[]
-        for item in itemName_array:
-            df_filterByValue = df_extracted[df_extracted['StationeryName'].str.match(item)] 
+        for item in itemCode_array:
+            df_filterByValue = df_extracted[df_extracted['ItemNumber'].str.match(item)] 
             df_filterByValue['Cumulative_RQ'] = df_filterByValue['RequisitionQuantity'].cumsum(axis=0) 
             df_filterByValue['Dates_ordinal'] = df_filterByValue['Dates'].apply(lambda date: date.toordinal()) 
             input_date = date(InputYear,InputMonth,InputDay)
-            input_date_ordinal = input_date.toordinal()
-            X = df_filterByValue[['Dates_ordinal']]
-            y = df_filterByValue['Cumulative_RQ']
-            X_train, X_test, y_train, y_test = train_test_split(X,y, random_state = 0)
-            linReg = LinearRegression()
-            linReg.fit(X_train, y_train)
-            requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
-            quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
-            one_day_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+1]])
-            one_day_RQ_difference = one_day_RQprediction - df_filterByValue.iloc[-1,8]
-            requisition_msg_1 = '0'
-            
-            if(quantity_difference > 0):
-                itemSelectDateRQ_list.append(str(int(quantity_difference)))
+            if(InputMonth == 4) or (InputMonth == 6) or (InputMonth == 9) or (InputMonth == 11):
+                input_date_ordinal = input_date.toordinal()
+                final_firstdayofmonth = date(InputYear,InputMonth,1)
+                final_firstdayofmonth_ordinal = final_firstdayofmonth.toordinal()
+                final_lastdayofmonth = date(InputYear,InputMonth,30)
+                final_lastdayofmonth_ordinal = final_lastdayofmonth.toordinal()
+                X = df_filterByValue[['Dates_ordinal']]
+                y = df_filterByValue['Cumulative_RQ']
+                X_train, X_test, y_train, y_test = train_test_split(X,y, random_state = 0)
+                linReg = LinearRegression()
+                linReg.fit(X_train, y_train)
+                requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
+                requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
+                requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
+#                 quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
+#                 one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+29]])
+#                 one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+                one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
+                requisition_msg_1 = '0'
+
+#                 if(quantity_difference > 0):
+#                     itemSelectDateRQ_list.append(str(int(quantity_difference)))
+#                 else:
+#                     itemSelectDateRQ_list.append(requisition_msg_1)
+                if(one_Month_RQ_difference > 0):
+                    itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
+                else:
+                    itemOneMonthRQ_list.append(requisition_msg_1)
+                itemDate_list.append(str(final_firstdayofmonth))
+                itemMonthEndDate_list.append(str(final_lastdayofmonth))
+                itemSelectedDate_list.append(str(date.fromordinal(input_date_ordinal)))
+            elif(InputMonth == 1) or (InputMonth == 3) or (InputMonth == 5) or (InputMonth == 7) or (InputMonth == 8) or (InputMonth == 10) or (InputMonth == 12):
+                input_date_ordinal = input_date.toordinal()
+                final_firstdayofmonth = date(InputYear,InputMonth,1)
+                final_firstdayofmonth_ordinal = final_firstdayofmonth.toordinal()
+                final_lastdayofmonth = date(InputYear,InputMonth,31)
+                final_lastdayofmonth_ordinal = final_lastdayofmonth.toordinal()
+                X = df_filterByValue[['Dates_ordinal']]
+                y = df_filterByValue['Cumulative_RQ']
+                X_train, X_test, y_train, y_test = train_test_split(X,y, random_state = 0)
+                linReg = LinearRegression()
+                linReg.fit(X_train, y_train)
+                requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
+                requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
+                requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
+#                 quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
+#                 one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+30]])
+#                 one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+                one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
+                requisition_msg_1 = '0'
+
+#                 if(quantity_difference > 0):
+#                     itemSelectDateRQ_list.append(str(int(quantity_difference)))
+#                 else:
+#                     itemSelectDateRQ_list.append(requisition_msg_1)
+                if(one_Month_RQ_difference > 0):
+                    itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
+                else:
+                    itemOneMonthRQ_list.append(requisition_msg_1)
+                itemDate_list.append(str(final_firstdayofmonth))
+                itemMonthEndDate_list.append(str(final_lastdayofmonth))
+                itemSelectedDate_list.append(str(date.fromordinal(input_date_ordinal)))
             else:
-                itemSelectDateRQ_list.append(requisition_msg_1)
-            if(one_day_RQ_difference > 0):
-                itemOneDayRQ_list.append(str(int(one_day_RQ_difference)))
-            else:
-                itemOneDayRQ_list.append(requisition_msg_1)
-            itemDate_list.append(str(date.fromordinal(df_filterByValue.iloc[-1,9])))
-            itemNextDate_list.append(str(date.fromordinal(df_filterByValue.iloc[-1,9]+1)))
-            itemSelectedDate_list.append(str(date.fromordinal(input_date_ordinal)))
-            
+                if(InputYear % 4 == 0):
+                    input_date_ordinal = input_date.toordinal()
+                    final_firstdayofmonth = date(InputYear,InputMonth,1)
+                    final_firstdayofmonth_ordinal = final_firstdayofmonth.toordinal()
+                    final_lastdayofmonth = date(InputYear,InputMonth,29)
+                    final_lastdayofmonth_ordinal = final_lastdayofmonth.toordinal()
+                    X = df_filterByValue[['Dates_ordinal']]
+                    y = df_filterByValue['Cumulative_RQ']
+                    X_train, X_test, y_train, y_test = train_test_split(X,y, random_state = 0)
+                    linReg = LinearRegression()
+                    linReg.fit(X_train, y_train)
+                    requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
+                    requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
+                    requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
+#                     quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
+#                     one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+28]])
+#                     one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+                    one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
+                    requisition_msg_1 = '0'
+
+#                     if(quantity_difference > 0):
+#                         itemSelectDateRQ_list.append(str(int(quantity_difference)))
+#                     else:
+#                         itemSelectDateRQ_list.append(requisition_msg_1)
+                    if(one_Month_RQ_difference > 0):
+                        itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
+                    else:
+                        itemOneMonthRQ_list.append(requisition_msg_1)
+                    itemDate_list.append(str(final_firstdayofmonth))
+                    itemMonthEndDate_list.append(str(final_lastdayofmonth))
+                    itemSelectedDate_list.append(str(date.fromordinal(input_date_ordinal)))
+                else:
+                    input_date_ordinal = input_date.toordinal()
+                    final_firstdayofmonth = date(InputYear,InputMonth,1)
+                    final_firstdayofmonth_ordinal = final_firstdayofmonth.toordinal()
+                    final_lastdayofmonth = date(InputYear,InputMonth,28)
+                    final_lastdayofmonth_ordinal = final_lastdayofmonth.toordinal()
+                    X = df_filterByValue[['Dates_ordinal']]
+                    y = df_filterByValue['Cumulative_RQ']
+                    X_train, X_test, y_train, y_test = train_test_split(X,y, random_state = 0)
+                    linReg = LinearRegression()
+                    linReg.fit(X_train, y_train)
+                    requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
+                    requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
+                    requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
+#                     quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
+#                     one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+27]])
+#                     one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+                    one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
+                    requisition_msg_1 = '0'
+
+#                     if(quantity_difference > 0):
+#                         itemSelectDateRQ_list.append(str(int(quantity_difference)))
+#                     else:
+#                         itemSelectDateRQ_list.append(requisition_msg_1)
+                    if(one_Month_RQ_difference > 0):
+                        itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
+                    else:
+                        itemOneMonthRQ_list.append(requisition_msg_1)
+                    itemDate_list.append(str(final_firstdayofmonth))
+                    itemMonthEndDate_list.append(str(final_lastdayofmonth))
+                    itemSelectedDate_list.append(str(date.fromordinal(input_date_ordinal)))
             
         itemRQ_array = np.asarray(itemSelectDateRQ_list)
-        itemOneDayRQ_array = np.asarray(itemOneDayRQ_list)
+        itemOneMonthRQ_array = np.asarray(itemOneMonthRQ_list)
         itemDate_array = np.asarray(itemDate_list)
-        itemNextDate_array = np.asarray(itemNextDate_list)
+        itemMonthEndDate_array = np.asarray(itemMonthEndDate_list)
         itemSelectedDate_array = np.asarray(itemSelectedDate_list)
-        df_AllRQ = pd.DataFrame({'Stationery Name': itemName_array, 'Most Recent Requisition Date': itemDate_array})
-        df_AllRQ['Next Day of Most Recent'] = itemNextDate_array
-        df_AllRQ['Estimated One Day Requisition Quantity'] = itemOneDayRQ_array
-        df_AllRQ['Selected Requisition day'] = itemSelectedDate_array
-        df_AllRQ['Estimated Requisition Quantity'] = itemRQ_array
+        df_AllRQ = pd.DataFrame({'Id':itemId_array,'Reorder level and quantity': itemOneMonthRQ_array})
+ #       df_AllRQ['Reorder level and quantity'] = itemOneMonthRQ_array
+#        df_AllRQ['Last day of the Month'] = itemMonthEndDate_array
+#        df_AllRQ['1st Day of the Moneth'] = itemDate_array
+#        df_AllRQ['Estimated One Day Requisition Quantity'] = itemOneMonthRQ_array
+#         df_AllRQ['Selected Requisition day'] = itemSelectedDate_array
+#         df_AllRQ['Estimated Requisition Quantity'] = itemRQ_array
         df_AllRQ_json = df_AllRQ.to_json(orient = 'values')
         return df_AllRQ_json
 
