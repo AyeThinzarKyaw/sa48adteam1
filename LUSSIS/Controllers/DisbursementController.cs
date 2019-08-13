@@ -29,17 +29,17 @@ namespace LUSSIS.Controllers
                 }
 
                 disbursementService = new DisbursementService();
-                List<DisbursementDetailDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
-                List<DisbursementDetailDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
 
                 if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == currentUser.EmployeeId))
                 {
-                    DisbursementListDTO model = new DisbursementListDTO { disbursementDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId };
+                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId };
                     return View(model);
                 }
                 else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
                 {
-                    DisbursementListDTO model = new DisbursementListDTO { disbursementDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId };
+                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId };
                     return View(model);
                 }
                 else return View();
@@ -59,7 +59,7 @@ namespace LUSSIS.Controllers
                 }
                
                 disbursementService = new DisbursementService();
-                List<DisbursementDetailDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
                 List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
 
 
