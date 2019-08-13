@@ -51,19 +51,20 @@ namespace LUSSIS.Services
 
 
 
-        public List<DisbursementListDTO> GetDepRepDisbursementsDetails(int EmployeeId)
+        public List<DisbursementDetailsDTO> GetDepRepDisbursementsDetails(int EmployeeId)
         {
             List<RequisitionDetail> RequisitionDetailsList = requisitionDetailRepo.GetRequisitionDetailsByDepRepDisbursementId(EmployeeId);
-            List<DisbursementListDTO> DisplayDisbursementDetailsList = new List<DisbursementListDTO>();
+            List<DisbursementDetailsDTO> DisplayDisbursementDetailsList = new List<DisbursementDetailsDTO>();
             foreach (RequisitionDetail rd in RequisitionDetailsList)
             {
-                DisbursementListDTO disbursementDTO = new DisbursementListDTO()
+                DisbursementDetailsDTO disbursementDTO = new DisbursementDetailsDTO()
                 {
                     Id = rd.Id,
                     DisbursementId = (int)rd.DisbursementId,
                     ReceivedEmployeeId = (int)disbursementRepo.FindById((int)rd.DisbursementId).ReceivedEmployeeId,
+                    RepName = employeeRepo.FindById((int)disbursementRepo.FindById((int)rd.DisbursementId).ReceivedEmployeeId).Name,
                     DeliveredEmployeeId = disbursementRepo.FindById((int)rd.DisbursementId).DeliveredEmployeeId,
-                    DeliveryDateTime = (DateTime)disbursementRepo.FindById((int)rd.DisbursementId).DeliveryDateTime,
+                    //DeliveryDateTime = (DateTime)disbursementRepo.FindById((int)rd.DisbursementId).DeliveryDateTime,
                     CollectionPoint = disbursementRepo.FindById((int)rd.DisbursementId).CollectionPoint,
                     QuantityOrdered = rd.QuantityOrdered,
                     QuantityDelivered = (int)rd.QuantityDelivered,
@@ -90,20 +91,21 @@ namespace LUSSIS.Services
             return DisplayDisbursementDetailsList;
         }
 
-        public List<DisbursementListDTO> GetClerkDisbursementsDetails(int EmployeeId)
+        public List<DisbursementDetailsDTO> GetClerkDisbursementsDetails(int EmployeeId)
         {
 
             List<RequisitionDetail> RequisitionDetailsList = requisitionDetailRepo.GetRequisitionDetailsByClerkDisbursementId(EmployeeId);
-            List<DisbursementListDTO> DisplayDisbursementDetailsList = new List<DisbursementListDTO>();
+            List<DisbursementDetailsDTO> DisplayDisbursementDetailsList = new List<DisbursementDetailsDTO>();
             foreach (RequisitionDetail rd in RequisitionDetailsList)
             {
-                DisbursementListDTO disbursementDTO = new DisbursementListDTO()
+                DisbursementDetailsDTO disbursementDTO = new DisbursementDetailsDTO()
                 {
                     Id = rd.Id,
                     DisbursementId = (int)rd.DisbursementId,
                     ReceivedEmployeeId = (int)disbursementRepo.FindById((int)rd.DisbursementId).ReceivedEmployeeId,
+                    RepName = employeeRepo.FindById((int)disbursementRepo.FindById((int)rd.DisbursementId).ReceivedEmployeeId).Name,
                     DeliveredEmployeeId = disbursementRepo.FindById((int)rd.DisbursementId).DeliveredEmployeeId,
-                    DeliveryDateTime = (DateTime)disbursementRepo.FindById((int)rd.DisbursementId).DeliveryDateTime,
+                    //DeliveryDateTime = (DateTime)disbursementRepo.FindById((int)rd.DisbursementId).DeliveryDateTime,
                     CollectionPoint = disbursementRepo.FindById((int)rd.DisbursementId).CollectionPoint,
                     QuantityOrdered = rd.QuantityOrdered,
                     QuantityDelivered = (int)rd.QuantityDelivered,
@@ -127,6 +129,106 @@ namespace LUSSIS.Services
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
             }
             return DisplayDisbursementDetailsList;
+        }
+
+        public Models.MobileDTOs.DisbursementListDTO GetDeptRepDisbursements(int EmployeeId)
+        {
+            Models.MobileDTOs.DisbursementListDTO disbursementList = new Models.MobileDTOs.DisbursementListDTO();
+            List<Disbursement> disbursements = (List <Disbursement>) disbursementRepo.GetDisbursementsByDeptRepId(EmployeeId);
+            List<Models.MobileDTOs.DisbursementDTO> disbursements1 = new List<Models.MobileDTOs.DisbursementDTO>();
+            foreach(Disbursement disbursement in disbursements)
+            {
+                Models.MobileDTOs.DisbursementDTO disbursement1 = new Models.MobileDTOs.DisbursementDTO
+                {
+                    Id = disbursement.Id,
+                    DeliveredEmployeeId = disbursement.DeliveredEmployeeId,
+                    ReceivedEmployeeId = (int)disbursement.ReceivedEmployeeId,
+                    ReceivedEmployeeName = disbursement.Employee1.Name,
+                    DepartmentName = disbursement.Employee1.Department.DepartmentName,
+                    AdHoc = disbursement.AdHoc,
+                    CollectionPoint = disbursement.CollectionPoint,
+                    //DeliveryDateTime = disbursement.DeliveryDateTime
+            };
+                disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();
+                foreach(RequisitionDetail rd in disbursement.RequisitionDetails)
+                {
+                    Models.MobileDTOs.RequisitionDetailDTO rd1 = new Models.MobileDTOs.RequisitionDetailDTO
+                    {
+                        Id = rd.Id,
+                        RequisitionId = rd.RequisitionId,
+                        DisbursementId = (int)rd.DisbursementId,
+                        StationeryId = rd.StationeryId,
+                        QuantityOrdered = rd.QuantityOrdered,
+                        QuantityDelivered = (int)rd.QuantityDelivered,
+                        Status = rd.Status,
+                        Stationery = new Models.MobileDTOs.StationeryDTO
+                        {
+                            Description = rd.Stationery.Description
+                        },
+                        Requisition = new Models.MobileDTOs.RequisitionDTO
+                        {
+                            Employee = new Models.MobileDTOs.EmployeeDTO
+                            {
+                                Name = rd.Requisition.Employee.Name
+                            }
+                        }
+                    };
+                    disbursement1.RequisitionDetails.Add(rd1);
+                }
+                disbursements1.Add(disbursement1);
+            }
+            disbursementList.Disbursements = disbursements1;
+            return disbursementList;
+        }
+
+        public Models.MobileDTOs.DisbursementListDTO GetClerkDisbursements(int EmployeeId)
+        {
+            Models.MobileDTOs.DisbursementListDTO disbursementList = new Models.MobileDTOs.DisbursementListDTO();
+            List<Disbursement> disbursements = (List<Disbursement>)disbursementRepo.GetDisbursementsByClerkId(EmployeeId);
+            List<Models.MobileDTOs.DisbursementDTO> disbursements1 = new List<Models.MobileDTOs.DisbursementDTO>();
+            foreach (Disbursement disbursement in disbursements)
+            {
+                Models.MobileDTOs.DisbursementDTO disbursement1 = new Models.MobileDTOs.DisbursementDTO
+                {
+                    Id = disbursement.Id,
+                    DeliveredEmployeeId = disbursement.DeliveredEmployeeId,
+                    ReceivedEmployeeId = (int)disbursement.ReceivedEmployeeId,
+                    ReceivedEmployeeName = disbursement.Employee1.Name,
+                    DepartmentName = disbursement.Employee1.Department.DepartmentName,
+                    AdHoc = disbursement.AdHoc,
+                    CollectionPoint = disbursement.CollectionPoint,
+                    //DeliveryDateTime = disbursement.DeliveryDateTime
+                };
+                disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();
+                foreach (RequisitionDetail rd in disbursement.RequisitionDetails)
+                {
+                    Models.MobileDTOs.RequisitionDetailDTO rd1 = new Models.MobileDTOs.RequisitionDetailDTO
+                    {
+                        Id = rd.Id,
+                        RequisitionId = rd.RequisitionId,
+                        DisbursementId = (int)rd.DisbursementId,
+                        StationeryId = rd.StationeryId,
+                        QuantityOrdered = rd.QuantityOrdered,
+                        QuantityDelivered = (int)rd.QuantityDelivered,
+                        Status = rd.Status,
+                        Stationery = new Models.MobileDTOs.StationeryDTO
+                        {
+                            Description = rd.Stationery.Description
+                        },
+                        Requisition = new Models.MobileDTOs.RequisitionDTO
+                        {
+                            Employee = new Models.MobileDTOs.EmployeeDTO
+                            {
+                                Name = rd.Requisition.Employee.Name
+                            }
+                        }
+                    };
+                    disbursement1.RequisitionDetails.Add(rd1);
+                }
+                disbursements1.Add(disbursement1);
+            }
+            disbursementList.Disbursements = disbursements1;
+            return disbursementList;
         }
     }
 }

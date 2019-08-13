@@ -1,4 +1,4 @@
-﻿@model LUSSIS.Models.DTOs.DisbursementListDTO
+﻿@model LUSSIS.Models.DTOs.DisbursementDTO
 @using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Index";
@@ -28,7 +28,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                 {
                                     <tr>
                                         <td>@dl.DeliveryDateTime</td>
@@ -68,7 +68,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var dl in Model.disbursementDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
+                                @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                 {
                                     <tr>
                                         <td>@dl.DisbursementId</td>

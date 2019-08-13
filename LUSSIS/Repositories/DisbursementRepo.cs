@@ -29,5 +29,23 @@ namespace LUSSIS.Repositories
 
             return result.ToList();
         }
+
+        public IEnumerable<Disbursement> GetDisbursementsByDeptRepId(int deptRepId)
+        {
+            var result = from d in Context.Disbursements
+                         where d.ReceivedEmployeeId == deptRepId
+                         select d;
+
+            return result.ToList();
+        }
+
+        public IEnumerable<Disbursement> GetDisbursementsByClerkId(int clerkId)
+        {
+            var result = from d in Context.Disbursements
+                         where d.DeliveredEmployeeId == clerkId && d.Signature.Equals(null)
+                         select d;
+
+            return result.ToList();
+        }
     }
 }

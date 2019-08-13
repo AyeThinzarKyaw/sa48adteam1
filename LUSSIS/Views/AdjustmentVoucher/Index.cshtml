@@ -20,11 +20,14 @@
             <div class="box">
 
                 <!-- If Clerk -->
-                <div class="box-header">
-                    <div class="box-tools pull-right" style="position: relative;">
-                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success right", @role = "button" })
+                @if(role == 7)
+                {
+                    <div class="box-header">
+                        <div class="box-tools pull-right" style="position: relative;">
+                            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success right", @role = "button" })
+                        </div>
                     </div>
-                </div>
+                }
                 <!-- If Clerk -->
 
                 <div class="box-body">
@@ -41,22 +44,22 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>@item.adjustmentVoucher.Id</td>
-                                    @{ string adjDate = "";
+                            <tr>
+                                <td>@item.adjustmentVoucher.Id</td>
+                                @{ string adjDate = "";
                                         if (item.adjustmentVoucher.Date != null)
                                         {
                                             adjDate = ((DateTime)item.adjustmentVoucher.Date).ToString("dd/MM/yyyy");
                                         }
 
-                                    }
-                                    <td>@adjDate</td>
-                                    <td>$ @item.TotalAmount</td>
-                                    <td>@item.adjustmentVoucher.Status</td>
-                                    <td>
-                                        @Html.ActionLink("Detail", "Detail", new { adjId = item.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
-                                    </td>
-                                </tr>
+                                }
+                                <td>@adjDate</td>
+                                <td>$ @item.TotalAmount</td>
+                                <td>@item.adjustmentVoucher.Status</td>
+                                <td>
+                                    @Html.ActionLink("Detail", "Detail", new { adjId = item.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
