@@ -46,7 +46,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead && currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -63,7 +63,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead || currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead && currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }

@@ -36,7 +36,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk && currentUser.RoleId == (int)Enums.Roles.StoreSupervisor && currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -76,7 +76,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk && currentUser.RoleId == (int)Enums.Roles.StoreSupervisor && currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -98,7 +98,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk && currentUser.RoleId == (int)Enums.Roles.StoreSupervisor && currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -119,7 +119,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk && currentUser.RoleId == (int)Enums.Roles.StoreSupervisor && currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -135,7 +135,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk && currentUser.RoleId == (int)Enums.Roles.StoreSupervisor && currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -153,7 +153,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk || currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId == (int)Enums.Roles.StoreClerk && currentUser.RoleId == (int)Enums.Roles.StoreSupervisor && currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
