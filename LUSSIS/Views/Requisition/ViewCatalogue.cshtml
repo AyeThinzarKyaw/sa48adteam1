@@ -3,10 +3,7 @@
 @{
     ViewBag.Title = "Home Page";
 }
-@if (Session["existinguser"] != null)
-{
-    LoginDTO loginDto = (LoginDTO)Session["existinguser"];
-}
+
 @section styles {
     <style type="text/css">
         input[type="text"] {
@@ -22,9 +19,10 @@
 <section class="content-header">
     <h1>Catalogue</h1>
 </section>
+@{LoginDTO loginDto = (LoginDTO)Session["existinguser"];}
 
 <!-- Main content -->
-<input type="hidden" id="employeeId" name="employeeId" value=@Model.LoginDTO.EmployeeId>
+<input type="hidden" id="employeeId" name="employeeId" value=@loginDto.EmployeeId>
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -169,8 +167,8 @@
                     success: function (r) {
                         //alert(r.reserved);
                         UpdateAvailability(r, "availStatus" + stationeryId);
-                        document.getElementById("reservedBox" + stationeryId).innerHTML = r.reserved ;
-                        document.getElementById("waitlistBox" + stationeryId).innerHTML = r.waitlist ;
+                        document.getElementById("reservedBox" + stationeryId).innerHTML = r.reserved;
+                        document.getElementById("waitlistBox" + stationeryId).innerHTML = r.waitlist;
                     },
                     contentType: 'application/json'
                 });
