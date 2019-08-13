@@ -48,7 +48,6 @@ namespace LUSSIS.Services
         public AdjustmentVoucher getOpenAdjustmentVoucherByClerk(int clerkId)
         {
             return adjustmentVoucherRepo.FindOneBy(x => x.Status == "Open" && x.EmployeeId == clerkId);
-                //FindByStatusAndEmployeeId(clerkId);
         }
 
         public void CreateAdjustmentVoucher(AdjustmentVoucher adj)

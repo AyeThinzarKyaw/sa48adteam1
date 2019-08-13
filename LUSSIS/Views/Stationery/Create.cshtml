@@ -195,13 +195,13 @@
                 async: true,
                 success: function (data) {
                     debugger;
-                    alert(data);
+                    //alert(data);
                     var result = "";
                     var val = $('#CategoryId');
-                    alert(val);
+                    //alert(val);
                     $('#CategoryId').empty();
                     val = $('#CategoryId');
-                    alert(val);
+                    //alert(val);
                     $.each(data, function (i, d) {
 
                         //alert(i+"/"+d.Id);
@@ -210,7 +210,7 @@
                         result += '>' + d.Type + '</option>';
 
                     });
-                    alert(result);
+                    //alert(result);
                     debugger;
                     $('#CategoryId').append(result);
                 },

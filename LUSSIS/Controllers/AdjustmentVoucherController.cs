@@ -120,10 +120,12 @@ namespace LUSSIS.Controllers
         [Authorizer]
         private AdjustmentVoucher generateVoucher(AdjustmentVoucherDTO adjDTO)
         {
+            LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+            int clerkId = currentUser.EmployeeId;
             AdjustmentVoucher newVoucher = new AdjustmentVoucher();
             newVoucher.Date = DateTime.Now;
             newVoucher.Status = Enum.GetName(typeof(Enums.AdjustmentVoucherStatus), Enums.AdjustmentVoucherStatus.Open);
-            newVoucher.EmployeeId = 1;
+            newVoucher.EmployeeId = clerkId;
             return newVoucher;
         }
         //By NESS

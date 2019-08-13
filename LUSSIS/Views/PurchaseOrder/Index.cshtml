@@ -3,7 +3,13 @@
 @{
     ViewBag.Title = "Purchase Orders";
 }
-
+@{
+    int role = 0;
+    if (Session["role"] != null)
+    {
+        role = (int)Session["role"];
+    }
+}
 <section class="content-header">
     <h1>
         Purchase Orders
@@ -12,87 +18,90 @@
 
 <!-- Main content -->
 
-    <section class="content">
-        <div class="row">
-            @using (Html.BeginForm())
-            {
-                <div class="col-xs-12">
+<section class="content">
+    <div class="row">
+        @using (Html.BeginForm())
+        {
+            <div class="col-xs-12">
 
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Search PO between</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Search PO between</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label>From Date:</label>
-                                        <div class="input-group date">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            @Html.TextBoxFor(x => x.FromDate, new { @type = "date", @class = "form-control" })
-                                            @*<input type="date" class="form-control pull-right" id="datepicker">*@
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>From Date:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
                                         </div>
+                                        @Html.TextBoxFor(x => x.FromDate, new { @type = "date", @class = "form-control" })
+                                        @*<input type="date" class="form-control pull-right" id="datepicker">*@
                                     </div>
                                 </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label>To Date:</label>
-                                        <div class="input-group date">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            @Html.TextBoxFor(x => x.ToDate, new { @type = "date", @class = "form-control" })
-                                            @*<input type="date" class="form-control pull-right" id="datepicker">*@
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>To Date:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
                                         </div>
+                                        @Html.TextBoxFor(x => x.ToDate, new { @type = "date", @class = "form-control" })
+                                        @*<input type="date" class="form-control pull-right" id="datepicker">*@
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <input type="submit" value="Search" style="margin-top:25px;" class="btn btn-success" />
-                                    @*<button class="btn btn-success" style="margin-top:25px;">Search</button>*@
-                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="submit" value="Search" style="margin-top:25px;" class="btn btn-success" />
+                                @*<button class="btn btn-success" style="margin-top:25px;">Search</button>*@
                             </div>
                         </div>
                     </div>
                 </div>
-            }
-                <div class="col-xs-12">
-                    <div class="box">
+            </div>
+        }
+        <div class="col-xs-12">
+            <div class="box">
 
-                        <!-- If Clerk -->
-                        <div class="box-header">
-                            <div class="box-tools pull-right" style="position: relative;">
-                                
-                                @Html.ActionLink("Add Item To Raise PO", "Catalogue", null, new { @class = "btn btn-primary right", @role = "button" })
-                                @*<a href="purchase-order-select-item.html" class="btn btn-primary right">Add Item To Raise PO</a>*@
-                            </div>
+                <!-- If Clerk -->
+                @if (role == 7)
+                {
+                    <div class="box-header">
+                        <div class="box-tools pull-right" style="position: relative;">
+
+                            @Html.ActionLink("Add Item To Raise PO", "Catalogue", null, new { @class = "btn btn-primary right", @role = "button" })
+                            @*<a href="purchase-order-select-item.html" class="btn btn-primary right">Add Item To Raise PO</a>*@
                         </div>
-                        <!-- If Clerk -->
+                    </div>
+                }
+                    <!-- If Clerk -->
 
-                        <div class="box-body">
-                            <table id="table" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>PO Number</th>
-                                        <th>Order Date</th>
-                                        <th>Estimated Delivery Date</th>
-                                        <th>Supplier</th>
+                    <div class="box-body">
+                        <table id="table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>PO Number</th>
+                                    <th>Order Date</th>
+                                    <th>Estimated Delivery Date</th>
+                                    <th>Supplier</th>
 
-                                        <!-- If Supervisor
-                                <th>Order By(Clerk Name)</th> -->
+                                    <!-- If Supervisor
+                        <th>Order By(Clerk Name)</th> -->
 
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var po in Model.PurchaseOrders)
-                                    {
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var po in Model.PurchaseOrders)
+                                {
                                     <tr>
                                         <td>@po.Id</td>
                                         <td>@po.OrderDateTime</td>
@@ -112,78 +121,78 @@
                                             {
                                                 <td>@po.Supplier.Name</td>
                                             }
-                                             string statusId = "lblStatus" + po.Id.ToString();}
-                                            <td id=@statusId class="text-blue">@po.Status</td>
-                                            <td>
-                                                @Html.ActionLink("Detail", "Detail", new { poId = po.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
-                                                @*<a href="purchase-order-detail.html" class="btn btn-sm btn-primary">Detail</a>*@
+                                            string statusId = "lblStatus" + po.Id.ToString();}
+                                        <td id=@statusId class="text-blue">@po.Status</td>
+                                        <td>
+                                            @Html.ActionLink("Detail", "Detail", new { poId = po.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                            @*<a href="purchase-order-detail.html" class="btn btn-sm btn-primary">Detail</a>*@
 
-                                                <!-- If Clerk -->
+                                            <!-- If Clerk -->
 
-                                                @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.OPEN))
-                                                {
-                                                    
-                                                    @Html.ActionLink("Cancel", null, null, new { @onclick = "if (confirm('Are you sure you want to cancel this PO?')) { return cancelPO('" + po.Id + "'); }" , @class = "btn btn-sm btn-danger", @role = "button" })
-                                                    @*@Html.ActionLink("Cancel", null, null, new { @onclick = "cancelPO('" + po.Id + "');", @class = "btn btn-sm btn-danger", @role = "button" })*@
-                                                    @*<a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>*@
-                                                }
-                                                @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.APPROVED))
-                                                {
-                                                    @Html.ActionLink("ReceiveDO", "ReceiveDO", new { @poId = po.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
-                                                    @*<a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>*@
-                                                }
-                                                <!-- If Clerk -->
-                                            </td>
-                                        </tr>
-                                    }
-                                        
-                                    </tbody>
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
+                                            @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.OPEN))
+                                            {
+
+                                                @Html.ActionLink("Cancel", null, null, new { @onclick = "if (confirm('Are you sure you want to cancel this PO?')) { return cancelPO('" + po.Id + "'); }", @class = "btn btn-sm btn-danger", @role = "button" })
+                                                @*@Html.ActionLink("Cancel", null, null, new { @onclick = "cancelPO('" + po.Id + "');", @class = "btn btn-sm btn-danger", @role = "button" })*@
+                                                @*<a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>*@
+                                            }
+                                            @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.APPROVED))
+                                            {
+                                                @Html.ActionLink("ReceiveDO", "ReceiveDO", new { @poId = po.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                                @*<a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>*@
+                                            }
+                                            <!-- If Clerk -->
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- /.box -->
+                    <!-- /.box-body -->
                 </div>
-                <!-- /.col -->
-            </div>
-        <!-- /.row -->
-    </section>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
 
-    @section scripts {
-        <script>
-            $(function () {
-                $('#table').DataTable({
-                    'columnDefs': [
-                        { 'orderable': false, 'targets': 5 }
-                    ],
-                    'paging': true,
-                    'lengthChange': false,
-                    'searching': true,
-                    'ordering': true,
-                    'info': true,
-                    'autoWidth': false
-                })
+@section scripts {
+    <script>
+        $(function () {
+            $('#table').DataTable({
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 5 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
             })
+        })
 
-            function cancelPO(r) {
-                debugger;
-                
-                var url = "/PurchaseOrder/CancelPO?poId=" + r;
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    async: true,
-                    success: function (data) {
-                        if (data == true) {
-                            document.getElementById("lblStatus" + r).innerHTML = "CANCELLED";
-                        }
-                        else {
-                            alert("Oops..Something went wrong! Please try again...")
-                        }
-                    },
-                    error: function (data) { }
-                });
-            }
-        </script>
-    }
+        function cancelPO(r) {
+            debugger;
+
+            var url = "/PurchaseOrder/CancelPO?poId=" + r;
+            $.ajax({
+                url: url,
+                type: "GET",
+                async: true,
+                success: function (data) {
+                    if (data == true) {
+                        document.getElementById("lblStatus" + r).innerHTML = "CANCELLED";
+                    }
+                    else {
+                        alert("Oops..Something went wrong! Please try again...")
+                    }
+                },
+                error: function (data) { }
+            });
+        }
+    </script>
+}
 
