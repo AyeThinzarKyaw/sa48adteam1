@@ -29,7 +29,9 @@
 
     <div class="form-group">
         <input value="Check" type="submit" />
-        
+        @*<div class="row">*@
+            @Html.ActionLink("Keep this as new Reorder Info", "UpdateReorderQuantity", null, new { @class = "btn btn-primary right", @role = "button" })
+        @*</div>*@
         <table class="table table-bordered table-hover">
             <tbody>
                 @if (ViewBag.data != null)
@@ -58,8 +60,6 @@
                 }
             </tbody>
         </table>
-        <div class="row">
-            @Html.ActionLink("Keep this as new Reorder Info", "UpdateReorderQuantity",null, new { @class = "btn btn-primary right", @role = "button" })
-        </div>
+        
     </div>
 }
