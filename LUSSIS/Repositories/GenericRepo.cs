@@ -31,18 +31,34 @@ namespace LUSSIS.Repositories
         public IEnumerable<T> FindAll()
         {
             context = new LUSSISContext();
+            if (typeof(T)==typeof(CartDetail))
+            {
+                context.CartDetail_releaseCartData();//Note:release cart detail which are more than 1hour existed by last item of an employee
+                context = new LUSSISContext();
+            }            
             return context.Set<T>().ToList<T>();
         }
 
         public T FindById(ID id)
         {
             context = new LUSSISContext();
+            if (typeof(T) == typeof(CartDetail))
+            {
+                context.CartDetail_releaseCartData();//Note:release cart detail which are more than 1hour existed by last item of an employee
+                context = new LUSSISContext();
+            }
+
             return context.Set<T>().Find(id);
            
         }
 
         public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
+            if (typeof(T) == typeof(CartDetail))
+            {
+                context.CartDetail_releaseCartData();//Note:release cart detail which are more than 1hour existed by last item of an employee
+                context = new LUSSISContext();
+            }
             context = new LUSSISContext();
             return context.Set<T>().Where(predicate).ToList();
         }
@@ -62,6 +78,11 @@ namespace LUSSIS.Repositories
 
         public T FindOneBy(Expression<Func<T, bool>> predicate)
         {
+            if (typeof(T) == typeof(CartDetail))
+            {
+                context.CartDetail_releaseCartData();//Note:release cart detail which are more than 1hour existed by last item of an employee
+                context = new LUSSISContext();
+            }
             context = new LUSSISContext();
             return context.Set<T>().Where(predicate).SingleOrDefault();
 
