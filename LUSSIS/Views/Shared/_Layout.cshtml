@@ -45,31 +45,31 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="../images/manager.png" class="user-image" alt="User Image" style="object-fit: cover;">
-                                @if (role == 1)
+                                @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                                 {
                                     <span class="hidden-xs">Department Head</span>
                                 }
-                                else if (role == 2)
+                                else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                                 {
                                     <span class="hidden-xs">Staff</span>
                                 }
-                                else if (role == 3)
+                                else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                                 {
                                     <span class="hidden-xs">Department Representative</span>
                                 }
-                                else if (role == 4)
+                                else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                                 {
                                     <span class="hidden-xs">Cover Staff</span>
                                 }
-                                else if (role == 5)
+                                else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                                 {
                                     <span class="hidden-xs">Store Manager</span>
                                 }
-                                else if (role == 6)
+                                else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                                 {
                                     <span class="hidden-xs">Store Supervisor</span>
                                 }
-                                else if (role == 7)
+                                else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                                 {
                                     <span class="hidden-xs">Store Clerk</span>
                                 }
@@ -80,49 +80,49 @@
                                 <li class="user-header">
                                     <img src="../images/manager.png" class="img-circle" alt="User Image" style="object-fit: cover;">
 
-                                    @if (role == 1)
+                                    @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                                     {
                                         <p>
                                             Department Head<br />
                                             (Department of Registrar)
                                         </p>
                                     }
-                                    else if (role == 2)
+                                    else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                                     {
                                         <p>
                                             Staff<br />
                                             (Department of Registrar)
                                         </p>
                                     }
-                                    else if (role == 3)
+                                    else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                                     {
                                         <p>
                                             Department Representative<br />
                                             (Department of Registrar)
                                         </p>
                                     }
-                                    else if (role == 4)
+                                    else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                                     {
                                         <p>
                                             Cover Staff<br />
                                             (Department of Registrar)
                                         </p>
                                     }
-                                    else if (role == 5)
+                                    else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                                     {
                                         <p>
                                             Store Manager<br />
                                             (Department of Store)
                                         </p>
                                     }
-                                    else if (role == 6)
+                                    else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                                     {
                                         <p>
                                             Store Supervisor<br />
                                             (Department of Store)
                                         </p>
                                     }
-                                    else if (role == 7)
+                                    else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                                     {
                                         <p>
                                             Store Clerk<br />
@@ -152,37 +152,37 @@
                         <img src="../images/manager.png" class="img-circle" alt="User Image" style="object-fit: cover; width: 35px; height: 35px;">
                     </div>
                     <div class="pull-left info">
-                        @if (role == 1)
+                        @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                         {
                             <p>Department Head</p>
                             <p style="font-size: 12px;">Department of Registrar</p>
                         }
-                        else if (role == 2)
+                        else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                         {
                             <p>Staff</p>
                             <p style="font-size: 12px;">Department of Registrar</p>
                         }
-                        else if (role == 3)
+                        else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                         {
                             <p>Department Representative</p>
                             <p style="font-size: 12px;">Department of Registrar</p>
                         }
-                        else if (role == 4)
+                        else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                         {
                             <p>Cover Staff</p>
                             <p style="font-size: 12px;">Department of Registrar</p>
                         }
-                        else if (role == 5)
+                        else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                         {
                             <p>Store Manager</p>
                             <p style="font-size: 12px;">Department of Store</p>
                         }
-                        else if (role == 6)
+                        else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                         {
                             <p>Store Supervisor</p>
                             <p style="font-size: 12px;">Department of Store</p>
                         }
-                        else if (role == 7)
+                        else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                         {
                             <p>Store Clerk</p>
                             <p style="font-size: 12px;">Department of Store</p>
@@ -194,7 +194,7 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVICATION</li>
-                    @if (role == 1 || role == 2 || role == 3 || role == 4)
+                    @if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff || role == (int)LUSSIS.Enums.Roles.DepartmentHead || role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative || role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                     {
                         <li>
                             <a href="/Requisition/ViewCatalogue">
@@ -202,12 +202,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/Requisition/Index">
+                            <a href="/Requisition/ViewRequisitionList">
                                 <i class="fa fa-list"></i> <span>My Requisition History</span>
                             </a>
                         </li>
                     }
-                    @if (role == 3)
+                    @if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                     {
                         <li class="header">DEP REP FUNCTION</li>
                         <li>
@@ -217,11 +217,11 @@
                         </li>
                     }
 
-                    @if (role == 1 || role == 4)
+                    @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead || role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                     {
                         <li class="header">ADMINISTRATION</li>
                         <li>
-                            <a href="/Requisition/ViewRequisitionList">
+                            <a href="/DeptHead/ViewDepartmentRequisitions">
                                 <i class="fa fa-list"></i> <span>Requested Requisition</span>
                             </a>
                         </li>
@@ -236,7 +236,7 @@
                             </a>
                         </li>
                     }
-                    @if (role == 1)
+                    @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                     {
                         <li>
                             <a href="/AssignStaff/AssignCoverStaff">
@@ -244,7 +244,7 @@
                             </a>
                         </li>
                     }
-                    @if (role == 5)
+                    @if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                     {
                         <li>
                             <a href="/Stationery/Index">
@@ -257,7 +257,7 @@
                             </a>
                         </li>
                     }
-                    @if (role == 5 || role == 6)
+                    @if (role == (int)LUSSIS.Enums.Roles.StoreManager || role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                     {
                         <li>
                             <a href="/AdjustmentVoucher/Index">
@@ -286,10 +286,10 @@
                             </a>
                         </li>
                     }
-                    @if (role == 7)
+                    @if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                     {
                         <li>
-                            <a href="/Retrieval/Index">
+                            <a href="/Retrieval/ViewRetrieval">
                                 <i class="fa fa-building"></i> <span>Retrieval List</span>
                             </a>
                         </li>

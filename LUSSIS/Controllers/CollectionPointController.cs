@@ -19,7 +19,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead && currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -46,7 +46,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId != (int)Enums.Roles.DepartmentHead && currentUser.RoleId != (int)Enums.Roles.DepartmentCoverHead)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -66,7 +66,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -92,7 +92,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreManager)
+                if (currentUser.RoleId != (int)Enums.Roles.StoreManager && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }

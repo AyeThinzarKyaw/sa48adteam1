@@ -26,6 +26,10 @@ namespace LUSSIS.Controllers
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<AdjustmentVoucherDTO> adjustmentvouchers = AdjustmentVoucherService.Instance.getTotalAmountDTO();
+                if(currentUser.RoleId == 6)
+                {
+                    adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status ==  "Acknowledged").ToList();
+                }
                 return View(adjustmentvouchers);
             }
             return RedirectToAction("Index", "Login");
@@ -85,7 +89,7 @@ namespace LUSSIS.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    int clerkId = 1;
+                    int clerkId = currentUser.EmployeeId;
                     adjDTO.adjustmentVoucher = new AdjustmentVoucher();
 
                     AdjustmentVoucher existVoucher = AdjustmentVoucherService.Instance.getOpenAdjustmentVoucherByClerk(clerkId);
@@ -116,10 +120,12 @@ namespace LUSSIS.Controllers
         [Authorizer]
         private AdjustmentVoucher generateVoucher(AdjustmentVoucherDTO adjDTO)
         {
+            LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+            int clerkId = currentUser.EmployeeId;
             AdjustmentVoucher newVoucher = new AdjustmentVoucher();
             newVoucher.Date = DateTime.Now;
             newVoucher.Status = Enum.GetName(typeof(Enums.AdjustmentVoucherStatus), Enums.AdjustmentVoucherStatus.Open);
-            newVoucher.EmployeeId = 1;
+            newVoucher.EmployeeId = clerkId;
             return newVoucher;
         }
         //By NESS

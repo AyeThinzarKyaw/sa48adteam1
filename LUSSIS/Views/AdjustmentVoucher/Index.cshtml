@@ -1,8 +1,15 @@
 ﻿@model List<LUSSIS.Models.DTOs.AdjustmentVoucherDTO>
+@using LUSSIS.Enums;
 @{
     ViewBag.Title = "Index";
 }
-
+@{
+    int role = 0;
+    if (Session["role"] != null)
+    {
+        role = (int)Session["role"];
+    }
+}
 <section class="content-header">
 
     <!-- If Clerk -->
@@ -20,7 +27,7 @@
             <div class="box">
 
                 <!-- If Clerk -->
-                @if(role == 7)
+                @if (role == 7)
                 {
                     <div class="box-header">
                         <div class="box-tools pull-right" style="position: relative;">
@@ -37,6 +44,10 @@
                                 <th>Voucher ID</th>
                                 <th>Voucher Date</th>
                                 <th>Total Amount</th>
+                                @if (role == 6)
+                                {
+                                    <th>Clerk Name</th>
+                                }
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -47,15 +58,30 @@
                             <tr>
                                 <td>@item.adjustmentVoucher.Id</td>
                                 @{ string adjDate = "";
-                                        if (item.adjustmentVoucher.Date != null)
-                                        {
-                                            adjDate = ((DateTime)item.adjustmentVoucher.Date).ToString("dd/MM/yyyy");
-                                        }
+                                    if (item.adjustmentVoucher.Date != null)
+                                    {
+                                        adjDate = ((DateTime)item.adjustmentVoucher.Date).ToString("dd/MM/yyyy");
+                                    }
 
                                 }
                                 <td>@adjDate</td>
                                 <td>$ @item.TotalAmount</td>
-                                <td>@item.adjustmentVoucher.Status</td>
+                                @if (role == 6)
+                                {
+                                    <td>@item.adjustmentVoucher.Employee.Name</td>
+                                }
+                                @if (item.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                {
+                                    <td class="text-blue">@item.adjustmentVoucher.Status</td>
+                                }
+                                else if (item.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Submitted))
+                                {
+                                    <td class="text-green">@item.adjustmentVoucher.Status</td>
+                                }
+                                else
+                                {
+                                    <td>@item.adjustmentVoucher.Status</td>
+                                }
                                 <td>
                                     @Html.ActionLink("Detail", "Detail", new { adjId = item.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
                                 </td>
@@ -77,6 +103,7 @@
     <script>
         $(function () {
             $('#table').DataTable({
+                "order": [[0, "desc"]],
                 'columnDefs': [
                     { 'orderable': false, 'targets': 4 }
                 ],

@@ -12,12 +12,9 @@ namespace LUSSIS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class EmployeeNotification
+    public partial class PublicHoliday
     {
-        public int Id { get; set; }
-        public int EmployeeId { get; set; }
-        public string Meassage { get; set; }
-    
-        public virtual Employee Employee { get; set; }
+        public string Name { get; set; }
+        public System.DateTime Date { get; set; }
     }
 }

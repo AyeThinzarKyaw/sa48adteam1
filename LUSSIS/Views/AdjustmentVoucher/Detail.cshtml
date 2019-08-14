@@ -60,7 +60,7 @@
                                     <th style="width: 100px;">Category</th>
                                     <th style="width: 250px;">Description</th>
                                     <th style="width: 150px;">Unit of Measure</th>
-                                    <th style="width: 100px;">Price</th>
+                                    @*<th style="width: 100px;">Price</th>*@
                                     <th style="width: 150px;">Adjusted Qty</th>
                                     <th>Reason</th>
                                     @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
@@ -77,7 +77,7 @@
                                         <td>@item.Stationery.Category.Type</td>
                                         <td>@item.Stationery.Description</td>
                                         <td>@item.Stationery.UnitOfMeasure</td>
-                                        <td>@item.Stationery.Status</td>
+                                        @*<td>@item.Stationery.SupplierTenders.</td>*@
                                         @{
                                             if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
                                             {

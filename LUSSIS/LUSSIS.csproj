@@ -204,6 +204,24 @@
     <Compile Include="Models\DTOs\DisbursementDTO.cs" />
     <Compile Include="Models\DTOs\DisbursementDetailsDTO.cs" />
     <Compile Include="Models\DTOs\MachineLearningDTO.cs" />
+    <Compile Include="Models\Employee.cs">
+      <DependentUpon>LUSSISContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LUSSISContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LUSSISContext.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LUSSISContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LUSSISContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LUSSISContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LUSSISContext.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\MobileDTOs\DisbursementDTO.cs" />
     <Compile Include="Models\MobileDTOs\DisbursementListDTO.cs" />
     <Compile Include="Models\MobileDTOs\EmployeeDTO.cs" />
@@ -240,28 +258,10 @@
     <Compile Include="Models\DTOs\StockMovementDTO.cs" />
     <Compile Include="Models\DTOs\SupplierDetailsDTO.cs" />
     <Compile Include="Models\DTOs\VMOwedItemsDTO.cs" />
-    <Compile Include="Models\Employee.cs">
-      <DependentUpon>LUSSISContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\EmployeeNotification.cs">
-      <DependentUpon>LUSSISContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\LUSSISContext.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LUSSISContext.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\LUSSISContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LUSSISContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\LUSSISContext.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LUSSISContext.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\PO_getPOCatalogue_Result.cs">
+      <DependentUpon>LUSSISContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PublicHoliday.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseOrder.cs">
@@ -298,6 +298,7 @@
     <Compile Include="Repositories\AdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\AdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\CartDetailRepo.cs" />
+    <Compile Include="Repositories\PublicHolidayRepo.cs" />
     <Compile Include="Repositories\CategoryRepo.cs" />
     <Compile Include="Repositories\CollectionPointRepo.cs" />
     <Compile Include="Repositories\DepartmentCoverEmployeeRepo.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Repositories\DisbursementRepo.cs" />
     <Compile Include="Repositories\EmployeeRepo.cs" />
     <Compile Include="Repositories\GenericRepo.cs" />
+    <Compile Include="Repositories\Interfaces\IPublicHolidayRepo.cs" />
     <Compile Include="Repositories\Interfaces\IAdjustmentVoucherDetailRepo.cs" />
     <Compile Include="Repositories\Interfaces\IAdjustmentVoucherRepo.cs" />
     <Compile Include="Repositories\Interfaces\ICartDetailRepo.cs" />

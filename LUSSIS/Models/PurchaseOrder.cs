@@ -29,9 +29,9 @@ namespace LUSSIS.Models
         public Nullable<System.DateTime> DeliveryDateTime { get; set; }
         public string Status { get; set; }
         public string Remark { get; set; }
+        public string DORemark { get; set; }
         public string DO { get; set; }
         public string Invoice { get; set; }
-        public string DORemark { get; set; }
     
         public virtual Employee Employee { get; set; }
         public virtual Supplier Supplier { get; set; }
