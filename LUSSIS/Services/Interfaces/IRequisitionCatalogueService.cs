@@ -1,4 +1,5 @@
-﻿using LUSSIS.Models;
+﻿using LUSSIS.Enums;
+using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,8 @@ namespace LUSSIS.Services.Interfaces
         List<Requisition> GetSchoolRequisitionsWithEmployeeAndDept();
 
         RequisitionDetailsDTO GetRequisitionDetailsForClerk(int requisitionId);
+        int GetAvailStockForUnfulfilledRd(int stationeryId);
+        void createNewRequisitionDetail(int qty, int requisitionId, int stationeryId, RequisitionDetailStatusEnum status);
 
         bool HasItemInCart(int employeeId);
 

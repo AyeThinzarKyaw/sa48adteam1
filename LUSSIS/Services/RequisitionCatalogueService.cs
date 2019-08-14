@@ -1,4 +1,4 @@
-﻿ using LUSSIS.Enums;
+﻿using LUSSIS.Enums;
 using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Repositories;
@@ -252,7 +252,7 @@ namespace LUSSIS.Services
             return newRequisition;
         }
 
-        private void createNewRequisitionDetail(int qty, int requisitionId, int stationeryId, RequisitionDetailStatusEnum status)
+        public void createNewRequisitionDetail(int qty, int requisitionId, int stationeryId, RequisitionDetailStatusEnum status)
         {
             RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
             {
@@ -285,7 +285,7 @@ namespace LUSSIS.Services
             //List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
             List<RequisitionDetail> requisitionDetails = requisitionDetailRepo.RequisitionDetailsEagerLoadStationery(requisitionId);
             return new RequisitionDetailsDTO() { EmployeeName = employeeName,
-                RequestedDate = requisition.DateTime.ToString("dd/MM/yyyy"),
+                RequestedDate = requisition.DateTime.ToString("yyyy-MM-dd"),
                 RequisitionFormId = requisition.Id,
                 RequisitionStatus = requisition.Status,
                 RequisitionDetails = requisitionDetails};
@@ -450,7 +450,7 @@ namespace LUSSIS.Services
             GenerateNewRequisitionDetailsForUnfulfilledRds(unfulfilledRds);
         }
 
-        private void GenerateNewRequisitionDetailsForUnfulfilledRds(List<RequisitionDetail> unfulfilledRds)
+        public void GenerateNewRequisitionDetailsForUnfulfilledRds(List<RequisitionDetail> unfulfilledRds)
         {
             foreach (RequisitionDetail rd in unfulfilledRds)
             {
@@ -475,7 +475,7 @@ namespace LUSSIS.Services
             }
         }
 
-        private int GetAvailStockForUnfulfilledRd(int stationeryId)
+        public int GetAvailStockForUnfulfilledRd(int stationeryId)
         {
             int reqInTransitCount = requisitionDetailRepo.GetRequisitionCountForUnfulfilledStationery(stationeryId);
 

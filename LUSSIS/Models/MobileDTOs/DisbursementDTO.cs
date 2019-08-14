@@ -15,7 +15,7 @@ namespace LUSSIS.Models.MobileDTOs
         public bool AdHoc { get; set; }
         public DateTime DeliveryDateTime { get; set; }
         public string CollectionPoint { get; set; }
-        public byte[] Signature { get; set; }
+        public string Signature { get; set; }
         public List<RequisitionDetailDTO> RequisitionDetails { get; set; }
     }
 }

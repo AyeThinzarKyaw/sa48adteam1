@@ -22,7 +22,7 @@
             <div class="box">
                 <div class="box-body">
 
-                    <div class="row">
+                    <div>
                         <label id="errMsg" class="text-danger"></label>
                     </div>
 
@@ -43,7 +43,8 @@
                             </tr>
                         </thead>
                         <tbody class="old">
-                            @foreach (var item in Model.SelectedItems)
+
+                            @foreach (var item in Model.SelectedItems.Where(x => x.CategoryId == 0))
                             {
                                 var poDetail = Model.Catalogue.Single(x => x.Id == item.Id);
                                 string rowID = "row" + item.Id.ToString();
@@ -74,8 +75,118 @@
                                     <td><a href="#" onclick="removeItem('@item.Id');" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
                                 </tr>
                             }
-
                         </tbody>
+                        @foreach (var supplierList in Model.SelectedItems.Where(q => q.CategoryId != 0).Select(p => new { supplier = p.CategoryId, name = p.SupplierTenders.Single(t => t.SupplierId == p.CategoryId).Supplier.Name }).Distinct())
+                        {
+                            string supName = supplierList.name.Substring(0, 3).ToUpper();
+                            string datePickerId = "datepicker" + supplierList.supplier.ToString();
+                            <tbody id=@supName>
+                                <tr>
+                                    <td colspan="2" class="with-border" style="background-color: #ecf0f5; color: #3c8dbc;">
+                                        <b>@supplierList.name</b>
+                                    </td>
+                                    <td colspan="2" style="background-color: #ecf0f5;">
+                                        Estimated Delivery Date :
+                                    </td>
+                                    <td colspan="2" style="background-color: #ecf0f5;">
+                                        <div class="form-group" style="margin: 0;">
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                @if (Model.EstimatedDates.Where(e => e.Key == supplierList.supplier).Count() == 1)
+                                                {
+                                                    <input type="date" class="datepicker form-control pull-right" value=@Model.EstimatedDates.Single(e=>e.Key==supplierList.supplier).Value.ToString("yyyy-MM-dd") id=@datePickerId onchange="setEstDate(@supplierList.supplier);" required="">
+                                                }
+                                                else
+                                                {
+                                                    <input type="date" class="datepicker form-control pull-right" id=@datePickerId onchange="setEstDate(@supplierList.supplier);" required="">
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="4" style="background-color: #ecf0f5;"></td>
+                                </tr>
+
+                            </tbody>
+                            <tbody class="@supName">
+
+                                @foreach (var item in Model.SelectedItems.Where(r => r.CategoryId == supplierList.supplier))
+                                {
+                                    var poDetail = Model.Catalogue.Single(x => x.Id == item.Id);
+                                    string rowID = "row" + item.Id.ToString();
+                                    string chkID = "chk" + item.Id.ToString();
+                                    //string selID = "supp" + item.Id.ToString();
+                                    <tr id=@rowID>
+                                        <td>@item.Code</td>
+                                        <td>@item.Description</td>
+                                        <td><b>@poDetail.AvailableQty</b></td>
+                                        <td>@poDetail.WaitlistQty</td>
+                                        <td>
+                                            @poDetail.Unsubmitted
+                                            @*<input type="text" value="63" style="width: 100px;" />*@
+                                        </td>
+                                        <td>@poDetail.ReorderLevel</td>
+                                        <td>@poDetail.ReorderQuantity</td>
+
+                                        @if (item.Status == "confirmed")
+                                        {
+                                            <td>
+                                                <select disabled id=@item.Id class="form-control select2" style="width: 100%;">
+                                                    <option value=0 class="nth">Select Supplier1</option>
+                                                    @foreach (var supplier in item.SupplierTenders.OrderBy(s => s.Rank))
+                                                    {
+                                                        if (item.CategoryId == supplier.SupplierId)
+                                                        {
+                                                            <option selected value=@supplier.SupplierId>@supplier.Supplier.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value=@supplier.SupplierId>@supplier.Supplier.Name</option>
+                                                        }
+                                                    }
+
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input checked="checked" type="checkbox" class="minimal" id=@chkID>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <select id=@item.Id class="form-control select2" style="width: 100%;">
+                                                    <option value=0 class="nth">Select Supplier1</option>
+                                                    @foreach (var supplier in item.SupplierTenders.OrderBy(s => s.Rank))
+                                                    {
+                                                        if (item.CategoryId == supplier.SupplierId)
+                                                        {
+                                                            <option selected value=@supplier.SupplierId>@supplier.Supplier.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value=@supplier.SupplierId>@supplier.Supplier.Name</option>
+                                                        }
+                                                    }
+
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="minimal" id=@chkID>
+                                            </td>
+
+                                        }
+
+
+                                        <td><a href="#" onclick="removeItem('@item.Id');" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
+                                    </tr>
+                                }
+                            </tbody>
+
+
+                        }
+
                     </table>
                 </div>
                 <!-- /.box-body -->
@@ -229,7 +340,7 @@
                 async: true,
                 data: data,
                 success: function (result) {
-                    if (result==false) {
+                    if (result == false) {
                         document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
                     }
                     else {

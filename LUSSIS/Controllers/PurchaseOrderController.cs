@@ -22,7 +22,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor && currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView","Login");
                 }
@@ -43,7 +43,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor && currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -105,7 +105,7 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor)
+                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor && currentUser.RoleId != (int)Enums.Roles.StoreManager)
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
@@ -499,8 +499,20 @@ namespace LUSSIS.Controllers
                 {
                     POCreateDTO poCreateDTO = (POCreateDTO)TempData["PO"];
                     TempData.Keep("PO");
+                    int oldSupplierId = poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId).CategoryId;
+                    //update supplier id
                     poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId).CategoryId = supplierId;
+                    //remove estimated date if the old supplier doesn't have any more item
+                    if (poCreateDTO.SelectedItems.Where(x => x.CategoryId == oldSupplierId).Count() <= 0)
+                    {
+                        if (poCreateDTO.EstimatedDates.Where(x => x.Key == oldSupplierId).Count() == 1)
+                        {
+                            poCreateDTO.EstimatedDates.Remove(poCreateDTO.EstimatedDates.Single(x => x.Key == oldSupplierId));
+                        }
+                    }
+
                     TempData["PO"] = poCreateDTO;
+                    
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
 
