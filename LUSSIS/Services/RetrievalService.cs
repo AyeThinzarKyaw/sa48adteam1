@@ -182,7 +182,7 @@ namespace LUSSIS.Services
                     rPID.ReqDetail = reDList;
                     rPID.Req = approvedRequisitionsFromEmployeesInAssignedDepartments.Find(x => x.Id == rPID.ReqDetail.RequisitionId);
                     rPID.ReqOwner = employeesInAssignedDepartments.Find(x => x.Id == rPID.Req.EmployeeId);
-                    rPID.ReqDepartmentRep = employeesInAssignedDepartments.Find(x => x.RoleId == 3);
+                    rPID.ReqDepartmentRep = employeesInAssignedDepartments.Find(x => x.RoleId == (int)Enums.Roles.DepartmentRepresentative);
                     rPID.ReqDepartment = assignedDepartment.Find(x => x.Id == rPID.ReqDepartmentRep.DepartmentId);
                     rPID.ReqCollectionPoint = assignedCollectionPoint.Find(x => x.Id == rPID.ReqDepartment.CollectionPointId);
 
@@ -283,7 +283,7 @@ namespace LUSSIS.Services
             {
                 Requisition affectedReq = (Requisition)requisitionRepo.FindOneBy(x => x.Id == entry.RequisitionId);
                 int targetDeptId = (int)employeeRepo.FindOneBy(x => x.Id == affectedReq.EmployeeId).DepartmentId;
-                int receivedEmployeeId = (int)employeeRepo.FindOneBy(x => x.DepartmentId == targetDeptId && x.RoleId == 3).Id;
+                int receivedEmployeeId = (int)employeeRepo.FindOneBy(x => x.DepartmentId == targetDeptId && x.RoleId ==(int)Enums.Roles.DepartmentRepresentative).Id;
 
                 RequisitionDetail target = entry;
                 int targetDisId = retrieveNewOrAvailableDisbursementIdForDept(deliveredEmployeeId, receivedEmployeeId);
@@ -486,7 +486,7 @@ namespace LUSSIS.Services
 
                     int deptId = rPID.ReqOwner.DepartmentId;
 
-                    rPID.ReqDepartmentRep = employeeRepo.FindOneBy(x => x.RoleId == 3 && x.DepartmentId == deptId);
+                    rPID.ReqDepartmentRep = employeeRepo.FindOneBy(x => x.RoleId == (int)Enums.Roles.DepartmentRepresentative && x.DepartmentId == deptId);
 
                     rPID.ReqDepartment = departmentRepo.FindOneBy(x => x.Id == deptId);
                     rPID.ReqCollectionPoint = collectionPointRepo.FindOneBy(x => x.Id == rPID.ReqDepartment.CollectionPointId);

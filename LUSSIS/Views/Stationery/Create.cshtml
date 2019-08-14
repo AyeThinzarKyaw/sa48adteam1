@@ -185,64 +185,46 @@
 @section scripts {
     <script>
         function addCategory() {
+            //var selectedId = 0;
             //if (confirm("Are you sure you want to add a new category?")) {
             debugger;
             var categoryText = document.getElementById("txtcategory").value;
             var url = "/Stationery/CreateCategory?type=" + categoryText;
+            
             $.ajax({
                 url: url,
                 type: "GET",
                 async: true,
                 success: function (data) {
                     debugger;
-                    //alert(data);
+                    
                     var result = "";
-                    var val = $('#CategoryId');
-                    //alert(val);
-                    $('#CategoryId').empty();
-                    val = $('#CategoryId');
-                    //alert(val);
+                    
+                    //var ind = 0;
                     $.each(data, function (i, d) {
-
-                        //alert(i+"/"+d.Id);
-                        result += '<option value="' + d.Id + '"';
+                        debugger;
+                        //if (d.Type == categoryText) {
+                            
+                        //    selectedId = ind;
+                            
+                        //}
+                        //else {
+                        //    ind++;
+                        //}
+                            result += '<option value="' + d.Id + '"';
 
                         result += '>' + d.Type + '</option>';
-
+                        
                     });
-                    //alert(result);
+                   
                     debugger;
                     $('#CategoryId').append(result);
+                    //document.getElementById('CategoryId').selectedIndex  = 22;
                 },
                 error: function (data) { }
             });
-            //$.ajax({
-            //    type: "GET",
-            //    url: "/Stationery/CreateCategory",
-            //    content: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    data: { 'type': categoryText },
-            //    success: function (data) {
-
-            //            $('#CategoryId').empty();
-
-            //        $.each(data, function (i, d) {
-
-            //            alert(i+"/"+d.Id);
-            //            result += '<option value="' + d.Id + '"';
-
-            //            result += '>' + 'aa' + '</option>';
-            //            alert(result);
-            //        });
-            //        $('#CategoryId').append(result);
-
-
-
-            //    },
-            //    error: function (xhr, textStatus, errorThrown) {
-            //        // TODO: Show error
-            //    }
-            //});
+           
+            
         }
 
     </script>
