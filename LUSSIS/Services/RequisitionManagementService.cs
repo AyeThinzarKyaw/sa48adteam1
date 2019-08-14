@@ -33,6 +33,7 @@ namespace LUSSIS.Services
             stationeryRepo = StationeryRepo.Instance;
             purchaseOrderRepo = PurchaseOrderRepo.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+            emailNotificationService = EmailNotificationService.Instance;
         }
 
         //returns single instance
