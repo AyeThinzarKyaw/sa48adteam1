@@ -48,5 +48,9 @@ namespace LUSSIS.Repositories
 
         }
 
+        public bool AnyItemInCartByEmployeeId(int employeeId)
+        {
+            return Context.CartDetails.Any(x => x.EmployeeId == employeeId);           
+        }
     }
 }

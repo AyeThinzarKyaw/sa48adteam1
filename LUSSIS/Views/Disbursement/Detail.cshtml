@@ -49,7 +49,7 @@
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Collection Date</td>
-                                                <td>:@dl.DeliveryDateTime</td>
+                                                <td>:@dl.DeliveryDateTime.ToString("yyyy-MM-dd")</td>
                                             }
                                         </tr>
                                         <tr>
@@ -185,7 +185,7 @@
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Collection Date</td>
-                                                <td>:@dl.DeliveryDateTime</td>
+                                                <td>:@dl.DeliveryDateTime.ToString("yyyy-MM-dd")</td>
                                             }
                                         </tr>
                                         <tr>

@@ -13,5 +13,7 @@ namespace LUSSIS.Repositories.Interfaces
 
         int GetFrontOfQueueCartCountForStationery(int stationeryId, DateTime datetime);
 
+        bool AnyItemInCartByEmployeeId(int employeeId);
+
     }
 }

@@ -36,7 +36,7 @@
                                 {
                                     <tr>
                                         <td>@r.Id</td>
-                                        <td>@r.DateTime.ToString("dd/MM/yyyy")</td>
+                                        <td>@r.DateTime.ToString("yyyy-MM-dd")</td>
                                         @if (r.Status.Equals("PENDING"))
                                         {
                                             <td class="text-blue">Pending</td>
@@ -87,6 +87,7 @@
     <script>
     $(function () {
         $('#table').DataTable({
+            "order": [[1, "desc"]],
             'columnDefs': [
                 { 'orderable': false, 'targets': 3 }
             ],

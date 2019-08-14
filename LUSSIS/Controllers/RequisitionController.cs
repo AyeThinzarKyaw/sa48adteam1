@@ -80,11 +80,17 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-                //convert all cart items into requsitiondetails for this requisition
-                Requisition newRequisition = requisitionCatalogueService.ConvertCartDetailsToRequisitionDetails(currentUser.EmployeeId);
 
-                //notify dept head for approval
-                emailNotificationService.NotifyDeptHeadToApprovePendingRequisition(newRequisition);
+                //check if cart is NOT empty
+                if (CartNotEmpty(currentUser.EmployeeId))
+                {
+                    //convert all cart items into requsitiondetails for this requisition
+                    Requisition newRequisition = requisitionCatalogueService.ConvertCartDetailsToRequisitionDetails(currentUser.EmployeeId);
+
+                    //notify dept head for approval
+                    emailNotificationService.NotifyDeptHeadToApprovePendingRequisition(newRequisition);
+
+                }
 
                 return RedirectToAction("ViewCatalogue");
                 //return to catalogue/dashboard view
@@ -92,6 +98,12 @@ namespace LUSSIS.Controllers
             }
             return RedirectToAction("Index", "Login");
         }
+
+        private bool CartNotEmpty(int employeeId)
+        {
+            return requisitionCatalogueService.HasItemInCart(employeeId);
+        }
+
         [Authorizer]
         public ActionResult ViewRequisitionList()
         {

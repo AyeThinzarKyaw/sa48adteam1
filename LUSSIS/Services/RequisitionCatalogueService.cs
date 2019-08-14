@@ -22,6 +22,7 @@ namespace LUSSIS.Services
         private IEmployeeRepo employeeRepo;
         private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
         private IDisbursementRepo disbursementRepo;
+        private IEmailNotificationService emailNotificationService;
 
         private static RequisitionCatalogueService instance = new RequisitionCatalogueService();
 
@@ -34,6 +35,7 @@ namespace LUSSIS.Services
             adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
             employeeRepo = EmployeeRepo.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+            emailNotificationService = EmailNotificationService.Instance;
             disbursementRepo = DisbursementRepo.Instance;
 
         }
@@ -286,9 +288,10 @@ namespace LUSSIS.Services
             //List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
             List<RequisitionDetail> requisitionDetails = requisitionDetailRepo.RequisitionDetailsEagerLoadStationery(requisitionId);
             return new RequisitionDetailsDTO() { EmployeeName = employeeName,
-                RequestedDate = requisition.DateTime.ToString("dd/MM/yyyy"),
+                RequestedDate = requisition.DateTime.ToString("yyyy-MM-dd"),
                 RequisitionFormId = requisition.Id,
                 RequisitionStatus = requisition.Status,
+                Remarks = requisition.Remarks,
                 RequisitionDetails = requisitionDetails};
         }
 
@@ -400,6 +403,7 @@ namespace LUSSIS.Services
                     //update r to completed
                     r.Status = RequisitionStatusEnum.COMPLETED.ToString();
                     requisitionRepo.Update(r);
+                    emailNotificationService.NotifyEmployeeCompletedRequisition(r, r.Employee);
                 }
             }
             Disbursement d = disbursementRepo.FindById(disbursementId);
@@ -574,6 +578,11 @@ namespace LUSSIS.Services
                 owedItems.Add(new OwedItemDTO {Stationery = s, QtyOwed = sum });
             }
             return owedItems;
+        }
+
+        public bool HasItemInCart(int employeeId)
+        {
+            return cartDetailRepo.AnyItemInCartByEmployeeId(employeeId);
         }
     }
 }
