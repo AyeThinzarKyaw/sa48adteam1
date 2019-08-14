@@ -149,7 +149,7 @@ namespace LUSSIS.Services
                     DepartmentName = disbursement.Employee1.Department.DepartmentName,
                     AdHoc = disbursement.AdHoc,
                     CollectionPoint = disbursement.CollectionPoint,
-                    //DeliveryDateTime = disbursement.DeliveryDateTime
+                    DeliveryDateTime = (DateTime) disbursement.DeliveryDateTime
             };
                 disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();
                 foreach(RequisitionDetail rd in disbursement.RequisitionDetails)
@@ -199,7 +199,7 @@ namespace LUSSIS.Services
                     DepartmentName = disbursement.Employee1.Department.DepartmentName,
                     AdHoc = disbursement.AdHoc,
                     CollectionPoint = disbursement.CollectionPoint,
-                    //DeliveryDateTime = disbursement.DeliveryDateTime
+                    DeliveryDateTime = (DateTime) disbursement.DeliveryDateTime
                 };
                 disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();
                 foreach (RequisitionDetail rd in disbursement.RequisitionDetails)
@@ -254,7 +254,7 @@ namespace LUSSIS.Services
                         requisitionDetailRepo.Update(rd1);
 
                         int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
-                        int availStockForUnfulfilled = requisitionCatalogueService.GetAvailStockForUnfulfilledRd(rd.StationeryId);
+                        int availStockForUnfulfilled = requisitionCatalogueService.GetAvailStockForUnfulfilledRd(rd.StationeryId, rd.Id);
 
                         if (availStockForUnfulfilled < diff) //insufficient stock
                         {
@@ -279,7 +279,7 @@ namespace LUSSIS.Services
                     requisitionDetailRepo.Update(rd1);
                 }
             }
-            requisitionCatalogueService.CheckRequisitionCompletenessAfterDisbursement(disbursement.Id);
+            requisitionCatalogueService.CheckRequisitionCompletenessAfterDisbursement(disbursement.Id, disbursement);
 
         }
     }

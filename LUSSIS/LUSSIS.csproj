@@ -225,6 +225,7 @@
     <Compile Include="Models\MobileDTOs\DisbursementDTO.cs" />
     <Compile Include="Models\MobileDTOs\DisbursementListDTO.cs" />
     <Compile Include="Models\MobileDTOs\EmployeeDTO.cs" />
+    <Compile Include="Models\MobileDTOs\LoginDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionDetailDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionDTO.cs" />
     <Compile Include="Models\MobileDTOs\RequisitionListDTO.cs" />

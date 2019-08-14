@@ -74,6 +74,36 @@ namespace LUSSIS.Services
             }
         }
 
+        public Models.MobileDTOs.LoginDTO GetEmployeeLoginByUsernameAndPassword2(string username, string password)
+        {
+            //return null if not valid employee
+            //else return a loginDTO with required details
+
+            //Hash password first
+            if (password == null)
+                return null;
+
+            string hashedPassword = HashPassword(password);
+
+            Employee e = employeeRepo.FindBy(x => x.Username == username && x.Password == hashedPassword).SingleOrDefault();
+            if (e == null) // no such user
+            {
+                return null;
+            }
+            else
+            {
+                Session newSession = new Session() { EmployeeId = e.Id, GUID = Guid.NewGuid().ToString(), LogInDateTime = DateTime.Now };
+                sessionRepo.Create(newSession);
+
+                //check if cover head?
+                int role = departmentCoverEmployeeRepo.FindOneBy(x => x.EmployeeId == e.Id && x.Status == "ACTIVE" && DbFunctions.TruncateTime(x.FromDate) <= DateTime.Now && DbFunctions.TruncateTime(x.ToDate) >= DateTime.Now) != null ? (int)Enums.Roles.DepartmentCoverHead : e.RoleId;
+
+                //set attributes
+                Models.MobileDTOs.LoginDTO loginDTO = new Models.MobileDTOs.LoginDTO() { EmployeeId = e.Id, RoleId = role, SessionGuid = newSession.GUID, Name = e.Name };
+                return loginDTO;
+            }
+        }
+
         public string HashPassword(string password)
         {
             using (MD5 md5Hash = MD5.Create())

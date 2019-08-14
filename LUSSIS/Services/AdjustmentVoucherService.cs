@@ -99,7 +99,7 @@ namespace LUSSIS.Services
             //any existing open adjustment voucher for this clerk?
 
             //could be null
-            AdjustmentVoucher openAV = adjustmentVoucherRepo.FindOneBy(x=>x.EmployeeId == clerkEmployeeId && x.Status == "OPEN");
+            AdjustmentVoucher openAV = adjustmentVoucherRepo.FindOneBy(x=>x.EmployeeId == clerkEmployeeId && x.Status == "Open");
 
             foreach (var item in retrievalList)
             {
@@ -108,7 +108,7 @@ namespace LUSSIS.Services
                     if (openAV == null) //no open AV for this clerk
                     {
                         //open new AV
-                        openAV = new AdjustmentVoucher { Date = DateTime.Now, EmployeeId = clerkEmployeeId, Status = AdjustmentVoucherStatusEnum.OPEN.ToString() };
+                        openAV = new AdjustmentVoucher { Date = DateTime.Now, EmployeeId = clerkEmployeeId, Status = AdjustmentVoucherStatus.Open.ToString() };
 
                         //persist in DB
                         openAV = adjustmentVoucherRepo.Create(openAV);

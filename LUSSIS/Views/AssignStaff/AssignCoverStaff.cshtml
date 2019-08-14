@@ -107,8 +107,8 @@
                                 @foreach (var coverdetail in Model.ActiveCoverHeadDetails)
                                 {
                                     <tr>
-                                        <td>@coverdetail.FromDate.ToString("dd/MM/yyyy")</td>
-                                        <td>@coverdetail.ToDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@coverdetail.FromDate.ToString("yyyy-MM-dd")</td>
+                                        <td>@coverdetail.ToDate.ToString("yyyy-MM-dd")</td>
                                         <td>@coverdetail.Employee.Name</td>
                                         <td>@coverdetail.Employee.Title</td>
                                         <td>
@@ -133,6 +133,7 @@
         <script>
             $(function () {
                 $('#table').DataTable({
+                    "order": [[0, "desc"]],
                     'columnDefs': [
                         { 'orderable': false, 'targets': 4 }
                     ],

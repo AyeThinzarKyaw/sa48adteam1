@@ -67,12 +67,12 @@
                             }
 
                         </tr>
-                       @if (Model.RequisitionStatus.Equals("APPROVED"))
+                        @if (Model.RequisitionStatus.Equals("APPROVED") || Model.RequisitionStatus.Equals("REJECTED"))
                         {
-                        <tr>
-                            <td>Remarks</td>
-                            <td>: @Model.Remarks </td>
-                        </tr>
+                            <tr>
+                                <td>Remarks</td>
+                                <td>: @Model.Remarks </td>
+                            </tr>
                         }
 
                     </table>
@@ -85,11 +85,11 @@
                                 <th>OrderQty</th>
                                 <th>Status</th>
                                 @if (Model.RequisitionStatus.Equals("APPROVED"))
-                                    {
-                                        <!-- If status = Approved -->
-                                        <th>Action</th>
-                                        <!-- If status = Approved -->
-                                    }
+                                {
+                                    <!-- If status = Approved -->
+                                    <th>Action</th>
+                                    <!-- If status = Approved -->
+                                }
                             </tr>
                         </thead>
                         <tbody>

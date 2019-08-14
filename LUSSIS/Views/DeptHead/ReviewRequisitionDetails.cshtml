@@ -58,7 +58,13 @@
                             }
 
                         </tr>
-
+                        @if (Model.RequisitionStatus.Equals("APPROVED") || Model.RequisitionStatus.Equals("REJECTED"))
+                        {
+                            <tr>
+                                <td>Remarks</td>
+                                <td>: @Model.Remarks </td>
+                            </tr>
+                        }
                     </table>
                     <br /><br />
                     <table class="table table-bordered table-hover">
