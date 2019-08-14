@@ -32,53 +32,53 @@ namespace LUSSIS.Controllers
 
                 // send a POST request to the server uri with the data and get the response as HttpResponseMessage object
                 // add 'Microsoft.AspNet.WebApi.Client' Nuget package
-                //HttpResponseMessage res = await client.PostAsJsonAsync("http://127.0.0.1:5000/", predModel);
+                HttpResponseMessage res = await client.PostAsJsonAsync("http://127.0.0.1:5000/", new { @InputYear =predictedDate.chosenDate.Year, @InputMonth =predictedDate.chosenDate.Month, @InputDay =predictedDate.chosenDate.Day});
 
                 // Return the result from the server if the status code is 200 (everything is OK)
                 // should raise exception or error if it's not
-                //if (res.IsSuccessStatusCode)
-                //{
+                if (res.IsSuccessStatusCode)
+                {
                     // pass the result by setting the Viewdata property
                     // have to read as string for the data in response.body
 
                     List<Stationery> stationeries = StationeryService.Instance.GetAllStationeries().ToList();
                     List<Stationery> updatedStationeries = new List<Stationery>();
-                    updatedStationeries = stationeries;
-                   
-                    //JArray jsonArray = JArray.Parse(res.Content.ReadAsStringAsync().Result);
-                    //int i;
-                    //foreach (JArray ja in jsonArray)
-                    //{
-                    //    i = 0;
-                    //    int currentId = 0;
-                    //    foreach (string a in ja)
-                    //    {
-                    //        if (i == 0)
-                    //        {
-                    //            currentId = Convert.ToInt32(a);
-                    //            updatedStationeries.Add(stationeries.Find(x => x.Id == currentId));
-                                
-                    //        }
-                                
-                    //        if (i == 1)
-                    //        {
-                    //            int qty= Convert.ToInt32(a);
-                    //            updatedStationeries.Find(x => x.Id == currentId).ReorderLevel = qty;
-                    //            updatedStationeries.Find(x => x.Id == currentId).ReorderQuantity = qty;
-                    //        }
-                           
-                    //        i = i + 1;
-                    //    }
-                        
-                    //}
+
+
+                    JArray jsonArray = JArray.Parse(res.Content.ReadAsStringAsync().Result);
+                    int i;
+                    foreach (JArray ja in jsonArray)
+                    {
+                        i = 0;
+                        int currentId = 0;
+                        foreach (string a in ja)
+                        {
+                            if (i == 0)
+                            {
+                                currentId = Convert.ToInt32(a);
+                                updatedStationeries.Add(stationeries.Find(x => x.Id == currentId));
+
+                            }
+
+                            if (i == 1)
+                            {
+                                int qty = Convert.ToInt32(a);
+                                updatedStationeries.Find(x => x.Id == currentId).ReorderLevel = qty;
+                                updatedStationeries.Find(x => x.Id == currentId).ReorderQuantity = qty;
+                            }
+
+                            i = i + 1;
+                        }
+
+                    }
                     TempData["updatedStationeryQty"] = updatedStationeries;
                     ViewBag.data = updatedStationeries;
                     return View(predictedDate);
-                //}
-                //else
-                //{
-                //    return View("Error");
-                //}
+                }
+                else
+                {
+                    return View("Error");
+                }
 
             }
 
