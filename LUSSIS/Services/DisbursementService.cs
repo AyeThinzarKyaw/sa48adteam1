@@ -26,6 +26,8 @@ namespace LUSSIS.Services
         private IDepartmentRepo departmentRepo;
         private IPurchaseOrderRepo purchaseOrderRepo;
         private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
+        private IRetrievalService retrievalService;
+        private IRequisitionCatalogueService requisitionCatalogueService;
         public DisbursementService()
         {
             stationeryRepo = StationeryRepo.Instance;
@@ -41,6 +43,8 @@ namespace LUSSIS.Services
             departmentRepo = DepartmentRepo.Instance;
             purchaseOrderRepo = PurchaseOrderRepo.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+            retrievalService = RetrievalService.Instance;
+            requisitionCatalogueService = RequisitionCatalogueService.Instance;
         }
         private static DisbursementService instance = new DisbursementService();
 
@@ -227,6 +231,56 @@ namespace LUSSIS.Services
             }
             disbursementList.Disbursements = disbursements1;
             return disbursementList;
+        }
+
+        public void CompleteDisbursementProcess(Models.MobileDTOs.DisbursementDTO disbursement)
+        {
+            List<Models.MobileDTOs.RequisitionDetailDTO> requisitionDetails = disbursement.RequisitionDetails;
+            List<RequisitionDetail> unfulfilledRds = new List<RequisitionDetail>();
+
+            foreach (Models.MobileDTOs.RequisitionDetailDTO rd in requisitionDetails)
+            {
+                if (rd.QuantityRetreived != rd.QuantityDelivered)
+                {
+                    int qtyDifference = rd.QuantityRetreived - (int)rd.QuantityDelivered;
+
+                    AdjustmentVoucher targetAdjustmentVoucher = retrievalService.retrieveNewOrAvailableAdjustmentVoucherForClerk(disbursement.DeliveredEmployeeId);
+                    retrievalService.createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rd.StationeryId, qtyDifference);
+
+                    if (rd.QuantityDelivered > 0)
+                    {
+                        RequisitionDetail rd1 = requisitionDetailRepo.FindById(rd.Id);
+                        rd1.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
+                        requisitionDetailRepo.Update(rd1);
+
+                        int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
+                        int availStockForUnfulfilled = requisitionCatalogueService.GetAvailStockForUnfulfilledRd(rd.StationeryId);
+
+                        if (availStockForUnfulfilled < diff) //insufficient stock
+                        {
+                            int waitlistCount = diff - availStockForUnfulfilled;
+                            requisitionCatalogueService.createNewRequisitionDetail(waitlistCount, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.WAITLIST_APPROVED);
+
+                            if (availStockForUnfulfilled > 0)
+                            {
+                                requisitionCatalogueService.createNewRequisitionDetail(availStockForUnfulfilled, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.PREPARING);
+                            }
+                        }
+                        else
+                        {
+                            requisitionCatalogueService.createNewRequisitionDetail(diff, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.PREPARING);
+                        }
+                    }
+                }
+                else
+                {
+                    RequisitionDetail rd1 = requisitionDetailRepo.FindById(rd.Id);
+                    rd1.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
+                    requisitionDetailRepo.Update(rd1);
+                }
+            }
+            requisitionCatalogueService.CheckRequisitionCompletenessAfterDisbursement(disbursement.Id);
+
         }
     }
 }
