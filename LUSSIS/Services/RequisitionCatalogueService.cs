@@ -21,6 +21,7 @@ namespace LUSSIS.Services
         private IAdjustmentVoucherRepo adjustmentVoucherRepo;
         private IEmployeeRepo employeeRepo;
         private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
+        private IDisbursementRepo disbursementRepo;
 
         private static RequisitionCatalogueService instance = new RequisitionCatalogueService();
 
@@ -33,6 +34,7 @@ namespace LUSSIS.Services
             adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
             employeeRepo = EmployeeRepo.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+            disbursementRepo = DisbursementRepo.Instance;
 
         }
 
@@ -384,7 +386,7 @@ namespace LUSSIS.Services
         }
 
         //only call AFTER GENERATING NEW RD FOR UNFULFILLED ITEMS
-        public void CheckRequisitionCompletenessAfterDisbursement(int disbursementId)
+        public void CheckRequisitionCompletenessAfterDisbursement(int disbursementId, Models.MobileDTOs.DisbursementDTO dDto)
         {
             List<Requisition> uniqueReqs = requisitionDetailRepo.GetUniqueRequisitionsForDisbursement(disbursementId);
 
@@ -400,6 +402,11 @@ namespace LUSSIS.Services
                     requisitionRepo.Update(r);
                 }
             }
+            Disbursement d = disbursementRepo.FindById(disbursementId);
+            d.DeliveryDateTime = DateTime.Now;
+            byte[] bytes = Convert.FromBase64String(dDto.Signature);
+            d.Signature = bytes;
+            disbursementRepo.Update(d);
         }
 
         public void UpdateRequisitionDetailsAfterDisbursement(int qtyCollected, List<int> requisitionDetailIds)
@@ -453,7 +460,7 @@ namespace LUSSIS.Services
             foreach (RequisitionDetail rd in unfulfilledRds)
             {
                 int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
-                int availStockForUnfulfilled = GetAvailStockForUnfulfilledRd(rd.StationeryId);
+                int availStockForUnfulfilled = GetAvailStockForUnfulfilledRd(rd.StationeryId, rd.Id);
 
                 if(availStockForUnfulfilled < diff) //insufficient stock
                 {
@@ -473,9 +480,9 @@ namespace LUSSIS.Services
             }
         }
 
-        public int GetAvailStockForUnfulfilledRd(int stationeryId)
+        public int GetAvailStockForUnfulfilledRd(int stationeryId, int reqDetId)
         {
-            int reqInTransitCount = requisitionDetailRepo.GetRequisitionCountForUnfulfilledStationery(stationeryId);
+            int reqInTransitCount = requisitionDetailRepo.GetRequisitionCountForUnfulfilledStationery(reqDetId);
 
             int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(stationeryId);
 

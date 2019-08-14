@@ -24,7 +24,7 @@ namespace LUSSIS.Services.Interfaces
         //assign qties on fcfs basis
         void UpdateRequisitionDetailsAfterDisbursement(int qtyCollected, List<int> requisitionDetailIds);
 
-        void CheckRequisitionCompletenessAfterDisbursement(int disbursementId);
+        void CheckRequisitionCompletenessAfterDisbursement(int disbursementId, Models.MobileDTOs.DisbursementDTO dDt);
 
         List<CatalogueItemDTO> GetCatalogueItems(int employeeId);
 
@@ -47,7 +47,7 @@ namespace LUSSIS.Services.Interfaces
         List<Requisition> GetSchoolRequisitionsWithEmployeeAndDept();
 
         RequisitionDetailsDTO GetRequisitionDetailsForClerk(int requisitionId);
-        int GetAvailStockForUnfulfilledRd(int stationeryId);
+        int GetAvailStockForUnfulfilledRd(int stationeryId, int reqDetId);
         void createNewRequisitionDetail(int qty, int requisitionId, int stationeryId, RequisitionDetailStatusEnum status);
 
     }
