@@ -284,7 +284,7 @@ namespace LUSSIS.Services
             //List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
             List<RequisitionDetail> requisitionDetails = requisitionDetailRepo.RequisitionDetailsEagerLoadStationery(requisitionId);
             return new RequisitionDetailsDTO() { EmployeeName = employeeName,
-                RequestedDate = requisition.DateTime.ToString("dd/MM/yyyy"),
+                RequestedDate = requisition.DateTime.ToString("yyyy-MM-dd"),
                 RequisitionFormId = requisition.Id,
                 RequisitionStatus = requisition.Status,
                 RequisitionDetails = requisitionDetails};

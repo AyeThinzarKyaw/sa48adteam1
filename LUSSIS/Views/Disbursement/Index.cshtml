@@ -31,14 +31,7 @@
                                 @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                 {
                                 <tr>
-                                    @{ string deliveryDate = "";
-                                        if (dl.DeliveryDateTime.Date != null)
-                                        {
-                                            deliveryDate = dl.DeliveryDateTime.ToString("dd/MM/yyyy");
-                                        }
-
-                                    }
-                                    <td>@deliveryDate</td>
+                                    <td>@dl.DeliveryDateTime.ToString("yyyy-MM-dd")</td>
                                     <td>@dl.CollectionPoint</td>
                                     @if (dl.Status.Contains("PENDING_COLLECTION"))
                                     {
@@ -118,6 +111,7 @@
     <script>
         $(function () {
             $('#table').DataTable({
+                "order": [[0, "desc"]],
                 'columnDefs': [
                     { 'orderable': false, 'targets': 3 }
                 ],
