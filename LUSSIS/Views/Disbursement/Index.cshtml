@@ -30,26 +30,33 @@
                             <tbody>
                                 @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                 {
-                                    <tr>
-                                        <td>@dl.DeliveryDateTime</td>
-                                        <td>@dl.CollectionPoint</td>
-                                        @if (dl.Status.Contains("PENDING_COLLECTION"))
+                                <tr>
+                                    @{ string deliveryDate = "";
+                                        if (dl.DeliveryDateTime.Date != null)
                                         {
-                                            <td class="text-blue">Pending Collection</td>
+                                            deliveryDate = dl.DeliveryDateTime.ToString("dd/MM/yyyy");
                                         }
-                                        else if (dl.Status.Contains("CANCELLED"))
-                                        {
-                                            <td>Cancelled</td>
-                                        }
-                                        else
-                                        {
-                                            <td>Delivered</td>
-                                        }
-                                        <td>
-                                            <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new {@DisbursementId = dl.DisbursementId})'" />
-                                        </td>
-                                    </tr>
+
+                                    }
+                                    <td>@deliveryDate</td>
+                                    <td>@dl.CollectionPoint</td>
+                                    @if (dl.Status.Contains("PENDING_COLLECTION"))
+                                    {
+                                        <td class="text-blue">Pending Collection</td>
+                                    }
+                                    else if (dl.Status.Contains("CANCELLED"))
+                                    {
+                                        <td>Cancelled</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Delivered</td>
+                                    }
+                                    <td>
+                                        <input type="button" class="btn btn-sm btn-primary" value="Detail"
+                                               onclick="location.href='@Url.Action("Detail", "Disbursement", new {@DisbursementId = dl.DisbursementId})'" />
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
