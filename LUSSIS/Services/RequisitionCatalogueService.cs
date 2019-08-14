@@ -21,7 +21,7 @@ namespace LUSSIS.Services
         private IAdjustmentVoucherRepo adjustmentVoucherRepo;
         private IEmployeeRepo employeeRepo;
         private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
-
+        private IEmailNotificationService emailNotificationService;
         private static RequisitionCatalogueService instance = new RequisitionCatalogueService();
 
         private RequisitionCatalogueService()
@@ -33,6 +33,7 @@ namespace LUSSIS.Services
             adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
             employeeRepo = EmployeeRepo.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+            emailNotificationService = EmailNotificationService.Instance;
 
         }
 
@@ -399,6 +400,7 @@ namespace LUSSIS.Services
                     //update r to completed
                     r.Status = RequisitionStatusEnum.COMPLETED.ToString();
                     requisitionRepo.Update(r);
+                    emailNotificationService.NotifyEmployeeCompletedRequisition(r, r.Employee);
                 }
             }
         }
@@ -568,6 +570,11 @@ namespace LUSSIS.Services
                 owedItems.Add(new OwedItemDTO {Stationery = s, QtyOwed = sum });
             }
             return owedItems;
+        }
+
+        public bool HasItemInCart(int employeeId)
+        {
+            return cartDetailRepo.AnyItemInCartByEmployeeId(employeeId);
         }
     }
 }

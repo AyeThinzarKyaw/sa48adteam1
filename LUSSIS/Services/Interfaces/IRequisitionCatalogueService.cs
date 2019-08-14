@@ -50,5 +50,7 @@ namespace LUSSIS.Services.Interfaces
         int GetAvailStockForUnfulfilledRd(int stationeryId);
         void createNewRequisitionDetail(int qty, int requisitionId, int stationeryId, RequisitionDetailStatusEnum status);
 
+        bool HasItemInCart(int employeeId);
+
     }
 }

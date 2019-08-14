@@ -30,6 +30,14 @@ namespace LUSSIS.Services
             get { return instance; }
         }
 
+        public void NotifyClerkShortFallInStationery(Stationery s, Employee clerk)
+        {
+            string body = "Dear " + clerk.Name + " there is insufficient incoming stock for Stationery: " + s.Description + " of Item Code: " + s.Code + ". Please raise a necessary Purchase Order for the recent demand. Thank you.";
+            string subject = "Shortfall in Stationery. Please raise a Purchase Order.";
+
+            SendNotificationEmail(clerk.Email, subject, body);
+        }
+
         public void NotifyDeptHeadToApprovePendingRequisition(Requisition newRequisition)
         {
             Employee e = employeeRepo.FindById(newRequisition.EmployeeId);
@@ -46,19 +54,20 @@ namespace LUSSIS.Services
                 deptHeadEmail = employeeRepo.FindOneBy(x=> x.DepartmentId == e.DepartmentId && x.RoleId == 1).Email;
             }
 
-            MailMessage mail = new MailMessage(employeeEmail, deptHeadEmail);
-            mail.Subject = "New Requisition Form Submission for Approval";
-            mail.Body = "Please review a new Requisition form (Id:"+ newRequisition.Id
+            //MailMessage mail = new MailMessage(employeeEmail, deptHeadEmail);
+            string subject = "New Requisition Form Submission for Approval";
+            string body = "Please review a new Requisition form (Id:"+ newRequisition.Id
                 +") submmission by " +e.Name + "for approval. Thank you.";
-            //SendEmail(mail);
+            SendNotificationEmail(deptHeadEmail, subject, body);
         }
 
+        /**
         private void SendEmail(MailMessage mail)
         {
             SmtpClient client = new SmtpClient("smtp.nus.edu.sg", 587);
             client.Credentials = new NetworkCredential();
             client.Send(mail);
-        }
+        } **/
 
         public void SendNotificationEmail(string receipient,string subject, string body, IEnumerable<string> attachments = null,string cc= null)
         {
@@ -93,6 +102,20 @@ namespace LUSSIS.Services
 
             //Send email 
             WebMail.Send(to: "sa48team1@gmail.com", subject: subject, body: body,cc: cc,filesToAttach: attachments, isBodyHtml: false);
+        }
+
+        public void NotifyEmployeeApprovedOrRejectedRequisition(Requisition r, Employee e)
+        {
+            string subject = "Result of pending requisition approval";
+            string body = "Dear " + e.Name + ", your Requisition of Id: " + r.Id + ", has been updated as " + r.Status;
+            SendNotificationEmail(e.Email, subject, body);
+        }
+        
+        public void NotifyEmployeeCompletedRequisition(Requisition r, Employee e)
+        {
+            string subject = "Completed Requisition";
+            string body = "Dear " + e.Name + ", your Requisition of Id: " + r.Id + ", has now been completed with all items requested fulfilled.";
+            SendNotificationEmail(e.Email, subject, body);
         }
     }
 }
