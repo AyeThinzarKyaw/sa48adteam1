@@ -47,5 +47,7 @@ namespace LUSSIS.Services.Interfaces
 
         RequisitionDetailsDTO GetRequisitionDetailsForClerk(int requisitionId);
 
+        bool HasItemInCart(int employeeId);
+
     }
 }
