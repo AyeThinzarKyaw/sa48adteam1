@@ -287,6 +287,7 @@ namespace LUSSIS.Services
                 RequestedDate = requisition.DateTime.ToString("yyyy-MM-dd"),
                 RequisitionFormId = requisition.Id,
                 RequisitionStatus = requisition.Status,
+                Remarks = requisition.Remarks,
                 RequisitionDetails = requisitionDetails};
         }
 

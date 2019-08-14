@@ -110,6 +110,7 @@
         $('.minimal').on('ifUnchecked', function (event) {
             var stationeryId = $(this).attr('id');
             var employeeId = document.getElementById("employeeId").value;
+            $("#inputBox" + stationeryId).attr("disabled", false);
             var data = JSON.stringify({
                 'employeeId': employeeId,
                 'stationeryId': stationeryId,
@@ -150,6 +151,7 @@
         $('.minimal').on('ifChecked', function (event) {
             var stationeryId = $(this).attr('id');
             var input = document.getElementById("inputBox" + stationeryId).value;
+            $("#inputBox" + stationeryId).attr("disabled", true);
 
             if (input) {
                 var employeeId = document.getElementById("employeeId").value;
