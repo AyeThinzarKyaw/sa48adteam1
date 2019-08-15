@@ -31,9 +31,9 @@
 
                                     <select id="departmentName" name="departmentName" style="width: 200px">
                                         <option value=""></option>
-                                        @foreach (var item in Model.departmentAndRetrieval)
+                                        @foreach (var item in Model.DepartmentAndRetrieval)
                                         {
-                                            <option value="@item.department.DepartmentName" data-id="@String.Join(",", item.requisitions.Select(x => x.Id).ToArray())">@item.department.DepartmentName</option>
+                                            <option value="@item.Department.DepartmentName" data-id="@String.Join(",", item.Requisitions.Select(x => x.Id).ToArray())">@item.Department.DepartmentName</option>
                                         }
                                     </select>
 

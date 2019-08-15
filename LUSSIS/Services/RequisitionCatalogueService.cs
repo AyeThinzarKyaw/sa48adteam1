@@ -401,8 +401,9 @@ namespace LUSSIS.Services
                 if (rowsReqDets == rowsFulfilled)
                 {
                     //update r to completed
-                    r.Status = RequisitionStatusEnum.COMPLETED.ToString();
-                    requisitionRepo.Update(r);
+                    Requisition req = requisitionRepo.FindById(r.Id);
+                    req.Status = RequisitionStatusEnum.COMPLETED.ToString();
+                    requisitionRepo.Update(req);
                     emailNotificationService.NotifyEmployeeCompletedRequisition(r, r.Employee);
                 }
             }
@@ -412,9 +413,11 @@ namespace LUSSIS.Services
             d.Signature = bytes;
             d.OnRoute = false;
             disbursementRepo.Update(d);
-            foreach(RequisitionDetail rd in (List<RequisitionDetail>)d.RequisitionDetails)
+            foreach(RequisitionDetail rd in d.RequisitionDetails)
             {
-                rd.Stationery.Quantity -= (int) rd.QuantityDelivered;
+                Stationery s = stationeryRepo.FindById(rd.Stationery.Id);
+                s.Quantity -= (int) rd.QuantityDelivered;
+                stationeryRepo.Update(s);
             }
                 
         }

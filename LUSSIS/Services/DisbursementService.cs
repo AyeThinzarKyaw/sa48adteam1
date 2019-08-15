@@ -244,7 +244,7 @@ namespace LUSSIS.Services
             {
                 if (rd.QuantityRetrieved != rd.QuantityDelivered)
                 {
-                    int qtyDifference = rd.QuantityRetrieved - (int)rd.QuantityDelivered;
+                    int qtyDifference = (int)rd.QuantityDelivered - rd.QuantityRetrieved;
 
                     AdjustmentVoucher targetAdjustmentVoucher = retrievalService.retrieveNewOrAvailableAdjustmentVoucherForClerk(disbursement.DeliveredEmployeeId);
                     retrievalService.createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rd.StationeryId, qtyDifference);
@@ -252,6 +252,7 @@ namespace LUSSIS.Services
                     if (rd.QuantityDelivered > 0)
                     {
                         RequisitionDetail rd1 = requisitionDetailRepo.FindById(rd.Id);
+                        rd1.QuantityDelivered = rd.QuantityDelivered;
                         rd1.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
                         requisitionDetailRepo.Update(rd1);
 
@@ -277,6 +278,7 @@ namespace LUSSIS.Services
                 else
                 {
                     RequisitionDetail rd1 = requisitionDetailRepo.FindById(rd.Id);
+                    rd1.QuantityDelivered = rd.QuantityDelivered;
                     rd1.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
                     requisitionDetailRepo.Update(rd1);
                 }

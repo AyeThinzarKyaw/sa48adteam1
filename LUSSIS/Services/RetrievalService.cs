@@ -237,10 +237,10 @@ namespace LUSSIS.Services
             {
                 if (rtItem.RetrievedQty != rtItem.NeededQuantity)
                 {
-                    int qtyDifference = rtItem.NeededQuantity - rtItem.RetrievedQty;
+                    int qtyDifference = rtItem.RetrievedQty - rtItem.NeededQuantity;
 
                     AdjustmentVoucher targetAdjustmentVoucher = retrieveNewOrAvailableAdjustmentVoucherForClerk(deliveredEmployeeId);
-                    createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rtItem.StationeryId, qtyDifference);
+                    createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rtItem.StationeryId, (qtyDifference));
 
                     // List<RetrievalPrepItemDTO> orderedRPItemListByDate = (List<RetrievalPrepItemDTO>)rtItem.RetrievalPrepItemList.OrderBy(x => x.Req.DateTime);
                     List<RequisitionDetail> requisitionDetailsList = (List<RequisitionDetail>)rtItem.RetrievalPrepItemList.Select(x => x.ReqDetail).ToList();
