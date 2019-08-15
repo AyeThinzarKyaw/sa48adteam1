@@ -10,8 +10,8 @@ namespace LUSSIS.Models.DTOs
     {
         //hidden
 
-        public List<AdHocDeptAndRetrievalDTO> departmentAndRetrieval { get; set; }
+        public List<AdHocDeptAndRetrievalDTO> DepartmentAndRetrieval { get; set; }
 
-        public int requisitionId { get; set; }
+        public int RequisitionId { get; set; }
     }
 }

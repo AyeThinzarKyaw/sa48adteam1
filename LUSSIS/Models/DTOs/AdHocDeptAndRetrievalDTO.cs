@@ -10,8 +10,8 @@ namespace LUSSIS.Models.DTOs
     {
         //hidden
 
-        public Department department { get; set; }
-        public List<Requisition> requisitions { get; set; }
+        public Department Department { get; set; }
+        public List<Requisition> Requisitions { get; set; }
 
     }
 }

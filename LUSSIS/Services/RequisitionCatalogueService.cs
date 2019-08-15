@@ -431,8 +431,9 @@ namespace LUSSIS.Services
                 if (rowsReqDets == rowsFulfilled)
                 {
                     //update r to completed
-                    r.Status = RequisitionStatusEnum.COMPLETED.ToString();
-                    requisitionRepo.Update(r);
+                    Requisition req = requisitionRepo.FindById(r.Id);
+                    req.Status = RequisitionStatusEnum.COMPLETED.ToString();
+                    requisitionRepo.Update(req);
                     emailNotificationService.NotifyEmployeeCompletedRequisition(r, r.Employee);
                 }
             }
@@ -440,7 +441,15 @@ namespace LUSSIS.Services
             d.DeliveryDateTime = DateTime.Now;
             byte[] bytes = Convert.FromBase64String(dDto.Signature);
             d.Signature = bytes;
+            d.OnRoute = false;
             disbursementRepo.Update(d);
+            foreach(RequisitionDetail rd in d.RequisitionDetails)
+            {
+                Stationery s = stationeryRepo.FindById(rd.Stationery.Id);
+                s.Quantity -= (int) rd.QuantityDelivered;
+                stationeryRepo.Update(s);
+            }
+                
         }
 
         public void UpdateRequisitionDetailsAfterDisbursement(int qtyCollected, List<int> requisitionDetailIds)
@@ -516,7 +525,7 @@ namespace LUSSIS.Services
 
         public int GetAvailStockForUnfulfilledRd(int stationeryId, int reqDetId)
         {
-            int reqInTransitCount = requisitionDetailRepo.GetRequisitionCountForUnfulfilledStationery(reqDetId);
+            int reqInTransitCount = requisitionDetailRepo.GetReservedCountForStationery(stationeryId);
 
             int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(stationeryId);
 

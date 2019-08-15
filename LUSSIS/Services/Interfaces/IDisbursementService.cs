@@ -15,5 +15,6 @@ namespace LUSSIS.Services.Interfaces
         Models.MobileDTOs.DisbursementListDTO GetDeptRepDisbursements(int EmployeeId);
         Models.MobileDTOs.DisbursementListDTO GetClerkDisbursements(int EmployeeId);
         void CompleteDisbursementProcess(Models.MobileDTOs.DisbursementDTO disbursement);
+        void SetDisbursementOnRoute(int disbursementId);
     }
 }

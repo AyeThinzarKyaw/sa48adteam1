@@ -53,7 +53,7 @@ namespace LUSSIS.Repositories
 
         public List<Requisition> GetUniqueRequisitionsForDisbursement(int disbursementId)
         {
-            return Context.RequisitionDetails.Select(x => x.Requisition).Distinct().ToList();
+            return Context.RequisitionDetails.Where(x=> x.DisbursementId == disbursementId).Select(x => x.Requisition).Distinct().ToList();
 
         }
 

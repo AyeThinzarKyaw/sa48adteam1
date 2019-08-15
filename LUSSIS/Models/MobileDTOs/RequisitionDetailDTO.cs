@@ -12,7 +12,7 @@ namespace LUSSIS.Models.MobileDTOs
         public int? DisbursementId { get; set; }
         public int StationeryId { get; set; }
         public int QuantityOrdered { get; set; }
-        public int QuantityRetreived { get; set; }
+        public int QuantityRetrieved { get; set; }
         public int? QuantityDelivered { get; set; }
         public string Status { get; set; }
         public virtual DisbursementDTO Disbursement { get; set; }
