@@ -141,7 +141,7 @@ namespace LUSSIS.Services
                             PurchaseOrderId = pod.PurchaseOrderId,
                             StationeryId = pod.StationeryId,
                             QuantityOrdered = pod.QuantityOrdered,
-                            QuantityDelivered = (int)pod.QuantityDelivered,
+                            QuantityDelivered = pod.QuantityDelivered==null?0:(int)pod.QuantityDelivered,
                             ItemName = stationeryRepo.FindById(pod.StationeryId).Description,
                             ItemType = categoryRepo.FindById(stationeryRepo.FindById(pod.StationeryId).CategoryId).Type,
                             UnitOfMeasure = stationeryRepo.FindById(pod.StationeryId).UnitOfMeasure,

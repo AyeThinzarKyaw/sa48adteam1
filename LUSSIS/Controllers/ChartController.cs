@@ -38,15 +38,15 @@ namespace LUSSIS.Controllers
             SupplierChartFilteringDTO supplierChartFilterings = purchaseOrderService.FilteringByAttributes();
             SupplierChartFilteringDTO model = new SupplierChartFilteringDTO { SupplierForChartList = supplierChartFilterings.SupplierForChartList, StationeryForChartList = supplierChartFilterings.StationeryForChartList, CategoryForChartList = supplierChartFilterings.CategoryForChartList };
 
-            TempData["chartData"] = model;
-            //return View(model);
-            return RedirectToAction("ExportAsPDF");
+            //TempData["chartData"] = model;
+            return View(model);
+            //return RedirectToAction("ExportAsPDF");
         }
 
-   
+
         public ActionResult ExportAsPDF()
         {
-            SupplierChartFilteringDTO model =(SupplierChartFilteringDTO)TempData["chartData"];
+            SupplierChartFilteringDTO model = (SupplierChartFilteringDTO)TempData["chartData"];
             if (model != null)
             {
                 MemoryStream workStream = new MemoryStream();
@@ -117,7 +117,7 @@ namespace LUSSIS.Controllers
                                 }
                             }
                         }
-                        
+
                     };
 
                     Table t = GenerateTable(TwelveMonthRange, ItemQtyArray);
@@ -190,7 +190,7 @@ namespace LUSSIS.Controllers
                                     ItemPriceArray[2 - i] = MonthlyPrice;
                                 }
                             }
-                        }                      
+                        }
                     };
                     Table t = GenerateTable(TwelveMonthRange, ItemQtyArray);
 
@@ -273,6 +273,8 @@ namespace LUSSIS.Controllers
             model.StationeryForChartList = supplierChartFilterings.StationeryForChartList;
             model.CategoryForChartList = supplierChartFilterings.CategoryForChartList;
 
+            TempData["chartData"] = model;
+            ViewBag.chart = "bar";
             return View(model);
         }
         public void BarChart(List<int> SupplierIds, int CategoryId, int StationeryId, DateTime TheChosenDate, int trend)
@@ -291,6 +293,7 @@ namespace LUSSIS.Controllers
                     </Chart>";
             Chart chart = new Chart(width: 1000, height: 200, theme: themeChart);
 
+            
 
             //SupplierIds = new List<int>() { 1, 4 };
             int[] ArraySupplierIds = SupplierIds.ToArray();
@@ -302,15 +305,16 @@ namespace LUSSIS.Controllers
             {
                 if (ArraySupplierIds != null)
                 {
+                    int[] ItemQtyArray = new int[3];
+                    string[] TwelveMonthRange = new string[3];
+
                     foreach (int s in ArraySupplierIds)
                     {
 
                         purchaseOrderService = new PurchaseOrderService();
                         List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
 
-                        int[] ItemQtyArray = new int[3];
-
-                        string[] TwelveMonthRange = new string[3];
+                        
 
                         for (int i = 2; i > -1; i--)
                         {
@@ -325,25 +329,30 @@ namespace LUSSIS.Controllers
                                 }
                             }
                         }
-                        chart.AddSeries(
-                            chartType: "column",
-                            xValue: TwelveMonthRange,
-                            yValues: ItemQtyArray);
+                        //chart.AddSeries(
+                        //    chartType: "column",
+                        //    xValue: TwelveMonthRange,
+                        //    yValues: ItemQtyArray);
 
 
                     };
+                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
+                                                            xValue: TwelveMonthRange,
+                                                            yValues: ItemQtyArray).GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    System.IO.File.WriteAllBytes(path, chartByteArr);
+
                 }
                 else
                 {
+                    int[] ItemQtyArray = new int[3];
+                    string[] TwelveMonthRange = new string[3];
+
                     foreach (int s in AllSupplierIds)
                     {
 
                         purchaseOrderService = new PurchaseOrderService();
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        int[] ItemQtyArray = new int[3];
-
-                        string[] TwelveMonthRange = new string[3];
+                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);                      
 
                         for (int i = 2; i > -1; i--)
                         {
@@ -358,28 +367,35 @@ namespace LUSSIS.Controllers
                                 }
                             }
                         }
-                        chart.AddSeries(
-                            chartType: "column",
-                            xValue: TwelveMonthRange,
-                            yValues: ItemQtyArray);
+                        //chart.AddSeries(
+                        //    chartType: "column",
+                        //    xValue: TwelveMonthRange,
+                        //    yValues: ItemQtyArray);
 
 
                     };
+                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
+                                                           xValue: TwelveMonthRange,
+                                                           yValues: ItemQtyArray).GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    System.IO.File.WriteAllBytes(path, chartByteArr);
                 }
             }
             else
             {
                 if (ArraySupplierIds != null)
                 {
+                    int[] ItemQtyArray = new int[3];
+                    string[] TwelveMonthRange = new string[3];
                     foreach (int s in ArraySupplierIds)
                     {
 
                         purchaseOrderService = new PurchaseOrderService();
                         List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
 
-                        int[] ItemQtyArray = new int[3];
+                        
                         decimal[] ItemPriceArray = new decimal[3];
-                        string[] TwelveMonthRange = new string[3];
+                      
 
                         for (int i = 2; i > -1; i--)
                         {
@@ -397,25 +413,33 @@ namespace LUSSIS.Controllers
                                 }
                             }
                         }
-                        chart.AddSeries(
-                            chartType: "column",
-                            xValue: TwelveMonthRange,
-                            yValues: ItemPriceArray);
+                        //chart.AddSeries(
+                        //    chartType: "column",
+                        //    xValue: TwelveMonthRange,
+                        //    yValues: ItemPriceArray);
 
 
                     };
+                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
+                                                           xValue: TwelveMonthRange,
+                                                           yValues: ItemQtyArray).GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    System.IO.File.WriteAllBytes(path, chartByteArr);
                 }
                 else
                 {
+                    int[] ItemQtyArray = new int[3];
+                    string[] TwelveMonthRange = new string[3];
+
                     foreach (int s in AllSupplierIds)
                     {
 
                         purchaseOrderService = new PurchaseOrderService();
                         List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
 
-                        int[] ItemQtyArray = new int[3];
+                        
                         decimal[] ItemPriceArray = new decimal[3];
-                        string[] TwelveMonthRange = new string[3];
+                        
 
                         for (int i = 2; i > -1; i--)
                         {
@@ -433,16 +457,21 @@ namespace LUSSIS.Controllers
                                 }
                             }
                         }
-                        chart.AddSeries(
-                            chartType: "column",
-                            xValue: TwelveMonthRange,
-                            yValues: ItemPriceArray);
+                        //chart.AddSeries(
+                        //    chartType: "column",
+                        //    xValue: TwelveMonthRange,
+                        //    yValues: ItemPriceArray);
 
 
                     };
+                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
+                                                           xValue: TwelveMonthRange,
+                                                           yValues: ItemQtyArray).GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    System.IO.File.WriteAllBytes(path, chartByteArr);
                 }
             }
-            chart.Write("png");
+            //chart.Write("png");
 
             //var BarChartImage = chart.GetBytes();
             //return File(BarChartImage, "image/bytes");
