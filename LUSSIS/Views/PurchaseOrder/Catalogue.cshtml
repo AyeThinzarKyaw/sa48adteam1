@@ -72,7 +72,7 @@
             var aa = $(this).attr('id');
             if ($(this).attr('id')!='showConfirmed') {
                 var stationeryId = $(this).attr('id');
-                document.getElementById("txtQty" + stationeryId).readOnly = true;
+                document.getElementById("txtQty" + stationeryId).disabled = true;
                 var updatedQty = document.getElementById("txtQty" + stationeryId).value;
                 updateSelectList(stationeryId, updatedQty, true, false);
                 
@@ -85,7 +85,8 @@
         $('.minimal').on('ifUnchecked', function (event) {
             if ($(this).attr('id') != 'showConfirmed') {
                 var stationeryId = $(this).attr('id');
-                document.getElementById("txtQty" + stationeryId).readOnly = false;
+                //$("#txtQty" + stationeryId).attr("disabled", true);
+                document.getElementById("txtQty" + stationeryId).disabled = false;
                 var updatedQty = document.getElementById("txtQty" + stationeryId).value;
                 updateSelectList(stationeryId, updatedQty, false, false);
             } 

@@ -326,7 +326,7 @@ namespace LUSSIS.Services
 
             if (targetAdjustmentVoucher == null)
             {
-                AdjustmentVoucher newAdjustmentVoucher = new AdjustmentVoucher() { EmployeeId = deliveredEmployeeId, Status = "Open" };
+                AdjustmentVoucher newAdjustmentVoucher = new AdjustmentVoucher() { EmployeeId = deliveredEmployeeId, Status = "Open", Date = DateTime.Now };
                 newAdjustmentVoucher = adjustmentVoucherRepo.Create(newAdjustmentVoucher);
 
                 returnTargetAdjustmentVoucherId = adjustmentVoucherRepo.FindOneBy(x => x.EmployeeId == deliveredEmployeeId && x.Status == "Open");

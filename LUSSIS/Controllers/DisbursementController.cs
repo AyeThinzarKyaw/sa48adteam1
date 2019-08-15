@@ -30,22 +30,36 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 disbursementService = new DisbursementService();
-                List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
-                List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
+                List<DisbursementDetailsDTO> disbursementList = new List<DisbursementDetailsDTO>();
+                if (currentUser.RoleId==(int)Enums.Roles.DepartmentRepresentative)
+                {
+                    disbursementList= disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = disbursementList, ReceivedEmployeeId = currentUser.EmployeeId };
+                    return View(model);
+                }
+                else if (currentUser.RoleId==(int)Enums.Roles.StoreClerk)
+                {
+                    disbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
+                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = disbursementList, DeliveredEmployeeId = currentUser.EmployeeId };
+                    return View(model);
+                }
+               
+                //disbursementService = new DisbursementService();
+                //List<DisbursementDetailsDTO> ViewDepRepDisbursementList = disbursementService.GetDepRepDisbursementsDetails(currentUser.EmployeeId);
+                //List<DisbursementDetailsDTO> ViewClerkDisbursementList = disbursementService.GetClerkDisbursementsDetails(currentUser.EmployeeId);
 
-                if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == currentUser.EmployeeId))
-                {
-                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId };
-                    return View(model);
-                }
-                else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
-                {
-                    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId };
-                    return View(model);
-                }
-                else return View();
+                //if (ViewDepRepDisbursementList.Any(x => x.ReceivedEmployeeId == currentUser.EmployeeId))
+                //{
+                //    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewDepRepDisbursementList, ReceivedEmployeeId = currentUser.EmployeeId };
+                //    return View(model);
+                //}
+                //else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
+                //{
+                //    DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId };
+                //    return View(model);
+                //}
+                //else return View();
             }
             return RedirectToAction("Index", "Login");
         }
