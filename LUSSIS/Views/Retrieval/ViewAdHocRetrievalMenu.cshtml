@@ -29,7 +29,7 @@
                             <tr>
                                 <td>
 
-                                    <select id="departmentName" name="departmentName" style="width: 200px">
+                                    <select id="departmentName" name="departmentName" style="width: 200px" class="form-control">
                                         <option value=""></option>
                                         @foreach (var item in Model.DepartmentAndRetrieval)
                                         {
@@ -51,7 +51,7 @@
 
                                 <td>
 
-                                    <select id="requisitionId" name="requisitionId" style="width: 200px;background:lightgray;" disabled="disabled" onchange="selectRetrievalId(this);" />
+                                    <select id="requisitionId" name="requisitionId" class="form-control" style="width: 200px;background:lightgray;" disabled="disabled" onchange="selectRetrievalId(this);" />
 
 
 
@@ -100,10 +100,11 @@
 @section scripts {
     <script>
         $("#departmentName").on("change", function () {
-            var ids = $(this).find("option:selected").data("id").split(",");
+            var ids = $(this).find("option:selected").data("id")+'';
+            var array = ids.split(",");
             var dropdown = "";
             dropdown += "<option selected disabled hidden>Select a Requisition Id</option>"
-            for (var i = 0; i < ids.length; i++) {
+            for (var i = 0; i < array.length; i++) {
                 var id = ids[i];
                 dropdown += "<option value='" + id + "'>" + id + "</option>";
                 console.log(ids[i]);
