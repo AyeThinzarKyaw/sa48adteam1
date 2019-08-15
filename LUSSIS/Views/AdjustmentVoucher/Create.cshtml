@@ -85,30 +85,3 @@
         <!-- /.row -->
     }
 </section>
-
-@section scripts {
-    <script>
-        function updateQtyReceive(e, adjd, adj) {
-            debugger;
-            if (e.value != "") {
-
-                //alert(e.value);
-                var url = "/AdjustmentVoucher/UpdateReceivedQty?adjdId=" + adjd + "&qty=" + e.value + "&adjId=" + adj;
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    async: true,
-                    success: function (data) {
-                        //if (data[0] == true) {
-                        //    window.location.href = '/PurchaseOrder/Index'
-                        //}
-                        //else {
-                        //    document.getElementById("errRemark").innerHTML = data[1];
-                        //}
-                    },
-                    error: function (data) { }
-                });
-            }
-        }
-    </script>
-}

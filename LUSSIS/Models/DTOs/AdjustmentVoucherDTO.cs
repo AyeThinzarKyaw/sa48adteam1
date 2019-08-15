@@ -19,6 +19,7 @@ namespace LUSSIS.Models.DTOs
         public IEnumerable<Stationery> Stationeries { get; set; }
 
         [Required(ErrorMessage = "Adjusted Qty is required.")]
+        
         public int Quantity { get; set; }
 
         public string Reason { get; set; }

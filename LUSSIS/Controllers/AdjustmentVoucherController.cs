@@ -184,6 +184,11 @@ namespace LUSSIS.Controllers
             }
             if (adj.Id == adjId)
             {
+                if(adj.AdjustmentVoucherDetails.Where(x => x.Id == adjdId).Count() <= 0)
+                {
+                    AdjustmentVoucherDetail newadjd = AdjustmentVoucherService.Instance.getAdjustmentVoucherDetailById(adjdId);
+                    adj.AdjustmentVoucherDetails.Add(newadjd);
+                }
                 adj.AdjustmentVoucherDetails.Single(x => x.Id == adjdId).Quantity = qty;
 
                 TempData["AdjustQty"] = adj;
@@ -224,6 +229,8 @@ namespace LUSSIS.Controllers
                     updatedVoucher.Status = Enum.GetName(typeof(Enums.AdjustmentVoucherStatus), Enums.AdjustmentVoucherStatus.Submitted);
                     updatedVoucher.Date = DateTime.Now;
                     AdjustmentVoucherService.Instance.UpdateAdjustmentVoucher(updatedVoucher);
+                    TempData["AdjustQty"] = null;
+
                     return RedirectToAction("Index");
                 }
                 return View(adjDTO);
@@ -232,22 +239,25 @@ namespace LUSSIS.Controllers
         }
 
         [Authorizer]
-        public ActionResult Remove(int adjdId)
+        public JsonResult Remove(int adjdId)
         {
-            if (Session["existinguser"] != null)
-            {
-                LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId != (int)Enums.Roles.StoreClerk && currentUser.RoleId != (int)Enums.Roles.StoreSupervisor && currentUser.RoleId != (int)Enums.Roles.StoreManager)
+
+                AdjustmentVoucher adj = new AdjustmentVoucher();
+                if (TempData["AdjustQty"] != null)
                 {
-                    return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
+                    adj = (AdjustmentVoucher)TempData["AdjustQty"];
+                    TempData.Keep("AdjustQty");
+                    
+                    adj.AdjustmentVoucherDetails.Remove(adj.AdjustmentVoucherDetails.Single(x => x.Id == adjdId));
+
+                    TempData["AdjustQty"] = adj;
                 }
+
                 AdjustmentVoucherDetail adjd = AdjustmentVoucherService.Instance.getAdjustmentVoucherDetailById(adjdId);
 
                 AdjustmentVoucherService.Instance.DeleteAdjustmentVoucherDetail(adjd);
 
-                return RedirectToAction("Detail", "AdjustmentVoucher", new { @adjId = adjd.AdjustmentVoucherId });
-            }
-            return RedirectToAction("Index", "Login");
+                return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 
