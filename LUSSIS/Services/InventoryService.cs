@@ -63,7 +63,7 @@ namespace LUSSIS.Services
                 {
                     inventoryList.StationeryId = s.Id;
                     inventoryList.ItemNumber = s.Code;
-                    inventoryList.Category = (String) categoryRepo.getCategoryType(s.CategoryId);
+                    inventoryList.Category = (String)categoryRepo.getCategoryType(s.CategoryId);
                     inventoryList.Description = s.Description;
                     inventoryList.Location = s.Bin;
                     inventoryList.UnitOfMeasure = s.UnitOfMeasure;
@@ -83,12 +83,12 @@ namespace LUSSIS.Services
 
             Stationery s = stationeryRepo.FindById(stationeryId);
             Category c = categoryRepo.FindById(s.CategoryId);
-            List<SupplierTender> st = (List<SupplierTender>) supplierTenderRepo.FindBy(x => x.StationeryId == stationeryId);
+            List<SupplierTender> st = (List<SupplierTender>)supplierTenderRepo.FindBy(x => x.StationeryId == stationeryId);
 
             List<Supplier> sp = new List<Supplier>();
             foreach (SupplierTender rankedsupplier in st)
             {
-                Supplier supplier = (Supplier) supplierRepo.FindById(rankedsupplier.SupplierId);
+                Supplier supplier = (Supplier)supplierRepo.FindById(rankedsupplier.SupplierId);
                 sp.Add(supplier);
             }
 
@@ -100,13 +100,13 @@ namespace LUSSIS.Services
                 {
                     supstockrank.Rank = i;
 
-                    SupplierTender rankingsupplier = (SupplierTender) supplierTenderRepo.FindOneBy(x => x.StationeryId == stationeryId && x.Rank == i);
+                    SupplierTender rankingsupplier = (SupplierTender)supplierTenderRepo.FindOneBy(x => x.StationeryId == stationeryId && x.Rank == i);
                     supstockrank.SupplierCode = rankingsupplier.Supplier.Code;
                     supstockrank.SupplierName = rankingsupplier.Supplier.Name;
                     supstockrank.ContactPerson = rankingsupplier.Supplier.ContactName;
                     supstockrank.ContactNumber = rankingsupplier.Supplier.PhoneNo;
                     supstockrank.Price = rankingsupplier.Price;
-                  }
+                }
                 supplierStockRank.Add(supstockrank);
             }
 
@@ -123,7 +123,7 @@ namespace LUSSIS.Services
                 {
                     avDet.Add(aVD);
                 }
-                    
+
             }
 
             // set retrieved adjustmentvouchers into StockMovementDTO
@@ -145,7 +145,7 @@ namespace LUSSIS.Services
             List<PurchaseOrderDetail> purchaseOrderDet = new List<PurchaseOrderDetail>();
             foreach (int a in poId)
             {
-                PurchaseOrderDetail purOrderDetail = (PurchaseOrderDetail) purchaseOrderDetailRepo.FindOneBy(x => x.PurchaseOrderId == a && x.StationeryId == stationeryId);
+                PurchaseOrderDetail purOrderDetail = (PurchaseOrderDetail)purchaseOrderDetailRepo.FindOneBy(x => x.PurchaseOrderId == a && x.StationeryId == stationeryId);
                 purchaseOrderDet.Add(purOrderDetail);
             }
 
@@ -156,43 +156,45 @@ namespace LUSSIS.Services
                 {
                     stockMovList.MovementDate = purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).OrderDateTime;
                     stockMovList.DepartmentOrSupplier = "Supplier - " + supplierRepo.FindById(purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).SupplierId).Name;
-                    stockMovList.Quantity = (int) poDetail.QuantityDelivered;
+                    stockMovList.Quantity = (int)poDetail.QuantityDelivered;
                 }
                 stockMovement.Add(stockMovList);
             }
 
             //retrieve all requisitiondetails that are delivered and are of the input stationeryId
-            List<RequisitionDetail> reqDet = (List<RequisitionDetail>) requisitionDetailRepo.FindBy(x => x.Status == "Collected" && x.StationeryId == stationeryId);
+            List<RequisitionDetail> reqDet = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.Status == "Collected" && x.StationeryId == stationeryId);
 
             // set retrieved PODetails into StockMovementDTO
             foreach (RequisitionDetail reqDetails in reqDet)
             {
                 StockMovementDTO stockMovList = new StockMovementDTO();
-                {
-                    stockMovList.MovementDate = (DateTime) reqDetails.Disbursement.DeliveryDateTime;
 
-                    int rcdEmployeeId = (int) disbursementRepo.FindOneBy(x => x.Id == reqDetails.DisbursementId).ReceivedEmployeeId;
-                    string deptName = departmentRepo.FindOneBy(x => x.Id == employeeRepo.FindOneBy(y => y.Id == rcdEmployeeId).DepartmentId).DepartmentName;
-                    stockMovList.DepartmentOrSupplier = deptName;
+                stockMovList.MovementDate = (DateTime)reqDetails.Disbursement.DeliveryDateTime;
 
-                    stockMovList.Quantity = (int) reqDetails.QuantityDelivered;
-                }
+                int rcdEmployeeId = (int)disbursementRepo.FindOneBy(x => x.Id == reqDetails.DisbursementId).ReceivedEmployeeId;
+
+                stockMovList.DepartmentOrSupplier = employeeRepo.FindById(rcdEmployeeId).Department.DepartmentName; ;
+
+                stockMovList.Quantity = (int)reqDetails.QuantityDelivered*-1;
+
                 stockMovement.Add(stockMovList);
             }
 
             // order the list by date & alphabetically
             stockMovement.OrderBy(x => x.MovementDate).OrderBy(x => x.DepartmentOrSupplier);
 
+            int runningBal = 0;
+
             // set StockMovementDTO into StockMovementBalanceDTO
             foreach (StockMovementDTO stkMovDTO in stockMovement)
             {
-                int runningBal = 0;
+
                 StockMovementBalanceDTO stockMovBalList = new StockMovementBalanceDTO();
-                {
-                    stockMovBalList.StockMovement = stkMovDTO;
-                    runningBal = 0 + stkMovDTO.Quantity;
-                    stockMovBalList.Balance = runningBal;
-                }
+
+                stockMovBalList.StockMovement = stkMovDTO;
+                runningBal = runningBal + stkMovDTO.Quantity;
+                stockMovBalList.Balance = runningBal;
+
                 stockMovementBalance.Add(stockMovBalList);
             }
 
@@ -208,6 +210,11 @@ namespace LUSSIS.Services
             stockAndSuppliers.UnitOfMeasure = s.UnitOfMeasure;
 
             stockAndSuppliers.SupplierStockRank = supplierStockRank;
+
+            foreach (StockMovementBalanceDTO stockMovementBalanceDTO in stockMovementBalance)
+            {
+                stockMovementBalanceDTO.Balance += s.Quantity - stockMovementBalance.Last().Balance;
+            }
 
             stockAndSuppliers.StockMovementBalance = stockMovementBalance;
 

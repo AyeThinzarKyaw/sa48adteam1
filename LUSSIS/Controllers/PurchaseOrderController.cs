@@ -52,7 +52,7 @@ namespace LUSSIS.Controllers
                 {
                     purchaseOrderListDTO.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders()
                                                         .Where(x => x.OrderDateTime.Date >= purchaseOrderListDTO.FromDate.Date
-                                                        && x.OrderDateTime <= purchaseOrderListDTO.ToDate.Date)
+                                                        && x.OrderDateTime.Date <= purchaseOrderListDTO.ToDate.Date)
                                                         .OrderByDescending(x => x.OrderDateTime);
                 }
                 else
@@ -124,21 +124,21 @@ namespace LUSSIS.Controllers
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
-                if (currentUser.RoleId == (int)Enums.Roles.StoreSupervisor)
+                if (currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     PurchaseOrder purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
 
 
                     if (purchaseOrder != null)
                     {
-                        if (purchaseOrder.Status == Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.OPEN))
+                        if (purchaseOrder.Status == Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.PENDING))
                         {
                             purchaseOrder.Status = reply;
                             purchaseOrder.Remark = remark;
                             PurchaseOrderService.Instance.UpdatePO(purchaseOrder);
                             return Json(new object[] { true, "" }, JsonRequestBehavior.AllowGet);
                         }
-                        return Json(new object[] { false, "This purchase order is not in OPEN status." }, JsonRequestBehavior.AllowGet);
+                        return Json(new object[] { false, "This purchase order is not in PENDING status." }, JsonRequestBehavior.AllowGet);
                     }
                     return Json(new object[] { false, "This purchase order does not exist." }, JsonRequestBehavior.AllowGet);
                 }

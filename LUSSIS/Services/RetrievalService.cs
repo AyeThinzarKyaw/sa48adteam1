@@ -227,7 +227,7 @@ namespace LUSSIS.Services
         }
 
 
-        public void completeRetrievalProcess(RetrievalDTO retrieval,int employeeId)
+        public void completeRetrievalProcess(RetrievalDTO retrieval, int employeeId)
         {
             int deliveredEmployeeId = employeeId;
 
@@ -283,9 +283,10 @@ namespace LUSSIS.Services
             {
                 Requisition affectedReq = (Requisition)requisitionRepo.FindOneBy(x => x.Id == entry.RequisitionId);
                 int targetDeptId = (int)employeeRepo.FindOneBy(x => x.Id == affectedReq.EmployeeId).DepartmentId;
-                int receivedEmployeeId = (int)employeeRepo.FindOneBy(x => x.DepartmentId == targetDeptId && x.RoleId ==(int)Enums.Roles.DepartmentRepresentative).Id;
+                int receivedEmployeeId = (int)employeeRepo.FindOneBy(x => x.DepartmentId == targetDeptId && x.RoleId == (int)Enums.Roles.DepartmentRepresentative).Id;
 
-                RequisitionDetail target = entry;
+                RequisitionDetail target = (RequisitionDetail)requisitionDetailRepo.FindBy(x => x.Id == entry.Id).FirstOrDefault();
+                //RequisitionDetail target = entry;
                 int targetDisId = retrieveNewOrAvailableDisbursementIdForDept(deliveredEmployeeId, receivedEmployeeId);
 
                 target.DisbursementId = targetDisId;
@@ -320,7 +321,7 @@ namespace LUSSIS.Services
         // retrieve open Adj Voucher
         public AdjustmentVoucher retrieveNewOrAvailableAdjustmentVoucherForClerk(int deliveredEmployeeId)
         {
-            AdjustmentVoucher targetAdjustmentVoucher = (AdjustmentVoucher)adjustmentVoucherRepo.FindOneBy(x => x.EmployeeId == deliveredEmployeeId && x.Status == "Open");
+            AdjustmentVoucher targetAdjustmentVoucher = (AdjustmentVoucher)adjustmentVoucherRepo.FindBy(x => x.EmployeeId == deliveredEmployeeId && x.Status == "Open").FirstOrDefault();
 
             AdjustmentVoucher returnTargetAdjustmentVoucherId;
 
@@ -345,7 +346,7 @@ namespace LUSSIS.Services
 
         public int retrieveNewOrAvailableDisbursementIdForDept(int deliveredEmployeeId, int receivedEmployeeId)
         {
-            Disbursement availableDisbursement = disbursementRepo.FindOneBy(x => x.DeliveredEmployeeId == deliveredEmployeeId && x.ReceivedEmployeeId == receivedEmployeeId && x.Signature == null);
+            Disbursement availableDisbursement = disbursementRepo.FindBy(x => x.DeliveredEmployeeId == deliveredEmployeeId && x.ReceivedEmployeeId == receivedEmployeeId && x.Signature == null).FirstOrDefault(); ;
 
             int targetDisbursementId;
 
@@ -393,7 +394,7 @@ namespace LUSSIS.Services
 
         public List<Department> retrieveAllDepartmentsWithApprovedRequisitions()
         {
-            List<Department> departmentList = (List<Department>) departmentRepo.FindAll();
+            List<Department> departmentList = (List<Department>)departmentRepo.FindAll();
             List<Employee> employeesAllDepartments = RetrieveAllEmployeesInAssignedDepartmentList(departmentList);
             List<Requisition> approvedRequisitionsFromEmployeesInAssignedDepartments = RetrieveAllApprovedRequisitionsByEmployeeList(employeesAllDepartments);
 
@@ -440,8 +441,8 @@ namespace LUSSIS.Services
 
             foreach (Department dept in departmentList)
             {
-                
-                List<Requisition> rt =  retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
+
+                List<Requisition> rt = retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
 
                 List<Requisition> rtFinal = new List<Requisition>();
 
@@ -449,7 +450,7 @@ namespace LUSSIS.Services
                 {
                     List<RequisitionDetail> reqDet = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == req.Id && x.Status == "PREPARING").ToList();
 
-                    if (reqDet.Count>0)
+                    if (reqDet.Count > 0)
                     {
                         rtFinal.Add(req);
                     }
@@ -464,7 +465,7 @@ namespace LUSSIS.Services
             output.DepartmentAndRetrieval = adDRList;
 
             AdHocDeptAndRetrievalDTO firstAdHocAndRetrieval = adDRList.FirstOrDefault();
-            
+
 
             return output;
         }
