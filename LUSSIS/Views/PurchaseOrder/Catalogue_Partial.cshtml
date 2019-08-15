@@ -23,7 +23,7 @@
         <td>
             @if (Model.SelectOnlyConfirm == true || Model.SelectedItems.Where(x => x.Id == stationery.Id).Count() > 0)
             {
-                <input readonly id=@inputBoxId value=@stationery.Unsubmitted type="text" style="width: 80px;" />@*onfocusout="confirm();"*@
+                <input disabled id=@inputBoxId value=@stationery.Unsubmitted type="text" style="width: 80px;" />@*onfocusout="confirm();"*@
             }
             else
             {

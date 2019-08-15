@@ -32,17 +32,31 @@
                                 <td>Adjustment Voucher ID</td>
                                 <td>: @Model.adjustmentVoucher.Id</td>
                                 <td width="600"></td>
-                                <td>Clerk Name</td>
-                                <td>: @Model.adjustmentVoucher.Employee.Name</td>
+                                @if(role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
+                                {
+                                    <td>Clerk Name</td>
+                                    <td>: @Model.adjustmentVoucher.Employee.Name</td>
+                                }
                             </tr>
                             <tr>
                                 <td>Voucher Date</td>
-                                @{ string adjDate = ((DateTime)Model.adjustmentVoucher.Date).ToString("dd/MM/yyyy"); }
-                                <td>: @adjDate</td>
+                                <td>: @Model.adjustmentVoucher.Date.ToString("yyyy-MM-dd")</td>
+                                
                             </tr>
                             <tr>
                                 <td>Voucher Status</td>
-                                <td class="text-blue">: @Model.adjustmentVoucher.Status</td>
+                                @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                {
+                                    <td class="text-blue">: @Model.adjustmentVoucher.Status</td>
+                                }
+                                else if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Submitted))
+                                {
+                                    <td class="text-green">: @Model.adjustmentVoucher.Status</td>
+                                }
+                                else
+                                {
+                                    <td>: @Model.adjustmentVoucher.Status</td>
+                                }
                             </tr>
                             <tr></tr>
                         </table>
@@ -72,7 +86,7 @@
                             <tbody>
                                 @foreach (var item in Model.adjustmentVoucher.AdjustmentVoucherDetails)
                                 {
-                                    <tr>
+                                    <tr id="@item.Id">
                                         <td>@item.Stationery.Code</td>
                                         <td>@item.Stationery.Category.Type</td>
                                         <td>@item.Stationery.Description</td>
@@ -91,7 +105,7 @@
                                         <td>@item.Reason</td>
                                         @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
                                         {
-                                            <td>@Html.ActionLink("Remove", "Remove", new { adjdId = item.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })</td>
+                                            <td><a href="#" class="btn btn-sm btn-danger" onclick="remove(this, '@item.Id')">Remove</a></td>
                                         }
                                     </tr>
                                 }
@@ -101,11 +115,11 @@
                     <!-- /.box-body -->
                     <!-- If Supervisor -->
                     <div class="box-footer">
-                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open) && role == 7)
+                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open) && role == (int)LUSSIS.Enums.Roles.StoreClerk)
                         {
                             <input type="submit" class="btn btn-success pull-right" value="Submit" />
                         }
-                        else if (Model.adjustmentVoucher.Status != Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Acknowledged) && role == 6)
+                        else if (Model.adjustmentVoucher.Status != Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Acknowledged) && role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                         {
                             @Html.ActionLink("Acknowledge", "ChangeStatus", new { adjId = @Model.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-success pull-right", @role = "button" })
                         }
@@ -134,12 +148,23 @@
                     type: "GET",
                     async: true,
                     success: function (data) {
-                        //if (data[0] == true) {
-                        //    window.location.href = '/PurchaseOrder/Index'
-                        //}
-                        //else {
-                        //    document.getElementById("errRemark").innerHTML = data[1];
-                        //}
+                    },
+                    error: function (data) { }
+                });
+            }
+        }
+
+        function remove(e, adjdId) {
+            if (e.value != "") {                
+                var url = "/AdjustmentVoucher/Remove?adjdId=" + adjdId;
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    async: true,
+                    success: function (data) {
+                        //debugger;
+                        var content = $(e).parent().parent().attr('id');
+                        $("#" + content).remove();
                     },
                     error: function (data) { }
                 });

@@ -23,6 +23,15 @@ namespace LUSSIS.Controllers
     {
         PurchaseOrderService purchaseOrderService;
         // GET: Chart
+        public ActionResult StationeryRequisitionTrend()
+        {
+            return View();
+        }
+        public ActionResult PurchaseOrderTrend()
+        {
+            return View();
+        }
+
         public ActionResult InventoryHistoricalData()
         {
             purchaseOrderService = new PurchaseOrderService();

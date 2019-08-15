@@ -3,7 +3,13 @@
 @{
     ViewBag.Title = "Detail";
 }
-
+@{
+    int role = 0;
+    if (Session["role"] != null)
+    {
+        role = (int)Session["role"];
+    }
+}
 <section class="content-header">
     <h1>
         Purchase Order Detail
@@ -95,7 +101,7 @@
                         </tbody>
                     </table>
                     <br />
-                    @if (Model.Status == Enum.GetName(typeof(POStatus), POStatus.PENDING))
+                    @if (Model.Status == Enum.GetName(typeof(POStatus), POStatus.PENDING) && (role == (int)LUSSIS.Enums.Roles.StoreSupervisor || role == (int)LUSSIS.Enums.Roles.StoreManager))
                     {
                         <!-- If Supervisor -->
                         <form>

@@ -168,15 +168,15 @@ namespace LUSSIS.Services
             foreach (RequisitionDetail reqDetails in reqDet)
             {
                 StockMovementDTO stockMovList = new StockMovementDTO();
-                {
+                
                     stockMovList.MovementDate = (DateTime) reqDetails.Disbursement.DeliveryDateTime;
 
                     int rcdEmployeeId = (int) disbursementRepo.FindOneBy(x => x.Id == reqDetails.DisbursementId).ReceivedEmployeeId;
-                    string deptName = departmentRepo.FindOneBy(x => x.Id == employeeRepo.FindOneBy(y => y.Id == rcdEmployeeId).DepartmentId).DepartmentName;
-                    stockMovList.DepartmentOrSupplier = deptName;
+                    
+                    stockMovList.DepartmentOrSupplier = employeeRepo.FindById(rcdEmployeeId).Department.DepartmentName; ;
 
                     stockMovList.Quantity = (int) reqDetails.QuantityDelivered;
-                }
+                
                 stockMovement.Add(stockMovList);
             }
 

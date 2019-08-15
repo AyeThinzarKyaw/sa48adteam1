@@ -72,19 +72,19 @@ namespace LUSSIS.Enums
         CANCELLED
     }
 
-    public enum RequisitionStatus
-    {
-        Created,
-        ReservedPending,
-        Preparing,
-        WaitlistPending,
-        WaitlistApproved,
-        RetrievedandPendingDisbursement,
-        Collected,
-        Rejected,
-        Cancelled
+    //public enum RequisitionStatus
+    //{
+    //    Created,
+    //    ReservedPending,
+    //    Preparing,
+    //    WaitlistPending,
+    //    WaitlistApproved,
+    //    RetrievedandPendingDisbursement,
+    //    Collected,
+    //    Rejected,
+    //    Cancelled
 
-    }
+    //}
 
     public enum AdjustmentVoucherStatus
     {

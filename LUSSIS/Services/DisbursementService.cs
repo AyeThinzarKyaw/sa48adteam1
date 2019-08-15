@@ -107,7 +107,7 @@ namespace LUSSIS.Services
                     DisbursementId = (int)rd.DisbursementId,
                     ReceivedEmployeeId = (int)disbursementRepo.FindById((int)rd.DisbursementId).ReceivedEmployeeId,
                     DeliveredEmployeeId = disbursementRepo.FindById((int)rd.DisbursementId).DeliveredEmployeeId,
-                    //DeliveryDateTime = (DateTime)disbursementRepo.FindById((int)rd.DisbursementId).DeliveryDateTime,
+                    DeliveryDateTime = (DateTime)disbursementRepo.FindById((int)rd.DisbursementId).DeliveryDateTime,
                     CollectionPoint = disbursementRepo.FindById((int)rd.DisbursementId).CollectionPoint,
                     QuantityOrdered = rd.QuantityOrdered,
                     QuantityDelivered = (int)rd.QuantityDelivered,
@@ -242,9 +242,9 @@ namespace LUSSIS.Services
 
             foreach (Models.MobileDTOs.RequisitionDetailDTO rd in requisitionDetails)
             {
-                if (rd.QuantityRetrieved != rd.QuantityDelivered)
+                if (rd.QuantityOrdered != rd.QuantityDelivered)
                 {
-                    int qtyDifference = (int)rd.QuantityDelivered - rd.QuantityRetrieved;
+                    int qtyDifference = (int)rd.QuantityDelivered - rd.QuantityOrdered;
 
                     AdjustmentVoucher targetAdjustmentVoucher = retrievalService.retrieveNewOrAvailableAdjustmentVoucherForClerk(disbursement.DeliveredEmployeeId);
                     retrievalService.createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rd.StationeryId, qtyDifference);
