@@ -412,6 +412,11 @@ namespace LUSSIS.Services
             d.Signature = bytes;
             d.OnRoute = false;
             disbursementRepo.Update(d);
+            foreach(RequisitionDetail rd in (List<RequisitionDetail>)d.RequisitionDetails)
+            {
+                rd.Stationery.Quantity -= (int) rd.QuantityDelivered;
+            }
+                
         }
 
         public void UpdateRequisitionDetailsAfterDisbursement(int qtyCollected, List<int> requisitionDetailIds)
