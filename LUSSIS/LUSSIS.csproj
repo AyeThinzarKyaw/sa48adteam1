@@ -149,6 +149,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdjustmentVoucherController.cs" />
     <Compile Include="Controllers\AssignStaffController.cs" />
+    <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\CollectionPointController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
@@ -554,6 +555,8 @@
     <Content Include="Views\CollectionPoint\AssignClerk.cshtml" />
     <Content Include="Views\CollectionPoint\AssignCollectionPoint.cshtml" />
     <Content Include="Views\MachineLearning\MachineLearning.cshtml" />
+    <Content Include="Views\Chart\PurchaseOrderTrend.cshtml" />
+    <Content Include="Views\Chart\StationeryRequisitionTrend.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -77,7 +77,7 @@
                                     }
                                     @if (catalogueItem.Confirmation == true)
                                     {
-                                        <td><input id=@inputBoxId type="text" style="width: 80px;" value=@catalogueItem.OrderQtyInput /></td>
+                                        <td><input id=@inputBoxId type="text" style="width: 80px;" value=@catalogueItem.OrderQtyInput disabled/></td>
                                         <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal" checked></td>
                                     }
                                     else

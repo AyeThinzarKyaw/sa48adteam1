@@ -9,6 +9,15 @@ namespace LUSSIS.Controllers
     public class ChartController : Controller
     {
         // GET: Chart
+        public ActionResult StationeryRequisitionTrend()
+        {
+            return View();
+        }
+        public ActionResult PurchaseOrderTrend()
+        {
+            return View();
+        }
+
         public ActionResult InventoryHistoricalData()
         {
             return View();
