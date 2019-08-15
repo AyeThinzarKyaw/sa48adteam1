@@ -74,7 +74,7 @@
                                         <td>@dl.DisbursementId</td>
                                         <td>@dl.DepartmentName</td>
                                         <td>@dl.CollectionPoint</td>
-                                        <td>@dl.DeliveryDateTime.Date</td>
+                                        <td>@dl.DeliveryDateTime.Date.ToString("yyyy-MM-dd")</td>
                                         @if (dl.Status.Contains("PENDING_COLLECTION"))
                                         {
                                             <td class="text-blue">Pending Collection</td>

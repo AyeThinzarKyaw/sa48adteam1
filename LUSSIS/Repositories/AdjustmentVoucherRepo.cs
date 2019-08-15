@@ -29,7 +29,7 @@ namespace LUSSIS.Repositories
         public List<int> getAdjustmentVoucherIdsWithAcknowledgedStatus()
         {
             var adjustments = from a in Context.AdjustmentVouchers
-                              where a.Status.Equals("test")
+                              where a.Status.Equals("Acknowledged")
                               select a.Id;
 
             List<int> adjustmentsList = adjustments.ToList();
