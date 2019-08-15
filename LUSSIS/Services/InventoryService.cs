@@ -175,7 +175,7 @@ namespace LUSSIS.Services
 
                 stockMovList.DepartmentOrSupplier = employeeRepo.FindById(rcdEmployeeId).Department.DepartmentName; ;
 
-                stockMovList.Quantity = (int)reqDetails.QuantityDelivered;
+                stockMovList.Quantity = (int)reqDetails.QuantityDelivered*-1;
 
                 stockMovement.Add(stockMovList);
             }
