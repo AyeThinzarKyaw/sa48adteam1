@@ -48,6 +48,11 @@ namespace LUSSIS.Models
         public virtual DbSet<SupplierTender> SupplierTenders { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     
+        public virtual int CartDetail_releaseCartData()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CartDetail_releaseCartData");
+        }
+    
         public virtual ObjectResult<PO_getPOCatalogue_Result> PO_getPOCatalogue()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PO_getPOCatalogue_Result>("PO_getPOCatalogue");

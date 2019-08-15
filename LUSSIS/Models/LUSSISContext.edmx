@@ -514,6 +514,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="CartDetail_releaseCartData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="PO_getPOCatalogue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="LUSSISContextModelStoreContainer">
           <EntitySet Name="AdjustmentVoucher" EntityType="Self.AdjustmentVoucher" Schema="dbo" store:Type="Tables" />
@@ -1312,6 +1313,7 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="SupplierTender" EntitySet="SupplierTenders" />
           </AssociationSet>
+          <FunctionImport Name="CartDetail_releaseCartData" />
           <FunctionImport Name="PO_getPOCatalogue" ReturnType="Collection(LUSSISContextModel.PO_getPOCatalogue_Result)" />
         </EntityContainer>
         <ComplexType Name="PO_getPOCatalogue_Result">
@@ -1572,6 +1574,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CartDetail_releaseCartData" FunctionName="LUSSISContextModel.Store.CartDetail_releaseCartData" />
           <FunctionImportMapping FunctionImportName="PO_getPOCatalogue" FunctionName="LUSSISContextModel.Store.PO_getPOCatalogue">
             <ResultMapping>
               <ComplexTypeMapping TypeName="LUSSISContextModel.PO_getPOCatalogue_Result">
