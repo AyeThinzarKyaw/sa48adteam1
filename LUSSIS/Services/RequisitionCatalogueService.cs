@@ -589,6 +589,21 @@ namespace LUSSIS.Services
             {              
                 //get the department
                 List<RequisitionDetail> rds = group.ToList();
+                List<RequisitionDetail> rds1 = new List<RequisitionDetail>();
+                foreach (RequisitionDetail rd in rds)
+                {
+                    foreach (RequisitionDetail rd1 in rds)
+                    {
+                        if(rd.RequisitionId == rd1.RequisitionId && rd.StationeryId == rd1.StationeryId)
+                        {
+                            if (rd.QuantityOrdered > rd1.QuantityOrdered)
+                                rds1.Add(rd);
+                        }
+                    }
+                }
+
+                rds = rds.Except(rds1).ToList();
+
                 Department d = rds.First().Requisition.Employee.Department;
 
                 //Create a list of owedItemDTOs
