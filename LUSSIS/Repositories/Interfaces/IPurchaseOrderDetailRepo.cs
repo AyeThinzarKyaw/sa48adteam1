@@ -9,6 +9,6 @@ namespace LUSSIS.Repositories.Interfaces
 {
     public interface IPurchaseOrderDetailRepo : IGenericRepo<PurchaseOrderDetail, int>
     {
-
+        List<PurchaseOrderDetail> GetPurchaseOrderDetailsBySupplierId(int SupplierId);
     }
 }

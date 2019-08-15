@@ -149,6 +149,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdjustmentVoucherController.cs" />
     <Compile Include="Controllers\AssignStaffController.cs" />
+    <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\ClerkRequisitionsController.cs" />
     <Compile Include="Controllers\CollectionPointController.cs" />
     <Compile Include="Controllers\DeptHeadController.cs" />
@@ -204,6 +205,8 @@
     <Compile Include="Models\DTOs\DisbursementDTO.cs" />
     <Compile Include="Models\DTOs\DisbursementDetailsDTO.cs" />
     <Compile Include="Models\DTOs\MachineLearningDTO.cs" />
+    <Compile Include="Models\DTOs\SupplierChartDTO.cs" />
+    <Compile Include="Models\DTOs\SupplierChartFilteringDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>

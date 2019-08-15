@@ -1,4 +1,4 @@
-﻿
+﻿@model LUSSIS.Models.DTOs.SupplierChartFilteringDTO
 @{
     ViewBag.Title = "InventoryHistoricalData";
 }
@@ -14,166 +14,172 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>
-                                    <input type="radio" name="r1" class="minimal" id="dept" checked> Department
-                                </label>
-                                <label style="margin-left: 10px; margin-bottom: 10px;">
-                                    <input type="radio" name="r1" class="minimal" id="supp"> Supplier
-                                </label>
-                            </div>
-                            <div class="card supp-content" style="padding: 20px; border: 1px solid #d2d6de; display: none;">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Supplier</label><br>
-                                            <div class="card" style="height: 100px; overflow: hidden; overflow-y: scroll; border-bottom: 1px solid #d2d6de;">
-                                                <div class="card-body" style="border: 1px solid #d2d6de; padding: 10px;">
-                                                    <input type="checkbox" class="minimal"> ALPHA Office Supplies <br>
-                                                    <input type="checkbox" class="minimal"> Cheap Stationer <br>
-                                                    <input type="checkbox" class="minimal"> OMEGA Stationery Supplier<br>
-                                                    <input type="checkbox" class="minimal"> BANES Shop<br>
-                                                    <input type="checkbox" class="minimal"> BANES Shop<br>
-                                                    <input type="checkbox" class="minimal"> BANES Shop<br>
-                                                    <input type="checkbox" class="minimal"> BANES Shop<br>
-                                                    <input type="checkbox" class="minimal"> BANES Shop
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Purchased From Date:</label>
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="date" class="form-control pull-right" id="datepicker">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Purchased To Date:</label>
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="date" class="form-control pull-right" id="datepicker">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Item Category</label>
-                                            <select class="form-control select2" style="width: 100%;">
-                                                <option></option>
-                                                <option>Pen</option>
-                                                <option>Envelope</option>
-                                                <option>Eraser</option>
-                                                <option>File</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Item Description</label>
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Trend</label>
-                                            <select class="form-control select2" style="width: 100%;">
-                                                <option></option>
-                                                <option>Price</option>
-                                                <option>Volume</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-success pull-right" style="margin-right: 15px;">Generate</button>
+                @using (Html.BeginForm())
+                {
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>
+                                        <input type="radio" name="r1" class="minimal" id="dept" checked> Department
+                                    </label>
+                                    <label style="margin-left: 10px; margin-bottom: 10px;">
+                                        <input type="radio" name="r1" class="minimal" id="supp"> Supplier
+                                    </label>
                                 </div>
-                            </div>
-                            <!-- /.supp-content -->
+                                <div class="card supp-content" style="padding: 20px; border: 1px solid #d2d6de; display: none;">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Supplier</label>
+                                                @Html.DropDownListFor(x => x.supplier, new SelectList(Model.SupplierForChartList, "Id", "Name"), new { @class = "form-control", @multiple = "true" })
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Supplier</label><br>
 
-                            <div class="card dept-content" style="padding: 20px; border: 1px solid #d2d6de;">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Department :</label>
-                                            <select class="form-control select2" style="width: 100%;">
-                                                <option></option>
-                                                <option>English Dept</option>
-                                                <option>Computer Science</option>
-                                                <option>Commerce Dept</option>
-                                                <option>Registrar Dept</option>
-                                                <option>Zoology Dept</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Requested From Date:</label>
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
+
+                                                            @Html.DropDownListFor(x => x.supplier, new SelectList(@Model.SupplierForChartList,"Id", "Name"),new { @class = "form-control" , @multiple="true"})
+
+
+
                                                 </div>
-                                                <input type="date" class="form-control pull-right" id="datepicker">
+                                            </div>*@
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Purchased From Date:</label>
+
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    @Html.TextBoxFor(x => x.selectedDateTime, new { @type = "date", @class = "form-control pull-right" })
+                                                    @*<input type="date" class="form-control pull-right" id="datepicker">*@
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Requested To Date:</label>
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
+                                        @*<div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Purchased To Date:</label>
+                                                    <div class="input-group date">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </div>
+                                                        <input type="date" class="form-control pull-right" id="datepicker">
+                                                    </div>
                                                 </div>
-                                                <input type="date" class="form-control pull-right" id="datepicker">
+                                            </div>*@
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Item Category</label>
+                                                @Html.DropDownListFor(x => x.category, new SelectList(Model.CategoryForChartList, "Id", "Type"), new { @class = "form-control" })
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Item Category</label>
-                                            <select class="form-control select2" style="width: 100%;">
-                                                <option></option>
-                                                <option>Pen</option>
-                                                <option>Envelope</option>
-                                                <option>Eraser</option>
-                                                <option>File</option>
-                                            </select>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Item Description</label>
+                                                @Html.DropDownListFor(x => x.stationery, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })
+                                                @*<select class="form-control select2" style="width: 100%;">
+
+                                                            <option></option>
+
+                                                    </select>*@
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Item Description</label>
-                                            <input class="form-control" type="text">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Trend</label>
+                                                <select id="trend" name="trend" class="form-control select2" style="width: 100%;">
+
+                                                    <option></option>
+                                                    <option value="1">volume</option>
+                                                    <option value="2">price</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        <button type="submit" class="btn btn-success pull-right" style="margin-right: 15px;">Generate</button>
+
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Trend</label>
-                                            <select class="form-control select2" style="width: 100%;">
-                                                <option></option>
-                                                <option>Price</option>
-                                                <option>Volume</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-success pull-right" style="margin-right: 15px;">Generate</button>
                                 </div>
+                                <!-- /.supp-content -->
+
+                                <div class="card dept-content" style="padding: 20px; border: 1px solid #d2d6de;">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Department :</label>
+                                                <select class="form-control select2" style="width: 100%;">
+                                                    <option></option>
+                                                    <option>English Dept</option>
+                                                    <option>Computer Science</option>
+                                                    <option>Commerce Dept</option>
+                                                    <option>Registrar Dept</option>
+                                                    <option>Zoology Dept</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Requested From Date:</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    <input type="date" class="form-control pull-right" id="datepicker">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Requested To Date:</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    <input type="date" class="form-control pull-right" id="datepicker">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Item Category</label>
+                                                <select class="form-control select2" style="width: 100%;">
+                                                    <option></option>
+                                                    <option>Pen</option>
+                                                    <option>Envelope</option>
+                                                    <option>Eraser</option>
+                                                    <option>File</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Item Description</label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Trend</label>
+                                                <select class="form-control select2" style="width: 100%;">
+                                                    <option></option>
+                                                    <option>Price</option>
+                                                    <option>Volume</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-success pull-right" style="margin-right: 15px;">Generate</button>
+                                    </div>
+                                </div>
+                                <!-- /.dept-content -->
+                                <br>
+                                <p>Comments : Charts will be chose by populating by the best soultion.</p>
                             </div>
-                            <!-- /.dept-content -->
-                            <br>
-                            <p>Comments : Charts will be chose by populating by the best soultion.</p>
                         </div>
+                        <!-- /.row -->
                     </div>
-                    <!-- /.row -->
-                </div>
+                }
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
@@ -182,30 +188,30 @@
     </div>
     <!-- /.row -->
     <div class="row supp-content" style="display: none;">
-        <div class="col-md-6">
-            <!-- AREA CHART -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Area Chart</h3>
+        @*<div class="col-md-6">
+                <!-- AREA CHART -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Area Chart</h3>
 
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                            <i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
                     </div>
-                </div>
-                <div class="box-body">
-                    <div class="chart">
-                        <canvas id="areaChart" style="height:250px"></canvas>
+                    <div class="box-body">
+                        <div class="chart">
+                            <canvas id="areaChart" style="height:250px"></canvas>
+                        </div>
                     </div>
+                    <!-- /.box-body -->
                 </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-        </div>
+                <!-- /.box -->
+            </div>*@
 
-        <div class="col-md-6">
+        <div class="col-md-12">
             <!-- BAR CHART -->
             <div class="box box-success">
                 <div class="box-header with-border">
@@ -221,6 +227,7 @@
                 <div class="box-body">
                     <div class="chart">
                         <canvas id="barChart" style="height:230px"></canvas>
+                        <img src="@Url.Action("BarChart")" />
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -230,28 +237,28 @@
     </div>
     <div class="row dept-content">
         <!-- /.col (LEFT) -->
-        <div class="col-md-6">
-            <!-- DONUT CHART -->
-            <div class="box box-danger">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Donut Chart</h3>
+        @*<div class="col-md-6">
+                <!-- DONUT CHART -->
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Donut Chart</h3>
 
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                            <i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
                     </div>
+                    <div class="box-body">
+                        <canvas id="pieChart" style="height:250px"></canvas>
+                    </div>
+                    <!-- /.box-body -->
                 </div>
-                <div class="box-body">
-                    <canvas id="pieChart" style="height:250px"></canvas>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-        </div>
+                <!-- /.box -->
+            </div>*@
         <!-- /.col (RIGHT) -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <!-- LINE CHART -->
             <div class="box box-info">
                 <div class="box-header with-border">
@@ -267,6 +274,7 @@
                 <div class="box-body">
                     <div class="chart">
                         <canvas id="lineChart" style="height:250px"></canvas>
+
                     </div>
                 </div>
                 <!-- /.box-body -->

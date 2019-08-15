@@ -1,6 +1,7 @@
 ﻿using LUSSIS.Models;
 using LUSSIS.Models.DTOs;
 using LUSSIS.Repositories;
+using LUSSIS.Repositories.Interfaces;
 using LUSSIS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,34 @@ namespace LUSSIS.Services
 {
     public class PurchaseOrderService :IPurchaseOrderService
     {
-        private PurchaseOrderService() { }
+        private IDisbursementRepo disbursementRepo;
+        private IStationeryRepo stationeryRepo;
+        private ICategoryRepo categoryRepo;
+        private ISupplierTenderRepo supplierTenderRepo;
+        private ISupplierRepo supplierRepo;
+        private IAdjustmentVoucherRepo adjustmentVoucherRepo;
+        private IAdjustmentVoucherDetailRepo adjustmentVoucherDetailRepo;
+        private IRequisitionRepo requisitionRepo;
+        private IRequisitionDetailRepo requisitionDetailRepo;
+        private IEmployeeRepo employeeRepo;
+        private IDepartmentRepo departmentRepo;
+        private IPurchaseOrderRepo purchaseOrderRepo;
+        private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
+        public PurchaseOrderService() {
+            stationeryRepo = StationeryRepo.Instance;
+            categoryRepo = CategoryRepo.Instance;
+            supplierTenderRepo = SupplierTenderRepo.Instance;
+            supplierRepo = SupplierRepo.Instance;
+            adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
+            adjustmentVoucherDetailRepo = AdjustmentVoucherDetailRepo.Instance;
+            requisitionRepo = RequisitionRepo.Instance;
+            requisitionDetailRepo = RequisitionDetailRepo.Instance;
+            disbursementRepo = DisbursementRepo.Instance;
+            employeeRepo = EmployeeRepo.Instance;
+            departmentRepo = DepartmentRepo.Instance;
+            purchaseOrderRepo = PurchaseOrderRepo.Instance;
+            purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
+        }
 
         private static PurchaseOrderService instance = new PurchaseOrderService();
         public static IPurchaseOrderService Instance
@@ -93,6 +121,69 @@ namespace LUSSIS.Services
                 
             }
         }
+        public List<SupplierChartDTO> TrendChartInfo(int SupplierId, int CategoryId, int StationeryId)
+        {
+            List<PurchaseOrderDetail> PurchaseOrderDetailsList = purchaseOrderDetailRepo.GetPurchaseOrderDetailsBySupplierId(SupplierId);
+            IEnumerable<SupplierTender> SupplierTendersList = supplierTenderRepo.FindBy(x => x.SupplierId == SupplierId);
 
+            List<SupplierChartDTO> chartDTOs = new List<SupplierChartDTO>();
+
+            foreach (PurchaseOrderDetail pod in PurchaseOrderDetailsList)
+            {
+                foreach (SupplierTender st in SupplierTendersList)
+                {
+                    if (pod.StationeryId == st.StationeryId && supplierRepo.FindById(purchaseOrderRepo.FindById(pod.PurchaseOrderId).SupplierId).Id == st.SupplierId && categoryRepo.FindById(stationeryRepo.FindById(pod.StationeryId).CategoryId).Id == CategoryId && stationeryRepo.FindById(pod.StationeryId).Id == StationeryId)
+                    {
+
+                        SupplierChartDTO chartDTO = new SupplierChartDTO()
+                        {
+                            Id = pod.Id,
+                            PurchaseOrderId = pod.PurchaseOrderId,
+                            StationeryId = pod.StationeryId,
+                            QuantityOrdered = pod.QuantityOrdered,
+                            QuantityDelivered = (int)pod.QuantityDelivered,
+                            ItemName = stationeryRepo.FindById(pod.StationeryId).Description,
+                            ItemType = categoryRepo.FindById(stationeryRepo.FindById(pod.StationeryId).CategoryId).Type,
+                            UnitOfMeasure = stationeryRepo.FindById(pod.StationeryId).UnitOfMeasure,
+                            OrderDateTime = purchaseOrderRepo.FindById(pod.PurchaseOrderId).OrderDateTime,
+                            SupplierName = supplierRepo.FindById(purchaseOrderRepo.FindById(pod.PurchaseOrderId).SupplierId).Name,
+                            ItemUnitPrice = st.Price,
+                            EmployeeId = purchaseOrderRepo.FindById(pod.PurchaseOrderId).EmployeeId,
+                            EmployeeName = employeeRepo.FindById(purchaseOrderRepo.FindById(pod.PurchaseOrderId).EmployeeId).Name,
+
+
+                            PurchaseOrderDetailForChart = purchaseOrderDetailRepo.FindById(pod.Id),
+                            EmployeeForChart = employeeRepo.FindById(purchaseOrderRepo.FindById(pod.PurchaseOrderId).EmployeeId),
+                            SupplierForChart = supplierRepo.FindById(purchaseOrderRepo.FindById(pod.PurchaseOrderId).SupplierId),
+                            StationeryForChart = stationeryRepo.FindById(pod.StationeryId),
+                            PurchaseOrderForChart = purchaseOrderRepo.FindById(pod.PurchaseOrderId),
+                            SupplierTenderForChart = supplierTenderRepo.FindById(st.Id),
+                            CategoryForChart = categoryRepo.FindById(stationeryRepo.FindById(pod.StationeryId).CategoryId),
+                        };
+                        chartDTOs.Add(chartDTO);
+
+                    }
+
+                }
+            }
+            return chartDTOs;
+
+
+        }
+
+        public SupplierChartFilteringDTO FilteringByAttributes()
+        {
+            List<Supplier> suppliers = (List<Supplier>)supplierRepo.FindAll();
+            List<Stationery> stationeries = (List<Stationery>)stationeryRepo.FindAll();
+            List<Category> categories = (List<Category>)categoryRepo.FindAll();
+
+            SupplierChartFilteringDTO FilteringDetails = new SupplierChartFilteringDTO()
+            {
+                SupplierForChartList = suppliers,
+                StationeryForChartList = stationeries,
+                CategoryForChartList = categories
+            };
+            return FilteringDetails;
+        }
     }
 }
