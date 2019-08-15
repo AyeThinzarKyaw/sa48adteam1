@@ -53,7 +53,7 @@ namespace LUSSIS.Services
             List<CatalogueItemDTO> catalogueItems = new List<CatalogueItemDTO>();
 
             //for each stationery in stationeries create a catalogueItemDTO
-            foreach(Stationery s in stationeries)
+            foreach (Stationery s in stationeries)
             {
                 CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO()
                 {
@@ -70,7 +70,7 @@ namespace LUSSIS.Services
                 //    catalogueItemDTO.ReservedCount = getReservedBalanceForExistingCartItem(cartDetail);
                 //    catalogueItemDTO.WaitlistCount = cartDetail.Quantity - catalogueItemDTO.ReservedCount;
                 //}
-                
+
                 catalogueItems.Add(catalogueItemDTO);
             }
 
@@ -97,9 +97,9 @@ namespace LUSSIS.Services
             else if (reorderLevel != null && currBalance < reorderLevel)
             {
                 return StockAvailabilityEnum.LowStock;
-                
+
             }
-            else 
+            else
             {
                 return StockAvailabilityEnum.InStock;
             }
@@ -157,7 +157,7 @@ namespace LUSSIS.Services
             //int totalCount = s.Quantity;
             int netCount = totalCount - reservedCount - cartCount + openAdjustmentCount;
 
-            if(netCount <= 0)
+            if (netCount <= 0)
             {
                 return 0;
             }
@@ -165,14 +165,14 @@ namespace LUSSIS.Services
             {
                 return netCount;
             }
-          
+
         }
 
 
         //returns null if user's cart is empty
         private List<CartDetail> GetAnyExistingCartDetails(int employeeId)
         {
-            
+
             List<CartDetail> cartDetails = (List<CartDetail>)cartDetailRepo.FindBy(x => x.Employee.Id == employeeId);
             if (cartDetails.Count == 0)
             {
@@ -182,8 +182,8 @@ namespace LUSSIS.Services
             {
                 return cartDetails;
             }
-            
-        }     
+
+        }
 
         public CatalogueItemDTO AddCartDetail(int employeeId, int stationeryId, int inputQty)
         {
@@ -196,7 +196,8 @@ namespace LUSSIS.Services
                 reserved = currBalance;
                 waitlist = inputQty - currBalance;
             }
-            else{
+            else
+            {
                 reserved = inputQty;
             }
             CartDetail cd = new CartDetail { DateTime = DateTime.Now, EmployeeId = employeeId, Quantity = inputQty, StationeryId = stationeryId };
@@ -215,7 +216,7 @@ namespace LUSSIS.Services
             Stationery s = stationeryRepo.FindById(stationeryId);
             //remove cd from db first
             CartDetail cd = cartDetailRepo.FindOneBy(x => x.EmployeeId == employeeId && x.StationeryId == stationeryId);
-            if(cd != null)
+            if (cd != null)
             {
                 cartDetailRepo.Delete(cd);
                 CatalogueItemDTO catalogueItemDTO = new CatalogueItemDTO();
@@ -247,7 +248,7 @@ namespace LUSSIS.Services
 
         public List<Requisition> GetPersonalRequisitionHistory(int employeeId)
         {
-            return (List<Requisition>)requisitionRepo.FindBy(x=> x.EmployeeId == employeeId);  
+            return (List<Requisition>)requisitionRepo.FindBy(x => x.EmployeeId == employeeId);
         }
 
 
@@ -255,26 +256,30 @@ namespace LUSSIS.Services
         {
             //erase records from cartDetails
             List<CartDetail> cartDetails = (List<CartDetail>)cartDetailRepo.FindBy(x => x.EmployeeId == employeeId);
-            Requisition newRequisition = new Requisition() {DateTime = DateTime.Now, EmployeeId = employeeId,
-                Status = RequisitionStatusEnum.PENDING.ToString() };
+            Requisition newRequisition = new Requisition()
+            {
+                DateTime = DateTime.Now,
+                EmployeeId = employeeId,
+                Status = RequisitionStatusEnum.PENDING.ToString()
+            };
             newRequisition = requisitionRepo.Create(newRequisition);
 
             List<RequisitionDetail> requisitionDetails = new List<RequisitionDetail>();
 
-            foreach(CartDetail cd in cartDetails)
+            foreach (CartDetail cd in cartDetails)
             {
                 cartDetailRepo.Delete(cd);
 
                 int reservedCount = getReservedBalanceForExistingCartItem(cd);
-                if(reservedCount < cd.Quantity)
+                if (reservedCount < cd.Quantity)
                 {
                     int waitlistCount = cd.Quantity - reservedCount;
                     //has waitlist, create 2 requisition details
                     createNewRequisitionDetail(waitlistCount, newRequisition.Id, cd.StationeryId, RequisitionDetailStatusEnum.WAITLIST_PENDING);
-                    if(reservedCount > 0)
+                    if (reservedCount > 0)
                     {
                         createNewRequisitionDetail(reservedCount, newRequisition.Id, cd.StationeryId, RequisitionDetailStatusEnum.RESERVED_PENDING);
-                    }                    
+                    }
                 }
                 else
                 {
@@ -317,18 +322,21 @@ namespace LUSSIS.Services
             //switch to eager loading method
             //List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=> x.RequisitionId == requisitionId);
             List<RequisitionDetail> requisitionDetails = requisitionDetailRepo.RequisitionDetailsEagerLoadStationery(requisitionId);
-            return new RequisitionDetailsDTO() { EmployeeName = employeeName,
+            return new RequisitionDetailsDTO()
+            {
+                EmployeeName = employeeName,
                 RequestedDate = requisition.DateTime.ToString("yyyy-MM-dd"),
                 RequisitionFormId = requisition.Id,
                 RequisitionStatus = requisition.Status,
                 Remarks = requisition.Remarks,
-                RequisitionDetails = requisitionDetails};
+                RequisitionDetails = requisitionDetails
+            };
         }
 
-        public bool CancelPendingRequisition(int requisitionId,int cancelledBy)
+        public bool CancelPendingRequisition(int requisitionId, int cancelledBy)
         {
             Requisition r = requisitionRepo.FindById(requisitionId);
-            if (r.EmployeeId!=cancelledBy)
+            if (r.EmployeeId != cancelledBy)
             {
                 return false;
             }
@@ -343,8 +351,8 @@ namespace LUSSIS.Services
             //get all requisitiondetails belonging to this requisition
             if (action.Equals("cancel"))
             {
-                List<RequisitionDetail> rds = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=>x.RequisitionId == requisitionId);
-                foreach(RequisitionDetail rd in rds)
+                List<RequisitionDetail> rds = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == requisitionId);
+                foreach (RequisitionDetail rd in rds)
                 {
                     rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
                     requisitionDetailRepo.Update(rd);
@@ -355,12 +363,12 @@ namespace LUSSIS.Services
         public void CancelWaitlistedRequisitionDetail(int requisitionDetailId, int cancelledBy)
         {
             RequisitionDetail rd = requisitionDetailRepo.FindById(requisitionDetailId);
-            if (rd.Requisition.EmployeeId==cancelledBy)
+            if (rd.Requisition.EmployeeId == cancelledBy)
             {
                 rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
                 requisitionDetailRepo.Update(rd);
             }
-            
+
         }
 
         public List<Requisition> GetSchoolRequisitionsWithEmployeeAndDept()
@@ -376,7 +384,7 @@ namespace LUSSIS.Services
             Requisition r = requisitionRepo.OneRequisitionEagerLoadEmployeeIncDepartment(requisitionId);
             List<RequisitionDetail> rds = requisitionDetailRepo.RequisitionDetailsEagerLoadStationeryIncCategory(requisitionId);
 
-            return new RequisitionDetailsDTO() { Requisition = r, RequisitionDetails = rds};
+            return new RequisitionDetailsDTO() { Requisition = r, RequisitionDetails = rds };
         }
 
         public void UpdateRequisitionDetailsAfterRetrieval(int qtyRetrieved, List<int> requisitionDetailIds)
@@ -399,8 +407,12 @@ namespace LUSSIS.Services
                     qtyToDisburse = 0;
                 }
                 //update status to PENDING COLLECTION and update db
-                rd.Status = RequisitionDetailStatusEnum.PENDING_COLLECTION.ToString();
-                requisitionDetailRepo.Update(rd);
+
+                RequisitionDetail rqD = (RequisitionDetail)requisitionDetailRepo.FindById(rd.Id);
+
+                rqD.Status = RequisitionDetailStatusEnum.PENDING_COLLECTION.ToString();
+
+                requisitionDetailRepo.Update(rqD);
             }
         }
 
@@ -423,10 +435,10 @@ namespace LUSSIS.Services
         {
             List<Requisition> uniqueReqs = requisitionDetailRepo.GetUniqueRequisitionsForDisbursement(disbursementId);
 
-            foreach(Requisition r in uniqueReqs)
+            foreach (Requisition r in uniqueReqs)
             {
-                int rowsReqDets = requisitionDetailRepo.FindBy(x=>x.RequisitionId == r.Id).Count();
-                int rowsFulfilled = requisitionDetailRepo.FindBy(x=>x.RequisitionId == r.Id 
+                int rowsReqDets = requisitionDetailRepo.FindBy(x => x.RequisitionId == r.Id).Count();
+                int rowsFulfilled = requisitionDetailRepo.FindBy(x => x.RequisitionId == r.Id
                 && x.Status.Equals("COLLECTED")).Count();
                 if (rowsReqDets == rowsFulfilled)
                 {
@@ -443,13 +455,13 @@ namespace LUSSIS.Services
             d.Signature = bytes;
             d.OnRoute = false;
             disbursementRepo.Update(d);
-            foreach(RequisitionDetail rd in d.RequisitionDetails)
+            foreach (RequisitionDetail rd in d.RequisitionDetails)
             {
                 Stationery s = stationeryRepo.FindById(rd.Stationery.Id);
-                s.Quantity -= (int) rd.QuantityDelivered;
+                s.Quantity -= (int)rd.QuantityDelivered;
                 stationeryRepo.Update(s);
             }
-                
+
         }
 
         public void UpdateRequisitionDetailsAfterDisbursement(int qtyCollected, List<int> requisitionDetailIds)
@@ -468,7 +480,7 @@ namespace LUSSIS.Services
             requisitionDetails.Sort(new RequisitionDetailComparer());
 
             int qtyDisbursed = qtyCollected;
-            foreach(RequisitionDetail rd in requisitionDetails)
+            foreach (RequisitionDetail rd in requisitionDetails)
             {
                 if (qtyDisbursed >= rd.QuantityOrdered)
                 {
@@ -476,7 +488,7 @@ namespace LUSSIS.Services
                     rd.QuantityDelivered = rd.QuantityOrdered;
                     qtyDisbursed = qtyDisbursed - rd.QuantityOrdered;
                 }
-                else if (qtyDisbursed >0 && qtyDisbursed < rd.QuantityOrdered)
+                else if (qtyDisbursed > 0 && qtyDisbursed < rd.QuantityOrdered)
                 {
                     //can give some
                     rd.QuantityDelivered = qtyDisbursed;
@@ -505,10 +517,10 @@ namespace LUSSIS.Services
                 int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
                 int availStockForUnfulfilled = GetAvailStockForUnfulfilledRd(rd.StationeryId, rd.Id);
 
-                if(availStockForUnfulfilled < diff) //insufficient stock
+                if (availStockForUnfulfilled < diff) //insufficient stock
                 {
                     int waitlistCount = diff - availStockForUnfulfilled;
-                    createNewRequisitionDetail(waitlistCount, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.WAITLIST_APPROVED);                   
+                    createNewRequisitionDetail(waitlistCount, rd.RequisitionId, rd.StationeryId, RequisitionDetailStatusEnum.WAITLIST_APPROVED);
 
                     if (availStockForUnfulfilled > 0)
                     {
@@ -536,13 +548,13 @@ namespace LUSSIS.Services
 
         public void CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(int purchaseOrderId)
         {
-            List<PurchaseOrderDetail> poDetails = (List<PurchaseOrderDetail>)purchaseOrderDetailRepo.FindBy(x=>x.PurchaseOrderId == purchaseOrderId);
+            List<PurchaseOrderDetail> poDetails = (List<PurchaseOrderDetail>)purchaseOrderDetailRepo.FindBy(x => x.PurchaseOrderId == purchaseOrderId);
             //get each stationery from each podetail
             foreach (PurchaseOrderDetail pod in poDetails)
             {
-                int availstock =  getCurrentBalance(pod.Stationery);
+                int availstock = getCurrentBalance(pod.Stationery);
 
-                List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x=>x.StationeryId == pod.StationeryId && x.Status.Equals("WAITLIST_APPROVED"));
+                List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.StationeryId == pod.StationeryId && x.Status.Equals("WAITLIST_APPROVED"));
                 requisitionDetails.Sort(new RequisitionDetailComparer());
 
                 DistributeIncomingGoodsAmongWaitlistApprovedRds(availstock, requisitionDetails);
@@ -555,7 +567,7 @@ namespace LUSSIS.Services
 
             int rdIndex = 0;
 
-            while(qtyToAllocate != 0 && rdIndex < requisitionDetails.Count())
+            while (qtyToAllocate != 0 && rdIndex < requisitionDetails.Count())
             {
                 RequisitionDetail rd = requisitionDetails[rdIndex];
 
@@ -585,30 +597,15 @@ namespace LUSSIS.Services
             List<DeptOwedItemDTO> deptOwedItems = new List<DeptOwedItemDTO>();
             List<IGrouping<int, RequisitionDetail>> groups = requisitionDetailRepo.GetUnfulfilledRequisitionDetailsGroupedByDept();
 
-            foreach(var group in groups)
-            {              
+            foreach (var group in groups)
+            {
                 //get the department
                 List<RequisitionDetail> rds = group.ToList();
-                List<RequisitionDetail> rds1 = new List<RequisitionDetail>();
-                foreach (RequisitionDetail rd in rds)
-                {
-                    foreach (RequisitionDetail rd1 in rds)
-                    {
-                        if(rd.RequisitionId == rd1.RequisitionId && rd.StationeryId == rd1.StationeryId)
-                        {
-                            if (rd.QuantityOrdered > rd1.QuantityOrdered)
-                                rds1.Add(rd);
-                        }
-                    }
-                }
-
-                rds = rds.Except(rds1).ToList();
-
                 Department d = rds.First().Requisition.Employee.Department;
 
                 //Create a list of owedItemDTOs
                 List<OwedItemDTO> stationeryGroups = GetListOfOwedItemDTOs(rds);
-                deptOwedItems.Add(new DeptOwedItemDTO {Department = d, OwedItems = stationeryGroups});
+                deptOwedItems.Add(new DeptOwedItemDTO { Department = d, OwedItems = stationeryGroups });
             }
 
             return deptOwedItems;
@@ -618,18 +615,18 @@ namespace LUSSIS.Services
         {
             List<OwedItemDTO> owedItems = new List<OwedItemDTO>();
             List<IGrouping<int, RequisitionDetail>> groups = requisitionDetails.GroupBy(x => x.StationeryId).ToList();
-            foreach(var group in groups)
+            foreach (var group in groups)
             {
                 int sum = 0;
                 List<RequisitionDetail> rds = group.ToList();
-                foreach(RequisitionDetail rd in rds)
+                foreach (RequisitionDetail rd in rds)
                 {
                     int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
                     sum += diff;
                 }
                 //get stationery
                 Stationery s = rds.First().Stationery;
-                owedItems.Add(new OwedItemDTO {Stationery = s, QtyOwed = sum });
+                owedItems.Add(new OwedItemDTO { Stationery = s, QtyOwed = sum });
             }
             return owedItems;
         }
