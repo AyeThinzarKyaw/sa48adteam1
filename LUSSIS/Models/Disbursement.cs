@@ -11,7 +11,7 @@ namespace LUSSIS.Models
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Disbursement
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,7 +19,7 @@ namespace LUSSIS.Models
         {
             this.RequisitionDetails = new HashSet<RequisitionDetail>();
         }
-    
+
         public int Id { get; set; }
         public int DeliveredEmployeeId { get; set; }
         public Nullable<int> ReceivedEmployeeId { get; set; }
@@ -27,6 +27,7 @@ namespace LUSSIS.Models
         public Nullable<System.DateTime> DeliveryDateTime { get; set; }
         public string CollectionPoint { get; set; }
         public byte[] Signature { get; set; }
+        public bool OnRoute { get; set; }
     
         public virtual Employee Employee { get; set; }
         public virtual Employee Employee1 { get; set; }

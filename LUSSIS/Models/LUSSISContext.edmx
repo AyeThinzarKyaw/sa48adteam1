@@ -83,6 +83,7 @@
           <Property Name="DeliveryDateTime" Type="datetime" />
           <Property Name="CollectionPoint" Type="nvarchar" MaxLength="50" />
           <Property Name="Signature" Type="image" />
+          <Property Name="OnRoute" Type="bit" Nullable="true" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -727,6 +728,7 @@
           <Property Name="DeliveryDateTime" Type="DateTime" Precision="3" />
           <Property Name="CollectionPoint" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Signature" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="OnRoute" Type="Boolean" Nullable="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Disbursement_Disbursement" FromRole="Disbursement" ToRole="Employee" />
           <NavigationProperty Name="Employee1" Relationship="Self.FK_Disbursement_Employee" FromRole="Disbursement" ToRole="Employee" />
           <NavigationProperty Name="RequisitionDetails" Relationship="Self.FK_RequisitionDetail_Disbursement" FromRole="Disbursement" ToRole="RequisitionDetail" />
@@ -1413,6 +1415,7 @@
                 <ScalarProperty Name="DeliveryDateTime" ColumnName="DeliveryDateTime" />
                 <ScalarProperty Name="CollectionPoint" ColumnName="CollectionPoint" />
                 <ScalarProperty Name="Signature" ColumnName="Signature" />
+                <ScalarProperty Name="OnRoute" ColumnName="OnRoute" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

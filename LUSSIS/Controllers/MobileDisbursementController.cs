@@ -46,5 +46,12 @@ namespace LUSSIS.Controllers
 
         }
 
+        [Route("Track/{Id}")]
+        public void PostOnRoute(int id)
+        {
+            disbursementService.SetDisbursementOnRoute(id);
+
+        }
+
     }
 }

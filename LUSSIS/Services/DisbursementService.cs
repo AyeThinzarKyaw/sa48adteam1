@@ -149,7 +149,8 @@ namespace LUSSIS.Services
                     DepartmentName = disbursement.Employee1.Department.DepartmentName,
                     AdHoc = disbursement.AdHoc,
                     CollectionPoint = disbursement.CollectionPoint,
-                    DeliveryDateTime = (DateTime) disbursement.DeliveryDateTime
+                    DeliveryDateTime = (DateTime)disbursement.DeliveryDateTime,
+                    OnRoute = disbursement.OnRoute
             };
                 disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();
                 foreach(RequisitionDetail rd in disbursement.RequisitionDetails)
@@ -199,7 +200,8 @@ namespace LUSSIS.Services
                     DepartmentName = disbursement.Employee1.Department.DepartmentName,
                     AdHoc = disbursement.AdHoc,
                     CollectionPoint = disbursement.CollectionPoint,
-                    DeliveryDateTime = (DateTime) disbursement.DeliveryDateTime
+                    DeliveryDateTime = (DateTime) disbursement.DeliveryDateTime,
+                    OnRoute = disbursement.OnRoute
                 };
                 disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();
                 foreach (RequisitionDetail rd in disbursement.RequisitionDetails)
@@ -240,9 +242,9 @@ namespace LUSSIS.Services
 
             foreach (Models.MobileDTOs.RequisitionDetailDTO rd in requisitionDetails)
             {
-                if (rd.QuantityRetreived != rd.QuantityDelivered)
+                if (rd.QuantityRetrieved != rd.QuantityDelivered)
                 {
-                    int qtyDifference = rd.QuantityRetreived - (int)rd.QuantityDelivered;
+                    int qtyDifference = rd.QuantityRetrieved - (int)rd.QuantityDelivered;
 
                     AdjustmentVoucher targetAdjustmentVoucher = retrievalService.retrieveNewOrAvailableAdjustmentVoucherForClerk(disbursement.DeliveredEmployeeId);
                     retrievalService.createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rd.StationeryId, qtyDifference);
@@ -281,6 +283,13 @@ namespace LUSSIS.Services
             }
             requisitionCatalogueService.CheckRequisitionCompletenessAfterDisbursement(disbursement.Id, disbursement);
 
+        }
+
+        public void SetDisbursementOnRoute(int disbursementId)
+        {
+            Disbursement d = disbursementRepo.FindById(disbursementId);
+            d.OnRoute = true;
+            disbursementRepo.Update(d);
         }
     }
 }

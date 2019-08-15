@@ -442,12 +442,12 @@ namespace LUSSIS.Services
             {
                 
                 List<Requisition> rt =  retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
-                AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { department = dept, requisitions = rt };
+                AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { Department = dept, Requisitions = rt };
 
                 adDRList.Add(adDR);
             }
 
-            output.departmentAndRetrieval = adDRList;
+            output.DepartmentAndRetrieval = adDRList;
 
             AdHocDeptAndRetrievalDTO firstAdHocAndRetrieval = adDRList.FirstOrDefault();
             

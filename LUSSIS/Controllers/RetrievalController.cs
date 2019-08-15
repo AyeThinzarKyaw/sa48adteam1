@@ -99,7 +99,7 @@ namespace LUSSIS.Controllers
         {
             AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
 
-            model.requisitionId = requisitionId;
+            model.RequisitionId = requisitionId;
 
             TempData["AdHocRetrievalMenuModel"] = model;
 
@@ -120,10 +120,10 @@ namespace LUSSIS.Controllers
                 }
                 AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
 
-                RetrievalDTO rtM = new RetrievalDTO() { AdHocRetrievalId = model.requisitionId };
+                RetrievalDTO rtM = new RetrievalDTO() { AdHocRetrievalId = model.RequisitionId };
                 //TempData["rtM"] = rtM;
 
-                return RedirectToAction("ViewSelectedAdHocRetrieval", new { @requisitionId = model.requisitionId });
+                return RedirectToAction("ViewSelectedAdHocRetrieval", new { @requisitionId = model.RequisitionId });
             }
             return RedirectToAction("Index", "Login");
         }

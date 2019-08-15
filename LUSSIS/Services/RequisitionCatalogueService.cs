@@ -410,6 +410,7 @@ namespace LUSSIS.Services
             d.DeliveryDateTime = DateTime.Now;
             byte[] bytes = Convert.FromBase64String(dDto.Signature);
             d.Signature = bytes;
+            d.OnRoute = false;
             disbursementRepo.Update(d);
         }
 

@@ -16,6 +16,7 @@ namespace LUSSIS.Models.MobileDTOs
         public DateTime DeliveryDateTime { get; set; }
         public string CollectionPoint { get; set; }
         public string Signature { get; set; }
+        public bool OnRoute { get; set; }
         public List<RequisitionDetailDTO> RequisitionDetails { get; set; }
     }
 }
