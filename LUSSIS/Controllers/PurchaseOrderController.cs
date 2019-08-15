@@ -52,7 +52,7 @@ namespace LUSSIS.Controllers
                 {
                     purchaseOrderListDTO.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders()
                                                         .Where(x => x.OrderDateTime.Date >= purchaseOrderListDTO.FromDate.Date
-                                                        && x.OrderDateTime <= purchaseOrderListDTO.ToDate.Date)
+                                                        && x.OrderDateTime.Date <= purchaseOrderListDTO.ToDate.Date)
                                                         .OrderByDescending(x => x.OrderDateTime);
                 }
                 else
