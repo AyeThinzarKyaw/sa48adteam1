@@ -486,7 +486,7 @@ namespace LUSSIS.Services
 
         public int GetAvailStockForUnfulfilledRd(int stationeryId, int reqDetId)
         {
-            int reqInTransitCount = requisitionDetailRepo.GetRequisitionCountForUnfulfilledStationery(reqDetId);
+            int reqInTransitCount = requisitionDetailRepo.GetReservedCountForStationery(stationeryId);
 
             int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(stationeryId);
 
