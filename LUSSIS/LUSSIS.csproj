@@ -155,7 +155,7 @@
     <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
-    <Compile Include="Controllers\MachineLearningController.cs" />
+    <Compile Include="Controllers\PredictionController.cs" />
     <Compile Include="Controllers\MobileDisbursementController.cs" />
     <Compile Include="Controllers\MobileRetrievalController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
