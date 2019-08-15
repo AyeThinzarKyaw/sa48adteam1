@@ -156,7 +156,7 @@
     <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
-    <Compile Include="Controllers\MachineLearningController.cs" />
+    <Compile Include="Controllers\PredictionController.cs" />
     <Compile Include="Controllers\MobileDisbursementController.cs" />
     <Compile Include="Controllers\MobileRetrievalController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
@@ -205,6 +205,8 @@
     <Compile Include="Models\DTOs\DisbursementDTO.cs" />
     <Compile Include="Models\DTOs\DisbursementDetailsDTO.cs" />
     <Compile Include="Models\DTOs\MachineLearningDTO.cs" />
+    <Compile Include="Models\DTOs\SupplierChartDTO.cs" />
+    <Compile Include="Models\DTOs\SupplierChartFilteringDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>

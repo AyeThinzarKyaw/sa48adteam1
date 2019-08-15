@@ -48,7 +48,7 @@ namespace LUSSIS.Services
 
         public List<CatalogueItemDTO> GetCatalogueItems(int employeeId)
         {
-            //List<CartDetail> cartDetails = GetAnyExistingCartDetails(employeeId);
+            List<CartDetail> cartDetails = GetAnyExistingCartDetails(employeeId);
             List<Stationery> stationeries = (List<Stationery>)stationeryRepo.FindAll();
             List<CatalogueItemDTO> catalogueItems = new List<CatalogueItemDTO>();
 
@@ -63,28 +63,28 @@ namespace LUSSIS.Services
                 };
                 getCatalogueItemAvailability(catalogueItemDTO, s);
 
-                CartDetail cartDetail=s.CartDetails.SingleOrDefault(x => x.EmployeeId == employeeId);
-                if (cartDetail!=null)
-                {
-                    catalogueItemDTO.OrderQtyInput = cartDetail.Quantity;
-                    catalogueItemDTO.ReservedCount = getReservedBalanceForExistingCartItem(cartDetail);
-                    catalogueItemDTO.WaitlistCount = cartDetail.Quantity - catalogueItemDTO.ReservedCount;
-                }
+                //CartDetail cartDetail=s.CartDetails.SingleOrDefault(x => x.EmployeeId == employeeId);
+                //if (cartDetail!=null)
+                //{
+                //    catalogueItemDTO.OrderQtyInput = cartDetail.Quantity;
+                //    catalogueItemDTO.ReservedCount = getReservedBalanceForExistingCartItem(cartDetail);
+                //    catalogueItemDTO.WaitlistCount = cartDetail.Quantity - catalogueItemDTO.ReservedCount;
+                //}
                 
                 catalogueItems.Add(catalogueItemDTO);
             }
 
-            //if (cartDetails != null)
-            //{
-            //    foreach (CartDetail cd in cartDetails)
-            //    {
-            //        CatalogueItemDTO catItemDTO = catalogueItems.Find(x => x.StationeryId == cd.StationeryId);
-            //        catItemDTO.OrderQtyInput = cd.Quantity;
-            //        catItemDTO.ReservedCount = getReservedBalanceForExistingCartItem(cd);
-            //        catItemDTO.WaitlistCount = cd.Quantity - catItemDTO.ReservedCount;
-            //        catItemDTO.Confirmation = true;
-            //    }
-            //}
+            if (cartDetails != null)
+            {
+                foreach (CartDetail cd in cartDetails)
+                {
+                    CatalogueItemDTO catItemDTO = catalogueItems.Find(x => x.StationeryId == cd.StationeryId);
+                    catItemDTO.OrderQtyInput = cd.Quantity;
+                    catItemDTO.ReservedCount = getReservedBalanceForExistingCartItem(cd);
+                    catItemDTO.WaitlistCount = cd.Quantity - catItemDTO.ReservedCount;
+                    catItemDTO.Confirmation = true;
+                }
+            }
             return catalogueItems;
         }
 
@@ -108,22 +108,22 @@ namespace LUSSIS.Services
         private int getReservedBalanceForExistingCartItem(CartDetail cd)
         {
             //Q - requisition reserved - adjustment open - total in front of queue
-            //int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(cd.StationeryId);
-            //int foqCartCount = cartDetailRepo.GetFrontOfQueueCartCountForStationery(cd.StationeryId, cd.DateTime);
-            //int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(cd.StationeryId);
-            //int totalCount = stationeryRepo.FindById(cd.StationeryId).Quantity;
-            
+            int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(cd.StationeryId);
+            int foqCartCount = cartDetailRepo.GetFrontOfQueueCartCountForStationery(cd.StationeryId, cd.DateTime);
+            int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(cd.StationeryId);
+            int totalCount = stationeryRepo.FindById(cd.StationeryId).Quantity;
 
-            int reservedCount = (from rd in cd.Stationery.RequisitionDetails
-                                 where (rd.Status.Equals("RESERVED_PENDING") || rd.Status.Equals("PREPARING") || rd.Status.Equals("PENDING_COLLECTION"))
-                                 select (int?)rd.QuantityOrdered).Sum() ?? 0;
-            int foqCartCount =  (int)(from c in cd.Stationery.CartDetails
-                                     where c.DateTime < cd.DateTime
-                                     select c.Quantity).Sum();
-            int openAdjustmentCount = (from av in cd.Stationery.AdjustmentVoucherDetails
-                                       where av.AdjustmentVoucher.Status.Equals("Open") || av.AdjustmentVoucher.Status.Equals("Pending")
-                                       select (int?)av.Quantity).Sum() ?? 0;
-            int totalCount = cd.Stationery.Quantity;
+
+            //int reservedCount = (from rd in cd.Stationery.RequisitionDetails
+            //                     where (rd.Status.Equals("RESERVED_PENDING") || rd.Status.Equals("PREPARING") || rd.Status.Equals("PENDING_COLLECTION"))
+            //                     select (int?)rd.QuantityOrdered).Sum() ?? 0;
+            //int foqCartCount =  (int)(from c in cd.Stationery.CartDetails
+            //                         where c.DateTime < cd.DateTime
+            //                         select c.Quantity).Sum();
+            //int openAdjustmentCount = (from av in cd.Stationery.AdjustmentVoucherDetails
+            //                           where av.AdjustmentVoucher.Status.Equals("Open") || av.AdjustmentVoucher.Status.Equals("Pending")
+            //                           select (int?)av.Quantity).Sum() ?? 0;
+            //int totalCount = cd.Stationery.Quantity;
             int netCount = totalCount - reservedCount - foqCartCount + openAdjustmentCount;
 
             if (netCount <= 0)
@@ -142,19 +142,19 @@ namespace LUSSIS.Services
 
         private int getCurrentBalance(Stationery s)
         {
-            //int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(s.Id);
-            //int cartCount = cartDetailRepo.GetCountOnHoldForStationery(s.Id); //could be 0
-            //int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(s.Id);
-            //int totalCount = stationeryRepo.FindById(s.Id).Quantity;
-            int reservedCount = (from rd in s.RequisitionDetails
-                                 where (rd.Status.Equals("RESERVED_PENDING") || rd.Status.Equals("PREPARING") || rd.Status.Equals("PENDING_COLLECTION"))
-                                 select (int?)rd.QuantityOrdered).Sum() ?? 0;
-            int cartCount = (int)(from cd in s.CartDetails
-                                  select cd.Quantity).Sum();
-            int openAdjustmentCount = (from av in s.AdjustmentVoucherDetails
-                                       where av.AdjustmentVoucher.Status.Equals("Open") || av.AdjustmentVoucher.Status.Equals("Pending")
-                                       select (int?)av.Quantity).Sum() ?? 0;
-            int totalCount = s.Quantity;
+            int reservedCount = requisitionDetailRepo.GetReservedCountForStationery(s.Id);
+            int cartCount = cartDetailRepo.GetCountOnHoldForStationery(s.Id); //could be 0
+            int openAdjustmentCount = adjustmentVoucherRepo.GetOpenAdjustmentVoucherCountForStationery(s.Id);
+            int totalCount = stationeryRepo.FindById(s.Id).Quantity;
+            //int reservedCount = (from rd in s.RequisitionDetails
+            //                     where (rd.Status.Equals("RESERVED_PENDING") || rd.Status.Equals("PREPARING") || rd.Status.Equals("PENDING_COLLECTION"))
+            //                     select (int?)rd.QuantityOrdered).Sum() ?? 0;
+            //int cartCount = (int)(from cd in s.CartDetails
+            //                      select cd.Quantity).Sum();
+            //int openAdjustmentCount = (from av in s.AdjustmentVoucherDetails
+            //                           where av.AdjustmentVoucher.Status.Equals("Open") || av.AdjustmentVoucher.Status.Equals("Pending")
+            //                           select (int?)av.Quantity).Sum() ?? 0;
+            //int totalCount = s.Quantity;
             int netCount = totalCount - reservedCount - cartCount + openAdjustmentCount;
 
             if(netCount <= 0)
@@ -298,17 +298,17 @@ namespace LUSSIS.Services
             requisitionDetailRepo.Create(reservedRequisitionDetail);
         }
 
-        //private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId, int stationeryId)
-        //{
-        //    RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
-        //    {
-        //        QuantityOrdered = reservedCount,
-        //        RequisitionId = requisitionId,
-        //        Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString(),
-        //        StationeryId = stationeryId
-        //    };
-        //    requisitionDetailRepo.Create(reservedRequisitionDetail);
-        //}
+        private void createReservedPendingRequisitionDetail(int reservedCount, int requisitionId, int stationeryId)
+        {
+            RequisitionDetail reservedRequisitionDetail = new RequisitionDetail()
+            {
+                QuantityOrdered = reservedCount,
+                RequisitionId = requisitionId,
+                Status = RequisitionDetailStatusEnum.RESERVED_PENDING.ToString(),
+                StationeryId = stationeryId
+            };
+            requisitionDetailRepo.Create(reservedRequisitionDetail);
+        }
 
         RequisitionDetailsDTO IRequisitionCatalogueService.GetRequisitionDetailsForSingleRequisition(int requisitionId, int employeeId)
         {

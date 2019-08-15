@@ -14,16 +14,16 @@ using LUSSIS.Services;
 
 namespace LUSSIS.Controllers
 {
-    public class MachineLearningController : Controller
+    public class PredictionController : Controller
     {
-        // GET: MachineLearning
-        public ActionResult MachineLearning()
+        // GET: GenerateReorderInfo
+        public ActionResult GenerateReorderInfo()
         {
             return View(new MachineLearningDTO() { chosenDate=DateTime.Now});
         }
 
         [HttpPost]
-        public async Task<ActionResult> MachineLearning(MachineLearningDTO predictedDate)
+        public async Task<ActionResult> GenerateReorderInfo(MachineLearningDTO predictedDate)
         {
             using (var client = new HttpClient())
             {
@@ -97,7 +97,7 @@ namespace LUSSIS.Controllers
             }
             ViewBag.data = stationeries;
             ViewBag.Message = "Successfully updated the reorder information.";
-            return View("MachineLearning", new MachineLearningDTO() { chosenDate = predictDate });
+            return View("GenerateReorderInfo", new MachineLearningDTO() { chosenDate = predictDate });
         }
     }
 }

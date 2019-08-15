@@ -33,12 +33,12 @@
                                         {
                                             if (employee.Id == @Model.DeptRep.Id)
                                             {
-                                                <option value="@employee.Id" selected> @employee.Name  </option>
+                                        <option value="@employee.Id" selected> @employee.Name (@employee.Title)   </option>
 
                                             }
                                             else
                                             {
-                                                <option value="@employee.Id"> @employee.Name  </option>
+                                        <option value="@employee.Id"> @employee.Name (@employee.Title) </option>
                                             }
 
                                         }

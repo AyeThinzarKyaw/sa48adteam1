@@ -123,7 +123,7 @@ namespace LUSSIS.Services
 
             foreach (Requisition req in requisitionList)
             {
-                List<RequisitionDetail> requisitionDetailList = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == req.Id && x.Status == "Preparing");
+                List<RequisitionDetail> requisitionDetailList = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == req.Id && x.Status == "PREPARING");
                 foreach (RequisitionDetail reqDet in requisitionDetailList)
                 {
                     RequisitionDetail rqDet = reqDet;
@@ -326,7 +326,7 @@ namespace LUSSIS.Services
 
             if (targetAdjustmentVoucher == null)
             {
-                AdjustmentVoucher newAdjustmentVoucher = new AdjustmentVoucher() { EmployeeId = deliveredEmployeeId, Status = "Open" };
+                AdjustmentVoucher newAdjustmentVoucher = new AdjustmentVoucher() { EmployeeId = deliveredEmployeeId, Status = "Open", Date = DateTime.Now };
                 newAdjustmentVoucher = adjustmentVoucherRepo.Create(newAdjustmentVoucher);
 
                 returnTargetAdjustmentVoucherId = adjustmentVoucherRepo.FindOneBy(x => x.EmployeeId == deliveredEmployeeId && x.Status == "Open");
@@ -442,7 +442,21 @@ namespace LUSSIS.Services
             {
                 
                 List<Requisition> rt =  retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
-                AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { Department = dept, Requisitions = rt };
+
+                List<Requisition> rtFinal = new List<Requisition>();
+
+                foreach (Requisition req in rt)
+                {
+                    List<RequisitionDetail> reqDet = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == req.Id && x.Status == "PREPARING").ToList();
+
+                    if (reqDet.Count>0)
+                    {
+                        rtFinal.Add(req);
+                    }
+
+                }
+
+                AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { Department = dept, Requisitions = rtFinal };
 
                 adDRList.Add(adDR);
             }
@@ -462,7 +476,7 @@ namespace LUSSIS.Services
             List<RetrievalPrepItemDTO> retrievalPrepList = new List<RetrievalPrepItemDTO>();
             List<RetrievalItemDTO> retrievalList = new List<RetrievalItemDTO>();
 
-            List<RequisitionDetail> preparingRequisitionDetailsFromSelectedRequisition = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == requisitionId).ToList();
+            List<RequisitionDetail> preparingRequisitionDetailsFromSelectedRequisition = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == requisitionId && x.Status == "PREPARING").ToList();
             List<int> stationeriesInPreparingRequisitionDetails = RetrieveStationeryDetailsByRequisitionDetailsList(preparingRequisitionDetailsFromSelectedRequisition).ToList();
 
             foreach (int s in stationeriesInPreparingRequisitionDetails)
