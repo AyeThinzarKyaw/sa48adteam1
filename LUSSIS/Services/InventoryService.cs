@@ -211,6 +211,11 @@ namespace LUSSIS.Services
 
             stockAndSuppliers.SupplierStockRank = supplierStockRank;
 
+            foreach (StockMovementBalanceDTO stockMovementBalanceDTO in stockMovementBalance)
+            {
+                stockMovementBalanceDTO.Balance += s.Quantity - stockMovementBalance.Last().Balance;
+            }
+
             stockAndSuppliers.StockMovementBalance = stockMovementBalance;
 
             return stockAndSuppliers;
