@@ -445,6 +445,7 @@ namespace LUSSIS.Services
                 List<Requisition> rt = retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
 
                 List<Requisition> rtFinal = new List<Requisition>();
+               
 
                 foreach (Requisition req in rt)
                 {
@@ -456,10 +457,12 @@ namespace LUSSIS.Services
                     }
 
                 }
-
-                AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { Department = dept, Requisitions = rtFinal };
-
-                adDRList.Add(adDR);
+                if (rtFinal.Count > 0)
+                {
+                    AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { Department = dept, Requisitions = rtFinal };
+                    adDRList.Add(adDR);
+                }
+    
             }
 
             output.DepartmentAndRetrieval = adDRList;

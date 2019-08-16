@@ -83,7 +83,12 @@ namespace LUSSIS.Services
                 newVoucher.adjustmentVoucher = adj;
                 if(adj.AdjustmentVoucherDetails.Count > 0)
                 {
-                    newVoucher.TotalAmount = adjustmentVoucherRepo.GetTotalAmount(adj.Id);
+                    var total = adjustmentVoucherRepo.GetTotalAmount(adj.Id);
+                    if(total < 0 )
+                    {
+                        total = total * -1;
+                    }
+                    newVoucher.TotalAmount = total;
                 }
                 else
                 {

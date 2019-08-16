@@ -53,7 +53,7 @@ namespace LUSSIS.Controllers
         }
 
         [Authorizer]
-        [HttpGet]
+        [HttpPost]
         public ActionResult SubmitRetrieval()
         {
             if (Session["existinguser"] != null)
