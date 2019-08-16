@@ -82,7 +82,7 @@ namespace LUSSIS.Controllers
                     PurchaseOrder purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
                     if (purchaseOrder != null)
                     {
-                        if (purchaseOrder.Status == Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.OPEN))
+                        if (purchaseOrder.Status == Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.PENDING))
                         {
                             purchaseOrder.Status = Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.CANCELLED);
                             PurchaseOrderService.Instance.UpdatePO(purchaseOrder);
