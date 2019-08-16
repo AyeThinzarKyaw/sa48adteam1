@@ -106,10 +106,10 @@ namespace LUSSIS.Services
                     }
                     else
                     {
-                        po = poCreateDTO.ConfirmedPOs.Single(x => x.SupplierId == item.CategoryId);
-                        pod.PurchaseOrderId = po.Id;
+                        //po = poCreateDTO.ConfirmedPOs.Single(x => x.SupplierId == item.CategoryId);
+                        //pod.PurchaseOrderId = po.Id;
 
-                        poCreateDTO.ConfirmedPOs.Single(x => x.Id == po.Id).PurchaseOrderDetails.Add(pod);
+                        poCreateDTO.ConfirmedPOs.Single(x => x.SupplierId == item.CategoryId).PurchaseOrderDetails.Add(pod);
                     }
                 }                
             }
