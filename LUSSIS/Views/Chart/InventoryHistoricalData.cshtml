@@ -36,16 +36,16 @@
                                             </div>
                                         </div>
                                         @*<div class="col-md-4">
-            <div class="form-group">
-                <label>Supplier</label><br>
+                <div class="form-group">
+                    <label>Supplier</label><br>
 
 
-                        @Html.DropDownListFor(x => x.supplier, new SelectList(@Model.SupplierForChartList,"Id", "Name"),new { @class = "form-control" , @multiple="true"})
+                            @Html.DropDownListFor(x => x.supplier, new SelectList(@Model.SupplierForChartList,"Id", "Name"),new { @class = "form-control" , @multiple="true"})
 
 
 
-            </div>
-        </div>*@
+                </div>
+            </div>*@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Purchased From Date:</label>
@@ -60,16 +60,16 @@
                                             </div>
                                         </div>
                                         @*<div class="col-md-4">
-            <div class="form-group">
-                <label>Purchased To Date:</label>
-                <div class="input-group date">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
+                <div class="form-group">
+                    <label>Purchased To Date:</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="date" class="form-control pull-right" id="datepicker">
                     </div>
-                    <input type="date" class="form-control pull-right" id="datepicker">
                 </div>
-            </div>
-        </div>*@
+            </div>*@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Item Category</label>
@@ -82,9 +82,9 @@
                                                 @Html.DropDownListFor(x => x.stationery, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })
                                                 @*<select class="form-control select2" style="width: 100%;">
 
-                        <option></option>
+                            <option></option>
 
-                </select>*@
+                    </select>*@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -99,12 +99,15 @@
                                             </div>
                                         </div>
 
-                                        @if (ViewBag.chart != null)
-        {
-                                        @Html.ActionLink("Download as PDF", "ExportAsPDF", null, new { @class = "btn btn-success pull-right"})
-                                        }
-                                        <button type="submit" class="btn btn-primary pull-right" style = "margin-right: 15px;">Generate</button>
+
+                                        <button type="submit" class="btn btn-success pull-right" style="margin-right: 15px;">Generate</button>
                                     </div>
+                                    @if (ViewBag.chart != null)
+                                    {
+                                    <div class="row">
+                                        @Html.ActionLink("Export", "ExportAsPDF", null, new { @class = "btn btn-primary pull-right",@style = "margin-right: 15px;" })
+                                    </div>
+                                    }
                                 </div>
                                 <!-- /.supp-content -->
 
