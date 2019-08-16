@@ -2,7 +2,6 @@
 using LUSSIS.Models;
 using LUSSIS.Services.Interfaces;
 using LUSSIS.Services;
-using LUSSIS.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,6 @@ namespace LUSSIS.Controllers
 {
     public class DisbursementController : Controller
     {
-        IRequisitionCatalogueService RequisitionCatalogueService;
         DisbursementService disbursementService;
         EmailNotificationService emailNotificationService;
 
