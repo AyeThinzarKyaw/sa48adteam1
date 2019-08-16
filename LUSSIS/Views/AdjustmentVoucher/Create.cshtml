@@ -59,7 +59,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label style="width: 100%;">Adjusted Qty </label>
-                                    @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control", @placeholder = "Enter Adjusted Qty" })
+                                    @Html.TextBoxFor(x => x.Quantity, new { @type="number", @class = "form-control", @placeholder = "Enter Adjusted Qty" })
                                     @Html.ValidationMessageFor(x => x.Quantity, "", new { @class = "text-danger" })
                                 </div>
                             </div>
