@@ -240,22 +240,22 @@ namespace LUSSIS.Controllers
                             StationeryService.Instance.UpdateStationery(s);
 
                             //check whether to raise AdjVoucher (eg: gift, extra)
-                            if (detail.QuantityOrdered < detail.QuantityDelivered)
-                            {
-                                //raise adjustment voucher
-                                AdjustmentVoucherDetail adjustmentItem = new AdjustmentVoucherDetail();
-                                adjustmentItem.DateTime = DateTime.Now;
-                                adjustmentItem.Quantity = (int)(detail.QuantityDelivered - detail.QuantityOrdered);
-                                adjustmentItem.Reason = "Received extra (eg: gift) on Delivery Order Receive";
-                                //AdjustmentVoucherService.Instance.CreateAdjustmentVoucher(adjustmentItem);
-                            }
+                            //if (detail.QuantityOrdered < detail.QuantityDelivered)
+                            //{
+                            //    //raise adjustment voucher
+                            //    AdjustmentVoucherDetail adjustmentItem = new AdjustmentVoucherDetail();
+                            //    adjustmentItem.DateTime = DateTime.Now;
+                            //    adjustmentItem.Quantity = (int)(detail.QuantityDelivered - detail.QuantityOrdered);
+                            //    adjustmentItem.Reason = "Received extra (eg: gift) on Delivery Order Receive";
+                            //    //AdjustmentVoucherService.Instance.CreateAdjustmentVoucher(adjustmentItem);
+                            //}
 
 
                         }
                         //Check to move waitlistApproved to Preparing
                         RequisitionCatalogueService.Instance.CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(receivedQtyDTO.Id);
 
-                        EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "(Stationery Store) Delivery Order and Invoice for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Delivery Order and Invoices for Purchase Orders of Stationery Store are attached.", attachments: attachments.AsEnumerable());
+                        EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "(Stationery Store) Delivery Order and Invoice for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Dear Burser Department,\n\n Delivery Order and Invoices for Delivery Orders of Stationery Store are attached.", attachments: attachments.AsEnumerable());
                         TempData["DOReceivedQty"] = null;
                         return RedirectToAction("Index");
 
