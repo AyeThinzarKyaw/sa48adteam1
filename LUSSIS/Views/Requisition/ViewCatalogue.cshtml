@@ -124,6 +124,11 @@
                 contentType: 'application/json',
                 success: function (r) {
                     UpdateAvailability(r, "availStatus" + stationeryId);
+                    //set inputBox to no value
+                    $("#inputBox" + stationeryId).val('');
+                    //set reserved qty and waiylist qty to 0
+                    document.getElementById("reservedBox" + stationeryId).innerHTML = '0';
+                    document.getElementById("waitlistBox" + stationeryId).innerHTML = '0';
                 }
             });
 

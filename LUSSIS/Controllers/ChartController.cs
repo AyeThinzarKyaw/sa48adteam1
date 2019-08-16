@@ -251,7 +251,7 @@ namespace LUSSIS.Controllers
             var qtyHeading = new Paragraph("Item Quantity").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
             table.AddCell(monthHeading);
             table.AddCell(qtyHeading);
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 3; i++)
             {
                 table.AddCell(TwelveMonthRange[i]);
                 table.AddCell(ItemQtyArray[i].ToString());
@@ -305,8 +305,7 @@ namespace LUSSIS.Controllers
             {
                 if (ArraySupplierIds != null)
                 {
-                    int[] ItemQtyArray = new int[3];
-                    string[] TwelveMonthRange = new string[3];
+                    
 
                     foreach (int s in ArraySupplierIds)
                     {
@@ -314,7 +313,8 @@ namespace LUSSIS.Controllers
                         purchaseOrderService = new PurchaseOrderService();
                         List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
 
-                        
+                        int[] ItemQtyArray = new int[3];
+                        string[] TwelveMonthRange = new string[3];
 
                         for (int i = 2; i > -1; i--)
                         {
@@ -333,27 +333,27 @@ namespace LUSSIS.Controllers
                         //    chartType: "column",
                         //    xValue: TwelveMonthRange,
                         //    yValues: ItemQtyArray);
-
+                        chart.AddSeries(chartType: "column",
+                                                            xValue: TwelveMonthRange,
+                                                            yValues: ItemQtyArray);
 
                     };
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                            xValue: TwelveMonthRange,
-                                                            yValues: ItemQtyArray).GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    byte[] chartByteArr = chart.GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
                     System.IO.File.WriteAllBytes(path, chartByteArr);
 
                 }
                 else
                 {
-                    int[] ItemQtyArray = new int[3];
-                    string[] TwelveMonthRange = new string[3];
+                    
 
                     foreach (int s in AllSupplierIds)
                     {
 
                         purchaseOrderService = new PurchaseOrderService();
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);                      
-
+                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
+                        int[] ItemQtyArray = new int[3];
+                        string[] TwelveMonthRange = new string[3];
                         for (int i = 2; i > -1; i--)
                         {
                             TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
@@ -371,13 +371,13 @@ namespace LUSSIS.Controllers
                         //    chartType: "column",
                         //    xValue: TwelveMonthRange,
                         //    yValues: ItemQtyArray);
-
+                        chart.AddSeries(chartType: "column",
+                                                           xValue: TwelveMonthRange,
+                                                           yValues: ItemQtyArray);
 
                     };
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                           xValue: TwelveMonthRange,
-                                                           yValues: ItemQtyArray).GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    byte[] chartByteArr = chart.GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
                     System.IO.File.WriteAllBytes(path, chartByteArr);
                 }
             }
@@ -385,15 +385,15 @@ namespace LUSSIS.Controllers
             {
                 if (ArraySupplierIds != null)
                 {
-                    int[] ItemQtyArray = new int[3];
-                    string[] TwelveMonthRange = new string[3];
+                    
                     foreach (int s in ArraySupplierIds)
                     {
 
                         purchaseOrderService = new PurchaseOrderService();
                         List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
 
-                        
+                        int[] ItemQtyArray = new int[3];
+                        string[] TwelveMonthRange = new string[3];
                         decimal[] ItemPriceArray = new decimal[3];
                       
 
@@ -417,19 +417,18 @@ namespace LUSSIS.Controllers
                         //    chartType: "column",
                         //    xValue: TwelveMonthRange,
                         //    yValues: ItemPriceArray);
-
+                        chart.AddSeries(chartType: "column",
+                                                           xValue: TwelveMonthRange,
+                                                           yValues: ItemQtyArray);
 
                     };
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                           xValue: TwelveMonthRange,
-                                                           yValues: ItemQtyArray).GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    byte[] chartByteArr = chart.GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
                     System.IO.File.WriteAllBytes(path, chartByteArr);
                 }
                 else
                 {
-                    int[] ItemQtyArray = new int[3];
-                    string[] TwelveMonthRange = new string[3];
+                   
 
                     foreach (int s in AllSupplierIds)
                     {
@@ -437,7 +436,8 @@ namespace LUSSIS.Controllers
                         purchaseOrderService = new PurchaseOrderService();
                         List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
 
-                        
+                        int[] ItemQtyArray = new int[3];
+                        string[] TwelveMonthRange = new string[3];
                         decimal[] ItemPriceArray = new decimal[3];
                         
 
@@ -461,13 +461,13 @@ namespace LUSSIS.Controllers
                         //    chartType: "column",
                         //    xValue: TwelveMonthRange,
                         //    yValues: ItemPriceArray);
-
+                        chart.AddSeries(chartType: "column",
+                                                           xValue: TwelveMonthRange,
+                                                           yValues: ItemQtyArray);
 
                     };
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                           xValue: TwelveMonthRange,
-                                                           yValues: ItemQtyArray).GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.png");
+                    byte[] chartByteArr = chart.GetBytes("jpeg");
+                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
                     System.IO.File.WriteAllBytes(path, chartByteArr);
                 }
             }
