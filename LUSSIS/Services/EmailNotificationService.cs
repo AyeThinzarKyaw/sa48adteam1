@@ -32,7 +32,7 @@ namespace LUSSIS.Services
 
         public void NotifyClerkShortFallInStationery(Stationery s, Employee clerk)
         {
-            string body = "Dear " + clerk.Name + " there is insufficient incoming stock for Stationery: " + s.Description + " of Item Code: " + s.Code + ". Please raise a necessary Purchase Order for the recent demand. Thank you.";
+            string body = "Dear " + clerk.Name + " \n There is insufficient incoming stock for Stationery: " + s.Description + " of Item Code: " + s.Code + ". Please raise a necessary Purchase Order for the recent demand. \n Thank you and have a great day.";
             string subject = "Shortfall in Stationery. Please raise a Purchase Order.";
 
             SendNotificationEmail(clerk.Email, subject, body);
@@ -42,22 +42,25 @@ namespace LUSSIS.Services
         {
             Employee e = employeeRepo.FindById(newRequisition.EmployeeId);
             string employeeEmail = employeeRepo.FindById(newRequisition.EmployeeId).Email;
+            Employee deptHead = null;
             string deptHeadEmail = null;
 
             Employee cs = employeeRepo.GetCoverStaffByDepartmentIdAndDate(e.DepartmentId, DateTime.Now);
             if(cs != null)
             {
+                deptHead = cs;
                 deptHeadEmail = cs.Email;
             }
             else
             {
-                deptHeadEmail = employeeRepo.FindOneBy(x=> x.DepartmentId == e.DepartmentId && x.RoleId == 1).Email;
+                deptHead = employeeRepo.FindOneBy(x => x.DepartmentId == e.DepartmentId && x.RoleId == 1);
+                deptHeadEmail = deptHead.Email;
             }
 
             //MailMessage mail = new MailMessage(employeeEmail, deptHeadEmail);
             string subject = "New Requisition Form Submission for Approval";
-            string body = "Please review a new Requisition form (Id:"+ newRequisition.Id
-                +") submmission by " +e.Name + "for approval. Thank you.";
+            string body = "Dear " + deptHead.Name +"\n Please review a new Requisition form (Id:"+ newRequisition.Id
+                +") submmission by " +e.Name + " for approval. \n Thank you and have a great day.";
             SendNotificationEmail(deptHeadEmail, subject, body);
         }
 
@@ -107,14 +110,14 @@ namespace LUSSIS.Services
         public void NotifyEmployeeApprovedOrRejectedRequisition(Requisition r, Employee e)
         {
             string subject = "Result of pending requisition approval";
-            string body = "Dear " + e.Name + ", your Requisition of Id: " + r.Id + ", has been updated as " + r.Status;
+            string body = "Dear " + e.Name + ", \n Your Requisition of Id: " + r.Id + ", has been updated as " + r.Status + ". /n Have a great Day.";
             SendNotificationEmail(e.Email, subject, body);
         }
         
         public void NotifyEmployeeCompletedRequisition(Requisition r, Employee e)
         {
             string subject = "Completed Requisition";
-            string body = "Dear " + e.Name + ", your Requisition of Id: " + r.Id + ", has now been completed with all items requested fulfilled.";
+            string body = "Dear " + e.Name + ", \n Your Requisition of Id: " + r.Id + ", has now been completed with all items requested fulfilled. /n Have a great Day.";
             SendNotificationEmail(e.Email, subject, body);
         }
     }
