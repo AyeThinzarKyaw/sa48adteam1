@@ -239,9 +239,10 @@
             else {
                 $("#" + content).detach().prependTo('.old');
             }
-
+            debugger;
             var empty = $("." + par).has("tr").length;
-            if (empty == 0) {
+            if (empty == 0 && par!="old") {
+
                 console.log(empty);
                 console.log(par);
                 $("." + par).remove();

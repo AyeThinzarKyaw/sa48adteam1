@@ -152,13 +152,16 @@ namespace LUSSIS.Services
             // set retrieved PODetails into StockMovementDTO
             foreach (PurchaseOrderDetail poDetail in purchaseOrderDet)
             {
-                StockMovementDTO stockMovList = new StockMovementDTO();
+                if (poDetail != null)
                 {
-                    stockMovList.MovementDate = purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).OrderDateTime;
-                    stockMovList.DepartmentOrSupplier = "Supplier - " + supplierRepo.FindById(purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).SupplierId).Name;
-                    stockMovList.Quantity = (int)poDetail.QuantityDelivered;
+                    StockMovementDTO stockMovList = new StockMovementDTO();
+                    {
+                        stockMovList.MovementDate = (DateTime) purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).DeliveryDateTime;
+                        stockMovList.DepartmentOrSupplier = "Supplier - " + supplierRepo.FindById(purchaseOrderRepo.FindById(poDetail.PurchaseOrderId).SupplierId).Name;
+                        stockMovList.Quantity = (int)poDetail.QuantityDelivered;
+                    }
+                    stockMovement.Add(stockMovList);
                 }
-                stockMovement.Add(stockMovList);
             }
 
             //retrieve all requisitiondetails that are delivered and are of the input stationeryId
@@ -181,7 +184,7 @@ namespace LUSSIS.Services
             }
 
             // order the list by date & alphabetically
-            stockMovement.OrderBy(x => x.MovementDate).OrderBy(x => x.DepartmentOrSupplier);
+            stockMovement = stockMovement.OrderBy(x => x.MovementDate).ToList();
 
             int runningBal = 0;
 
