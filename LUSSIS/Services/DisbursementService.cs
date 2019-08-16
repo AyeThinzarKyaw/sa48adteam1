@@ -65,7 +65,8 @@ namespace LUSSIS.Services
                 {
                     Id = rd.Id,
                     DisbursementId = (int)rd.DisbursementId,
-                    ReceivedEmployeeId = (int)disbursementRepo.FindById((int)rd.DisbursementId).ReceivedEmployeeId,
+                    ReceivedEmployeeId = (int) rd.Disbursement.ReceivedEmployeeId,
+                    //ReceivedEmployeeId = (int)disbursementRepo.FindById((int)rd.DisbursementId).ReceivedEmployeeId,
                     DeliveredEmployeeId = disbursementRepo.FindById((int)rd.DisbursementId).DeliveredEmployeeId,
                     DeliveryDateTime = (DateTime)disbursementRepo.FindById((int)rd.DisbursementId).DeliveryDateTime,
                     CollectionPoint = disbursementRepo.FindById((int)rd.DisbursementId).CollectionPoint,

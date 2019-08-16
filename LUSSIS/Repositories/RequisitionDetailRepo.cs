@@ -59,7 +59,7 @@ namespace LUSSIS.Repositories
 
         public List<IGrouping<int, RequisitionDetail>> GetUnfulfilledRequisitionDetailsGroupedByDept()
         {
-            return Context.RequisitionDetails.Where(x => x.QuantityOrdered > x.QuantityDelivered && x.Status.Equals("COLLECTED")).GroupBy(x => x.Requisition.Employee.DepartmentId).ToList();
+            return Context.RequisitionDetails.Where(x => x.Status.Equals("COLLECTED")).GroupBy(x => x.Requisition.Employee.DepartmentId).ToList();
         }
 
         

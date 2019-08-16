@@ -394,21 +394,21 @@ namespace LUSSIS.Services
             int qtyToDisburse = qtyRetrieved;
             foreach (RequisitionDetail rd in requisitionDetails)
             {
+                RequisitionDetail rqD = (RequisitionDetail)requisitionDetailRepo.FindById(rd.Id);
+
                 if (qtyToDisburse >= rd.QuantityOrdered)
                 {
                     //can give all
-                    rd.QuantityDelivered = rd.QuantityOrdered;
+                    rqD.QuantityDelivered = rd.QuantityOrdered;
                     qtyToDisburse = qtyToDisburse - rd.QuantityOrdered;
                 }
                 else //qtyToDisburse < ordered
                 {
                     //can give some
-                    rd.QuantityDelivered = qtyToDisburse;
+                    rqD.QuantityDelivered = qtyToDisburse;
                     qtyToDisburse = 0;
                 }
                 //update status to PENDING COLLECTION and update db
-
-                RequisitionDetail rqD = (RequisitionDetail)requisitionDetailRepo.FindById(rd.Id);
 
                 rqD.Status = RequisitionDetailStatusEnum.PENDING_COLLECTION.ToString();
 
@@ -640,7 +640,8 @@ namespace LUSSIS.Services
                 }
                 //get stationery
                 Stationery s = rds.First().Stationery;
-                owedItems.Add(new OwedItemDTO { Stationery = s, QtyOwed = sum });
+                if(sum>0)
+                    owedItems.Add(new OwedItemDTO { Stationery = s, QtyOwed = sum });
             }
             return owedItems;
         }

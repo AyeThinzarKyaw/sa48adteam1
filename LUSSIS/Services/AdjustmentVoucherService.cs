@@ -15,12 +15,14 @@ namespace LUSSIS.Services
     {
         private IAdjustmentVoucherRepo adjustmentVoucherRepo;
         private IAdjustmentVoucherDetailRepo adjustmentVoucherDetailRepo;
+        private IStationeryRepo stationeryRepo;
         private static AdjustmentVoucherService instance = new AdjustmentVoucherService();
 
         private AdjustmentVoucherService()
         {
             adjustmentVoucherRepo = AdjustmentVoucherRepo.Instance;
             adjustmentVoucherDetailRepo = AdjustmentVoucherDetailRepo.Instance;
+            stationeryRepo = StationeryRepo.Instance;
         }
 
 
@@ -56,6 +58,16 @@ namespace LUSSIS.Services
         }
         public void UpdateAdjustmentVoucher(AdjustmentVoucher adj)
         {
+            if(adj.Status.Equals("Submitted"))
+            {
+                foreach(AdjustmentVoucherDetail avd in adj.AdjustmentVoucherDetails)
+                {
+                    int sId = avd.StationeryId;
+                    Stationery s = stationeryRepo.FindById(sId);
+                    s.Quantity += avd.Quantity;
+                    stationeryRepo.Update(s);
+                }
+            }
             adjustmentVoucherRepo.Update(adj);
         }
 
