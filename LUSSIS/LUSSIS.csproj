@@ -493,6 +493,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Chart\chart.png" />
     <Content Include="Images\logic.jpg" />
     <Content Include="Images\manager.png" />
     <Content Include="Models\LUSSISContext.Context.tt">

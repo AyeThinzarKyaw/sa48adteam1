@@ -26,9 +26,13 @@ namespace LUSSIS.Controllers
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<AdjustmentVoucherDTO> adjustmentvouchers = AdjustmentVoucherService.Instance.getTotalAmountDTO();
-                if(currentUser.RoleId == 6)
+                if(currentUser.RoleId == (int)Enums.Roles.StoreSupervisor)
                 {
-                    adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status ==  "Acknowledged").ToList();
+                    adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status ==  "Acknowledged" &&  x.TotalAmount <= 250).ToList();
+                }
+                else if (currentUser.RoleId == (int)Enums.Roles.StoreManager)
+                {
+                    adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status == "Acknowledged" && x.TotalAmount > 250).ToList();
                 }
                 return View(adjustmentvouchers);
             }
