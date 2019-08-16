@@ -88,7 +88,7 @@
                                     <td colspan="2" style="background-color: #ecf0f5;">
                                         Estimated Delivery Date :
                                     </td>
-                                    <td colspan="2" style="background-color: #ecf0f5;">
+                                    <td colspan="6" style="background-color: #ecf0f5;">
                                         <div class="form-group" style="margin: 0;">
                                             <div class="input-group date">
                                                 <div class="input-group-addon">
@@ -100,13 +100,13 @@
                                                 }
                                                 else
                                                 {
-                                                    <input type="date" class="datepicker form-control pull-right" id=@datePickerId onchange="setEstDate(@supplierList.supplier);" required="">
+                                                    <input type="date" min="@DateTime.Now.Date" class="datepicker form-control pull-right" id=@datePickerId onchange="setEstDate(@supplierList.supplier);" required="">
                                                 }
 
                                             </div>
                                         </div>
                                     </td>
-                                    <td colspan="4" style="background-color: #ecf0f5;"></td>
+                                    
                                 </tr>
 
                             </tbody>
@@ -231,7 +231,7 @@
                     $("#" + content).detach().prependTo('.' + res);
                 }
                 else {
-                    $("table").append("<tbody id='" + res + "'><tr><td colspan='2' class='with-border' style='background-color: #ecf0f5; color: #3c8dbc;'><b>" + str + "</b></td><td colspan='2' style='background-color: #ecf0f5;'>Estimated Delivery Date :</td><td colspan='2' style='background-color: #ecf0f5;'><div class='form-group' style='margin: 0;'><div class='input-group date'><div class='input-group-addon'><i class='fa fa-calendar'></i></div><input type='date' class='datepicker form-control pull-right' required id='datepicker" + supplierId + "' onchange='setEstDate(" + supplierId + ");'></div></div></td><td colspan='4' style='background-color: #ecf0f5;'></td></tr></tbody>");
+                    $("table").append("<tbody id='" + res + "'><tr><td colspan='2' class='with-border' style='background-color: #ecf0f5; color: #3c8dbc;'><b>" + str + "</b></td><td colspan='2' style='background-color: #ecf0f5;'>Estimated Delivery Date :</td><td colspan='6' style='background-color: #ecf0f5;'><div class='form-group' style='margin: 0;'><div class='input-group date'><div class='input-group-addon'><i class='fa fa-calendar'></i></div><input type='date' class='datepicker form-control pull-right' required id='datepicker" + supplierId + "' onchange='setEstDate(" + supplierId + ");'></div></div></td></tr></tbody>");
                     $("table").append("<tbody class='" + res + "'></tbody>");
                     $("#" + content).detach().prependTo('.' + res);
                 }
@@ -275,27 +275,35 @@
 
         function setEstDate(supId) {
             debugger;
+            var result = checkEstDateValid($("#datepicker" + supId));
+            if (result==true) {
 
-            var data = JSON.stringify({
-                'estDate': $("#datepicker" + supId).val(),
-                'supplierId': supId
-            });
+                var data = JSON.stringify({
+                    'estDate': $("#datepicker" + supId)[0].value,
+                    'supplierId': supId
+                });
 
-            $.ajax({
-                type: "POST",
-                url: "/PurchaseOrder/UpdateEstimatedDate",
-                async: true,
-                data: data,
-                success: function (result) {
-                    if (result == false) {
-                        document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
-                    }
-                    else {
-                        document.getElementById("errMsg").innerHTML = "";
-                    }
-                },
-                contentType: 'application/json'
-            });
+                $.ajax({
+                    type: "POST",
+                    url: "/PurchaseOrder/UpdateEstimatedDate",
+                    async: true,
+                    data: data,
+                    success: function (result) {
+                        if (result == false) {
+                            document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
+                        }
+                        else {
+                            if ($("#datepicker" + supId).parent().next(".validation").length > 0) // only remove if added
+                            {
+                                $("#datepicker" + supId).parent().next(".validation").remove(); // remove it
+                            }
+                            document.getElementById("errMsg").innerHTML = "";
+                        }
+                    },
+                    contentType: 'application/json'
+                });
+            }
+           
         }
 
         function removeItem(stationeryId) {
@@ -365,31 +373,80 @@
             ConfirmItemToPO(stationeryId, "unconfirmed");
         });
 
-        function RaisePO(removeZero) {
-            var data = JSON.stringify({
-                'removeZero': removeZero
-            });
-            $.ajax({
-                type: "POST",
-                url: "/PurchaseOrder/RaisePO",
-                async: true,
-                data: data,
-                success: function (result) {
-                    if (result[0] == true && result[1] == null) {//successfully raised PO
-                        window.location.href = '/PurchaseOrder/Index'
-                    }
-                    else if (result[0] == true && result[1] != null) {//confirm dialog
-                        if (confirm(result[1])) {
-                            RaisePO(true);
-                        }
+        function checkEstDateValid(element) {
+            var isValid = true;
+            debugger;
+            if (element[0].value == "") {
 
+                if ($("#" + element[0].id).parent().next(".validation").length == 0) // only add if not added
+                {
+                    $("#" + element[0].id).parent().after("<div class='validation' style='color:red;'>Please choose the estimated delivery date</div>");
+                }
+                isValid = false;
+            }
+            else {
+                //if ($("#" + element[0].id).parent().next(".validation").length > 0) // only remove if added
+                //{
+                    var estDate =element[0].value;
+                    var today = new Date().toISOString().split('T')[0];
+                    debugger;
+                    if (estDate < today) {
+                        isValid = false;
+                        if ($("#" + element[0].id).parent().next(".validation").length > 0) // only remove if added
+                        {
+                            $("#" + element[0].id).parent().next(".validation").remove(); // remove it
+                        }
+                        if ($("#" + element[0].id).parent().next(".validation").length == 0) // only add if not added
+                        {
+                            $("#" + element[0].id).parent().after("<div class='validation' style='color:red;'>Estimated Delivery Date cannot be before today.</div>");
+                        }
                     }
-                    else if (result[0] == false) {//show error msg
-                        document.getElementById("errMsg").innerHTML = result[1];
+                    else {
+                        $("#" + element[0].id).parent().next(".validation").remove(); // remove it
                     }
-                },
-                contentType: 'application/json'
+                //}
+            }
+
+            return isValid;
+        }
+
+        function RaisePO(removeZero) {
+            debugger;
+            var isValid = true;
+            $(".datepicker").each(function () {
+                var result = checkEstDateValid($(this));
+                debugger;
+                if (result==false) {
+                    isValid = false;
+                }
             });
+            if (isValid == true) {
+                var data = JSON.stringify({
+                    'removeZero': removeZero
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "/PurchaseOrder/RaisePO",
+                    async: true,
+                    data: data,
+                    success: function (result) {
+                        if (result[0] == true && result[1] == null) {//successfully raised PO
+                            window.location.href = '/PurchaseOrder/Index'
+                        }
+                        else if (result[0] == true && result[1] != null) {//confirm dialog
+                            if (confirm(result[1])) {
+                                RaisePO(true);
+                            }
+
+                        }
+                        else if (result[0] == false) {//show error msg
+                            document.getElementById("errMsg").innerHTML = result[1];
+                        }
+                    },
+                    contentType: 'application/json'
+                });
+            }
+
         }
     </script>
 }

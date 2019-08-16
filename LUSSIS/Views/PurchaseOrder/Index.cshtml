@@ -71,7 +71,7 @@
             <div class="box">
 
                 <!-- If Clerk -->
-                @if (role == 7)
+                @if (role ==(int)LUSSIS.Enums.Roles.StoreClerk)
                 {
                     <div class="box-header">
                         <div class="box-tools pull-right" style="position: relative;">
@@ -129,14 +129,14 @@
 
                                             <!-- If Clerk -->
 
-                                            @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.OPEN))
+                                            @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.PENDING) && role == (int)LUSSIS.Enums.Roles.StoreClerk)
                                             {
 
                                                 @Html.ActionLink("Cancel", null, null, new { @onclick = "if (confirm('Are you sure you want to cancel this PO?')) { return cancelPO('" + po.Id + "'); }", @class = "btn btn-sm btn-danger", @role = "button" })
                                                 @*@Html.ActionLink("Cancel", null, null, new { @onclick = "cancelPO('" + po.Id + "');", @class = "btn btn-sm btn-danger", @role = "button" })*@
                                                 @*<a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>*@
                                             }
-                                            @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.APPROVED))
+                                            @if (po.Status == Enum.GetName(typeof(POStatus), POStatus.APPROVED) && role == (int)LUSSIS.Enums.Roles.StoreClerk)
                                             {
                                                 @Html.ActionLink("ReceiveDO", "ReceiveDO", new { @poId = po.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
                                                 @*<a href="strationary-detail.html" class="btn btn-sm btn-danger">Cancel</a>*@

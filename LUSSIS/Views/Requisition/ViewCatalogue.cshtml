@@ -77,12 +77,12 @@
                                     }
                                     @if (catalogueItem.Confirmation == true)
                                     {
-                                        <td><input id=@inputBoxId type="text" style="width: 80px;" value=@catalogueItem.OrderQtyInput disabled/></td>
+                                        <td><input id=@inputBoxId type="text" onkeypress="return isNumber(event)" style="width: 80px;" value=@catalogueItem.OrderQtyInput disabled/></td>
                                         <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal" checked></td>
                                     }
                                     else
                                     {
-                                        <td><input id=@inputBoxId type="text" style="width: 80px;" /></td>
+                                        <td><input id=@inputBoxId type="text" onkeypress="return isNumber(event)" style="width: 80px;" /></td>
                                         <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal"></td>
                                     }
 
@@ -107,26 +107,47 @@
 
 @section scripts {
     <script>
+
+        function isNumber(event) {
+            var keycode = event.keyCode;
+            if (keycode >= 48 && keycode <= 57) {
+                return true;
+            }
+            return false;
+        }
+
+
         $('.minimal').on('ifUnchecked', function (event) {
             var stationeryId = $(this).attr('id');
-            var employeeId = document.getElementById("employeeId").value;
             $("#inputBox" + stationeryId).attr("disabled", false);
-            var data = JSON.stringify({
-                'employeeId': employeeId,
-                'stationeryId': stationeryId,
-            });
+            var input = document.getElementById("inputBox" + stationeryId).value;
+            input = parseFloat(input);
+            //alert(typeof input);
+            if (input > 0) {
+                //alert("unchecked valid number");
+                var employeeId = document.getElementById("employeeId").value;
+                var data = JSON.stringify({
+                    'employeeId': employeeId,
+                    'stationeryId': stationeryId,
+                });
 
-            $.ajax({
-                type: "POST",
-                url: "/Requisition/RemoveItemFromCart",
-                async: true,
-                data: data,
-                contentType: 'application/json',
-                success: function (r) {
-                    UpdateAvailability(r, "availStatus" + stationeryId);
-                }
-            });
-
+                $.ajax({
+                    type: "POST",
+                    url: "/Requisition/RemoveItemFromCart",
+                    async: true,
+                    data: data,
+                    contentType: 'application/json',
+                    success: function (r) {
+                        UpdateAvailability(r, "availStatus" + stationeryId);
+                        
+                    }
+                });
+            }
+            //set inputBox to no value
+            $("#inputBox" + stationeryId).val('');
+            //set reserved qty and waiylist qty to 0
+            document.getElementById("reservedBox" + stationeryId).innerHTML = '0';
+            document.getElementById("waitlistBox" + stationeryId).innerHTML = '0';
         });
 
         function UpdateAvailability(r, elementId) {
@@ -150,10 +171,13 @@
 
         $('.minimal').on('ifChecked', function (event) {
             var stationeryId = $(this).attr('id');
-            var input = document.getElementById("inputBox" + stationeryId).value;
             $("#inputBox" + stationeryId).attr("disabled", true);
-
-            if (input) {
+            var input = document.getElementById("inputBox" + stationeryId).value;
+            //alert(typeof input);
+            input = parseFloat(input);
+            //alert(input);
+           
+            if (input > 0) {              
                 var employeeId = document.getElementById("employeeId").value;
                 var data = JSON.stringify({
                     'employeeId': employeeId,
@@ -167,18 +191,15 @@
                     async: true,
                     data: data,
                     success: function (r) {
-                        //alert(r.reserved);
                         UpdateAvailability(r, "availStatus" + stationeryId);
                         document.getElementById("reservedBox" + stationeryId).innerHTML = r.reserved;
                         document.getElementById("waitlistBox" + stationeryId).innerHTML = r.waitlist;
                     },
                     contentType: 'application/json'
                 });
-
-                //alert(input);
             }
             else {
-                //no input, do nothing
+                alert("Please input a number greater than 0");
             }
 
         });
