@@ -23,5 +23,7 @@ namespace LUSSIS.Repositories.Interfaces
 
         List<RequisitionDetail> GetRequisitionDetailsByClerkDisbursementId(int EmployeeId);
         List<RequisitionDetail> GetRequisitionDetailsByDepRepDisbursementId(int EmployeeId);
+        List<RequisitionDetail> GetRequisitionDetailsByDepartmentIdByCategoryIdByStationeryId(int DepartmentId, int CategoryId, int SstationeryId);
+
     }
 }

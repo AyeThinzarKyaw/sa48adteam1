@@ -91,5 +91,19 @@ namespace LUSSIS.Repositories
                          select rd;
             return result.ToList();
         }
+
+        public List<RequisitionDetail> GetRequisitionDetailsByDepartmentId(int DepartmentId)
+        {
+            var result = from rd in Context.RequisitionDetails
+                         join r in Context.Requisitions on rd.RequisitionId equals r.Id
+                         join e in Context.Employees on r.EmployeeId equals e.Id
+                         join d in Context.Departments on e.DepartmentId equals d.Id
+                         join s in Context.Stationeries on rd.StationeryId equals s.Id
+                         join c in Context.Categories on s.CategoryId equals c.Id
+                         where d.Id == DepartmentId
+                         select rd;
+
+            return result.ToList();
+        }
     }
 }
