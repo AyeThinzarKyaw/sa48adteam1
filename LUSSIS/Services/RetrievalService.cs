@@ -209,7 +209,7 @@ namespace LUSSIS.Services
 
             RetrievalDTO retrieval = new RetrievalDTO();
 
-            retrieval.RetrievalDate = System.DateTime.Now.ToString("dd/MM/yyyy");
+            retrieval.RetrievalDate = System.DateTime.Now.ToString("yyyy-MM-dd");
             Employee clerk = (Employee)employeeRepo.FindOneBy(x => x.Id == loginDTO.EmployeeId);
 
             if (clerk.Name == null)
@@ -532,7 +532,7 @@ namespace LUSSIS.Services
 
             RetrievalDTO retrieval = new RetrievalDTO();
 
-            retrieval.RetrievalDate = System.DateTime.Now.ToString("dd/MM/yyyy");
+            retrieval.RetrievalDate = System.DateTime.Now.ToString("yyyy-MM-dd");
             Employee clerk = (Employee)employeeRepo.FindOneBy(x => x.Id == loginDTO.EmployeeId);
 
             if (clerk.Name == null)
