@@ -297,7 +297,7 @@ namespace LUSSIS.Services
 
         public List<RequisitionDetail> getRequisitionDetailListByPendingCollectionAndStationeryId(int stationeryId)
         {
-            List<RequisitionDetail> returnReqList = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.StationeryId == stationeryId && x.Status == "Pending_Collection");
+            List<RequisitionDetail> returnReqList = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.StationeryId == stationeryId && x.Status == "Pending_Collection" && x.DisbursementId == null);
 
             return returnReqList;
 
@@ -445,6 +445,7 @@ namespace LUSSIS.Services
                 List<Requisition> rt = retrieveAllApprovedRequisitionIdsByDepartmentName(dept.DepartmentName).ToList();
 
                 List<Requisition> rtFinal = new List<Requisition>();
+               
 
                 foreach (Requisition req in rt)
                 {
@@ -456,10 +457,12 @@ namespace LUSSIS.Services
                     }
 
                 }
-
-                AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { Department = dept, Requisitions = rtFinal };
-
-                adDRList.Add(adDR);
+                if (rtFinal.Count > 0)
+                {
+                    AdHocDeptAndRetrievalDTO adDR = new AdHocDeptAndRetrievalDTO() { Department = dept, Requisitions = rtFinal };
+                    adDRList.Add(adDR);
+                }
+    
             }
 
             output.DepartmentAndRetrieval = adDRList;

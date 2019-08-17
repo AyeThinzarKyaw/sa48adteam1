@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using LUSSIS.Models.DTOs;
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -13,16 +15,16 @@
 </head>
 @{
     int role = 0;
-    if (Session["role"] != null)
-    {
-        role = (int)Session["role"];
-    }
+    LoginDTO currentUser = (LoginDTO)Session["existinguser"];
+    string dept = currentUser.Department;
+    role = currentUser.RoleId;
+
 }
-<body class="hold-transition skin-blue sidebar-mini" style="padding: 0 !important;">
+<body class="hold-transition skin-blue sidebar-mini" style="padding: 0 !important; height: auto;">
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
-            <a href="../../index2.html" class="logo">
+            <a href="#" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><img src="../images/logic.jpg" width="25"></span>
                 <!-- logo for regular state and mobile devices -->
@@ -82,52 +84,52 @@
 
                                     @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                                     {
-                                        <p>
-                                            Department Head<br />
-                                            (Department of Registrar)
-                                        </p>
+                                    <p>
+                                        Department Head<br />
+                                        (Dept - @dept)
+                                    </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                                     {
-                                        <p>
-                                            Staff<br />
-                                            (Department of Registrar)
-                                        </p>
+                                    <p>
+                                        Staff<br />
+                                        (Dept - @dept)
+                                    </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                                     {
-                                        <p>
-                                            Department Representative<br />
-                                            (Department of Registrar)
-                                        </p>
+                                    <p>
+                                        Department Representative<br />
+                                        (Dept - @dept)
+                                    </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                                     {
-                                        <p>
-                                            Cover Staff<br />
-                                            (Department of Registrar)
-                                        </p>
+                                    <p>
+                                        Cover Staff<br />
+                                        (Dept - @dept)
+                                    </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                                     {
-                                        <p>
-                                            Store Manager<br />
-                                            (Department of Store)
-                                        </p>
+                                    <p>
+                                        Store Manager<br />
+                                        (Dept - @dept)
+                                    </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                                     {
-                                        <p>
-                                            Store Supervisor<br />
-                                            (Department of Store)
-                                        </p>
+                                    <p>
+                                        Store Supervisor<br />
+                                        (Dept - @dept)
+                                    </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                                     {
-                                        <p>
-                                            Store Clerk<br />
-                                            (Department of Store)
-                                        </p>
+                                    <p>
+                                        Store Clerk<br />
+                                        (Dept - @dept)
+                                    </p>
                                     }
                                 </li>
                                 <!-- Menu Footer-->
@@ -155,37 +157,37 @@
                         @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                         {
                             <p>Department Head</p>
-                            <p style="font-size: 12px;">Department of Registrar</p>
+                            <p style="font-size: 12px;">Dept- @dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                         {
                             <p>Staff</p>
-                            <p style="font-size: 12px;">Department of Registrar</p>
+                            <p style="font-size: 12px;">Dept- @dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                         {
                             <p>Department Representative</p>
-                            <p style="font-size: 12px;">Department of Registrar</p>
+                            <p style="font-size: 12px;">Dept- @dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                         {
                             <p>Cover Staff</p>
-                            <p style="font-size: 12px;">Department of Registrar</p>
+                            <p style="font-size: 12px;">Dept- @dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                         {
                             <p>Store Manager</p>
-                            <p style="font-size: 12px;">Department of Store</p>
+                            <p style="font-size: 12px;">Dept- @dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                         {
                             <p>Store Supervisor</p>
-                            <p style="font-size: 12px;">Department of Store</p>
+                            <p style="font-size: 12px;">Dept- @dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                         {
                             <p>Store Clerk</p>
-                            <p style="font-size: 12px;">Department of Store</p>
+                            <p style="font-size: 12px;">Dept- @dept</p>
                         }
 
                     </div>
@@ -340,7 +342,7 @@
         </aside>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="min-height: 610px;">
             @RenderBody()
         </div>
         <!-- /.content -->

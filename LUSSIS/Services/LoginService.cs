@@ -69,7 +69,7 @@ namespace LUSSIS.Services
                 int role = departmentCoverEmployeeRepo.FindOneBy(x => x.EmployeeId == e.Id && x.Status== "ACTIVE" && DbFunctions.TruncateTime(x.FromDate) <= DateTime.Now && DbFunctions.TruncateTime(x.ToDate) >= DateTime.Now) != null ? (int)Enums.Roles.DepartmentCoverHead : e.RoleId;
 
                 //set attributes
-                LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, RoleId = role, SessionGuid = newSession.GUID };
+                LoginDTO loginDTO = new LoginDTO() { EmployeeId = e.Id, RoleId = role, SessionGuid = newSession.GUID,Department=e.Department.DepartmentName };
                 return loginDTO;
             }
         }
