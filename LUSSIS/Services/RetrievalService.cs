@@ -297,7 +297,7 @@ namespace LUSSIS.Services
 
         public List<RequisitionDetail> getRequisitionDetailListByPendingCollectionAndStationeryId(int stationeryId)
         {
-            List<RequisitionDetail> returnReqList = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.StationeryId == stationeryId && x.Status == "Pending_Collection");
+            List<RequisitionDetail> returnReqList = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.StationeryId == stationeryId && x.Status == "Pending_Collection" && x.DisbursementId == null);
 
             return returnReqList;
 
