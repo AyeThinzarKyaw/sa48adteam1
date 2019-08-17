@@ -37,11 +37,11 @@ namespace LUSSIS.Controllers
             return View(model);
         }
         #region ExportAsPDF
-        public ActionResult ExportAsPDF(ChartFilteringDTO model)
+        public ActionResult ExportAsPDF()
         {
             if (TempData["FilterModel"] != null)
             {
-                model =(ChartFilteringDTO)TempData["FilterModel"];
+                ChartFilteringDTO model = (ChartFilteringDTO)TempData["FilterModel"];
                 TempData.Keep("FilterModel");
                 //ChartFilteringDTO model = (ChartFilteringDTO)TempData["chartData"];
                 if (model != null)
