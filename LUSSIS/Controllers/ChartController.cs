@@ -39,23 +39,29 @@ namespace LUSSIS.Controllers
         #region ExportAsPDF
         public ActionResult ExportAsPDF(ChartFilteringDTO model)
         {
-            //ChartFilteringDTO model = (ChartFilteringDTO)TempData["chartData"];
-            if (model != null)
+            if (TempData["FilterModel"] != null)
             {
-                MemoryStream workStream = new MemoryStream();
-                PdfWriter writer = new PdfWriter(workStream);
-                writer.SetCloseStream(false);
-                PdfDocument pdfDoc = new PdfDocument(writer);
-                Document pdfFile = CreatePDF(model, pdfDoc);
-                pdfFile.Close();
-                byte[] byteInfo = workStream.ToArray();
-                workStream.Write(byteInfo, 0, byteInfo.Length);
-                workStream.Position = 0;
-                string strPDFFileName = string.Format("Report" + DateTime.Now.ToString("yyyyMMdd") + "-" + ".pdf");
-                return File(workStream, "application/pdf", strPDFFileName);
+                model =(ChartFilteringDTO)TempData["FilterModel"];
+                TempData.Keep("FilterModel");
+                //ChartFilteringDTO model = (ChartFilteringDTO)TempData["chartData"];
+                if (model != null)
+                {
+                    MemoryStream workStream = new MemoryStream();
+                    PdfWriter writer = new PdfWriter(workStream);
+                    writer.SetCloseStream(false);
+                    PdfDocument pdfDoc = new PdfDocument(writer);
+                    Document pdfFile = CreatePDF(model, pdfDoc);
+                    pdfFile.Close();
+                    byte[] byteInfo = workStream.ToArray();
+                    workStream.Write(byteInfo, 0, byteInfo.Length);
+                    workStream.Position = 0;
+                    string strPDFFileName = string.Format("Report" + DateTime.Now.ToString("yyyyMMdd") + "-" + ".pdf");
+                    return File(workStream, "application/pdf", strPDFFileName);
+                }
+                else   //return RedirectToAction("InventoryHistoricalData");
+                    return null;
             }
-            else   //return RedirectToAction("InventoryHistoricalData");
-                return null;
+            return RedirectToAction("InventoryHistoricalData");
         }
         #endregion
 
@@ -1016,7 +1022,7 @@ namespace LUSSIS.Controllers
             model.StationeryForChartList = supplierChartFilterings.StationeryForChartList;
             model.CategoryForChartList = supplierChartFilterings.CategoryForChartList;
             model.DepartmentForChartList = supplierChartFilterings.DepartmentForChartList;
-
+            TempData["FilterModel"] = model;
             return View("InventoryHistoricalData", "_Layout", model);
         }
         #endregion
@@ -1039,7 +1045,7 @@ namespace LUSSIS.Controllers
             model.StationeryForChartList = supplierChartFilterings.StationeryForChartList;
             model.CategoryForChartList = supplierChartFilterings.CategoryForChartList;
             model.DepartmentForChartList = supplierChartFilterings.DepartmentForChartList;
-
+            TempData["FilterModel"] = model;
             return View("InventoryHistoricalData", "_Layout", model);
         }
         #endregion
