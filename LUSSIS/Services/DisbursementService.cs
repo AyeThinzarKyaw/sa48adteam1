@@ -86,6 +86,7 @@ namespace LUSSIS.Services
                     ItemCode = rd.Stationery.Code,
                     RequisitionID = rd.RequisitionId,
                     RequisitionDateTime = rd.Requisition.DateTime,
+                    DeliveryDateTime = (DateTime)rd.Disbursement.DeliveryDateTime,
 
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
@@ -128,6 +129,7 @@ namespace LUSSIS.Services
                     ItemCode = rd.Stationery.Code,
                     RequisitionID = rd.RequisitionId,
                     RequisitionDateTime = rd.Requisition.DateTime,
+                    DeliveryDateTime = (DateTime)rd.Disbursement.DeliveryDateTime,
 
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
