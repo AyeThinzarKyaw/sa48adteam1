@@ -92,7 +92,7 @@ namespace LUSSIS.Repositories
             return result.ToList();
         }
 
-        public List<RequisitionDetail> GetRequisitionDetailsByDepartmentId(int DepartmentId)
+        public List<RequisitionDetail> GetRequisitionDetailsByDepartmentIdByCategoryIdByStationeryId(int DepartmentId, int CategoryId, int StationeryId)
         {
             var result = from rd in Context.RequisitionDetails
                          join r in Context.Requisitions on rd.RequisitionId equals r.Id
@@ -100,7 +100,7 @@ namespace LUSSIS.Repositories
                          join d in Context.Departments on e.DepartmentId equals d.Id
                          join s in Context.Stationeries on rd.StationeryId equals s.Id
                          join c in Context.Categories on s.CategoryId equals c.Id
-                         where d.Id == DepartmentId
+                         where d.Id == DepartmentId && c.Id == CategoryId && s.Id == StationeryId
                          select rd;
 
             return result.ToList();
