@@ -19,8 +19,6 @@ namespace LUSSIS.Services.Interfaces
         void UpdatePODetail(PurchaseOrderDetail pod);
 
         void RaisePO(POCreateDTO poCreateDTO,int createdBy);
-        List<ChartDTO> TrendChartInfo(int SupplierId, int CategoryId, int StationeryId);
-        ChartFilteringDTO FilteringByAttributes();
 
     }
 }
