@@ -78,7 +78,7 @@
                                         <td>@pod.QuantityOrdered</td>
                                        
                                         <td>                                            
-                                            <input type="text" class="form-control" required value=@pod.QuantityDelivered onfocusout="updateQtyReceive(this,'@pod.Id','@pod.PurchaseOrderId');" />
+                                            <input type="number" min="1" pattern="[0-9]*" class="form-control" required value=@pod.QuantityDelivered onfocusout="updateQtyReceive(this,'@pod.Id','@pod.PurchaseOrderId');" />
                                         </td>
                                     </tr>
                                     i++;

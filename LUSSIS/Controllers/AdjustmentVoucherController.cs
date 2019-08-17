@@ -28,11 +28,11 @@ namespace LUSSIS.Controllers
                 List<AdjustmentVoucherDTO> adjustmentvouchers = AdjustmentVoucherService.Instance.getTotalAmountDTO();
                 if(currentUser.RoleId == (int)Enums.Roles.StoreSupervisor)
                 {
-                    adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status ==  "Acknowledged" &&  x.TotalAmount <= 250).ToList();
+                    adjustmentvouchers = adjustmentvouchers.Where(x => x.TotalAmount <= 250 && (x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status == "Acknowledged")).ToList();
                 }
                 else if (currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
-                    adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status == "Acknowledged" && x.TotalAmount > 250).ToList();
+                    adjustmentvouchers = adjustmentvouchers.Where(x => x.TotalAmount > 250 && (x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status == "Acknowledged")).ToList();
                 }
                 return View(adjustmentvouchers);
             }
