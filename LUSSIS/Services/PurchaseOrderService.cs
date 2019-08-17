@@ -121,12 +121,12 @@ namespace LUSSIS.Services
                 
             }
         }
-        public List<SupplierChartDTO> TrendChartInfo(int SupplierId, int CategoryId, int StationeryId)
+        public List<ChartDTO> TrendChartInfo(int SupplierId, int CategoryId, int StationeryId)
         {
             List<PurchaseOrderDetail> PurchaseOrderDetailsList = purchaseOrderDetailRepo.GetPurchaseOrderDetailsBySupplierId(SupplierId);
             IEnumerable<SupplierTender> SupplierTendersList = supplierTenderRepo.FindBy(x => x.SupplierId == SupplierId);
 
-            List<SupplierChartDTO> chartDTOs = new List<SupplierChartDTO>();
+            List<ChartDTO> chartDTOs = new List<ChartDTO>();
 
             foreach (PurchaseOrderDetail pod in PurchaseOrderDetailsList)
             {
@@ -135,9 +135,9 @@ namespace LUSSIS.Services
                     if (pod.StationeryId == st.StationeryId && supplierRepo.FindById(purchaseOrderRepo.FindById(pod.PurchaseOrderId).SupplierId).Id == st.SupplierId && categoryRepo.FindById(stationeryRepo.FindById(pod.StationeryId).CategoryId).Id == CategoryId && stationeryRepo.FindById(pod.StationeryId).Id == StationeryId)
                     {
 
-                        SupplierChartDTO chartDTO = new SupplierChartDTO()
+                        ChartDTO chartDTO = new ChartDTO()
                         {
-                            Id = pod.Id,
+                            PurchaseOrderDetailId = pod.Id,
                             PurchaseOrderId = pod.PurchaseOrderId,
                             StationeryId = pod.StationeryId,
                             QuantityOrdered = pod.QuantityOrdered,
@@ -171,13 +171,13 @@ namespace LUSSIS.Services
 
         }
 
-        public SupplierChartFilteringDTO FilteringByAttributes()
+        public ChartFilteringDTO FilteringByAttributes()
         {
             List<Supplier> suppliers = (List<Supplier>)supplierRepo.FindAll();
             List<Stationery> stationeries = (List<Stationery>)stationeryRepo.FindAll();
             List<Category> categories = (List<Category>)categoryRepo.FindAll();
 
-            SupplierChartFilteringDTO FilteringDetails = new SupplierChartFilteringDTO()
+            ChartFilteringDTO FilteringDetails = new ChartFilteringDTO()
             {
                 SupplierForChartList = suppliers,
                 StationeryForChartList = stationeries,
