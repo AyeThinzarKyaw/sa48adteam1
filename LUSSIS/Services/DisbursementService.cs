@@ -61,6 +61,7 @@ namespace LUSSIS.Services
             List<DisbursementDetailsDTO> DisplayDisbursementDetailsList = new List<DisbursementDetailsDTO>();
             foreach (RequisitionDetail rd in RequisitionDetailsList)
             {
+
                 DisbursementDetailsDTO disbursementDTO = new DisbursementDetailsDTO()
                 {
                     Id = rd.Id,
@@ -69,7 +70,7 @@ namespace LUSSIS.Services
                     DeliveredEmployeeId = rd.Disbursement.DeliveredEmployeeId,
                     CollectionPoint = rd.Disbursement.CollectionPoint,
                     QuantityOrdered = rd.QuantityOrdered,
-                    QuantityDelivered = (int)rd.QuantityDelivered,
+                    QuantityDelivered = rd.QuantityDelivered == null ? 0 : (int)rd.QuantityDelivered,
                     StationeryId = rd.StationeryId,
                     Status = rd.Status,
                     UnitOfMeasure = rd.Stationery.UnitOfMeasure,
@@ -85,9 +86,12 @@ namespace LUSSIS.Services
                     ItemCode = rd.Stationery.Code,
                     RequisitionID = rd.RequisitionId,
                     RequisitionDateTime = rd.Requisition.DateTime,
+                    DeliveryDateTime = (DateTime)rd.Disbursement.DeliveryDateTime,
 
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
+
+
             }
 
             return DisplayDisbursementDetailsList;
@@ -100,6 +104,7 @@ namespace LUSSIS.Services
             List<DisbursementDetailsDTO> DisplayDisbursementDetailsList = new List<DisbursementDetailsDTO>();
             foreach (RequisitionDetail rd in RequisitionDetailsList)
             {
+
                 DisbursementDetailsDTO disbursementDTO = new DisbursementDetailsDTO()
                 {
                     Id = rd.Id,
@@ -108,7 +113,7 @@ namespace LUSSIS.Services
                     DeliveredEmployeeId = rd.Disbursement.DeliveredEmployeeId,
                     CollectionPoint = rd.Disbursement.CollectionPoint,
                     QuantityOrdered = rd.QuantityOrdered,
-                    QuantityDelivered = (int)rd.QuantityDelivered,
+                    QuantityDelivered = rd.QuantityDelivered == null ? 0 : (int)rd.QuantityDelivered,
                     StationeryId = rd.StationeryId,
                     Status = rd.Status,
                     UnitOfMeasure = rd.Stationery.UnitOfMeasure,
@@ -124,9 +129,12 @@ namespace LUSSIS.Services
                     ItemCode = rd.Stationery.Code,
                     RequisitionID = rd.RequisitionId,
                     RequisitionDateTime = rd.Requisition.DateTime,
+                    DeliveryDateTime = (DateTime)rd.Disbursement.DeliveryDateTime,
 
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
+
+
             }
             return DisplayDisbursementDetailsList;
         }
@@ -134,9 +142,9 @@ namespace LUSSIS.Services
         public Models.MobileDTOs.DisbursementListDTO GetDeptRepDisbursements(int EmployeeId)
         {
             Models.MobileDTOs.DisbursementListDTO disbursementList = new Models.MobileDTOs.DisbursementListDTO();
-            List<Disbursement> disbursements = (List <Disbursement>) disbursementRepo.GetDisbursementsByDeptRepId(EmployeeId);
+            List<Disbursement> disbursements = (List<Disbursement>)disbursementRepo.GetDisbursementsByDeptRepId(EmployeeId);
             List<Models.MobileDTOs.DisbursementDTO> disbursements1 = new List<Models.MobileDTOs.DisbursementDTO>();
-            foreach(Disbursement disbursement in disbursements)
+            foreach (Disbursement disbursement in disbursements)
             {
                 Models.MobileDTOs.DisbursementDTO disbursement1 = new Models.MobileDTOs.DisbursementDTO
                 {
@@ -149,9 +157,9 @@ namespace LUSSIS.Services
                     CollectionPoint = disbursement.CollectionPoint,
                     DeliveryDateTime = (DateTime)disbursement.DeliveryDateTime,
                     OnRoute = disbursement.OnRoute
-            };
+                };
                 disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();
-                foreach(RequisitionDetail rd in disbursement.RequisitionDetails)
+                foreach (RequisitionDetail rd in disbursement.RequisitionDetails)
                 {
                     Models.MobileDTOs.RequisitionDetailDTO rd1 = new Models.MobileDTOs.RequisitionDetailDTO
                     {
@@ -198,7 +206,7 @@ namespace LUSSIS.Services
                     DepartmentName = disbursement.Employee1.Department.DepartmentName,
                     AdHoc = disbursement.AdHoc,
                     CollectionPoint = disbursement.CollectionPoint,
-                    DeliveryDateTime = (DateTime) disbursement.DeliveryDateTime,
+                    DeliveryDateTime = (DateTime)disbursement.DeliveryDateTime,
                     OnRoute = disbursement.OnRoute
                 };
                 disbursement1.RequisitionDetails = new List<Models.MobileDTOs.RequisitionDetailDTO>();

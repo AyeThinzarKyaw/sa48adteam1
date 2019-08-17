@@ -17,36 +17,29 @@ using iText.Kernel.Font;
 using iText.IO.Font.Constants;
 using iText.IO.Image;
 
+
 namespace LUSSIS.Controllers
 {
     public class ChartController : Controller
     {
-        PurchaseOrderService purchaseOrderService;
-        // GET: Chart
-        public ActionResult StationeryRequisitionTrend()
-        {
-            return View();
-        }
-        public ActionResult PurchaseOrderTrend()
-        {
-            return View();
-        }
 
+        ChartService chartService;
+
+        // GET: Chart
         public ActionResult InventoryHistoricalData()
         {
-            purchaseOrderService = new PurchaseOrderService();
-            SupplierChartFilteringDTO supplierChartFilterings = purchaseOrderService.FilteringByAttributes();
-            SupplierChartFilteringDTO model = new SupplierChartFilteringDTO { SupplierForChartList = supplierChartFilterings.SupplierForChartList, StationeryForChartList = supplierChartFilterings.StationeryForChartList, CategoryForChartList = supplierChartFilterings.CategoryForChartList };
 
-            //TempData["chartData"] = model;
+            chartService = new ChartService();
+            ChartFilteringDTO supplierChartFilterings = chartService.FilteringByAttributes();
+            ChartFilteringDTO model = new ChartFilteringDTO { SupplierForChartList = supplierChartFilterings.SupplierForChartList, StationeryForChartList = supplierChartFilterings.StationeryForChartList, CategoryForChartList = supplierChartFilterings.CategoryForChartList, DepartmentForChartList = supplierChartFilterings.DepartmentForChartList };
+
+
             return View(model);
-            //return RedirectToAction("ExportAsPDF");
         }
-
-
-        public ActionResult ExportAsPDF()
+        #region ExportAsPDF
+        public ActionResult ExportAsPDF(ChartFilteringDTO model)
         {
-            SupplierChartFilteringDTO model = (SupplierChartFilteringDTO)TempData["chartData"];
+            //ChartFilteringDTO model = (ChartFilteringDTO)TempData["chartData"];
             if (model != null)
             {
                 MemoryStream workStream = new MemoryStream();
@@ -61,11 +54,13 @@ namespace LUSSIS.Controllers
                 string strPDFFileName = string.Format("Report" + DateTime.Now.ToString("yyyyMMdd") + "-" + ".pdf");
                 return File(workStream, "application/pdf", strPDFFileName);
             }
-            //return RedirectToAction("InventoryHistoricalData");
-            return null;
+            else   //return RedirectToAction("InventoryHistoricalData");
+                return null;
         }
+        #endregion
 
-        private Document CreatePDF(SupplierChartFilteringDTO model, PdfDocument pdfDoc)
+        #region CreatePDF
+        private Document CreatePDF(ChartFilteringDTO model, PdfDocument pdfDoc)
         {
             Document doc = new Document(pdfDoc);
 
@@ -74,6 +69,12 @@ namespace LUSSIS.Controllers
             int StationeryId = model.stationery;
             DateTime TheChosenDate = model.selectedDateTime;
             int trend = model.trend;
+
+            List<int> DepartmentIdsForDep = model.department;
+            int CategoryIdForDep = model.categoryDep;
+            int StationeryIdForDep = model.stationeryDep;
+            DateTime TheChosenDateForDep = model.selectedDateTimeDep;
+            int trendForDep = model.trendDep;
 
             string themeChart = @"<Chart>
                       <ChartAreas>
@@ -88,163 +89,880 @@ namespace LUSSIS.Controllers
                       </ChartAreas>                        
                     </Chart>";
             Chart chart = new Chart(width: 1000, height: 200, theme: themeChart);
-            int[] ArraySupplierIds = SupplierIds.ToArray();
-            int[] AllSupplierIds = new int[] { 1, 2, 3, 4, 5, 6 };
-            int[] ItemQtyArray = new int[3];
-            string[] TwelveMonthRange = new string[3];
-            decimal[] ItemPriceArray = new decimal[3];
-
-            purchaseOrderService = new PurchaseOrderService();
-
-            if (trend == 1)
+            if (SupplierIds != null)
             {
-                if (ArraySupplierIds != null)
+                int[] AllSupplierIds = new int[] { 1, 2, 3, 4, 5, 6 }; //total 6 suppliers
+                int[] AllStationeryIds = new int[90]; //all stationery items
+
+
+                if (SupplierIds != null)
                 {
-                    foreach (int s in ArraySupplierIds)
+                    int[] ArraySupplierIds = SupplierIds.ToArray(); //convert input parameter from list to array
+                    if (trend == 1)
                     {
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        for (int i = 2; i > -1; i--)
+                        if (StationeryId != 0) // if there is an item selected
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+                            foreach (int s in ArraySupplierIds)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId); //calling service to pass the list of ChartDTO
+                                int[] ItemQtyArray = new int[3]; // for 3 months comparison
+                                string[] ThreeMonthRange = new string[3]; // for 3 months comparison
+
+
+                                for (int i = 2; i > -1; i--)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"); //convert date into MMMM-yyyy
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        } //sum up the quantity within the month
+
+                                    }
                                 }
-                            }
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: BarChartInfo.FirstOrDefault().SupplierName);
+                                }//add series to chart
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
                         }
+                        else if (StationeryId == 0) // if no item selected
+                        {
+                            foreach (int s in ArraySupplierIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
 
-                    };
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                    if (BarChartInfo.Any(x => x.SupplierId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.QuantityOrdered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                            }
+                                        }
+                                    }
+                                }
 
-                    Table t = GenerateTable(TwelveMonthRange, ItemQtyArray);
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: SuNames.First());
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
 
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                            xValue: TwelveMonthRange,
-                                                            yValues: ItemQtyArray).GetBytes("jpeg");
-                    ImageData imgData = ImageDataFactory.Create(chartByteArr);
-                    Image chartImage = new Image(imgData);
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
 
-                    doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
-                    doc.Add(chartImage);
-                    doc.Add(t);
-                    return doc;
+                            return doc;
+                        }
+                        else { return null; }
+                    }
+                    else
+                    {
+                        if (StationeryId != 0)
+                        {
+                            foreach (int s in ArraySupplierIds)
+                            {
+
+
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId);
+
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: BarChartInfo.FirstOrDefault().SupplierName);
+                                }
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+
+                            };
+                            chart.AddTitle("Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
+                        }
+                        else if (StationeryId == 0)
+                        {
+                            foreach (int s in ArraySupplierIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                    if (BarChartInfo.Any(x => x.SupplierId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        decimal MonthlyPrice = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.QuantityOrdered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                                MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                                ItemPriceArray[2 - i] = MonthlyPrice;
+                                            }
+                                        }
+                                    }
+                                }
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: SuNames.First());
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
+                        }
+                        else { return null; }
+                    }
                 }
                 else
                 {
-                    foreach (int s in AllSupplierIds)
+                    if (trend == 1)
                     {
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        for (int i = 2; i > -1; i--)
+                        if (StationeryId != 0)
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+                            foreach (int s in AllSupplierIds)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId);
+                                int[] ItemQtyArray = new int[3];
+                                string[] ThreeMonthRange = new string[3];
+
+                                for (int i = 2; i > -1; i--)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        }
+                                    }
                                 }
-                            }
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: BarChartInfo.FirstOrDefault().SupplierName);
+                                }
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
                         }
-                    };
-                    Table t = GenerateTable(TwelveMonthRange, ItemQtyArray);
+                        else if (StationeryId == 0)
+                        {
+                            foreach (int s in AllSupplierIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
 
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                            xValue: TwelveMonthRange,
-                                                            yValues: ItemQtyArray).GetBytes("jpeg");
-                    ImageData imgData = ImageDataFactory.Create(chartByteArr);
-                    Image chartImage = new Image(imgData);
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                    if (BarChartInfo.Any(x => x.SupplierId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.QuantityOrdered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                            }
+                                        }
+                                    }
+                                }
 
-                    doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
-                    doc.Add(chartImage);
-                    doc.Add(t);
-                    return doc;
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: SuNames.First());
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+
+                            };
+                            chart.AddTitle("Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
+                        }
+                        else { return null; }
+                    }
+                    else
+                    {
+                        if (StationeryId != 0)
+                        {
+                            foreach (int s in AllSupplierIds)
+                            {
+
+
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId);
+
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: BarChartInfo.FirstOrDefault().SupplierName);
+                                }
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+
+                            };
+                            chart.AddTitle("Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
+                        }
+                        else if (StationeryId == 0)
+                        {
+                            foreach (int s in AllSupplierIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                    if (BarChartInfo.Any(x => x.SupplierId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        decimal MonthlyPrice = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.QuantityOrdered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                                MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                                ItemPriceArray[2 - i] = MonthlyPrice;
+                                            }
+                                        }
+                                    }
+                                }
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: SuNames.First());
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+                            return doc;
+                        }
+                        else { return null; }
+                    }
                 }
             }
             else
             {
-                if (ArraySupplierIds != null)
+                int[] AllDepartmentIds = new int[] { 1, 2, 3, 4, 5, 6, 7 }; //total 7 Departments
+                int[] AllStationeryIds = new int[90]; //all stationery items
+                if (DepartmentIdsForDep != null)
                 {
-                    foreach (int s in ArraySupplierIds)
+                    int[] ArrayDepartmentIds = DepartmentIdsForDep.ToArray(); //convert input parameter from list to array
+                    if (trendForDep == 1)
                     {
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        for (int i = 2; i > -1; i--)
+                        if (StationeryIdForDep != 0) // if there is an item selected
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            decimal MonthlyPrice = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+                            foreach (int s in ArrayDepartmentIds)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep); //calling service to pass the list of ChartDTO
+                                int[] ItemQtyArray = new int[3]; // for 3 months comparison
+                                string[] ThreeMonthRange = new string[3]; // for 3 months comparison
+
+
+                                for (int i = 2; i > -1; i--)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
-                                    MonthlyPrice += MonthlyQty * pc.ItemUnitPrice;
-                                    ItemPriceArray[2 - i] = MonthlyPrice;
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"); //convert date into MMMM-yyyy
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        } //sum up the quantity within the month
+
+                                    }
                                 }
-                            }
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                                }//add series to chart
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Department Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
                         }
-                    };
-                    Table t = GenerateTable(TwelveMonthRange, ItemQtyArray);
+                        else if (StationeryIdForDep == 0) // if no item selected
+                        {
+                            foreach (int s in ArrayDepartmentIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
 
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                            xValue: TwelveMonthRange,
-                                                            yValues: ItemPriceArray).GetBytes("jpeg");
-                    ImageData imgData = ImageDataFactory.Create(chartByteArr);
-                    Image chartImage = new Image(imgData);
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                    if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.RequisitionQuantityDelivered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                            }
+                                        }
+                                    }
+                                }
 
-                    doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
-                    doc.Add(chartImage);
-                    doc.Add(t);
-                    return doc;
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: SuNames.First());
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Department Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
+                        }
+                        else { return null; }
+                    }
+                    else
+                    {
+                        if (StationeryIdForDep != 0)
+                        {
+                            foreach (int s in ArrayDepartmentIds)
+                            {
+
+
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep);
+
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                                }
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+
+                            };
+                            chart.AddTitle("Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+                            return doc;
+                        }
+                        else if (StationeryIdForDep == 0)
+                        {
+                            foreach (int s in ArrayDepartmentIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                    if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        decimal MonthlyPrice = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.RequisitionQuantityDelivered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                                MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                                ItemPriceArray[2 - i] = MonthlyPrice;
+                                            }
+                                        }
+                                    }
+                                }
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: SuNames.First());
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Department Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+                            return doc;
+                        }
+                        else { return null; }
+                    }
                 }
                 else
                 {
-                    foreach (int s in AllSupplierIds)
+                    if (trendForDep == 1)
                     {
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        for (int i = 2; i > -1; i--)
+                        if (StationeryIdForDep != 0)
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            decimal MonthlyPrice = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+                            foreach (int s in AllDepartmentIds)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep);
+                                int[] ItemQtyArray = new int[3];
+                                string[] ThreeMonthRange = new string[3];
+
+                                for (int i = 2; i > -1; i--)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
-                                    MonthlyPrice += MonthlyQty * pc.ItemUnitPrice;
-                                    ItemPriceArray[2 - i] = MonthlyPrice;
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        }
+                                    }
                                 }
-                            }
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                                }
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Department Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
                         }
-                    };
-                    Table t = GenerateTable(TwelveMonthRange, ItemQtyArray);
+                        else if (StationeryIdForDep == 0)
+                        {
+                            foreach (int s in AllDepartmentIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
 
-                    byte[] chartByteArr = chart.AddSeries(chartType: "column",
-                                                            xValue: TwelveMonthRange,
-                                                            yValues: ItemPriceArray).GetBytes("jpeg");
-                    ImageData imgData = ImageDataFactory.Create(chartByteArr);
-                    Image chartImage = new Image(imgData);
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                    if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.RequisitionQuantityDelivered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                            }
+                                        }
+                                    }
+                                }
 
-                    doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
-                    doc.Add(chartImage);
-                    doc.Add(t);
-                    return doc;
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: SuNames.First());
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                doc.Add(t);
+
+                            };
+                            chart.AddTitle("Department Monthly Volume Comparison");
+                            chart.SetYAxis("Volume");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+
+                            return doc;
+                        }
+                        else { return null; }
+
+                    }
+                    else
+                    {
+                        if (StationeryIdForDep != 0)
+                        {
+                            foreach (int s in AllDepartmentIds)
+                            {
+
+
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep);
+
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                {
+                                    chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                                }
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+
+                            };
+                            chart.AddTitle("Department Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+                            return doc;
+                        }
+                        else if (StationeryIdForDep == 0)
+                        {
+                            foreach (int s in AllDepartmentIds)
+                            {
+                                int[] ItemQtyArray = new int[3];
+                                decimal[] ItemPriceArray = new decimal[3];
+                                string[] ThreeMonthRange = new string[3];
+                                List<string> SuNames = new List<string>();
+                                for (int j = 0; j < AllStationeryIds.Length; j++)
+                                {
+                                    chartService = new ChartService();
+                                    List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                    if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                    { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                    for (int i = 2; i > -1; i--)
+                                    {
+                                        ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                        int MonthlyQty = 0;
+                                        decimal MonthlyPrice = 0;
+                                        foreach (ChartDTO bci in BarChartInfo)
+                                        {
+                                            if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                            {
+                                                MonthlyQty += bci.RequisitionQuantityDelivered;
+                                                ItemQtyArray[2 - i] = MonthlyQty;
+                                                MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                                ItemPriceArray[2 - i] = MonthlyPrice;
+                                            }
+                                        }
+                                    }
+                                }
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemPriceArray,
+                                    name: SuNames.First());
+                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                doc.Add(t);
+                            };
+                            chart.AddTitle("Department Monthly Price Comparison");
+                            chart.SetYAxis("Price");
+                            chart.AddLegend();
+                            chart.SetXAxis("Time");
+                            byte[] chartByteArr = chart.GetBytes("jpeg");
+                            ImageData imgData = ImageDataFactory.Create(chartByteArr);
+                            Image chartImage = new Image(imgData);
+
+                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
+                            doc.Add(chartImage);
+                            return doc;
+                        }
+                        else { return null; }
+                    }
+
                 }
             }
         }
+        #endregion
 
-        private Table GenerateTable(string[] TwelveMonthRange, int[] ItemQtyArray)
+        #region VolumeTable
+        private Table GenerateVolumeTable(string[] TwelveMonthRange, int[] ItemQtyArray)
         {
             Table table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
             var monthHeading = new Paragraph("Month").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
@@ -259,25 +977,75 @@ namespace LUSSIS.Controllers
 
             return table;
         }
+        #endregion
 
+        #region PriceTable
+        private Table GeneratePriceTable(string[] TwelveMonthRange, decimal[] ItemPriceArray)
+        {
+            Table table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
+            var monthHeading = new Paragraph("Month").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
+            var priceHeading = new Paragraph("Item Quantity").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
+            table.AddCell(monthHeading);
+            table.AddCell(priceHeading);
+            for (int i = 0; i < 3; i++)
+            {
+                table.AddCell(TwelveMonthRange[i]);
+                table.AddCell(ItemPriceArray[i].ToString());
+            }
+
+            return table;
+        }
+        #endregion
+
+        #region InventoryHistoryicalData(HttpPost)
         [HttpPost]
-        public ActionResult InventoryHistoricalData(SupplierChartFilteringDTO model)
+        public ActionResult InventoryHistoricalDataDep(ChartFilteringDTO model)
         {
             if (model != null)
             {
-                BarChart(model.supplier, model.category, model.stationery, model.selectedDateTime, model.trend);
+
+                BarChartDepartment(model.department, model.categoryDep, model.stationeryDep, model.selectedDateTimeDep, model.trendDep);
+                ViewBag.chart = "dept";
+
+
             }
-            purchaseOrderService = new PurchaseOrderService();
-            SupplierChartFilteringDTO supplierChartFilterings = purchaseOrderService.FilteringByAttributes();
+
+            chartService = new ChartService();
+            ChartFilteringDTO supplierChartFilterings = chartService.FilteringByAttributes();
             model.SupplierForChartList = supplierChartFilterings.SupplierForChartList;
             model.StationeryForChartList = supplierChartFilterings.StationeryForChartList;
             model.CategoryForChartList = supplierChartFilterings.CategoryForChartList;
+            model.DepartmentForChartList = supplierChartFilterings.DepartmentForChartList;
 
-            TempData["chartData"] = model;
-            ViewBag.chart = "bar";
-            return View(model);
+            return View("InventoryHistoricalData", "_Layout", model);
         }
-        public void BarChart(List<int> SupplierIds, int CategoryId, int StationeryId, DateTime TheChosenDate, int trend)
+        #endregion
+        #region InventoryHistoryicalData(HttpPost)
+        [HttpPost]
+        public ActionResult InventoryHistoricalDataSup(ChartFilteringDTO model)
+        {
+            if (model != null)
+            {
+
+                BarChartSupplier(model.supplier, model.category, model.stationery, model.selectedDateTime, model.trend);
+                ViewBag.chart = "supp";
+
+
+            }
+
+            chartService = new ChartService();
+            ChartFilteringDTO supplierChartFilterings = chartService.FilteringByAttributes();
+            model.SupplierForChartList = supplierChartFilterings.SupplierForChartList;
+            model.StationeryForChartList = supplierChartFilterings.StationeryForChartList;
+            model.CategoryForChartList = supplierChartFilterings.CategoryForChartList;
+            model.DepartmentForChartList = supplierChartFilterings.DepartmentForChartList;
+
+            return View("InventoryHistoricalData", "_Layout", model);
+        }
+        #endregion
+
+        #region BarChartSupplierMethod
+        public void BarChartSupplier(List<int> SupplierIds, int CategoryId, int StationeryId, DateTime TheChosenDate, int trend)
         {
             string themeChart = @"<Chart>
                       <ChartAreas>
@@ -293,192 +1061,690 @@ namespace LUSSIS.Controllers
                     </Chart>";
             Chart chart = new Chart(width: 1000, height: 200, theme: themeChart);
 
-            
+            int[] AllSupplierIds = new int[] { 1, 2, 3, 4, 5, 6 }; //total 6 suppliers
+            int[] AllStationeryIds = new int[90]; //all stationery items
 
-            //SupplierIds = new List<int>() { 1, 4 };
-            int[] ArraySupplierIds = SupplierIds.ToArray();
-            int[] AllSupplierIds = new int[] { 1, 2, 3, 4, 5, 6 };
-            //int CategoryId = 1;
-            //int StationeryId = 1;
-            //DateTime TheChosenDate = new DateTime(2019, 2, 1);
-            if (trend == 1)
+
+            if (SupplierIds != null)
             {
-                if (ArraySupplierIds != null)
+                int[] ArraySupplierIds = SupplierIds.ToArray(); //convert input parameter from list to array
+                if (trend == 1)
                 {
-                    
-
-                    foreach (int s in ArraySupplierIds)
+                    if (StationeryId != 0) // if there is an item selected
                     {
-
-                        purchaseOrderService = new PurchaseOrderService();
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        int[] ItemQtyArray = new int[3];
-                        string[] TwelveMonthRange = new string[3];
-
-                        for (int i = 2; i > -1; i--)
+                        foreach (int s in ArraySupplierIds)
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId); //calling service to pass the list of ChartDTO
+                            int[] ItemQtyArray = new int[3]; // for 3 months comparison
+                            string[] ThreeMonthRange = new string[3]; // for 3 months comparison
+
+
+                            for (int i = 2; i > -1; i--)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"); //convert date into MMMM-yyyy
+                                int MonthlyQty = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
+                                    if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.QuantityOrdered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                    } //sum up the quantity within the month
+
                                 }
                             }
-                        }
-                        //chart.AddSeries(
-                        //    chartType: "column",
-                        //    xValue: TwelveMonthRange,
-                        //    yValues: ItemQtyArray);
-                        chart.AddSeries(chartType: "column",
-                                                            xValue: TwelveMonthRange,
-                                                            yValues: ItemQtyArray);
+                            if (BarChartInfo.Any(x => x.SupplierId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: BarChartInfo.FirstOrDefault().SupplierName);
+                            }//add series to chart
 
-                    };
-                    byte[] chartByteArr = chart.GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
-                    System.IO.File.WriteAllBytes(path, chartByteArr);
+                        };
+                    }
+                    else if (StationeryId == 0) // if no item selected
+                    {
+                        foreach (int s in ArraySupplierIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
 
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        }
+                                    }
+                                }
+                            }
+
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: SuNames.First());
+
+                        };
+                    }
+                    chart.AddTitle("Monthly Volume Comparison");
+                    chart.SetYAxis("Volume");
                 }
                 else
                 {
-                    
-
-                    foreach (int s in AllSupplierIds)
+                    if (StationeryId != 0)
                     {
-
-                        purchaseOrderService = new PurchaseOrderService();
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-                        int[] ItemQtyArray = new int[3];
-                        string[] TwelveMonthRange = new string[3];
-                        for (int i = 2; i > -1; i--)
+                        foreach (int s in ArraySupplierIds)
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+
+
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId);
+
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+
+                            for (int i = 2; i > -1; i--)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                int MonthlyQty = 0;
+                                decimal MonthlyPrice = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
+                                    if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.QuantityOrdered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                        MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                        ItemPriceArray[2 - i] = MonthlyPrice;
+                                    }
                                 }
                             }
-                        }
-                        //chart.AddSeries(
-                        //    chartType: "column",
-                        //    xValue: TwelveMonthRange,
-                        //    yValues: ItemQtyArray);
-                        chart.AddSeries(chartType: "column",
-                                                           xValue: TwelveMonthRange,
-                                                           yValues: ItemQtyArray);
+                            if (BarChartInfo.Any(x => x.SupplierId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: BarChartInfo.FirstOrDefault().SupplierName);
+                            }
 
-                    };
-                    byte[] chartByteArr = chart.GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
-                    System.IO.File.WriteAllBytes(path, chartByteArr);
+                        };
+                    }
+                    else if (StationeryId == 0)
+                    {
+                        foreach (int s in ArraySupplierIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                            }
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: SuNames.First());
+                        };
+                    }
+                    chart.AddTitle("Monthly Price Comparison");
+                    chart.SetYAxis("Price");
                 }
             }
             else
             {
-                if (ArraySupplierIds != null)
+                if (trend == 1)
                 {
-                    
-                    foreach (int s in ArraySupplierIds)
+                    if (StationeryId != 0)
                     {
-
-                        purchaseOrderService = new PurchaseOrderService();
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        int[] ItemQtyArray = new int[3];
-                        string[] TwelveMonthRange = new string[3];
-                        decimal[] ItemPriceArray = new decimal[3];
-                      
-
-                        for (int i = 2; i > -1; i--)
+                        foreach (int s in AllSupplierIds)
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            decimal MonthlyPrice = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId);
+                            int[] ItemQtyArray = new int[3];
+                            string[] ThreeMonthRange = new string[3];
+
+                            for (int i = 2; i > -1; i--)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                int MonthlyQty = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
-                                    MonthlyPrice += MonthlyQty * pc.ItemUnitPrice;
-                                    ItemPriceArray[2 - i] = MonthlyPrice;
+                                    if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.QuantityOrdered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                    }
                                 }
                             }
-                        }
-                        //chart.AddSeries(
-                        //    chartType: "column",
-                        //    xValue: TwelveMonthRange,
-                        //    yValues: ItemPriceArray);
-                        chart.AddSeries(chartType: "column",
-                                                           xValue: TwelveMonthRange,
-                                                           yValues: ItemQtyArray);
+                            if (BarChartInfo.Any(x => x.SupplierId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: BarChartInfo.FirstOrDefault().SupplierName);
+                            }
+                        };
+                    }
+                    else if (StationeryId == 0)
+                    {
+                        foreach (int s in AllSupplierIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
 
-                    };
-                    byte[] chartByteArr = chart.GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
-                    System.IO.File.WriteAllBytes(path, chartByteArr);
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        }
+                                    }
+                                }
+                            }
+
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: SuNames.First());
+
+
+                        };
+                    }
+                    chart.AddTitle("Monthly Volume Comparison");
+                    chart.SetYAxis("Volume");
                 }
                 else
                 {
-                   
-
-                    foreach (int s in AllSupplierIds)
+                    if (StationeryId != 0)
                     {
-
-                        purchaseOrderService = new PurchaseOrderService();
-                        List<SupplierChartDTO> PieChartDTOs = purchaseOrderService.TrendChartInfo(s, CategoryId, StationeryId);
-
-                        int[] ItemQtyArray = new int[3];
-                        string[] TwelveMonthRange = new string[3];
-                        decimal[] ItemPriceArray = new decimal[3];
-                        
-
-                        for (int i = 2; i > -1; i--)
+                        foreach (int s in AllSupplierIds)
                         {
-                            TwelveMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
-                            int MonthlyQty = 0;
-                            decimal MonthlyPrice = 0;
-                            foreach (SupplierChartDTO pc in PieChartDTOs)
+
+
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, StationeryId);
+
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+
+                            for (int i = 2; i > -1; i--)
                             {
-                                if (pc.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                int MonthlyQty = 0;
+                                decimal MonthlyPrice = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
                                 {
-                                    MonthlyQty += pc.QuantityOrdered;
-                                    ItemQtyArray[2 - i] = MonthlyQty;
-                                    MonthlyPrice += MonthlyQty * pc.ItemUnitPrice;
-                                    ItemPriceArray[2 - i] = MonthlyPrice;
+                                    if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.QuantityOrdered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                        MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                        ItemPriceArray[2 - i] = MonthlyPrice;
+                                    }
                                 }
                             }
-                        }
-                        //chart.AddSeries(
-                        //    chartType: "column",
-                        //    xValue: TwelveMonthRange,
-                        //    yValues: ItemPriceArray);
-                        chart.AddSeries(chartType: "column",
-                                                           xValue: TwelveMonthRange,
-                                                           yValues: ItemQtyArray);
+                            if (BarChartInfo.Any(x => x.SupplierId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: BarChartInfo.FirstOrDefault().SupplierName);
+                            }
 
-                    };
-                    byte[] chartByteArr = chart.GetBytes("jpeg");
-                    var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
-                    System.IO.File.WriteAllBytes(path, chartByteArr);
+                        };
+                    }
+                    else if (StationeryId == 0)
+                    {
+                        foreach (int s in AllSupplierIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForSupplier(s, CategoryId, j + 1);
+                                if (BarChartInfo.Any(x => x.SupplierId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().SupplierName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDate.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.OrderDateTime.ToString("MMMM yyyy") == TheChosenDate.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.QuantityOrdered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.ItemUnitPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                            }
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: SuNames.First());
+                        };
+                    }
+                    chart.AddTitle("Monthly Price Comparison");
+                    chart.SetYAxis("Price");
+                }
+
+            }
+            chart.AddLegend();
+            chart.SetXAxis("Time");
+            byte[] chartByteArr = chart.GetBytes("jpeg");
+            var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
+            System.IO.File.WriteAllBytes(path, chartByteArr);
+        }
+        #endregion
+
+        #region BarChartDepartment
+        public void BarChartDepartment(List<int> DepartmentIdsForDep, int CategoryIdForDep, int StationeryIdForDep, DateTime TheChosenDateForDep, int trendForDep)
+        {
+            string themeChart = @"<Chart>
+                      <ChartAreas>
+                        <ChartArea Name=""Default"" _Template_=""All"">
+                          <AxisY>
+                            <LabelStyle Font=""Verdana, 12px"" />
+                          </AxisY>
+                          <AxisX LineColor=""64, 64, 64, 64"" Interval=""1"">
+                            <LabelStyle Font=""Verdana, 12px"" />
+                          </AxisX>
+                        </ChartArea>
+                      </ChartAreas>                        
+                    </Chart>";
+            Chart chart = new Chart(width: 1000, height: 200, theme: themeChart);
+            int[] AllDepartmentIds = new int[] { 1, 2, 3, 4, 5, 6, 7 }; //total 7 Departments
+            int[] AllStationeryIds = new int[90]; //all stationery items
+            if (DepartmentIdsForDep != null)
+            {
+                int[] ArrayDepartmentIds = DepartmentIdsForDep.ToArray(); //convert input parameter from list to array
+                if (trendForDep == 1)
+                {
+                    if (StationeryIdForDep != 0) // if there is an item selected
+                    {
+                        foreach (int s in ArrayDepartmentIds)
+                        {
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep); //calling service to pass the list of ChartDTO
+                            int[] ItemQtyArray = new int[3]; // for 3 months comparison
+                            string[] ThreeMonthRange = new string[3]; // for 3 months comparison
+
+
+                            for (int i = 2; i > -1; i--)
+                            {
+                                ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"); //convert date into MMMM-yyyy
+                                int MonthlyQty = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
+                                {
+                                    if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.RequisitionQuantityDelivered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                    } //sum up the quantity within the month
+
+                                }
+                            }
+                            if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                            }//add series to chart
+
+                        };
+                    }
+                    else if (StationeryIdForDep == 0) // if no item selected
+                    {
+                        foreach (int s in ArrayDepartmentIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
+
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        }
+                                    }
+                                }
+                            }
+
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: SuNames.First());
+
+                        };
+                    }
+                    chart.AddTitle("Department Monthly Volume Comparison");
+                    chart.SetYAxis("Volume");
+                }
+                else
+                {
+                    if (StationeryIdForDep != 0)
+                    {
+                        foreach (int s in ArrayDepartmentIds)
+                        {
+
+
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep);
+
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+
+                            for (int i = 2; i > -1; i--)
+                            {
+                                ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                int MonthlyQty = 0;
+                                decimal MonthlyPrice = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
+                                {
+                                    if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.RequisitionQuantityDelivered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                        MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                        ItemPriceArray[2 - i] = MonthlyPrice;
+                                    }
+                                }
+                            }
+                            if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                            }
+
+                        };
+                    }
+                    else if (StationeryIdForDep == 0)
+                    {
+                        foreach (int s in ArrayDepartmentIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                            }
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: SuNames.First());
+                        };
+                    }
+                    chart.AddTitle("Department Monthly Price Comparison");
+                    chart.SetYAxis("Price");
+
                 }
             }
-            //chart.Write("png");
+            else
+            {
+                if (trendForDep == 1)
+                {
+                    if (StationeryIdForDep != 0)
+                    {
+                        foreach (int s in AllDepartmentIds)
+                        {
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep);
+                            int[] ItemQtyArray = new int[3];
+                            string[] ThreeMonthRange = new string[3];
 
-            //var BarChartImage = chart.GetBytes();
-            //return File(BarChartImage, "image/bytes");
-            //return null;
-            //chart.Write("png");
+                            for (int i = 2; i > -1; i--)
+                            {
+                                ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                int MonthlyQty = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
+                                {
+                                    if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.RequisitionQuantityDelivered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                    }
+                                }
+                            }
+                            if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                            }
+                        };
+                    }
+                    else if (StationeryIdForDep == 0)
+                    {
+                        foreach (int s in AllDepartmentIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
 
-            //return null;
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                        }
+                                    }
+                                }
+                            }
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemQtyArray,
+                                name: SuNames.First());
+                        };
+                    }
+                    chart.AddTitle("Department Monthly Volume Comparison");
+                    chart.SetYAxis("Volume");
+                }
+                else
+                {
+                    if (StationeryIdForDep != 0)
+                    {
+                        foreach (int s in AllDepartmentIds)
+                        {
+                            chartService = new ChartService();
+                            List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, StationeryIdForDep);
+
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+
+                            for (int i = 2; i > -1; i--)
+                            {
+                                ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                int MonthlyQty = 0;
+                                decimal MonthlyPrice = 0;
+                                foreach (ChartDTO bci in BarChartInfo)
+                                {
+                                    if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                    {
+                                        MonthlyQty += bci.RequisitionQuantityDelivered;
+                                        ItemQtyArray[2 - i] = MonthlyQty;
+                                        MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                        ItemPriceArray[2 - i] = MonthlyPrice;
+                                    }
+                                }
+                            }
+                            if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                            {
+                                chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
+                            }
+
+                        };
+                    }
+                    else if (StationeryIdForDep == 0)
+                    {
+                        foreach (int s in AllDepartmentIds)
+                        {
+                            int[] ItemQtyArray = new int[3];
+                            decimal[] ItemPriceArray = new decimal[3];
+                            string[] ThreeMonthRange = new string[3];
+                            List<string> SuNames = new List<string>();
+                            for (int j = 0; j < AllStationeryIds.Length; j++)
+                            {
+                                chartService = new ChartService();
+                                List<ChartDTO> BarChartInfo = chartService.TrendChartInfoForDepartment(s, CategoryIdForDep, j + 1);
+                                if (BarChartInfo.Any(x => x.RequisitionEmployeeDepartmentId == s))
+                                { SuNames.Add(BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName); }
+                                for (int i = 2; i > -1; i--)
+                                {
+                                    ThreeMonthRange[2 - i] = TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy");
+                                    int MonthlyQty = 0;
+                                    decimal MonthlyPrice = 0;
+                                    foreach (ChartDTO bci in BarChartInfo)
+                                    {
+                                        if (bci.RequisitionDateTime.ToString("MMMM yyyy") == TheChosenDateForDep.AddMonths(-i).ToString("MMMM yyyy"))
+                                        {
+                                            MonthlyQty += bci.RequisitionQuantityDelivered;
+                                            ItemQtyArray[2 - i] = MonthlyQty;
+                                            MonthlyPrice += MonthlyQty * bci.RequisitionStationeryItemPrice;
+                                            ItemPriceArray[2 - i] = MonthlyPrice;
+                                        }
+                                    }
+                                }
+                            }
+                            chart.AddSeries(
+                                chartType: "column",
+                                xValue: ThreeMonthRange,
+                                yValues: ItemPriceArray,
+                                name: SuNames.First());
+                        };
+                    }
+                    chart.AddTitle("Department Monthly Price Comparison");
+                    chart.SetYAxis("Price");
+                }
+
+            }
+            chart.AddLegend();
+            chart.SetXAxis("Time");
+            byte[] chartByteArr = chart.GetBytes("jpeg");
+            var path = Path.Combine(Server.MapPath("~/Images/Chart"), "chart.jpeg");
+            System.IO.File.WriteAllBytes(path, chartByteArr);
         }
+        #endregion
     }
 }

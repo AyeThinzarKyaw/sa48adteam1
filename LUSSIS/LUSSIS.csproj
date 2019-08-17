@@ -241,8 +241,8 @@
     <Compile Include="Models\DTOs\DisbursementDTO.cs" />
     <Compile Include="Models\DTOs\DisbursementDetailsDTO.cs" />
     <Compile Include="Models\DTOs\MachineLearningDTO.cs" />
-    <Compile Include="Models\DTOs\SupplierChartDTO.cs" />
-    <Compile Include="Models\DTOs\SupplierChartFilteringDTO.cs" />
+    <Compile Include="Models\DTOs\ChartDTO.cs" />
+    <Compile Include="Models\DTOs\ChartFilteringDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>LUSSISContext.tt</DependentUpon>
     </Compile>
@@ -375,11 +375,13 @@
     <Compile Include="Repositories\SupplierTenderRepo.cs" />
     <Compile Include="Services\AdjustmentVoucherService.cs" />
     <Compile Include="Services\AssignStaffService.cs" />
+    <Compile Include="Services\ChartService.cs" />
     <Compile Include="Services\CollectionPointService.cs" />
     <Compile Include="Services\DisbursementService.cs" />
     <Compile Include="Services\EmailNotificationService.cs" />
     <Compile Include="Services\Interfaces\IAdjustmentVoucherService.cs" />
     <Compile Include="Services\Interfaces\IAssignStaffService.cs" />
+    <Compile Include="Services\Interfaces\IChartService.cs" />
     <Compile Include="Services\Interfaces\ICollectionPointService.cs" />
     <Compile Include="Services\Interfaces\IDisbursementService.cs" />
     <Compile Include="Services\Interfaces\IEmailNotificationService.cs" />
