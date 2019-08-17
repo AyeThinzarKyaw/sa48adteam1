@@ -113,12 +113,13 @@ namespace LUSSIS.Services
                     }
                 }                
             }
-
+            Employee employee = EmployeeRepo.Instance.FindById(createdBy);
             foreach (PurchaseOrder purchaseOrder in poCreateDTO.ConfirmedPOs)
             {
                 purchaseOrder.EmployeeId = createdBy;
                 PurchaseOrderService.Instance.CreatePO(purchaseOrder);
                 
+                EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Request for purchase order approval", body: "Dear Manager,\n\nStore clerk - "+ employee.Name+" raised a purchase order. Please check and approve." , cc: "sa48team1@gmail.com");
             }
         }
         public List<ChartDTO> TrendChartInfo(int SupplierId, int CategoryId, int StationeryId)

@@ -255,7 +255,7 @@ namespace LUSSIS.Controllers
                         //Check to move waitlistApproved to Preparing
                         RequisitionCatalogueService.Instance.CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(receivedQtyDTO.Id);
 
-                        EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "(Stationery Store) Delivery Order and Invoice for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Dear Burser Department,\n\n Delivery Order and Invoices for Delivery Orders of Stationery Store are attached.", attachments: attachments.AsEnumerable());
+                        EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "(Stationery Store) Delivery Order and Invoice for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Dear Bursar Department,\n\nDelivery Order and Invoices for Delivery Orders of Stationery Store are attached.", attachments: attachments.AsEnumerable());
                         TempData["DOReceivedQty"] = null;
                         return RedirectToAction("Index");
 
