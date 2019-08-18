@@ -86,14 +86,16 @@ namespace LUSSIS.Controllers
                 else if (ViewClerkDisbursementList.Any(x => x.DeliveredEmployeeId == currentUser.EmployeeId))
                 {
                     DisbursementDTO model = new DisbursementDTO { DisbursementDetailsDTOList = ViewClerkDisbursementList, DeliveredEmployeeId = currentUser.EmployeeId, DisbursementId = DisbursementId };
+                   
 
                     if (DisbursementStatus == "PENDING_COLLECTION")
                     {
                         foreach (var vcdl in ViewClerkDisbursementList)
                         {
+                            
 
                             emailNotificationService = new EmailNotificationService();
-                            emailNotificationService.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Disbursement Details for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Please collect your department items.", attachments: null);
+                            emailNotificationService.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Disbursement Details for " +vcdl.ReceivedEmployeedDepName+" Department"+" on"+ DateTime.Now.ToString("dd/MM/yyyy"), body: "Dear "+vcdl.ReceivedEmployeedName+":\n"+"\nYour Department Items is ready for collection, Please refer to Disbursement Number: "+vcdl.DisbursementId+"\n\nBest Regards\n\n"+vcdl.DeliveredEmployeeName, attachments: null);
 
                             return View(model);
 

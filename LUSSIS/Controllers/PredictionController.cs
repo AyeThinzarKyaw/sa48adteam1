@@ -32,7 +32,7 @@ namespace LUSSIS.Controllers
 
                 // send a POST request to the server uri with the data and get the response as HttpResponseMessage object
                 // add 'Microsoft.AspNet.WebApi.Client' Nuget package
-                HttpResponseMessage res = await client.PostAsJsonAsync("http://127.0.0.1:5000/", new { @InputYear =predictedDate.chosenDate.Year, @InputMonth =predictedDate.chosenDate.Month, @InputDay =predictedDate.chosenDate.Day});
+                HttpResponseMessage res = await client.PostAsJsonAsync("http://127.0.0.1:5000/", new { @InputYear =DateTime.Now.Year, @InputMonth = DateTime.Now.Month, @InputDay = DateTime.Now.Day });
 
                 // Return the result from the server if the status code is 200 (everything is OK)
                 // should raise exception or error if it's not
