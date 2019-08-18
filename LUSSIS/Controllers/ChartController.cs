@@ -16,7 +16,7 @@ using iText.Layout.Properties;
 using iText.Kernel.Font;
 using iText.IO.Font.Constants;
 using iText.IO.Image;
-
+using LUSSIS.Filters;
 
 namespace LUSSIS.Controllers
 {
@@ -26,6 +26,7 @@ namespace LUSSIS.Controllers
         ChartService chartService;
 
         // GET: Chart
+        [Authorizer]
         public ActionResult InventoryHistoricalData()
         {
 
@@ -36,6 +37,16 @@ namespace LUSSIS.Controllers
 
             return View(model);
         }
+
+        [Authorizer]
+        public JsonResult FilterItem(int id)
+        {
+            var aa = StationeryService.Instance.GetStationeriesByCategory(id);
+
+            return Json(aa, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorizer]
         #region ExportAsPDF
         public ActionResult ExportAsPDF()
         {
@@ -65,6 +76,7 @@ namespace LUSSIS.Controllers
         }
         #endregion
 
+        [Authorizer]
         #region CreatePDF
         private Document CreatePDF(ChartFilteringDTO model, PdfDocument pdfDoc)
         {
@@ -967,6 +979,7 @@ namespace LUSSIS.Controllers
         }
         #endregion
 
+        [Authorizer]
         #region VolumeTable
         private Table GenerateVolumeTable(string[] TwelveMonthRange, int[] ItemQtyArray)
         {
@@ -985,6 +998,7 @@ namespace LUSSIS.Controllers
         }
         #endregion
 
+        [Authorizer]
         #region PriceTable
         private Table GeneratePriceTable(string[] TwelveMonthRange, decimal[] ItemPriceArray)
         {
@@ -1005,6 +1019,7 @@ namespace LUSSIS.Controllers
 
         #region InventoryHistoryicalData(HttpPost)
         [HttpPost]
+        [Authorizer]
         public ActionResult InventoryHistoricalDataDep(ChartFilteringDTO model)
         {
             if (model != null)
@@ -1026,6 +1041,7 @@ namespace LUSSIS.Controllers
             return View("InventoryHistoricalData", "_Layout", model);
         }
         #endregion
+        [Authorizer]
         #region InventoryHistoryicalData(HttpPost)
         [HttpPost]
         public ActionResult InventoryHistoricalDataSup(ChartFilteringDTO model)
@@ -1050,6 +1066,7 @@ namespace LUSSIS.Controllers
         }
         #endregion
 
+        [Authorizer]
         #region BarChartSupplierMethod
         public void BarChartSupplier(List<int> SupplierIds, int CategoryId, int StationeryId, DateTime TheChosenDate, int trend)
         {
@@ -1405,6 +1422,7 @@ namespace LUSSIS.Controllers
         }
         #endregion
 
+        [Authorizer]
         #region BarChartDepartment
         public void BarChartDepartment(List<int> DepartmentIdsForDep, int CategoryIdForDep, int StationeryIdForDep, DateTime TheChosenDateForDep, int trendForDep)
         {

@@ -12,5 +12,7 @@ namespace LUSSIS.Repositories.Interfaces
         IEnumerable<Stationery> GetStationeriesBySupplierIdAndYear(int supplierId, int year);
 
         List<Stationery> getAllStationeries();
+
+        List<Stationery> getStationeriesByCategoryId(int catId);
     }
 }

@@ -86,49 +86,49 @@
                                     {
                                     <p>
                                         Department Head<br />
-                                        (Dept - @dept)
+                                        (@dept)
                                     </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                                     {
                                     <p>
-                                        Staff<br />
-                                        (Dept - @dept)
+                                        Department Staff<br />
+                                        (@dept)
                                     </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                                     {
                                     <p>
-                                        Department Representative<br />
-                                        (Dept - @dept)
+                                        Department Rep<br />
+                                        (@dept)
                                     </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                                     {
                                     <p>
-                                        Cover Staff<br />
-                                        (Dept - @dept)
+                                        Department Cover Head<br />
+                                        (@dept)
                                     </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                                     {
                                     <p>
                                         Store Manager<br />
-                                        (Dept - @dept)
+                                        (@dept)
                                     </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                                     {
                                     <p>
                                         Store Supervisor<br />
-                                        (Dept - @dept)
+                                        (@dept)
                                     </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                                     {
                                     <p>
                                         Store Clerk<br />
-                                        (Dept - @dept)
+                                        (@dept)
                                     </p>
                                     }
                                 </li>
@@ -157,37 +157,37 @@
                         @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                         {
                             <p>Department Head</p>
-                            <p style="font-size: 12px;">Dept- @dept</p>
+                            <p style="font-size: 12px;">@dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                         {
-                            <p>Staff</p>
-                            <p style="font-size: 12px;">Dept- @dept</p>
+                            <p>Department Staff</p>
+                            <p style="font-size: 12px;">@dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                         {
-                            <p>Department Representative</p>
-                            <p style="font-size: 12px;">Dept- @dept</p>
+                            <p>Department Rep</p>
+                            <p style="font-size: 12px;">@dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                         {
-                            <p>Cover Staff</p>
-                            <p style="font-size: 12px;">Dept- @dept</p>
+                            <p>Department Cover Head</p>
+                            <p style="font-size: 12px;">@dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                         {
                             <p>Store Manager</p>
-                            <p style="font-size: 12px;">Dept- @dept</p>
+                            <p style="font-size: 12px;">@dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                         {
                             <p>Store Supervisor</p>
-                            <p style="font-size: 12px;">Dept- @dept</p>
+                            <p style="font-size: 12px;">@dept</p>
                         }
                         else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                         {
                             <p>Store Clerk</p>
-                            <p style="font-size: 12px;">Dept- @dept</p>
+                            <p style="font-size: 12px;">@dept</p>
                         }
 
                     </div>
@@ -292,6 +292,11 @@
                                 <i class="fa fa-bar-chart"></i> <span>Stationery Requisition Trend</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="/Prediction/GenerateReorderInfo">
+                                <i class="fa fa-font-awesome"></i> <span>Stationery Prediction</span>
+                            </a>
+                        </li>
                     }
                     @if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                     {
@@ -328,6 +333,11 @@
                         <li>
                             <a href="/AdjustmentVoucher/Index">
                                 <i class="fa fa-clone"></i> <span>My Adjustment Vouchers</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Prediction/GenerateReorderInfo">
+                                <i class="fa fa-font-awesome"></i> <span>Stationery Prediction</span>
                             </a>
                         </li>
                     }

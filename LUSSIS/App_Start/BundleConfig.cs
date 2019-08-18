@@ -26,6 +26,7 @@ namespace LUSSIS
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/admin-lte/css/AdminLTE.css",
+                      "~/admin-lte/css/skins/_all-skins.min.css",
                       "~/admin-lte/css/skins/skin-blue.css",
                       "~/admin-lte/plugins/AdminLTE/bower_components/Ionicons/css/ionicons.min.css",
                       "~/admin-lte/plugins/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css",
@@ -35,6 +36,7 @@ namespace LUSSIS
 
             bundles.Add(new ScriptBundle("~/admin-lte/js").Include(
                 "~/admin-lte/js/app.js",
+                "~/admin-lte/js/adminlte.min.js",
                 "~/admin-lte/plugins/AdminLTE/bower_components/fastclick/fastclick.js",
                 "~/admin-lte/plugins/AdminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
                 "~/admin-lte/plugins/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js",
