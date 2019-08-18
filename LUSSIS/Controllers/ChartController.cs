@@ -1089,7 +1089,7 @@ namespace LUSSIS.Controllers
         {
             Table table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
             var monthHeading = new Paragraph("Month").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
-            var qtyHeading = new Paragraph("Item Quantity").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
+            var qtyHeading = new Paragraph("Total Value ($)").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
             table.AddCell(monthHeading);
             table.AddCell(qtyHeading);
             for (int i = 0; i < 3; i++)
