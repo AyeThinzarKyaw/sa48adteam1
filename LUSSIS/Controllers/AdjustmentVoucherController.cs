@@ -26,7 +26,8 @@ namespace LUSSIS.Controllers
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 List<AdjustmentVoucherDTO> adjustmentvouchers = AdjustmentVoucherService.Instance.getTotalAmountDTO();
-                if(currentUser.RoleId == (int)Enums.Roles.StoreSupervisor)
+                adjustmentvouchers = adjustmentvouchers.Where(x => x.adjustmentVoucher.EmployeeId == currentUser.EmployeeId).ToList();
+                if (currentUser.RoleId == (int)Enums.Roles.StoreSupervisor)
                 {
                     adjustmentvouchers = adjustmentvouchers.Where(x => x.TotalAmount <= 250 && (x.adjustmentVoucher.Status == "Submitted" || x.adjustmentVoucher.Status == "Acknowledged")).ToList();
                 }
@@ -202,6 +203,34 @@ namespace LUSSIS.Controllers
         }
 
         [Authorizer]
+        public JsonResult UpdateReason(int adjdId, string reason, int adjId)
+        {
+            AdjustmentVoucher adj = new AdjustmentVoucher();
+            if (TempData["AdjustQty"] == null)
+            {
+                adj = AdjustmentVoucherService.Instance.getAdjustmentVoucherById(adjId);
+            }
+            else if (TempData["AdjustQty"] != null)
+            {
+                adj = (AdjustmentVoucher)TempData["AdjustQty"];
+                TempData.Keep("AdjustQty");
+            }
+            if (adj.Id == adjId)
+            {
+                if (adj.AdjustmentVoucherDetails.Where(x => x.Id == adjdId).Count() <= 0)
+                {
+                    AdjustmentVoucherDetail newadjd = AdjustmentVoucherService.Instance.getAdjustmentVoucherDetailById(adjdId);
+                    adj.AdjustmentVoucherDetails.Add(newadjd);
+                }
+                adj.AdjustmentVoucherDetails.Single(x => x.Id == adjdId).Reason = reason;
+
+                TempData["AdjustQty"] = adj;
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorizer]
         [HttpPost]
         public ActionResult SubmitVoucher(AdjustmentVoucherDTO adjDTO)
         {
@@ -226,6 +255,7 @@ namespace LUSSIS.Controllers
                             AdjustmentVoucherDetail oldVoucherDetail = updatedVoucher.AdjustmentVoucherDetails.Single(x => x.Id == detail.Id);
 
                             oldVoucherDetail.Quantity = detail.Quantity;
+                            oldVoucherDetail.Reason = detail.Reason;
 
                             //AdjustmentVoucherService.Instance.UpdateAdjustmentVoucherDetail(oldVoucherDetail);
                         }

@@ -1,155 +1,137 @@
 ﻿@model LUSSIS.Models.DTOs.RequisitionDetailsDTO
-
 @{
     ViewBag.Title = "ViewRequisitionDetails";
 }
 
-    <section class="content-header">
-        <!-- If Supervisor -->
-        <!-- <h1>
-        Requested Requisition Details
-    </h1> -->
-        <!-- If Supervisor -->
+<section class="content-header">
+    <h1>
+        Requisition Details
+    </h1>
+</section>
 
-        <h1>
-            Requisition Details
-        </h1>
-    </section>
-
-    <section class="content">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                    <div class="box-body">
-                        <table>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table>
+                        <tr>
+                            <td>Requisition Form ID</td>
+                            <td>: @Model.Requisition.Id</td>
+                            <td></td>
+                            <td>Dept Name</td>
+                            <td>: @Model.Requisition.Employee.Department.DepartmentName</td>
+                        </tr>
+                        <tr>
+                            <td>Requested Date</td>
+                            <td>: @Model.Requisition.DateTime.ToString("dd/MM/yyyy")</td>
+                            <td></td>
+                            <td>Dept Code</td>
+                            <td>: @Model.Requisition.Employee.Department.DepartmentCode</td>
+                        </tr>
+                        <tr>
+                            <td>Requisition Status</td>
+                            @if (Model.Requisition.Status.Equals("PENDING"))
+                            {
+                                <td>: <span class="text-blue">Pending</span></td>
+                            }
+                            else if (Model.Requisition.Status.Equals("CANCELLED"))
+                            {
+                                <td>: <span class="text-orange">Cancelled</span></td>
+                            }
+                            else if (Model.Requisition.Status.Equals("APPROVED"))
+                            {
+                                <td>: <span class="text-green">Approved</span></td>
+                            }
+                            else if (Model.Requisition.Status.Equals("REJECTED"))
+                            {
+                                <td>: <span class="text-red">Rejected</span></td>
+                            }
+                            else //STATUS COMPLETED
+                            {
+                                <td>: <span class="text-grey">Completed</span></td>
+                            }
+                            <td style="width: 400px;"></td>
+                        </tr>
+                        <tr> </tr>
+                        <tr> </tr>
+                        <tr>
+                            <td>Employee Name</td>
+                            <td>: @Model.Requisition.Employee.Name</td>
+                            <td style="width: 400px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Employee Id</td>
+                            <td>: @Model.Requisition.EmployeeId</td>
+                            <td style="width: 400px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Employee Email</td>
+                            <td>: @Model.Requisition.Employee.Email</td>
+                            <td style="width: 400px;"></td>
+                        </tr>
+                    </table>
+                    <br /><br />
+                    <table class="table table-bordered table-hover">
+                        <thead>
                             <tr>
-                                <td>Requisition Form ID</td>
-                                <td>: @Model.Requisition.Id</td>
-                                <td></td>
-                                <td>Dept Name</td>
-                                <td>: @Model.Requisition.Employee.Department.DepartmentName</td>
+                                <th>Item Number</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Unit of Measure</th>
+                                <th>Qty</th>
+                                <th>Status</th>
                             </tr>
-                            <tr>
-                                <td>Requested Date</td>
-                                <td>: @Model.Requisition.DateTime.ToString("dd/MM/yyyy")</td>
-                                <td></td>
-                                <td>Dept Code</td>
-                                <td>: @Model.Requisition.Employee.Department.DepartmentCode</td>
-
-                            </tr>
-                            <tr>
-                                <td>Requisition Status</td>
-                                @if (Model.Requisition.Status.Equals("PENDING"))
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var rd in Model.RequisitionDetails)
                                 {
-                                    <td>: <span class="text-blue">Pending</span></td>
+                                    <tr>
+                                        <td>@rd.Stationery.Code</td>
+                                        <td>@rd.Stationery.Category.Type</td>
+                                        <td>@rd.Stationery.Description</td>
+                                        <td>@rd.Stationery.UnitOfMeasure</td>
+                                        <td>@rd.QuantityOrdered</td>
+                                        @if (rd.Status.Equals("PREPARING"))
+                                        {
+                                            <td class="text-blue">Preparing</td>
+                                        }
+                                        else if (rd.Status.Equals("WAITLIST_APPROVED"))
+                                        {
+                                            <td class="text-orange">Waitlist Approved</td>
+                                        }
+                                        else if (rd.Status.Equals("PENDING_COLLECTION"))
+                                        {
+                                            <td class="text-light-blue">Pending Collection</td>
+                                        }
+                                        else if (rd.Status.Equals("CANCELLED"))
+                                        {
+                                            <td class="text-maroon">Cancelled</td>
+                                        }
+                                        else if (rd.Status.Equals("REJECTED"))
+                                        {
+                                            <td class="text-red">Rejected</td>
+                                        }
+                                        else if (rd.Status.Equals("COLLECTED"))
+                                        {
+                                            <td class="text-grey">Fulfilled</td>
+                                        }
+                                        else if (rd.Status.Equals("WAITLIST_PENDING"))
+                                        {
+                                            <td class="text-orange">Waitlist Pending</td>
+                                        }
+                                        else//RESERVED_PENDING
+                                        {
+                                            <td class="text-blue">Reserved Pending</td>
+                                        }
+                                    </tr>
                                 }
-                                else if (Model.Requisition.Status.Equals("CANCELLED"))
-                                {
-                                    <td>: <span class="text-orange">Cancelled</span></td>
-                                }
-                                else if (Model.Requisition.Status.Equals("APPROVED"))
-                                {
-                                    <td>: <span class="text-green">Approved</span></td>
-                                }
-                                else if (Model.Requisition.Status.Equals("REJECTED"))
-                                {
-                                    <td>: <span class="text-red">Rejected</span></td>
-                                }
-                                else //STATUS COMPLETED
-                                {
-                                    <td>: <span class="text-grey">Completed</span></td>
-                                }
-                                <td style="width: 400px;"></td>
-                            </tr>
-                            <tr> </tr>
-                            <tr> </tr>
-                            <tr>
-                                <td>Employee Name</td>
-                                <td>: @Model.Requisition.Employee.Name</td>
-                                <td style="width: 400px;"></td>
-                            </tr>
-
-                            <tr>
-                                <td>Employee Id</td>
-                                <td>: @Model.Requisition.EmployeeId</td>
-                                <td style="width: 400px;"></td>
-                            </tr>
-
-                            <tr>
-                                <td>Employee Email</td>
-                                <td>: @Model.Requisition.Employee.Email</td>
-                                <td style="width: 400px;"></td>
-                            </tr>
-
-                        </table>
-
-                        <br /><br />
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Item Number</th>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                    <th>Unit of Measure</th>
-                                    <th>Qty</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    foreach (var rd in Model.RequisitionDetails)
-                                    {
-                                        <tr>
-                                            <td>@rd.Stationery.Code</td>
-                                            <td>@rd.Stationery.Category.Type</td>
-                                            <td>@rd.Stationery.Description</td>
-                                            <td>@rd.Stationery.UnitOfMeasure</td>
-                                            <td>@rd.QuantityOrdered</td>
-                                            @if (rd.Status.Equals("PREPARING"))
-                                            {
-                                                <td class="text-blue">Preparing</td>
-                                            }
-                                            else if (rd.Status.Equals("WAITLIST_APPROVED"))
-                                            {
-                                                <td class="text-orange">Waitlist Approved</td>
-                                            }
-                                            else if (rd.Status.Equals("PENDING_COLLECTION"))
-                                            {
-                                                <td class="text-light-blue">Pending Collection</td>
-                                            }
-                                            else if (rd.Status.Equals("CANCELLED"))
-                                            {
-                                                <td class="text-maroon">Cancelled</td>
-                                            }
-                                            else if (rd.Status.Equals("REJECTED"))
-                                            {
-                                                <td class="text-red">Rejected</td>
-                                            }
-                                            else if (rd.Status.Equals("COLLECTED"))
-                                            {
-                                                <td class="text-grey">Fulfilled</td>
-                                            }
-                                            else if (rd.Status.Equals("WAITLIST_PENDING"))
-                                            {
-                                                <td class="text-orange">Waitlist Pending</td>
-                                            }
-                                            else//RESERVED_PENDING
-                                            {
-                                                <td class="text-blue">Reserved Pending</td>
-                                            }
-
-                                        </tr>
-                                    }
-                                }
-                        </table>
-                        <br />
-                    </div>
+                            }
+                    </table>
+                    <br />
                 </div>
-
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
-    </section>
-
+    </div>
+</section>

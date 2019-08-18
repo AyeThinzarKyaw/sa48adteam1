@@ -1,16 +1,9 @@
 ﻿@model LUSSIS.Models.DTOs.RequisitionsDTO
-
 @{
     ViewBag.Title = "ViewRequisitionList";
 }
 
 <section class="content-header">
-    <!-- If Supervisor -->
-    <!-- <h1>
-        Requested Requisitions
-    </h1> -->
-    <!-- If Supervisor -->
-
     <h1>
         My Requisition History
     </h1>
@@ -31,8 +24,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @{ 
-                                foreach(var r in Model.Requisitions)
+                            @{
+                                foreach (var r in Model.Requisitions)
                                 {
                                     <tr>
                                         <td>@r.Id</td>
@@ -57,47 +50,41 @@
                                         {
                                             <td class="text-grey">Completed</td>
                                         }
-                                    <td>
-                                        <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                               onclick="location.href='@Url.Action("ViewRequisitionDetail", "Requisition", new {@requisitionId = r.Id})'" />
-                                        @if (r.Status.Equals("PENDING"))
-                                        {
-                                            <input type="button" class="btn btn-sm btn-danger" value="Cancel"
-                                                   onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new {@requisitionId = r.Id})'" />
-                                        }
-
-                                    </td>
+                                        <td>
+                                            <input type="button" class="btn btn-sm btn-primary" value="Detail"
+                                                   onclick="location.href='@Url.Action("ViewRequisitionDetail", "Requisition", new {@requisitionId = r.Id})'" />
+                                            @if (r.Status.Equals("PENDING"))
+                                            {
+                                                <input type="button" class="btn btn-sm btn-danger" value="Cancel"
+                                                       onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new {@requisitionId = r.Id})'" />
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             }
-                            
                         </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {
     <script>
-    $(function () {
-        $('#table').DataTable({
-            "order": [[1, "desc"]],
-            'columnDefs': [
-                { 'orderable': false, 'targets': 3 }
-            ],
-            'paging': true,
-            'lengthChange': false,
-            'searching': true,
-            'ordering': true,
-            'info': true,
-            'autoWidth': false
-        })
-    });
+        $(function () {
+            $('#table').DataTable({
+                "order": [[1, "desc"]],
+                'columnDefs': [
+                    { 'orderable': false, 'targets': 3 }
+                ],
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        });
     </script>
 }

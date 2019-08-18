@@ -9,7 +9,6 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     @using (Html.BeginForm())
     {
@@ -29,9 +28,7 @@
                                 </div>
                             </div>
                         }
-
                         <div class="row">
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Supplier Code</label>
@@ -39,7 +36,6 @@
                                     @Html.ValidationMessageFor(x => x.Code, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Supplier Name</label>
@@ -48,7 +44,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -57,7 +52,6 @@
                                     @Html.ValidationMessageFor(x => x.ContactName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Phone Number</label>
@@ -101,15 +95,11 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /.box-body -->
                     <div class="box-footer">
                         <button class="btn btn-warning pull-right">Update</button>
                     </div>
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
     }
 </section>

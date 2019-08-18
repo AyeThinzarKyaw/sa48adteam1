@@ -1,5 +1,4 @@
 ﻿@model LUSSIS.Models.DTOs.AssignDeptRepDTO
-
 @{
     ViewBag.Title = "AssignDeptRep";
 }
@@ -10,52 +9,41 @@
     </h1>
 </section>
 
-<!-- Main content -->
-
-@using (Html.BeginForm("AssignDeptRep", "AssignStaff", FormMethod.Post))
-{
-    <section class="content">
+<section class="content">
+    @using (Html.BeginForm("AssignDeptRep", "AssignStaff", FormMethod.Post))
+    {
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
                         <p>Current Department Representative - <b class="text-green">@Model.DeptRep.Name</b></p>
                     </div>
-                    <!-- /.box-header -->
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Assign To</label>
                                     <select id="NewDeptRepId" class="form-control" name="NewDeptRepId">
-
                                         @foreach (var employee in Model.StaffAndDeptRep)
                                         {
                                             if (employee.Id == @Model.DeptRep.Id)
                                             {
-                                        <option value="@employee.Id" selected> @employee.Name (@employee.Title)   </option>
-
+                                                <option value="@employee.Id" selected> @employee.Name (@employee.Title)</option>
                                             }
                                             else
                                             {
-                                        <option value="@employee.Id"> @employee.Name (@employee.Title) </option>
+                                                <option value="@employee.Id"> @employee.Name (@employee.Title) </option>
                                             }
-
                                         }
                                     </select>
                                 </div>
                             </div>
                             <br />
                             <input type="submit" value="Assign" class="btn btn-primary" />
-
                         </div>
                     </div>
-                    <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
-    </section>
-}
+    }
+</section>

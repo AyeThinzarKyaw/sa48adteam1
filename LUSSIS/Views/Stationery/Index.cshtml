@@ -10,7 +10,6 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -24,15 +23,9 @@
                     <table id="table" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>
-                                    Stationery Code
-                                </th>
-                                <th>
-                                    Category
-                                </th>
-                                <th>
-                                    Description
-                                </th>
+                                <th>Stationery Code</th>
+                                <th>Category</th>
+                                <th>Description</th>
                                 <th>Unit of Measue</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -41,49 +34,42 @@
                         <tbody>
                             @foreach (var stationery in Model)
                             {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.Category.Type)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.Description)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => stationery.UnitOfMeasure)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem=> stationery.Status)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Detail", "Detail", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
-                                    @Html.ActionLink("Update", "Update", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-warning", @role = "button" })
-                                    @if (stationery.Status == Enum.GetName(typeof(ActiveStatus), ActiveStatus.INACTIVE))
-                                    {
-                                        @Html.ActionLink("Make Active", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
-                                    }
-                                    else
-                                    {
-                                        @Html.ActionLink("Make Inactive", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
-                                    }
-
-
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => stationery.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => stationery.Category.Type)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => stationery.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => stationery.UnitOfMeasure)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => stationery.Status)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Detail", "Detail", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                        @Html.ActionLink("Update", "Update", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-warning", @role = "button" })
+                                        @if (stationery.Status == Enum.GetName(typeof(ActiveStatus), ActiveStatus.INACTIVE))
+                                        {
+                                            @Html.ActionLink("Make Active", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("Make Inactive", "ChangeStatus", new { stationeryId = stationery.Id }, new { @class = "btn btn-sm btn-danger", @role = "button" })
+                                        }
+                                    </td>
+                                </tr>
                             }
-                            
                         </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {
@@ -101,23 +87,5 @@
                 'autoWidth': false
             })
         })
-
-        //function changeStatus(id) {
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/Stationery/ChangeStatus",
-        //        content: "application/json; charset=utf-8",
-        //        dataType: "json",
-        //        data: JSON.stringify(id),
-        //        success: function (d) {
-        //            if (d.success == true)
-        //                window.location = "index.html";
-        //            else { }
-        //        },
-        //        error: function (xhr, textStatus, errorThrown) {
-        //            // TODO: Show error
-        //        }
-        //    });
-        //}
     </script>
 }

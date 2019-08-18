@@ -1,16 +1,9 @@
 ﻿@model LUSSIS.Models.DTOs.RequisitionsDTO
-
 @{
     ViewBag.Title = "ViewDepartmentRequisitions";
 }
 
 <section class="content-header">
-    <!-- If Supervisor -->
-    <!-- <h1>
-        Requested Requisitions
-    </h1> -->
-    <!-- If Supervisor -->
-
     <h1>
         Department Requisitions
     </h1>
@@ -60,23 +53,17 @@
                                             <td class="text-grey">Completed</td>
                                         }
                                         <td>
-                                            <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                                   onclick="location.href='@Url.Action("ReviewRequisitionDetails", "DeptHead", new {  @requisitionId = r.Id})'" />                                            
+                                            <input type="button" class="btn btn-sm btn-primary" value="Detail" onclick="location.href='@Url.Action("ReviewRequisitionDetails", "DeptHead", new {  @requisitionId = r.Id})'" />
                                         </td>
                                     </tr>
                                 }
                             }
-
                         </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {

@@ -10,7 +10,6 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -18,26 +17,15 @@
                 @using (Html.BeginForm(FormMethod.Post))
                 {
                     <div class="box-body">
-                        @*<div class="col-md-2 form-group">
-                            <label>Choose a date : </label>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            @Html.TextBoxFor(x => x.chosenDate, new { @type = "date", @class = "form-control" })
-                        </div>*@
                         <div class="col-md-4 form-group">
                             <input value="Predict Current Month Reorder Levels" type="submit" class="btn btn-primary" />
-
                         </div>
-
                     </div>
                     if (ViewBag.data != null)
                     {
-
                         <div class="box-body">
-
-
-                            @Html.ActionLink("Keep this as new Reorder Info", "UpdateReorderQuantity", new { @predictDate =Model.chosenDate}, new { @class = "btn btn-success", @role = "button" })
-                            @if (ViewBag.Message!=null)
+                            @Html.ActionLink("Keep this as new Reorder Info", "UpdateReorderQuantity", new { @predictDate = Model.chosenDate }, new { @class = "btn btn-success", @role = "button" })
+                            @if (ViewBag.Message != null)
                             {
                                 <label class="text-danger">@ViewBag.Message</label>
                             }
@@ -70,19 +58,14 @@
                                             </td>
                                         </tr>
                                     }
-
                                 </tbody>
                             </table>
                         </div>
                     }
-                    <!-- /.box-body -->
                 }
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {
@@ -97,7 +80,6 @@
                 'info': true,
                 'autoWidth': false
             })
-        })
-
+        });
     </script>
 }

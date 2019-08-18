@@ -10,7 +10,6 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     @using (Html.BeginForm())
     {
@@ -31,7 +30,6 @@
                             </div>
                         }
                         <div class="row">
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Stationery Code</label><label class="text-red">&nbsp;*</label>
@@ -39,12 +37,10 @@
                                     @Html.ValidationMessageFor(x => x.Code, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <!-- select box -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Category</label>
                                     <select id="CategoryId" class="form-control" name="CategoryId">
-
                                         @if (Model.Categories != null)
                                         {
                                             foreach (var item in Model.Categories)
@@ -55,28 +51,20 @@
 
                                                         @item.Type
                                                     </option>
-
                                                 }
                                                 else
                                                 {
                                                     <option value="@item.Id">
-
                                                         @item.Type
                                                     </option>
                                                 }
                                             }
                                         }
                                     </select>
-
-                                    @*@Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Type"), new { @class = "form-control select2", @style = "width: 100%;" })*@
-                                    @*@Html.DropDownListFor(x => x.CategoryId, new SelectList(Model.Categories, "Id", "Type"), new { @id = "categoryList", @class = "form-control select2", @style = "width: 100%;" })*@
                                     <a href="#" data-toggle="modal" data-target="#categoryModal" class="btn btn-sm btn-primary">Add New Category</a>
-                                    @*@Html.ActionLink("Add Category", null, new { @data-toggle = "modal", @data-target = "#categoryModal", @class = "btn btn-sm btn-primary", @role = "button" })*@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -101,7 +89,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -145,16 +132,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.box-body -->
                     <div class="box-footer">
                         <input type="submit" value="Create" class="btn btn-success pull-right" />
                     </div>
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
     }
     <div class="modal fade" id="categoryModal">
         <div class="modal-dialog">
@@ -162,7 +145,6 @@
                 <div class="modal-header">
                     <button type="button" id="clsBtn" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Add new category</h4>
-
                 </div>
                 <div class="modal-body">
                     <form>
@@ -178,54 +160,25 @@
     </div>
 </section>
 
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script src="~/Scripts/bootstrap.min.js"></script>
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-@*<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">*@
 @section scripts {
     <script>
         function addCategory() {
-            //var selectedId = 0;
-            //if (confirm("Are you sure you want to add a new category?")) {
-            debugger;
             var categoryText = document.getElementById("txtcategory").value;
             var url = "/Stationery/CreateCategory?type=" + categoryText;
-            
             $.ajax({
                 url: url,
                 type: "GET",
                 async: true,
                 success: function (data) {
-                    debugger;
-                    
                     var result = "";
-                    
-                    //var ind = 0;
                     $.each(data, function (i, d) {
-                        debugger;
-                        //if (d.Type == categoryText) {
-                            
-                        //    selectedId = ind;
-                            
-                        //}
-                        //else {
-                        //    ind++;
-                        //}
-                            result += '<option value="' + d.Id + '"';
-
+                        result += '<option value="' + d.Id + '"';
                         result += '>' + d.Type + '</option>';
-                        
                     });
-                   
-                    debugger;
                     $('#CategoryId').append(result);
-                    //document.getElementById('CategoryId').selectedIndex  = 22;
                 },
                 error: function (data) { }
             });
-           
-            
         }
-
     </script>
 }

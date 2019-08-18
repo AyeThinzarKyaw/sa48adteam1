@@ -2,29 +2,25 @@
 @using LUSSIS.Enums;
 @{
     ViewBag.Title = "Detail";
-}
-
-@{
     int role = 0;
     if (Session["role"] != null)
     {
         role = (int)Session["role"];
     }
 }
+
 <section class="content-header">
     <h1>
         Adjustment Voucher Details
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     @using (Html.BeginForm("SubmitVoucher", "AdjustmentVoucher", FormMethod.Post))
     {
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-
                     <div class="box-body">
                         <table>
                             <tr>
@@ -32,7 +28,7 @@
                                 <td>Adjustment Voucher ID</td>
                                 <td>: @Model.adjustmentVoucher.Id</td>
                                 <td width="600"></td>
-                                @if(role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
+                                @if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                                 {
                                     <td>Clerk Name</td>
                                     <td>: @Model.adjustmentVoucher.Employee.Name</td>
@@ -41,7 +37,6 @@
                             <tr>
                                 <td>Voucher Date</td>
                                 <td>: @Model.adjustmentVoucher.Date.ToString("yyyy-MM-dd")</td>
-                                
                             </tr>
                             <tr>
                                 <td>Voucher Status</td>
@@ -68,52 +63,49 @@
                         <br /><br />
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
-                                <!--VLR001-->
                                 <tr>
                                     <th style="width: 150px;">Item Number</th>
                                     <th style="width: 100px;">Category</th>
                                     <th style="width: 250px;">Description</th>
                                     <th style="width: 150px;">Unit of Measure</th>
-                                    @*<th style="width: 100px;">Price</th>*@
                                     <th style="width: 150px;">Adjusted Qty</th>
                                     <th>Reason</th>
                                     @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
                                     {
                                         <th>Action</th>
                                     }
-                                    </tr>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.adjustmentVoucher.AdjustmentVoucherDetails)
                                 {
-                                    <tr id="@item.Id">
-                                        <td>@item.Stationery.Code</td>
-                                        <td>@item.Stationery.Category.Type</td>
-                                        <td>@item.Stationery.Description</td>
-                                        <td>@item.Stationery.UnitOfMeasure</td>
-                                        @*<td>@item.Stationery.SupplierTenders.</td>*@
-                                        @{
-                                            if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
-                                            {
-                                                <th style="width: 150px;"><input type="text" class="form-control" value="@item.Quantity" onfocusout="updateQtyReceive(this,'@item.Id','@item.AdjustmentVoucherId');" /></th>
-                                            }
-                                            else
-                                            {
-                                                <td>@item.Quantity</td>
-                                            }
-                                        }
-                                        <td>@item.Reason</td>
-                                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                <tr id="@item.Id">
+                                    <td>@item.Stationery.Code</td>
+                                    <td>@item.Stationery.Category.Type</td>
+                                    <td>@item.Stationery.Description</td>
+                                    <td>@item.Stationery.UnitOfMeasure</td>
+                                    @{
+                                        if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
                                         {
-                                            <td><a href="#" class="btn btn-sm btn-danger" onclick="remove(this, '@item.Id')">Remove</a></td>
+                                            <th style="width: 150px;"><input type="text" class="form-control" value="@item.Quantity" onfocusout="updateQtyReceive(this,'@item.Id','@item.AdjustmentVoucherId');" /></th>
+                                            <th style="width: 150px;"><input type="text" class="form-control" value="@item.Reason" onfocusout="updateReason(this,'@item.Id','@item.AdjustmentVoucherId');" /></th>
                                         }
-                                    </tr>
+                                        else
+                                        {
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Reason</td>
+                                        }
+                                    }
+                                    @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                    {
+                                        <td><a href="#" class="btn btn-sm btn-danger" onclick="remove(this, '@item.Id')">Remove</a></td>
+                                    }
+                                </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.box-body -->
-                    <!-- If Supervisor -->
+
                     <div class="box-footer">
                         @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open) && role == (int)LUSSIS.Enums.Roles.StoreClerk)
                         {
@@ -124,14 +116,9 @@
                             @Html.ActionLink("Acknowledge", "ChangeStatus", new { adjId = @Model.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-success pull-right", @role = "button" })
                         }
                     </div>
-                    <!-- If Supervisor -->
-
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
     }
 </section>
 
@@ -140,29 +127,39 @@
         function updateQtyReceive(e, adjd, adj) {
             debugger;
             if (e.value != "") {
-
-                //alert(e.value);
                 var url = "/AdjustmentVoucher/UpdateReceivedQty?adjdId=" + adjd + "&qty=" + e.value + "&adjId=" + adj;
                 $.ajax({
                     url: url,
                     type: "GET",
                     async: true,
-                    success: function (data) {
-                    },
+                    success: function (data) { },
+                    error: function (data) { }
+                });
+            }
+        }
+
+        function updateReason(e, adjd, adj) {
+            debugger;
+            if (e.value != "") {
+                var url = "/AdjustmentVoucher/UpdateReason?adjdId=" + adjd + "&reason=" + e.value + "&adjId=" + adj;
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    async: true,
+                    success: function (data) { },
                     error: function (data) { }
                 });
             }
         }
 
         function remove(e, adjdId) {
-            if (e.value != "") {                
+            if (e.value != "") {
                 var url = "/AdjustmentVoucher/Remove?adjdId=" + adjdId;
                 $.ajax({
                     url: url,
                     type: "GET",
                     async: true,
                     success: function (data) {
-                        //debugger;
                         var content = $(e).parent().parent().attr('id');
                         $("#" + content).remove();
                     },

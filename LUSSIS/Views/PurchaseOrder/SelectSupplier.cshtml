@@ -9,25 +9,15 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
-
-
-    @*@using (Html.BeginForm())
-        {*@
     <div class="row">
-
         <div class="col-xs-12">
-
             <div class="box">
                 <div class="box-body">
-
                     <div>
                         <label id="errMsg" class="text-danger"></label>
                     </div>
-
                     <table class="table table-bordered table-hover">
-
                         <thead>
                             <tr>
                                 <th>Code</th>
@@ -43,22 +33,17 @@
                             </tr>
                         </thead>
                         <tbody class="old">
-
                             @foreach (var item in Model.SelectedItems.Where(x => x.CategoryId == 0))
                             {
                                 var poDetail = Model.Catalogue.Single(x => x.Id == item.Id);
                                 string rowID = "row" + item.Id.ToString();
                                 string chkID = "chk" + item.Id.ToString();
-                                //string selID = "supp" + item.Id.ToString();
                                 <tr id=@rowID>
                                     <td>@item.Code</td>
                                     <td>@item.Description</td>
                                     <td><b>@poDetail.AvailableQty</b></td>
                                     <td>@poDetail.WaitlistQty</td>
-                                    <td>
-                                        @poDetail.Unsubmitted
-                                        @*<input type="text" value="63" style="width: 100px;" />*@
-                                    </td>
+                                    <td>@poDetail.Unsubmitted</td>
                                     <td>@poDetail.ReorderLevel</td>
                                     <td>@poDetail.ReorderQuantity</td>
                                     <td>
@@ -68,7 +53,6 @@
                                             {
                                                 <option value=@supplier.SupplierId>@supplier.Supplier.Name</option>
                                             }
-
                                         </select>
                                     </td>
                                     <td><input type="checkbox" class="minimal" id=@chkID></td>
@@ -102,34 +86,25 @@
                                                 {
                                                     <input type="date" min="@DateTime.Now.Date" class="datepicker form-control pull-right" id=@datePickerId onchange="setEstDate(@supplierList.supplier);" required="">
                                                 }
-
                                             </div>
                                         </div>
                                     </td>
-                                    
                                 </tr>
-
                             </tbody>
                             <tbody class="@supName">
-
                                 @foreach (var item in Model.SelectedItems.Where(r => r.CategoryId == supplierList.supplier))
                                 {
                                     var poDetail = Model.Catalogue.Single(x => x.Id == item.Id);
                                     string rowID = "row" + item.Id.ToString();
                                     string chkID = "chk" + item.Id.ToString();
-                                    //string selID = "supp" + item.Id.ToString();
                                     <tr id=@rowID>
                                         <td>@item.Code</td>
                                         <td>@item.Description</td>
                                         <td><b>@poDetail.AvailableQty</b></td>
                                         <td>@poDetail.WaitlistQty</td>
-                                        <td>
-                                            @poDetail.Unsubmitted
-                                            @*<input type="text" value="63" style="width: 100px;" />*@
-                                        </td>
+                                        <td>@poDetail.Unsubmitted</td>
                                         <td>@poDetail.ReorderLevel</td>
                                         <td>@poDetail.ReorderQuantity</td>
-
                                         @if (item.Status == "confirmed")
                                         {
                                             <td>
@@ -146,7 +121,6 @@
                                                             <option value=@supplier.SupplierId>@supplier.Supplier.Name</option>
                                                         }
                                                     }
-
                                                 </select>
                                             </td>
                                             <td>
@@ -169,50 +143,35 @@
                                                             <option value=@supplier.SupplierId>@supplier.Supplier.Name</option>
                                                         }
                                                     }
-
                                                 </select>
                                             </td>
                                             <td>
                                                 <input type="checkbox" class="minimal" id=@chkID>
                                             </td>
-
                                         }
-
-
                                         <td><a href="#" onclick="removeItem('@item.Id');" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></a></td>
                                     </tr>
                                 }
                             </tbody>
-
-
                         }
-
                     </table>
                 </div>
-                <!-- /.box-body -->
                 <div class="box-footer">
                     <button class="btn btn-success pull-right" onclick="RaisePO(false);">Submit</button>
                 </div>
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    @*}*@
-    <!-- /.row -->
 </section>
 
 @section scripts {
     <script>
-
-        //iCheck for checkbox and radio inputs
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         })
 
         $(".select2").change(function (e) {
-            debugger;
             var str = "";
             var supplierId = $(this).find("option:selected").val();
             var stationeryId = $(this).attr("id");
@@ -225,8 +184,6 @@
 
             var par = $("#" + content).parent().attr('class');
             if (res != "Sel") {
-
-                //if this class already exists or not
                 if ($('.' + res).length) {
                     $("#" + content).detach().prependTo('.' + res);
                 }
@@ -239,9 +196,8 @@
             else {
                 $("#" + content).detach().prependTo('.old');
             }
-            debugger;
             var empty = $("." + par).has("tr").length;
-            if (empty == 0 && par!="old") {
+            if (empty == 0 && par != "old") {
 
                 console.log(empty);
                 console.log(par);
@@ -275,9 +231,8 @@
         }
 
         function setEstDate(supId) {
-            debugger;
             var result = checkEstDateValid($("#datepicker" + supId));
-            if (result==true) {
+            if (result == true) {
 
                 var data = JSON.stringify({
                     'estDate': $("#datepicker" + supId)[0].value,
@@ -304,11 +259,9 @@
                     contentType: 'application/json'
                 });
             }
-           
         }
 
         function removeItem(stationeryId) {
-            debugger;
             var row = document.getElementById("row" + stationeryId);
             if (row.parentNode.childNodes.length == 1) {
                 var aa = row.parentNode.className;
@@ -361,14 +314,12 @@
         }
 
         $('.minimal').on('ifChecked', function (event) {
-            debugger;
             var stationeryId = $(this).attr('id').substring(3);
             document.getElementById(stationeryId).disabled = true;
             ConfirmItemToPO(stationeryId, "confirmed");
 
         });
         $('.minimal').on('ifUnchecked', function (event) {
-            debugger;
             var stationeryId = $(this).attr('id').substring(3);
             document.getElementById(stationeryId).disabled = false;
             ConfirmItemToPO(stationeryId, "unconfirmed");
@@ -376,7 +327,6 @@
 
         function checkEstDateValid(element) {
             var isValid = true;
-            debugger;
             if (element[0].value == "") {
 
                 if ($("#" + element[0].id).parent().next(".validation").length == 0) // only add if not added
@@ -386,38 +336,32 @@
                 isValid = false;
             }
             else {
-                //if ($("#" + element[0].id).parent().next(".validation").length > 0) // only remove if added
-                //{
-                    var estDate =element[0].value;
-                    var today = new Date().toISOString().split('T')[0];
-                    debugger;
-                    if (estDate < today) {
-                        isValid = false;
-                        if ($("#" + element[0].id).parent().next(".validation").length > 0) // only remove if added
-                        {
-                            $("#" + element[0].id).parent().next(".validation").remove(); // remove it
-                        }
-                        if ($("#" + element[0].id).parent().next(".validation").length == 0) // only add if not added
-                        {
-                            $("#" + element[0].id).parent().after("<div class='validation' style='color:red;'>Estimated Delivery Date cannot be before today.</div>");
-                        }
-                    }
-                    else {
+                var estDate = element[0].value;
+                var today = new Date().toISOString().split('T')[0];
+                if (estDate < today) {
+                    isValid = false;
+                    if ($("#" + element[0].id).parent().next(".validation").length > 0) // only remove if added
+                    {
                         $("#" + element[0].id).parent().next(".validation").remove(); // remove it
                     }
-                //}
+                    if ($("#" + element[0].id).parent().next(".validation").length == 0) // only add if not added
+                    {
+                        $("#" + element[0].id).parent().after("<div class='validation' style='color:red;'>Estimated Delivery Date cannot be before today.</div>");
+                    }
+                }
+                else {
+                    $("#" + element[0].id).parent().next(".validation").remove(); // remove it
+                }
             }
 
             return isValid;
         }
 
         function RaisePO(removeZero) {
-            debugger;
             var isValid = true;
             $(".datepicker").each(function () {
                 var result = checkEstDateValid($(this));
-                debugger;
-                if (result==false) {
+                if (result == false) {
                     isValid = false;
                 }
             });
@@ -438,7 +382,6 @@
                             if (confirm(result[1])) {
                                 RaisePO(true);
                             }
-
                         }
                         else if (result[0] == false) {//show error msg
                             document.getElementById("errMsg").innerHTML = result[1];
@@ -447,7 +390,6 @@
                     contentType: 'application/json'
                 });
             }
-
         }
     </script>
 }

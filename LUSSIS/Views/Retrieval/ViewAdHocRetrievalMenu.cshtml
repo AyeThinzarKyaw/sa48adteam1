@@ -9,17 +9,14 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-
                     <br /><br />
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
-                            <!--VLR001-->
                             <tr>
                                 <th>Departments With Approved Requisitions</th>
                                 <th>Select the Requisition Number</th>
@@ -28,7 +25,6 @@
                         <tbody>
                             <tr>
                                 <td>
-
                                     <select id="departmentName" name="departmentName" style="width: 200px" class="form-control">
                                         <option value=""></option>
                                         @foreach (var item in Model.DepartmentAndRetrieval)
@@ -36,66 +32,21 @@
                                             <option value="@item.Department.DepartmentName" data-id="@String.Join(",", item.Requisitions.Select(x => x.Id).ToArray())">@item.Department.DepartmentName</option>
                                         }
                                     </select>
-
                                 </td>
-                                @*<select name="listbox" id="listbox" style="width: 200px" onfocusout="selectRetrievalId(this)">
-                            <option value="@Model.departmentName"></option>
-                            @foreach (var item in Model.departmentAndRetrieval)
-                            {
-                            <option value="@item.department.DepartmentName">
-                                @item.department.DepartmentName
-                            </option>
-                            }
-                        </select>*@
-
-
                                 <td>
-
                                     <select id="requisitionId" name="requisitionId" class="form-control" style="width: 200px;background:lightgray;" disabled="disabled" onchange="selectRetrievalId(this);" />
-
-
-
-
-                                    @*<select name="listbox" id="listbox" style="width: 200px" onfocusout="selectRetrievalId(this)">
-                                <option value="@Model.requisitionList"></option>
-                                @foreach (var item in Model.requisitionList)
-                                {
-                                    <option value="@item.Id">
-                                        @item.Id
-                                    </option>
-                                }
-                            </select>*@
-
-
-
-
-                                    @*<select name="RequisitionId" id="RequisitionId" style="width: 200px" data-url="window.location='@Url.Action("SelectRetrievalId", "Retrieval")'">
-                                <option value=""></option>
-                                @foreach (var req in item.requisitions)
-                                {
-                                    <option value="@req.Id">
-                                        @req.Id
-                                    </option>
-                                }
-                            </select>*@
-
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
                 <div class="box-footer">
                     <input type="button" class="btn btn-success pull-right" value="Submit!" onclick="location.href='@Url.Action("RetrieveSelectedAdHocRetrieval", "Retrieval")'" />
                 </div>
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
-
 
 @section scripts {
     <script>
@@ -106,56 +57,23 @@
                 var array = ids.split(",");
                 len = array.length;
             }
-           
+
             var dropdown = "";
             dropdown += "<option selected disabled hidden>Select a Requisition Id</option>"
             for (var i = 0; i < len; i++) {
                 var id = array[i];
                 dropdown += "<option value='" + id + "'>" + id + "</option>";
-                console.log(ids[i]);
             }
             $("#requisitionId").html(dropdown).removeAttr("disabled").css("background", "white");
         });
-        @*function updateDepartment(e) {
-
-            //alert(e.value);
-            var url = "/Retrieval/UpdateDepartment?departmentName=" + e.value;
-            $.ajax({
-                url: url,
-                type: "GET",
-                async: true,
-                success: function (data) {
-                    console.log("YAYYYYYY");
-                    //if (data[0] == true) {
-                    //    window.location.href = '/PurchaseOrder/Index'
-                    //}
-                    //else {
-                    //    document.getElementById("errRemark").innerHTML = data[1];
-                    //}
-                },
-                error: function (data) { }
-            });
-        }
-    </script>*@
 
         function selectRetrievalId(e) {
-
-            //alert(e.value);
             var url = "/Retrieval/SelectRetrievalId?requisitionId=" + e.value;
             $.ajax({
                 url: url,
                 type: "GET",
                 async: true,
-                success: function (data) {
-                    console.log("YAYYYYYY");
-                    console.log(data)
-                    //if (data[0] == true) {
-                    //    window.location.href = '/PurchaseOrder/Index'
-                    //}
-                    //else {
-                    //    document.getElementById("errRemark").innerHTML = data[1];
-                    //}
-                },
+                success: function (data) { },
                 error: function (data) { }
             });
         }

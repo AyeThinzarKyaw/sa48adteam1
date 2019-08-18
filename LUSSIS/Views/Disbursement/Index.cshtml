@@ -2,6 +2,7 @@
 @using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Index";
+    LoginDTO loginDto = (LoginDTO)Session["existinguser"];
 }
 
 <section class="content-header">
@@ -9,8 +10,7 @@
         Disbursement List
     </h1>
 </section>
-@{LoginDTO loginDto = (LoginDTO)Session["existinguser"];}
-<!-- Main content -->
+
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -30,26 +30,26 @@
                             <tbody>
                                 @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                 {
-                                <tr>
-                                    <td>@dl.DeliveryDateTime.ToString("yyyy-MM-dd")</td>
-                                    <td>@dl.CollectionPoint</td>
-                                    @if (dl.Status.Contains("PENDING_COLLECTION"))
-                                    {
-                                        <td class="text-blue">Pending Collection</td>
-                                    }
-                                    else if (dl.Status.Contains("CANCELLED"))
-                                    {
-                                        <td>Cancelled</td>
-                                    }
-                                    else
-                                    {
-                                        <td>Delivered</td>
-                                    }
-                                    <td>
-                                        <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                               onclick="location.href='@Url.Action("Detail", "Disbursement", new {@DisbursementId = dl.DisbursementId})'" />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>@dl.DeliveryDateTime.ToString("yyyy-MM-dd")</td>
+                                        <td>@dl.CollectionPoint</td>
+                                        @if (dl.Status.Contains("PENDING_COLLECTION"))
+                                        {
+                                            <td class="text-blue">Pending Collection</td>
+                                        }
+                                        else if (dl.Status.Contains("CANCELLED"))
+                                        {
+                                            <td>Cancelled</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Delivered</td>
+                                        }
+                                        <td>
+                                            <input type="button" class="btn btn-sm btn-primary" value="Detail"
+                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new {@DisbursementId = dl.DisbursementId})'" />
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -88,23 +88,17 @@
                                             <td>Delivered</td>
                                         }
                                         <td>
-                                            <input type="button" class="btn btn-sm btn-primary" value="Detail"
-                                                   onclick="location.href='@Url.Action("Detail", "Disbursement", new { @DisbursementId = dl.DisbursementId})'" />
+                                            <input type="button" class="btn btn-sm btn-primary" value="Detail" onclick="location.href='@Url.Action("Detail", "Disbursement", new { @DisbursementId = dl.DisbursementId})'" />
                                         </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     }
-
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {
