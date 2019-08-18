@@ -204,12 +204,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemQtyArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
                                 doc.Add(t);
                             };
@@ -315,11 +317,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
                                 doc.Add(t);
                             };
@@ -417,12 +422,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemQtyArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
                                 doc.Add(t);
 
@@ -529,11 +536,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
                                 doc.Add(t);
                             };
@@ -638,12 +648,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemQtyArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
                                 doc.Add(t);
                             };
@@ -748,11 +760,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
                                 doc.Add(t);
                             };
@@ -849,12 +864,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemQtyArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
                                 doc.Add(t);
 
@@ -961,11 +978,14 @@ namespace LUSSIS.Controllers
                                         }
                                     }
                                 }
-                                chart.AddSeries(
+                                if (SuNames.Count > 0)
+                                {
+                                    chart.AddSeries(
                                     chartType: "column",
                                     xValue: ThreeMonthRange,
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
+                                }
                                 Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
                                 doc.Add(t);
                             };
@@ -1166,12 +1186,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-
-                            chart.AddSeries(
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
                                 chartType: "column",
                                 xValue: ThreeMonthRange,
                                 yValues: ItemQtyArray,
                                 name: SuNames.First());
+                            }
 
                         };
                     }
@@ -1251,11 +1273,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-                            chart.AddSeries(
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
                                 chartType: "column",
                                 xValue: ThreeMonthRange,
                                 yValues: ItemPriceArray,
                                 name: SuNames.First());
+                            }
                         };
                     }
                     chart.AddTitle("Monthly Price Comparison");
@@ -1326,12 +1351,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-
-                            chart.AddSeries(
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
                                 chartType: "column",
                                 xValue: ThreeMonthRange,
                                 yValues: ItemQtyArray,
                                 name: SuNames.First());
+                            }
 
 
                         };
@@ -1412,11 +1439,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-                            chart.AddSeries(
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
                                 chartType: "column",
                                 xValue: ThreeMonthRange,
                                 yValues: ItemPriceArray,
                                 name: SuNames.First());
+                            }
                         };
                     }
                     chart.AddTitle("Monthly Price Comparison");
@@ -1519,12 +1549,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-
-                            chart.AddSeries(
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
                                 chartType: "column",
                                 xValue: ThreeMonthRange,
                                 yValues: ItemQtyArray,
                                 name: SuNames.First());
+                            }
 
                         };
                     }
@@ -1604,11 +1636,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-                            chart.AddSeries(
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
                                 chartType: "column",
                                 xValue: ThreeMonthRange,
                                 yValues: ItemPriceArray,
                                 name: SuNames.First());
+                            }
                         };
                     }
                     chart.AddTitle("Department Monthly Price Comparison");
@@ -1680,11 +1715,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-                            chart.AddSeries(
-                                chartType: "column",
-                                xValue: ThreeMonthRange,
-                                yValues: ItemQtyArray,
-                                name: SuNames.First());
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
+                                    chartType: "column",
+                                    xValue: ThreeMonthRange,
+                                    yValues: ItemQtyArray,
+                                    name: SuNames.First());
+                            }
                         };
                     }
                     chart.AddTitle("Department Monthly Volume Comparison");
@@ -1761,11 +1799,14 @@ namespace LUSSIS.Controllers
                                     }
                                 }
                             }
-                            chart.AddSeries(
+                            if (SuNames.Count > 0)
+                            {
+                                chart.AddSeries(
                                 chartType: "column",
                                 xValue: ThreeMonthRange,
                                 yValues: ItemPriceArray,
                                 name: SuNames.First());
+                            }
                         };
                     }
                     chart.AddTitle("Department Monthly Price Comparison");

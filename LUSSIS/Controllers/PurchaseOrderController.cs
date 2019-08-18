@@ -561,7 +561,10 @@ namespace LUSSIS.Controllers
                     {
                         if (poCreateDTO.SelectedItems.Where(x => x.CategoryId == supplierId).Count() <= 0)
                         {
-                            poCreateDTO.EstimatedDates.Remove(poCreateDTO.EstimatedDates.Single(x => x.Key == supplierId));
+                            if (poCreateDTO.EstimatedDates.Where(x => x.Key == supplierId).Count() == 1)
+                            {
+                                poCreateDTO.EstimatedDates.Remove(poCreateDTO.EstimatedDates.Single(x => x.Key == supplierId));
+                            }
                         }
                     }
                     TempData["PO"] = poCreateDTO;

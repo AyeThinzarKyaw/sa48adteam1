@@ -97,7 +97,7 @@
                                             <div class="form-group">
                                                 <label>Item Description</label>
                                                 <select name='stationery' id='stationery' class='form-control' disabled>
-                                                    <option>Select Item Category First</option>
+                                                    <option value="0" selected>Select Item Category First</option>
                                                 </select>
                                                 @*@Html.DropDownListFor(x => x.stationery, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })*@
                                                 @*<select class="form-control select2" style="width: 100%;">
@@ -113,8 +113,8 @@
                                                 <select id="trend" name="trend" class="form-control select2" style="width: 100%;">
 
                                                     <option></option>
-                                                    <option value="1">volume</option>
-                                                    <option value="2">price</option>
+                                                    <option value="1">Volume</option>
+                                                    <option value="2">Price</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -166,9 +166,9 @@
                                             <div class="form-group">
                                                 <label>Item Description</label>
                                                 @*@Html.DropDownListFor(x => x.stationeryDep, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })*@
-                                                <select name='stationeryDep' id='stationeryDep' class='form-control' disabled>
-                                                    <option>Select Item Category First</option>
-                                                </select>
+                                            <select name='stationeryDep' id='stationeryDep' class='form-control' disabled>
+                                                <option value="0" selected>Select Item Category First</option>
+                                            </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -176,8 +176,8 @@
                                                 <label>Trend</label>
                                                 <select id="trendDep" name="trendDep" class="form-control select2" style="width: 100%;">
                                                     <option></option>
-                                                    <option value="1">volume</option>
-                                                    <option value="2">price</option>
+                                                    <option value="1">Volume</option>
+                                                    <option value="2">Price</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -194,7 +194,7 @@
 
                             }
                             <br>
-                            <p>Comments : Charts will be chose by populating by the best soultion.</p>
+                            
                         </div>
                     </div>
                     <!-- /.row -->
@@ -305,7 +305,7 @@
         $("#categoryDep").change(function () {
             var id = $(this)[0].value;
             var url = "/Chart/FilterItem?id=" + id;
-            var result = "<select name='stationeryDep' id='stationeryDep' class='form-control'>";
+            var result = "<select name='stationeryDep' id='stationeryDep' class='form-control'><option value='0' selected>All</option>";
             $.ajax({
                 url: url,
                 type: "GET",
@@ -329,7 +329,7 @@
         $("#category").change(function () {
             var id = $(this)[0].value;
             var url = "/Chart/FilterItem?id=" + id;
-            var result = "<select name='stationery' id='stationery' class='form-control'>";
+            var result = "<select name='stationery' id='stationery' class='form-control'><option value='0' selected>All</option>";
             $.ajax({
                 url: url,
                 type: "GET",

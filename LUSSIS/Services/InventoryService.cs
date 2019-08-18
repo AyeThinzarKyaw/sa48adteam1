@@ -57,13 +57,14 @@ namespace LUSSIS.Services
             List<Stationery> stationeries = stationeryRepo.getAllStationeries();
             List<InventoryListDTO> inventory = new List<InventoryListDTO>();
 
-            foreach (Stationery s in stationeries)
+            foreach (Stationery st in stationeries)
             {
+                Stationery s = StationeryRepo.Instance.FindById(st.Id);
                 InventoryListDTO inventoryList = new InventoryListDTO();
                 {
                     inventoryList.StationeryId = s.Id;
                     inventoryList.ItemNumber = s.Code;
-                    inventoryList.Category = (String)categoryRepo.getCategoryType(s.CategoryId);
+                    inventoryList.Category = s.Category.Type;
                     inventoryList.Description = s.Description;
                     inventoryList.Location = s.Bin;
                     inventoryList.UnitOfMeasure = s.UnitOfMeasure;
@@ -200,6 +201,8 @@ namespace LUSSIS.Services
 
                 stockMovementBalance.Add(stockMovBalList);
             }
+
+            stockMovementBalance.Reverse();
 
             // set StockMovementBalanceDTO into StockAndSupplierDTO
 

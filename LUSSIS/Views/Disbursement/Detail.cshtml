@@ -98,7 +98,7 @@
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Dept Representative</td>
-                                                <td>:@dl.DepartmentContactName</td>
+                                                <td>:@dl.EmployeeName</td>
                                             }
                                         </tr>
                                         <tr>
@@ -244,11 +244,8 @@
                                                 </button>
                                             </td>
                                         </tr>
-
-                                    }
-                                    <tr>
-                                        <td colspan="4" style="padding: 0;">
-                                            <div class="collapse" id="collapseExample@{@dl.StationeryId}">
+                                        <tr class="collapse" id="collapseExample@{@dl.StationeryId}">
+                                            <td colspan="4" style="padding: 0;">
                                                 <table id="example2" class="table table-bordered table-hover">
                                                     <thead>
                                                         <tr>
@@ -261,7 +258,7 @@
                                                     <tbody>
                                                         @foreach (var dlpi in Model.DisbursementDetailsDTOList)
                                                         {
-                                                            if (dlpi.ItemCode == dl.ItemCode)
+                                                            if (dlpi.ItemCode == dl.ItemCode && dlpi.DisbursementId == dl.DisbursementId)
                                                             {
                                                                 <tr>
                                                                     <td>@dlpi.RequisitionID</td>
@@ -273,10 +270,9 @@
                                                         }
                                                     </tbody>
                                                 </table>
-                                            </div>
-
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    }
 
                                 }
                             </tbody>

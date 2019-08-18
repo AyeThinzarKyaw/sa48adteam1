@@ -86,28 +86,29 @@
                             <tbody>
                                 @foreach (var item in Model.adjustmentVoucher.AdjustmentVoucherDetails)
                                 {
-                                    <tr id="@item.Id">
-                                        <td>@item.Stationery.Code</td>
-                                        <td>@item.Stationery.Category.Type</td>
-                                        <td>@item.Stationery.Description</td>
-                                        <td>@item.Stationery.UnitOfMeasure</td>
-                                        @*<td>@item.Stationery.SupplierTenders.</td>*@
-                                        @{
-                                            if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
-                                            {
-                                                <th style="width: 150px;"><input type="text" class="form-control" value="@item.Quantity" onfocusout="updateQtyReceive(this,'@item.Id','@item.AdjustmentVoucherId');" /></th>
-                                            }
-                                            else
-                                            {
-                                                <td>@item.Quantity</td>
-                                            }
-                                        }
-                                        <td>@item.Reason</td>
-                                        @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                <tr id="@item.Id">
+                                    <td>@item.Stationery.Code</td>
+                                    <td>@item.Stationery.Category.Type</td>
+                                    <td>@item.Stationery.Description</td>
+                                    <td>@item.Stationery.UnitOfMeasure</td>
+                                    @*<td>@item.Stationery.SupplierTenders.</td>*@
+                                    @{
+                                        if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
                                         {
-                                            <td><a href="#" class="btn btn-sm btn-danger" onclick="remove(this, '@item.Id')">Remove</a></td>
+                                            <th style="width: 150px;"><input type="text" class="form-control" value="@item.Quantity" onfocusout="updateQtyReceive(this,'@item.Id','@item.AdjustmentVoucherId');" /></th>
+                                            <th style="width: 150px;"><input type="text" class="form-control" value="@item.Reason"/></th>
                                         }
-                                    </tr>
+                                        else
+                                        {
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Reason</td>
+                                        }
+                                    }
+                                    @if (Model.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                    {
+                                        <td><a href="#" class="btn btn-sm btn-danger" onclick="remove(this, '@item.Id')">Remove</a></td>
+                                    }
+                                </tr>
                                 }
                             </tbody>
                         </table>
