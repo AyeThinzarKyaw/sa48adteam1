@@ -14,6 +14,7 @@ namespace LUSSIS.Services
         private StationeryService() { }
 
         private static StationeryService instance = new StationeryService();
+
         public static IStationeryService Instance
         {
             get { return instance; }
@@ -50,6 +51,7 @@ namespace LUSSIS.Services
         {
             StationeryRepo.Instance.Update(stationery);
         }
+
         public IEnumerable<Category> GetAllCategories()
         {
             return CategoryRepo.Instance.FindAll().OrderBy(c=>c.Type).ToList();
@@ -59,6 +61,7 @@ namespace LUSSIS.Services
         {
             return SupplierRepo.Instance.FindAll().OrderBy(s => s.Name).ToList();
         }
+
         public void CreateCategory(Category category)
         {
             CategoryRepo.Instance.Create(category);

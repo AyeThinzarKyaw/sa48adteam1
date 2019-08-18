@@ -13,6 +13,7 @@ namespace LUSSIS.Services
         private SupplierService() { }
 
         private static SupplierService instance = new SupplierService();
+
         public static ISupplierService Instance
         {
             get { return instance; }
@@ -27,10 +28,12 @@ namespace LUSSIS.Services
         {
             return SupplierRepo.Instance.FindById(poId);
         }
+
         public void CreateSupplier(Supplier supplier)
         {
             SupplierRepo.Instance.Create(supplier);
         }
+
         public void UpdateSupplier(Supplier supplier)
         {
             SupplierRepo.Instance.Update(supplier);

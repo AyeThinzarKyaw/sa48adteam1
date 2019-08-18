@@ -24,7 +24,6 @@ namespace LUSSIS.Services
             employeeRepo = EmployeeRepo.Instance;
         }
 
-        //returns single instance
         public static IEmailNotificationService Instance
         {
             get { return instance; }
@@ -34,7 +33,6 @@ namespace LUSSIS.Services
         {
             string body = "Dear " + clerk.Name + ",\n\nThere is insufficient incoming stock for Stationery: " + s.Description + " of Item Code: " + s.Code + ".\nPlease raise a necessary Purchase Order for the recent demand. \n\nThank you and have a great day.";
             string subject = "Shortfall in Stationery. Please raise a Purchase Order.";
-
             SendNotificationEmail(clerk.Email, subject, body);
         }
 
@@ -44,7 +42,6 @@ namespace LUSSIS.Services
             string employeeEmail = employeeRepo.FindById(newRequisition.EmployeeId).Email;
             Employee deptHead = null;
             string deptHeadEmail = null;
-
             Employee cs = employeeRepo.GetCoverStaffByDepartmentIdAndDate(e.DepartmentId, DateTime.Now);
             if(cs != null)
             {
@@ -64,33 +61,8 @@ namespace LUSSIS.Services
             SendNotificationEmail(deptHeadEmail, subject, body);
         }
 
-        /**
-        private void SendEmail(MailMessage mail)
-        {
-            SmtpClient client = new SmtpClient("smtp.nus.edu.sg", 587);
-            client.Credentials = new NetworkCredential();
-            client.Send(mail);
-        } **/
-
         public void SendNotificationEmail(string receipient,string subject, string body, IEnumerable<string> attachments = null,string cc= null)
         {
-            //SmtpClient client = new SmtpClient();
-            //MailMessage mm = new MailMessage();
-            //mm.To.Add(receipient);
-            //mm.Subject = subject;
-            //mm.Body = body;
-            //if (attachments!=null)
-            //{
-            //    foreach (var item in attachments)
-            //    {
-            //        System.Net.Mail.Attachment attachment;
-            //        attachment = new System.Net.Mail.Attachment(item);
-            //        mm.Attachments.Add(attachment);
-            //    }
-            //}
-
-            //client.Send(mm);
-
             WebMail.SmtpServer = "smtp.gmail.com";
             //gmail port to send emails 
             WebMail.SmtpPort = 587;
@@ -102,7 +74,6 @@ namespace LUSSIS.Services
             WebMail.Password = "Team1@SA48";
             //Sender email address. 
             WebMail.From = "sa48team1@gmail.com";
-
             //Send email 
             WebMail.Send(to: "sa48team1@gmail.com", subject: subject, body: body,cc: cc,filesToAttach: attachments, isBodyHtml: false);
         }

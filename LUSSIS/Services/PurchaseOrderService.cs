@@ -61,15 +61,18 @@ namespace LUSSIS.Services
         {
             return PurchaseOrderRepo.Instance.GetPOCatalogue();
         }
+
         public void CreatePO(PurchaseOrder po)
         {            
-                po.OrderDateTime = DateTime.Now;                
-                PurchaseOrderRepo.Instance.Create(po);           
+            po.OrderDateTime = DateTime.Now;                
+            PurchaseOrderRepo.Instance.Create(po);           
         }
+
         public void UpdatePO(PurchaseOrder po)
         {
             PurchaseOrderRepo.Instance.Update(po);
         }
+
         public void CreatePODetail(PurchaseOrderDetail pod)
         {
             PurchaseOrderDetailRepo.Instance.Create(pod);
@@ -86,29 +89,22 @@ namespace LUSSIS.Services
             {
                 if (poCreateDTO.Catalogue.Single(c => c.Id == item.Id).Unsubmitted > 0)
                 {
-
                     PurchaseOrder po = new PurchaseOrder();
-
                     PurchaseOrderDetail pod = new PurchaseOrderDetail();
                     pod.StationeryId = item.Id;
                     pod.QuantityOrdered = poCreateDTO.Catalogue.Single(c => c.Id == item.Id).Unsubmitted;
-
                     if (poCreateDTO.ConfirmedPOs.Count == 0 || poCreateDTO.ConfirmedPOs.Where(x => x.SupplierId == item.CategoryId).Count() <= 0)
                     {
                         //if no Confirm PO for this supplier yet, create new PO
                         po.SupplierId = item.CategoryId;
                         po.Status = Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.PENDING);
                         po.EstDeliveryDate = poCreateDTO.EstimatedDates.Single(e => e.Key == po.SupplierId).Value;
-
                         pod.PurchaseOrderId = po.Id;
                         po.PurchaseOrderDetails.Add(pod);
                         poCreateDTO.ConfirmedPOs.Add(po);
                     }
                     else
                     {
-                        //po = poCreateDTO.ConfirmedPOs.Single(x => x.SupplierId == item.CategoryId);
-                        //pod.PurchaseOrderId = po.Id;
-
                         poCreateDTO.ConfirmedPOs.Single(x => x.SupplierId == item.CategoryId).PurchaseOrderDetails.Add(pod);
                     }
                 }                
@@ -118,10 +114,8 @@ namespace LUSSIS.Services
             {
                 purchaseOrder.EmployeeId = createdBy;
                 PurchaseOrderService.Instance.CreatePO(purchaseOrder);
-                
                 EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Request for purchase order approval", body: "Dear Manager,\n\nStore clerk - "+ employee.Name+" raised a purchase order. Please check and approve." , cc: "sa48team1@gmail.com");
             }
         }
-        
     }
 }

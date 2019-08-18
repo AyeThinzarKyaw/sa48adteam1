@@ -46,7 +46,6 @@ namespace LUSSIS.Services
         {
             //get dept Id
             Employee deptHead = employeeRepo.FindById(deptHeadEmployeeId);
-
             return requisitionRepo.DepartmentRequisitionsEagerLoadEmployee(deptHead.DepartmentId);
         }
 
@@ -54,7 +53,6 @@ namespace LUSSIS.Services
         {
             //get dept Id
             Employee deptHead = employeeRepo.FindById(deptHeadEmployeeId);
-
             return requisitionRepo.DepartmentPendingRequisitionsEagerLoadEmployee(deptHead.DepartmentId);
         }
 
@@ -71,16 +69,13 @@ namespace LUSSIS.Services
                 r.Status = RequisitionStatusEnum.APPROVED.ToString();
                 requisitionRepo.Update(r);
                 CascadeToRequisitionDetails(action, requisitionId);
-                
             }
             else
             {
                 r.Status = RequisitionStatusEnum.REJECTED.ToString();
                 requisitionRepo.Update(r);
                 CascadeToRequisitionDetails(action, requisitionId);
-
             }
-
             emailNotificationService.NotifyEmployeeApprovedOrRejectedRequisition(r, r.Employee);
         }
 
@@ -113,9 +108,7 @@ namespace LUSSIS.Services
                     {
                         //throw new Exception("This RD shouldnt belong to a pending Requsition!");
                     }
-                    
                 }
-               
             }
             else
             {

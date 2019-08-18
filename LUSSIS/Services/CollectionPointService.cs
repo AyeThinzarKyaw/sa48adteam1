@@ -13,6 +13,7 @@ namespace LUSSIS.Services
         private CollectionPointService() { }
 
         private static CollectionPointService instance = new CollectionPointService();
+
         public static ICollectionPointService Instance
         {
             get { return instance; }
@@ -54,7 +55,6 @@ namespace LUSSIS.Services
         {
             return CollectionPointRepo.Instance.GetDepartmentCollectionPointByEmployeeId(employeeId);
         }
-
 
         public Department GetDepartmentByEmployeeId(int employeeId)
         {

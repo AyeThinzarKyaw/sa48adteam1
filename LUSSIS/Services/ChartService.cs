@@ -25,6 +25,8 @@ namespace LUSSIS.Services
         private IDepartmentRepo departmentRepo;
         private IPurchaseOrderRepo purchaseOrderRepo;
         private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
+        private static ChartService instance = new ChartService();
+
         public ChartService()
         {
             stationeryRepo = StationeryRepo.Instance;
@@ -42,8 +44,6 @@ namespace LUSSIS.Services
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
         }
 
-        private static ChartService instance = new ChartService();
-
         public static IChartService Instance
         {
             get { return instance; }
@@ -53,16 +53,13 @@ namespace LUSSIS.Services
         {
             List<PurchaseOrderDetail> PurchaseOrderDetailsList = purchaseOrderDetailRepo.GetPurchaseOrderDetailsBySupplierId(SupplierId);
             IEnumerable<SupplierTender> SupplierTendersList = supplierTenderRepo.FindBy(x => x.SupplierId == SupplierId);
-
             List<ChartDTO> chartDTOs = new List<ChartDTO>();
-
             foreach (PurchaseOrderDetail pod in PurchaseOrderDetailsList)
             {
                 foreach (SupplierTender st in SupplierTendersList)
                 {
                     if (pod.StationeryId == st.StationeryId && pod.PurchaseOrder.SupplierId == st.SupplierId && pod.Stationery.CategoryId == CategoryId && pod.StationeryId == StationeryId)
                     {
-
                         ChartDTO chartDTO = new ChartDTO()
                         {
                             PubchaseOrderDetailId = pod.Id,
@@ -80,7 +77,6 @@ namespace LUSSIS.Services
                             EmployeeId = pod.PurchaseOrder.Employee.Id,
                             EmployeeName = pod.PurchaseOrder.Employee.Name,
                             SupplierId = pod.PurchaseOrder.SupplierId,
-
                             PurchaseOrderDetailForChart = pod,
                             EmployeeForChart = pod.PurchaseOrder.Employee,
                             SupplierForChart = pod.PurchaseOrder.Supplier,
@@ -90,20 +86,18 @@ namespace LUSSIS.Services
                             CategoryForChart = pod.Stationery.Category,
                         };
                         chartDTOs.Add(chartDTO);
-
                     }
-
                 }
             }
             return chartDTOs;
         }
+
         public ChartFilteringDTO FilteringByAttributes()
         {
             List<Supplier> suppliers = (List<Supplier>)supplierRepo.FindAll();
             List<Stationery> stationeries = (List<Stationery>)stationeryRepo.FindAll();
             List<Category> categories = (List<Category>)categoryRepo.FindAll();
             List<Department> departments = (List<Department>)departmentRepo.FindAll();
-
             ChartFilteringDTO FilteringDetails = new ChartFilteringDTO()
             {
                 SupplierForChartList = suppliers,

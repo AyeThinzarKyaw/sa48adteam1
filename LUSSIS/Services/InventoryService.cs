@@ -45,8 +45,7 @@ namespace LUSSIS.Services
             purchaseOrderRepo = PurchaseOrderRepo.Instance;
             purchaseOrderDetailRepo = PurchaseOrderDetailRepo.Instance;
         }
-
-        //returns single instance
+        
         public static IInventoryService Instance
         {
             get { return instance; }
@@ -56,7 +55,6 @@ namespace LUSSIS.Services
         {
             List<Stationery> stationeries = stationeryRepo.getAllStationeries();
             List<InventoryListDTO> inventory = new List<InventoryListDTO>();
-
             foreach (Stationery st in stationeries)
             {
                 Stationery s = StationeryRepo.Instance.FindById(st.Id);
@@ -72,7 +70,6 @@ namespace LUSSIS.Services
                 }
                 inventory.Add(inventoryList);
             }
-
             return inventory;
         }
 
@@ -81,11 +78,9 @@ namespace LUSSIS.Services
             List<StockMovementDTO> stockMovement = new List<StockMovementDTO>();
             List<StockMovementBalanceDTO> stockMovementBalance = new List<StockMovementBalanceDTO>();
             List<SupplierStockRankDTO> supplierStockRank = new List<SupplierStockRankDTO>();
-
             Stationery s = stationeryRepo.FindById(stationeryId);
             Category c = categoryRepo.FindById(s.CategoryId);
             List<SupplierTender> st = (List<SupplierTender>)supplierTenderRepo.FindBy(x => x.StationeryId == stationeryId);
-
             List<Supplier> sp = new List<Supplier>();
             foreach (SupplierTender rankedsupplier in st)
             {
@@ -111,7 +106,6 @@ namespace LUSSIS.Services
                 supplierStockRank.Add(supstockrank);
             }
 
-
             //retrieve all adjustment voucher Ids that are acknowledged
             List<int> avId = adjustmentVoucherRepo.getAdjustmentVoucherIdsWithAcknowledgedStatus();
 
@@ -124,7 +118,6 @@ namespace LUSSIS.Services
                 {
                     avDet.Add(aVD);
                 }
-
             }
 
             // set retrieved adjustmentvouchers into StockMovementDTO
@@ -186,26 +179,21 @@ namespace LUSSIS.Services
 
             // order the list by date & alphabetically
             stockMovement = stockMovement.OrderBy(x => x.MovementDate).ToList();
-
             int runningBal = 0;
 
             // set StockMovementDTO into StockMovementBalanceDTO
             foreach (StockMovementDTO stkMovDTO in stockMovement)
             {
-
                 StockMovementBalanceDTO stockMovBalList = new StockMovementBalanceDTO();
-
                 stockMovBalList.StockMovement = stkMovDTO;
                 runningBal = runningBal + stkMovDTO.Quantity;
                 stockMovBalList.Balance = runningBal;
-
                 stockMovementBalance.Add(stockMovBalList);
             }
 
             stockMovementBalance.Reverse();
 
             // set StockMovementBalanceDTO into StockAndSupplierDTO
-
             StockAndSupplierDTO stockAndSuppliers = new StockAndSupplierDTO();
 
             stockAndSuppliers.StationeryId = s.Id;
@@ -214,7 +202,6 @@ namespace LUSSIS.Services
             stockAndSuppliers.Description = s.Description;
             stockAndSuppliers.Location = s.Bin;
             stockAndSuppliers.UnitOfMeasure = s.UnitOfMeasure;
-
             stockAndSuppliers.SupplierStockRank = supplierStockRank;
 
             foreach (StockMovementBalanceDTO stockMovementBalanceDTO in stockMovementBalance)
@@ -223,9 +210,7 @@ namespace LUSSIS.Services
             }
 
             stockAndSuppliers.StockMovementBalance = stockMovementBalance;
-
             return stockAndSuppliers;
         }
-
     }
 }

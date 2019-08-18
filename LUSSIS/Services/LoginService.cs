@@ -27,7 +27,6 @@ namespace LUSSIS.Services
             departmentCoverEmployeeRepo = DepartmentCoverEmployeeRepo.Instance;
         }
 
-        //returns single instance
         public static ILoginService Instance
         {
             get { return instance; }
@@ -46,9 +45,6 @@ namespace LUSSIS.Services
 
         public LoginDTO GetEmployeeLoginByUsernameAndPassword(string username, string password)
         {
-            //return null if not valid employee
-            //else return a loginDTO with required details
-
             //Hash password first
             if (password == null)
                 return null;
@@ -76,9 +72,6 @@ namespace LUSSIS.Services
 
         public Models.MobileDTOs.LoginDTO GetEmployeeLoginByUsernameAndPassword2(string username, string password)
         {
-            //return null if not valid employee
-            //else return a loginDTO with required details
-
             //Hash password first
             if (password == null)
                 return null;
@@ -120,5 +113,4 @@ namespace LUSSIS.Services
 
         }
     }
-
 }

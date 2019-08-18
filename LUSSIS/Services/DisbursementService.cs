@@ -28,6 +28,8 @@ namespace LUSSIS.Services
         private IPurchaseOrderDetailRepo purchaseOrderDetailRepo;
         private IRetrievalService retrievalService;
         private IRequisitionCatalogueService requisitionCatalogueService;
+        private static DisbursementService instance = new DisbursementService();
+
         public DisbursementService()
         {
             stationeryRepo = StationeryRepo.Instance;
@@ -46,14 +48,11 @@ namespace LUSSIS.Services
             retrievalService = RetrievalService.Instance;
             requisitionCatalogueService = RequisitionCatalogueService.Instance;
         }
-        private static DisbursementService instance = new DisbursementService();
 
         public static IDisbursementService Instance
         {
             get { return instance; }
         }
-
-
 
         public List<DisbursementDetailsDTO> GetDepRepDisbursementsDetails(int EmployeeId)
         {
@@ -61,7 +60,6 @@ namespace LUSSIS.Services
             List<DisbursementDetailsDTO> DisplayDisbursementDetailsList = new List<DisbursementDetailsDTO>();
             foreach (RequisitionDetail rd in RequisitionDetailsList)
             {
-
                 DisbursementDetailsDTO disbursementDTO = new DisbursementDetailsDTO()
                 {
                     Id = rd.Id,
@@ -91,25 +89,18 @@ namespace LUSSIS.Services
                     DeliveredEmployeeName = rd.Disbursement.Employee.Name,
                     ReceivedEmployeedDepName = rd.Disbursement.Employee1.Department.DepartmentName,
                     DeliveredEmployeeDepName = rd.Disbursement.Employee.Department.DepartmentName,
-                    
-
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
-
-
             }
-
             return DisplayDisbursementDetailsList;
         }
 
         public List<DisbursementDetailsDTO> GetClerkDisbursementsDetails(int EmployeeId)
         {
-
             List<RequisitionDetail> RequisitionDetailsList = requisitionDetailRepo.GetRequisitionDetailsByClerkDisbursementId(EmployeeId);
             List<DisbursementDetailsDTO> DisplayDisbursementDetailsList = new List<DisbursementDetailsDTO>();
             foreach (RequisitionDetail rd in RequisitionDetailsList)
             {
-
                 DisbursementDetailsDTO disbursementDTO = new DisbursementDetailsDTO()
                 {
                     Id = rd.Id,
@@ -139,11 +130,8 @@ namespace LUSSIS.Services
                     DeliveredEmployeeName = rd.Disbursement.Employee.Name,
                     ReceivedEmployeedDepName = rd.Disbursement.Employee1.Department.DepartmentName,
                     DeliveredEmployeeDepName = rd.Disbursement.Employee.Department.DepartmentName,
-
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
-
-
             }
             return DisplayDisbursementDetailsList;
         }
@@ -254,26 +242,21 @@ namespace LUSSIS.Services
         {
             List<Models.MobileDTOs.RequisitionDetailDTO> requisitionDetails = disbursement.RequisitionDetails;
             List<RequisitionDetail> unfulfilledRds = new List<RequisitionDetail>();
-
             foreach (Models.MobileDTOs.RequisitionDetailDTO rd in requisitionDetails)
             {
                 if (rd.QuantityOrdered != rd.QuantityDelivered)
                 {
                     int qtyDifference = (int)rd.QuantityDelivered - rd.QuantityOrdered;
-
                     AdjustmentVoucher targetAdjustmentVoucher = retrievalService.retrieveNewOrAvailableAdjustmentVoucherForClerk(disbursement.DeliveredEmployeeId);
                     retrievalService.createNewAdjustmentVoucherDetail(targetAdjustmentVoucher, rd.StationeryId, qtyDifference);
-
                     if (rd.QuantityDelivered > 0)
                     {
                         RequisitionDetail rd1 = requisitionDetailRepo.FindById(rd.Id);
                         rd1.QuantityDelivered = rd.QuantityDelivered;
                         rd1.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
                         requisitionDetailRepo.Update(rd1);
-
                         int diff = rd.QuantityOrdered - (int)rd.QuantityDelivered;
                         int availStockForUnfulfilled = requisitionCatalogueService.GetAvailStockForUnfulfilledRd(rd.StationeryId, rd.Id);
-
                         if (availStockForUnfulfilled < diff) //insufficient stock
                         {
                             int waitlistCount = diff - availStockForUnfulfilled;
@@ -299,7 +282,6 @@ namespace LUSSIS.Services
                 }
             }
             requisitionCatalogueService.CheckRequisitionCompletenessAfterDisbursement(disbursement.Id, disbursement);
-
         }
 
         public void SetDisbursementOnRoute(int disbursementId)

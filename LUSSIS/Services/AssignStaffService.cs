@@ -11,7 +11,6 @@ namespace LUSSIS.Services
     public class AssignStaffService : IAssignStaffService
     {
         private AssignStaffService() { }
-
         private static AssignStaffService instance = new AssignStaffService();
         public static IAssignStaffService Instance
         {
@@ -23,7 +22,6 @@ namespace LUSSIS.Services
             Employee employee = EmployeeRepo.Instance.FindById(eId);
             int dId = employee.DepartmentId;
             Employee deptrep = EmployeeRepo.Instance.GetDeptRepByDepartmentId(dId);
-
             return deptrep;
         }
 
@@ -31,7 +29,6 @@ namespace LUSSIS.Services
         {
             return EmployeeRepo.Instance.FindById(eId);
         }
-
 
         public IEnumerable<Employee> GetAllStaffAndRepInDept(int dId)
         {
@@ -43,6 +40,7 @@ namespace LUSSIS.Services
             e.RoleId = (int)Enums.Roles.DepartmentStaff;
             EmployeeRepo.Instance.Update(e);
         }
+
         public void UpdateDeptRep(Employee e)
         {
             e.RoleId = (int)Enums.Roles.DepartmentRepresentative;
@@ -79,8 +77,6 @@ namespace LUSSIS.Services
         public IEnumerable<DepartmentCoverEmployee> GetExistingDepartmentCoverEmployeesWithinDateRange(DateTime FromDate, DateTime ToDate)
         {
             return DepartmentCoverEmployeeRepo.Instance.GetExistingDepartmentCoverEmployeesWithinDateRange(FromDate, ToDate);
-
-
         }
     }
 }

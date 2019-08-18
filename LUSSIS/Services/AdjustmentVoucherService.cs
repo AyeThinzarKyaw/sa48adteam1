@@ -25,8 +25,6 @@ namespace LUSSIS.Services
             stationeryRepo = StationeryRepo.Instance;
         }
 
-
-        //returns single instance
         public static IAdjustmentVoucherService Instance
         {
             get { return instance; }
@@ -56,6 +54,7 @@ namespace LUSSIS.Services
         {
             adjustmentVoucherRepo.Create(adj);
         }
+
         public void UpdateAdjustmentVoucher(AdjustmentVoucher adj)
         {
             if(adj.Status.Equals("Submitted"))
@@ -75,6 +74,7 @@ namespace LUSSIS.Services
         {
             adjustmentVoucherDetailRepo.Create(adjdetail);
         }
+
         public void UpdateAdjustmentVoucherDetail(AdjustmentVoucherDetail adjdetail)
         {
             adjustmentVoucherDetailRepo.Update(adjdetail);
@@ -89,7 +89,6 @@ namespace LUSSIS.Services
         {
             List<AdjustmentVoucherDTO> voucherDTO = new List<AdjustmentVoucherDTO>();
             IEnumerable<AdjustmentVoucher> adjs = adjustmentVoucherRepo.FindAll();
-
             foreach (var adj in adjs)
             {
                 AdjustmentVoucherDTO newVoucher = new AdjustmentVoucherDTO();
@@ -114,11 +113,7 @@ namespace LUSSIS.Services
 
         public void AutoAdjustmentsForRetrieval(int clerkEmployeeId, List<RetrievalItemDTO> retrievalList)
         {
-            //any existing open adjustment voucher for this clerk?
-
-            //could be null
             AdjustmentVoucher openAV = adjustmentVoucherRepo.FindOneBy(x=>x.EmployeeId == clerkEmployeeId && x.Status == "Open");
-
             foreach (var item in retrievalList)
             {
                 if (item.NeededQuantity > item.RetrievedQty) //retrieval short of needed
@@ -127,7 +122,6 @@ namespace LUSSIS.Services
                     {
                         //open new AV
                         openAV = new AdjustmentVoucher { Date = DateTime.Now, EmployeeId = clerkEmployeeId, Status = AdjustmentVoucherStatus.Open.ToString() };
-
                         //persist in DB
                         openAV = adjustmentVoucherRepo.Create(openAV);
 
@@ -138,7 +132,6 @@ namespace LUSSIS.Services
                         Quantity = adjustmentQty,
                         Reason = AdjustmentVoucherDefaultReasons.RETRIEVAL_SHORTAGE.ToString(),
                         StationeryId = item.StationeryId };
-                    //persist in db
                     adjustmentVoucherDetailRepo.Create(newAVD);
                 }
             }

@@ -14,6 +14,7 @@ namespace LUSSIS.Services
         private SupplierTenderService() { }
 
         private static SupplierTenderService instance = new SupplierTenderService();
+
         public static ISupplierTenderService Instance
         {
             get { return instance; }
@@ -35,10 +36,10 @@ namespace LUSSIS.Services
         {
             SupplierTenderRepo.Instance.Create(supplierTender);
         }
+
         public void UpdateSupplierTender(SupplierTender supplierTender)
         {
             SupplierTenderRepo.Instance.Update(supplierTender);
         }
-
     }
 }
