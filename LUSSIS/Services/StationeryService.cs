@@ -36,6 +36,11 @@ namespace LUSSIS.Services
             return stationery;
         }
 
+        public IEnumerable<Stationery> GetStationeriesByCategory(int id)
+        {
+            return StationeryRepo.Instance.getStationeriesByCategoryId(id);
+        }
+
         public void CreateStationery(Stationery stationery)
         {
             StationeryRepo.Instance.Create(stationery);

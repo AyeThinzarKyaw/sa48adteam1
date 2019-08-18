@@ -36,6 +36,13 @@ namespace LUSSIS.Controllers
 
             return View(model);
         }
+        public JsonResult FilterItem(int id)
+        {
+            var aa = StationeryService.Instance.GetStationeriesByCategory(id);
+
+            return Json(aa, JsonRequestBehavior.AllowGet);
+        }
+
         #region ExportAsPDF
         public ActionResult ExportAsPDF(ChartFilteringDTO model)
         {

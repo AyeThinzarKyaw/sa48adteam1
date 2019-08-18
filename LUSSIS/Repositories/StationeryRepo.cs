@@ -27,5 +27,10 @@ namespace LUSSIS.Repositories
             return stationeries;
         }
 
+        public List<Stationery> getStationeriesByCategoryId(int catId)
+        {
+            List<Stationery> stationeries = Context.Stationeries.Where(s => s.CategoryId == catId ).ToList();
+            return stationeries;
+        }
     }
 }
