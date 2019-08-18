@@ -104,7 +104,7 @@
                                 {
                                     <tr>
                                         <td>@po.Id</td>
-                                        <td>@po.OrderDateTime</td>
+                                        <td>@po.OrderDateTime.ToString("dd/MM/yyyy")</td>
                                         @{ string estDate = "";
                                             if (po.EstDeliveryDate != null)
                                             {
