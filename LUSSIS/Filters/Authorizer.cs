@@ -11,9 +11,7 @@ namespace LUSSIS.Filters
     {
         public void OnAuthorization(AuthorizationContext ac)
         {
-
             if (HttpContext.Current.Session["existinguser"] == null)
-
             {
                 ac.Result = new RedirectToRouteResult(
                     new RouteValueDictionary
@@ -22,7 +20,6 @@ namespace LUSSIS.Filters
                         { "action", "Index" }
                     });
             }
-
         }
     }
 }

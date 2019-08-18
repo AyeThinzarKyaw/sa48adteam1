@@ -8,10 +8,10 @@ namespace LUSSIS.Models.DTOs
 {
     public class StockMovementDTO
     {
-
         public DateTime MovementDate { get; set; }
-        public String DepartmentOrSupplier { get; set; }
-        public int Quantity { get; set; }
 
+        public String DepartmentOrSupplier { get; set; }
+
+        public int Quantity { get; set; }
     }
 }

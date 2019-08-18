@@ -8,6 +8,5 @@ namespace LUSSIS.Models.DTOs
     public class InventoryListRecordsDTO
     {
         public List<InventoryListDTO> InventoryList { get; set; }
-        
     }
 }

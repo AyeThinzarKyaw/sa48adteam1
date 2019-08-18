@@ -21,6 +21,5 @@ namespace LUSSIS.Models.DTOs
         public Department ReqDepartment { get; set; }
 
         public CollectionPoint ReqCollectionPoint { get; set; }
-
     }
 }

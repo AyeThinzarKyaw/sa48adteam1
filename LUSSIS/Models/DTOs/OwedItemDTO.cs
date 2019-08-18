@@ -10,10 +10,5 @@ namespace LUSSIS.Models.DTOs
         public Stationery Stationery{get; set;}
 
         public int QtyOwed { get; set; }
-
-        //public int InStock { get; set; }
-
-        //public int Waitlist { get; set; }
-
     }
 }

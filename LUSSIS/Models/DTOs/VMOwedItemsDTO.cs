@@ -10,6 +10,5 @@ namespace LUSSIS.Models.DTOs
         public LoginDTO LoginDTO { get; set; }
 
         public List<DeptOwedItemDTO> DeptOwedItems { get; set; }
-
     }
 }

@@ -20,6 +20,5 @@ namespace LUSSIS.Models.DTOs
         public List<RequisitionDetail> RequisitionDetails { get; set; }
 
         public string Remarks { get; set; }
-
     }
 }

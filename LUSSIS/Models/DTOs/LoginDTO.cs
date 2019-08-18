@@ -12,7 +12,7 @@ namespace LUSSIS.Models.DTOs
         public int RoleId { get; set; }
 
         public string SessionGuid { get; set; }
-        public string Department { get; set; }
 
+        public string Department { get; set; }
     }
 }
