@@ -83,7 +83,6 @@ namespace LUSSIS.Controllers
                 {
                     Supplier newSupplier = this.generateSupplier(supplier);
                     SupplierService.Instance.CreateSupplier(newSupplier);
-
                     return RedirectToAction("Index");
                 }
                 return View(supplier);
@@ -104,7 +103,6 @@ namespace LUSSIS.Controllers
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 SupplierDetailsDTO supplierDetails = this.generateSupplierDetailsDTO(supplierId);
-
                 return View(supplierDetails);
             }
             return RedirectToAction("Index", "Login");
@@ -125,12 +123,10 @@ namespace LUSSIS.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-
                     Supplier newSupplier = this.generateSupplier(supplier);
                     SupplierService.Instance.UpdateSupplier(newSupplier);
                     return RedirectToAction("Index");
                 }
-
                 return View(supplier);
             }
             return RedirectToAction("Index", "Login");
@@ -160,7 +156,6 @@ namespace LUSSIS.Controllers
         private SupplierDetailsDTO generateSupplierDetailsDTO(int supplierId)
         {
             Supplier supplier = SupplierService.Instance.getSupplierById(supplierId);
-
             SupplierDetailsDTO supplierDetails = new SupplierDetailsDTO();
             supplierDetails.SupplierId = supplier.Id;
             supplierDetails.Code = supplier.Code;
@@ -172,7 +167,6 @@ namespace LUSSIS.Controllers
             supplierDetails.Address1 = supplier.Address1;
             supplierDetails.Address2 = supplier.Address2;
             supplierDetails.Address3 = supplier.Address3;
-
             return supplierDetails;
         }
 

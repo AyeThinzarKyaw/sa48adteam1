@@ -114,7 +114,7 @@ namespace LUSSIS.Services
             {
                 purchaseOrder.EmployeeId = createdBy;
                 PurchaseOrderService.Instance.CreatePO(purchaseOrder);
-                EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Request for purchase order approval", body: "Dear Manager,\n\nStore clerk - "+ employee.Name+" raised a purchase order. Please check and approve." , cc: "sa48team1@gmail.com");
+                EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "Request for purchase order approval", body: "Dear Manager,\n\nStore clerk - " + employee.Name + " raised a purchase order. Please check and approve.", cc: "sa48team1@gmail.com");
             }
         }
     }

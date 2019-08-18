@@ -22,14 +22,6 @@ namespace LUSSIS.Controllers
             emailNotificationService = EmailNotificationService.Instance;
         }
 
-
-        // GET: Requisition
-        //[Authorizer]
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
         [Authorizer]
         public ActionResult ViewCatalogue()
         {
@@ -42,11 +34,11 @@ namespace LUSSIS.Controllers
                 }
                 List<CatalogueItemDTO> catalogueItems = requisitionCatalogueService.GetCatalogueItems(currentUser.EmployeeId);
                 FormRequisitionDTO model = new FormRequisitionDTO { CatalogueItems = catalogueItems };
-
                 return View(model);
             }
             return RedirectToAction("Index", "Login");
         }
+
         [Authorizer]
         public JsonResult AddItemToCart(int employeeId, int stationeryId, int inputQty)
         {
@@ -58,8 +50,8 @@ namespace LUSSIS.Controllers
                 reserved = catalogueItemDTO.ReservedCount,
                 waitlist = catalogueItemDTO.WaitlistCount
             }, JsonRequestBehavior.AllowGet);
-
         }
+
         [Authorizer]
         public JsonResult RemoveItemFromCart(int employeeId, int stationeryId)
         {
@@ -70,6 +62,7 @@ namespace LUSSIS.Controllers
                 lowstockcount = catalogueItemDTO.LowStockAvailability
             }, JsonRequestBehavior.AllowGet);
         }
+
         [Authorizer]
         public ActionResult SubmitRequisitionForm()
         {
@@ -89,12 +82,8 @@ namespace LUSSIS.Controllers
 
                     //notify dept head for approval
                     emailNotificationService.NotifyDeptHeadToApprovePendingRequisition(newRequisition);
-
                 }
-
                 return RedirectToAction("ViewCatalogue");
-                //return to catalogue/dashboard view
-                //ViewCatalogue(loginDTO); 
             }
             return RedirectToAction("Index", "Login");
         }
@@ -116,7 +105,6 @@ namespace LUSSIS.Controllers
                 }
                 //Get all requsition from this employee
                 List<Requisition> requisitionHistory = requisitionCatalogueService.GetPersonalRequisitionHistory(currentUser.EmployeeId);
-
                 RequisitionsDTO model = new RequisitionsDTO() { Requisitions = requisitionHistory };
 
                 //viewData add additional data
@@ -159,6 +147,7 @@ namespace LUSSIS.Controllers
             }
             return RedirectToAction("Index", "Login");
         }
+
         [Authorizer]
         public ActionResult CancelWaitlistedRequisitionDetail(int requisitionDetailId, int requisitionId)
         {
@@ -178,6 +167,5 @@ namespace LUSSIS.Controllers
             }
             return RedirectToAction("Index", "Login");
         }
-
     }
 }

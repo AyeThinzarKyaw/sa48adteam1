@@ -33,7 +33,11 @@ namespace LUSSIS.Services
         public Stationery GetStationeryById(int id)
         {
             Stationery stationery=StationeryRepo.Instance.FindById(id);
-            stationery.SupplierTenders = stationery.SupplierTenders.OrderBy(x => x.Rank).ToList();
+            if (stationery != null)
+            {
+                stationery.SupplierTenders = stationery.SupplierTenders.OrderBy(x => x.Rank).ToList();
+            }
+            
             return stationery;
         }
 

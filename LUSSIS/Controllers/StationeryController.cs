@@ -44,7 +44,6 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
                 return View(stationery);
             }
@@ -63,7 +62,6 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 StationeryDetailsDTO stationery = new StationeryDetailsDTO();
                 stationery.Categories = StationeryService.Instance.GetAllCategories();
                 stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
@@ -85,7 +83,6 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 if (ModelState.IsValid)
                 {
                     if (stationery.Supplier1 == stationery.Supplier2
@@ -99,14 +96,12 @@ namespace LUSSIS.Controllers
                         stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
                         return View(stationery);
                     }
-
                     Stationery newStationery = this.generateStationery(stationery);
                     StationeryService.Instance.CreateStationery(newStationery);
 
                     this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
                     this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
                     this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
-
                     return RedirectToAction("Index");
                 }
                 stationery.Categories = StationeryService.Instance.GetAllCategories();
@@ -116,11 +111,11 @@ namespace LUSSIS.Controllers
             return RedirectToAction("Index", "Login");
         }
 
-
         //By ATZK
         [Authorizer]
         private Stationery generateStationery(StationeryDetailsDTO stationery)
         {
+           
             Stationery newStationery = StationeryService.Instance.GetStationeryById(stationery.StationeryId);
             if (newStationery == null) newStationery = new Stationery();
             newStationery.Id = stationery.StationeryId;
@@ -131,18 +126,14 @@ namespace LUSSIS.Controllers
             newStationery.Bin = stationery.Bin;
             newStationery.Status = Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE);
             return newStationery;
-
         }
-
 
         //By ATZK
         [Authorizer]
         private void generateSupplierTender(int supplierId, int rank, int stationeryId, decimal price)
         {
             SupplierTender supplierTender = new SupplierTender();
-
             supplierTender = SupplierTenderService.Instance.GetSupplierTendersOfCurrentYearByStationeryId(stationeryId).SingleOrDefault(s => s.Rank == rank);
-
             if (supplierTender == null)
             {
                 supplierTender = new SupplierTender();
@@ -160,7 +151,6 @@ namespace LUSSIS.Controllers
                 supplierTender.Price = price;
                 SupplierTenderService.Instance.UpdateSupplierTender(supplierTender);
             }
-
         }
 
         //By ATZK
@@ -168,7 +158,6 @@ namespace LUSSIS.Controllers
         private StationeryDetailsDTO generateStationeryDetailsDTO(int stationeryId)
         {
             Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
-
             StationeryDetailsDTO stationeryDetails = new StationeryDetailsDTO();
             stationeryDetails.StationeryId = stationery.Id;
             stationeryDetails.Code = stationery.Code;
@@ -181,9 +170,7 @@ namespace LUSSIS.Controllers
             stationeryDetails.Price1 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 1).Price;
             stationeryDetails.Price2 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 2).Price;
             stationeryDetails.Price3 = stationery.SupplierTenders.SingleOrDefault(x => x.Rank == 3).Price;
-
             return stationeryDetails;
-
         }
 
         //UPDATE stationery getMethod
@@ -198,9 +185,7 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 StationeryDetailsDTO stationeryDetails = this.generateStationeryDetailsDTO(stationeryId);
-
                 stationeryDetails.Categories = StationeryService.Instance.GetAllCategories();
                 stationeryDetails.Suppliers = StationeryService.Instance.GetAllSuppliers();
                 return View(stationeryDetails);
@@ -221,7 +206,6 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 if (ModelState.IsValid)
                 {
                     if (stationery.Supplier1 == stationery.Supplier2 || stationery.Supplier1 == stationery.Supplier3 || stationery.Supplier2 == stationery.Supplier3)
@@ -233,14 +217,11 @@ namespace LUSSIS.Controllers
                         stationery.Suppliers = StationeryService.Instance.GetAllSuppliers();
                         return View(stationery);
                     }
-
                     Stationery newStationery = this.generateStationery(stationery);
                     StationeryService.Instance.UpdateStationery(newStationery);
-
                     this.generateSupplierTender(stationery.Supplier1, 1, newStationery.Id, stationery.Price1);
                     this.generateSupplierTender(stationery.Supplier2, 2, newStationery.Id, stationery.Price2);
                     this.generateSupplierTender(stationery.Supplier3, 3, newStationery.Id, stationery.Price3);
-
                     return RedirectToAction("Index");
                 }
                 stationery.Categories = StationeryService.Instance.GetAllCategories();
@@ -249,7 +230,6 @@ namespace LUSSIS.Controllers
             }
             return RedirectToAction("Index", "Login");
         }
-
 
         //CREATE category postMethod call from ajax
         //By ATZK
@@ -260,7 +240,6 @@ namespace LUSSIS.Controllers
             category.Type = type;
             StationeryService.Instance.CreateCategory(category);
             var aa = StationeryService.Instance.GetAllCategories();
-
             var bb =
                 from c in aa
                 orderby c.Type
@@ -284,7 +263,6 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 Stationery stationery = StationeryService.Instance.GetStationeryById(stationeryId);
                 if (stationery.Status == Enum.GetName(typeof(Enums.ActiveStatus), Enums.ActiveStatus.ACTIVE))
                 {
@@ -299,6 +277,5 @@ namespace LUSSIS.Controllers
             }
             return RedirectToAction("Index", "Login");
         }
-
     }
 }
