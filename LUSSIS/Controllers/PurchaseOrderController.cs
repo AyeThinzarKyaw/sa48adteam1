@@ -126,6 +126,17 @@ namespace LUSSIS.Controllers
                             purchaseOrder.Status = reply;
                             purchaseOrder.Remark = remark;
                             PurchaseOrderService.Instance.UpdatePO(purchaseOrder);
+                            if (reply != "REJECTED")
+                            {
+                                string supplierName = purchaseOrder.Supplier.Name;//SupplierService.Instance.getSupplierById(purchaseOrder.SupplierId);
+                                string itemlist = "";
+                                foreach (PurchaseOrderDetail po in purchaseOrder.PurchaseOrderDetails)
+                                {
+                                    Stationery s = StationeryService.Instance.GetStationeryById(po.StationeryId);
+                                    itemlist += s.Description + " : " + po.QuantityOrdered + "\n";
+                                }
+                                EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "New Purchase Order" + DateTime.Now.ToString("dd/MM/yyyy"), body: "Dear " + supplierName + ",\n\nWe want to order these items. Please delivery the listed items by " + ((DateTime)purchaseOrder.EstDeliveryDate).ToString("dd/MM/yyyy") + "\n\n" + itemlist + "\n\nThanks You");
+                            }
                             return Json(new object[] { true, "" }, JsonRequestBehavior.AllowGet);
                         }
                         return Json(new object[] { false, "This purchase order is not in PENDING status." }, JsonRequestBehavior.AllowGet);
