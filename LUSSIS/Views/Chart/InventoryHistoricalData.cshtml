@@ -50,16 +50,24 @@
                                             </div>
                                         </div>
                                         @*<div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Supplier</label><br>
+            <div class="form-group">
+                <label>Supplier</label><br>
 
 
-                                            @Html.DropDownListFor(x => x.supplier, new SelectList(@Model.SupplierForChartList,"Id", "Name"),new { @class = "form-control" , @multiple="true"})
+                        @Html.DropDownListFor(x => x.supplier, new SelectList(@Model.SupplierForChartList,"Id", "Name"),new { @class = "form-control" , @multiple="true"})
 
 
 
-                                </div>
-                            </div>*@
+            </div>
+        </div>*@
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Item Category</label>
+                                                @Html.DropDownListFor(x => x.category, new SelectList(Model.CategoryForChartList, "Id", "Type"), new { @class = "form-control" })
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Purchased From Date:</label>
@@ -75,32 +83,28 @@
                                         </div>
 
                                         @*<div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Purchased To Date:</label>
-                                    <div class="input-group date">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <input type="date" class="form-control pull-right" id="datepicker">
-                                    </div>
-                                </div>
-                            </div>*@
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Item Category</label>
-                                                @Html.DropDownListFor(x => x.category, new SelectList(Model.CategoryForChartList, "Id", "Type"), new { @class = "form-control" })
-                                            </div>
-                                        </div>
+            <div class="form-group">
+                <label>Purchased To Date:</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="date" class="form-control pull-right" id="datepicker">
+                </div>
+            </div>
+        </div>*@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Item Description</label>
-
-                                                @Html.DropDownListFor(x => x.stationery, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })
+                                                <select name='stationery' id='stationery' class='form-control' disabled>
+                                                    <option>Select Item Category First</option>
+                                                </select>
+                                                @*@Html.DropDownListFor(x => x.stationery, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })*@
                                                 @*<select class="form-control select2" style="width: 100%;">
 
-                                            <option></option>
+                <option></option>
 
-                                    </select>*@
+        </select>*@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -138,6 +142,14 @@
                                                 @Html.DropDownListFor(x => x.department, new SelectList(Model.DepartmentForChartList, "Id", "DepartmentName"), new { @class = "form-control", @multiple = "true" })
                                             </div>
                                         </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Item Category</label>
+                                                @Html.DropDownListFor(x => x.categoryDep, new SelectList(Model.CategoryForChartList, "Id", "Type"), new { @class = "form-control" })
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Requested From Date:</label>
@@ -152,14 +164,11 @@
 
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Item Category</label>
-                                                @Html.DropDownListFor(x => x.categoryDep, new SelectList(Model.CategoryForChartList, "Id", "Type"), new { @class = "form-control" })
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
                                                 <label>Item Description</label>
-                                                @Html.DropDownListFor(x => x.stationeryDep, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })
+                                                @*@Html.DropDownListFor(x => x.stationeryDep, new SelectList(Model.StationeryForChartList, "Id", "Description"), new { @class = "form-control" })*@
+                                                <select name='stationeryDep' id='stationeryDep' class='form-control' disabled>
+                                                    <option>Select Item Category First</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -294,17 +303,48 @@
 @section scripts {
     <script>
         $("#categoryDep").change(function () {
-            debugger;
             var id = $(this)[0].value;
             var url = "/Chart/FilterItem?id=" + id;
+            var result = "<select name='stationeryDep' id='stationeryDep' class='form-control'>";
             $.ajax({
                 url: url,
                 type: "GET",
                 async: true,
                 success: function (data) {
-                    debugger;
-                    alert(data);
-                    console.log(data);
+                    var i;
+                    $.each(data, function (i, item) {
+
+                        result += '<option value="' + item.Id + '"';
+
+                        result += '>' + item.Description + '</option>';
+                    });
+                    result += "</select>";
+
+                    $("#stationeryDep").replaceWith(result);
+                },
+                error: function (data) { }
+            });
+        });
+
+        $("#category").change(function () {
+            var id = $(this)[0].value;
+            var url = "/Chart/FilterItem?id=" + id;
+            var result = "<select name='stationery' id='stationery' class='form-control'>";
+            $.ajax({
+                url: url,
+                type: "GET",
+                async: true,
+                success: function (data) {
+                    var i;
+                    $.each(data, function (i, item) {
+
+                        result += '<option value="' + item.Id + '"';
+
+                        result += '>' + item.Description + '</option>';
+                    });
+                    result += "</select>";
+
+                    $("#stationery").replaceWith(result);
                 },
                 error: function (data) { }
             });

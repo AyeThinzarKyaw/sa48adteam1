@@ -40,10 +40,20 @@ namespace LUSSIS.Controllers
 
         [Authorizer]
         public JsonResult FilterItem(int id)
-        {
+        {           
+
             var aa = StationeryService.Instance.GetStationeriesByCategory(id);
 
-            return Json(aa, JsonRequestBehavior.AllowGet);
+            var bb =
+                from c in aa
+                orderby c.Description
+                select new
+                {
+                    Id = c.Id,
+                    Description = c.Description
+                };
+
+            return Json(bb,JsonRequestBehavior.AllowGet);
         }
 
         [Authorizer]
