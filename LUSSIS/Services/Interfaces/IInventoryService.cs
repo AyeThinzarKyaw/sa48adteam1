@@ -13,6 +13,5 @@ namespace LUSSIS.Services.Interfaces
         List<InventoryListDTO> RetrieveStationeryAndCategory();
 
         StockAndSupplierDTO RetrieveStockMovement(int stationeryId);
-
     }
 }

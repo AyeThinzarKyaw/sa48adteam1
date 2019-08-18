@@ -19,7 +19,9 @@ namespace LUSSIS.Services.Interfaces
         void UpdateStationery(Stationery stationery);
 
         IEnumerable<Category> GetAllCategories();
+
         IEnumerable<Supplier> GetAllSuppliers();
+
         IEnumerable<Stationery> GetStationeriesByCategory(int id);
 
         void CreateCategory(Category category);
