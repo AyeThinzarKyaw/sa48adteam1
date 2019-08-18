@@ -29,11 +29,15 @@ namespace LUSSIS.Controllers
         ChartService chartService;
         ISupplierRepo supplierRepo;
         IDepartmentRepo departmentRepo;
+        ICategoryRepo categoryRepo;
+        IStationeryRepo stationeryRepo;
 
         public ChartController()
         {
             supplierRepo = SupplierRepo.Instance;
             departmentRepo = DepartmentRepo.Instance;
+            categoryRepo = CategoryRepo.Instance;
+            stationeryRepo = StationeryRepo.Instance;
         }
 
         // GET: Chart
@@ -116,6 +120,8 @@ namespace LUSSIS.Controllers
             DateTime TheChosenDateForDep = model.selectedDateTimeDep;
             int trendForDep = model.trendDep;
 
+
+
             string themeChart = @"<Chart>
                       <ChartAreas>
                         <ChartArea Name=""Default"" _Template_=""All"">
@@ -131,6 +137,20 @@ namespace LUSSIS.Controllers
             Chart chart = new Chart(width: 1000, height: 200, theme: themeChart);
             if (SupplierIds != null)
             {
+                Category cat = categoryRepo.FindById(CategoryId);
+                Stationery stat = stationeryRepo.FindById(StationeryId);
+
+                doc.Add(new Paragraph("Item Category: " + cat.Type));
+                if(stat != null)
+                {
+                    doc.Add(new Paragraph("Item: " + stat.Description));
+                }
+                else
+                {
+                    doc.Add(new Paragraph("Item: ALL"));
+                }
+                
+
                 int[] AllSupplierIds = new int[] { 1, 2, 3, 4, 5, 6 }; //total 6 suppliers
                 int[] AllStationeryIds = new int[90]; //all stationery items
 
@@ -593,6 +613,19 @@ namespace LUSSIS.Controllers
             }
             else
             {
+                Category cat = categoryRepo.FindById(CategoryIdForDep);
+                Stationery stat = stationeryRepo.FindById(StationeryIdForDep);
+
+                doc.Add(new Paragraph("Item Category: " + cat.Type));
+                if (stat != null)
+                {
+                    doc.Add(new Paragraph("Item: " + stat.Description));
+                }
+                else
+                {
+                    doc.Add(new Paragraph("Item: ALL"));
+                }
+
                 int[] AllDepartmentIds = new int[] { 1, 2, 3, 4, 5, 6, 7 }; //total 7 Departments
                 int[] AllStationeryIds = new int[90]; //all stationery items
                 if (DepartmentIdsForDep != null)
