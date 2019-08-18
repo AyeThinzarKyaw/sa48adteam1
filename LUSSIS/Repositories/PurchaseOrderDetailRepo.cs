@@ -13,6 +13,7 @@ namespace LUSSIS.Repositories
         private PurchaseOrderDetailRepo() { }
 
         private static PurchaseOrderDetailRepo instance = new PurchaseOrderDetailRepo();
+
         public static IPurchaseOrderDetailRepo Instance
         {
             get { return instance; }
@@ -26,11 +27,11 @@ namespace LUSSIS.Repositories
                           join su in Context.Suppliers on po.SupplierId equals su.Id
                           join s in Context.Stationeries on pod.StationeryId equals s.Id
                           join c in Context.Categories on s.CategoryId equals c.Id
-
                           where su.Id == SupplierId
                           select pod;
             return results.ToList();
         }
+
         public List<PurchaseOrderDetail> GetPurchaseOrderDetailsBySupplierIdByCategoryName(int SupplierId, string CategoryName)
         {
             var results = from pod in Context.PurchaseOrderDetails
@@ -39,7 +40,6 @@ namespace LUSSIS.Repositories
                           join su in Context.Suppliers on po.SupplierId equals su.Id
                           join s in Context.Stationeries on pod.StationeryId equals s.Id
                           join c in Context.Categories on s.CategoryId equals c.Id
-
                           where su.Id == SupplierId && c.Type == CategoryName
                           select pod;
             return results.ToList();
@@ -53,11 +53,11 @@ namespace LUSSIS.Repositories
                           join su in Context.Suppliers on po.SupplierId equals su.Id
                           join s in Context.Stationeries on pod.StationeryId equals s.Id
                           join c in Context.Categories on s.CategoryId equals c.Id
-
                           where su.Id == SupplierId && c.Type == CategoryName && s.Description == ItemName
                           select pod;
             return results.ToList();
         }
+
         public List<RequisitionDetail> GetRequisitionDetailsByDepartmentIdByCategoryIdByStationeryId(int DepartmentId, int CategoryId, int StationeryId)
         {
             var result = from rd in Context.RequisitionDetails
@@ -68,7 +68,6 @@ namespace LUSSIS.Repositories
                          join c in Context.Categories on s.CategoryId equals c.Id
                          where d.Id == DepartmentId && c.Id == CategoryId && s.Id == StationeryId
                          select rd;
-
             return result.ToList();
         }
     }

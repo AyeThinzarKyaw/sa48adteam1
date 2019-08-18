@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
         private CategoryRepo() { }
 
         private static CategoryRepo instance = new CategoryRepo();
+
         public static ICategoryRepo Instance
         {
             get { return instance; }
@@ -22,9 +23,7 @@ namespace LUSSIS.Repositories
             var categoryType = from a in Context.Categories
                                where a.Id == categoryId
                                select a.Type;
-
             String returncategoryType = (String)categoryType.First();
-
             return returncategoryType;
         }
     }

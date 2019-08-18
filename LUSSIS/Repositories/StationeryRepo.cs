@@ -12,10 +12,12 @@ namespace LUSSIS.Repositories
         private StationeryRepo() { }
 
         private static StationeryRepo instance = new StationeryRepo();
+
         public static IStationeryRepo Instance
         {
             get { return instance; }
         }
+
         public IEnumerable<Stationery> GetStationeriesBySupplierIdAndYear(int supplierId, int year)
         {
             return Context.Stationeries.Where(s => s.Id == s.SupplierTenders.Single(t => t.SupplierId == supplierId && t.Year == year).StationeryId).Distinct().ToList();
@@ -23,7 +25,6 @@ namespace LUSSIS.Repositories
 
         public List<Stationery> getAllStationeries()
         {
-            
             List<Stationery> stationeries = Context.Stationeries.ToList();
             return stationeries;
         }

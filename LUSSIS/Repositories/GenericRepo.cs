@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
     public class GenericRepo<T, ID> : IGenericRepo<T, ID> where T : class
     {
         private LUSSISContext context = new LUSSISContext();
+
         public LUSSISContext Context { get { return this.context; } }
 
         public T Create(T entity)
@@ -47,9 +48,7 @@ namespace LUSSIS.Repositories
                 context.CartDetail_releaseCartData();//Note:release cart detail which are more than 1hour existed by last item of an employee
                 context = new LUSSISContext();
             }
-
             return context.Set<T>().Find(id);
-
         }
 
         public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
@@ -70,7 +69,6 @@ namespace LUSSIS.Repositories
 
         public void Update(T entity)
         {
-            //is this line necessary?
             try
             {
                 context.Set<T>().Attach(entity);
@@ -78,11 +76,7 @@ namespace LUSSIS.Repositories
                 Save();
             }
             catch
-            {
-
-            }
-
-
+            { }
         }
 
         public T FindOneBy(Expression<Func<T, bool>> predicate)
@@ -94,7 +88,6 @@ namespace LUSSIS.Repositories
             }
             context = new LUSSISContext();
             return context.Set<T>().Where(predicate).SingleOrDefault();
-
         }
     }
 }

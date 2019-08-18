@@ -13,6 +13,7 @@ namespace LUSSIS.Repositories
         private RequisitionDetailRepo() { }
 
         private static RequisitionDetailRepo instance = new RequisitionDetailRepo();
+
         public static IRequisitionDetailRepo Instance
         {
             get { return instance; }
@@ -29,7 +30,6 @@ namespace LUSSIS.Repositories
         public int GetRequisitionCountForUnfulfilledStationery(int requisitionDetailId)
         {
             Requisition r = FindById(requisitionDetailId).Requisition;
-
             return (from rd in Context.RequisitionDetails
                     where rd.Id == requisitionDetailId
                     where rd.Requisition.DateTime < r.DateTime
@@ -54,15 +54,12 @@ namespace LUSSIS.Repositories
         public List<Requisition> GetUniqueRequisitionsForDisbursement(int disbursementId)
         {
             return Context.RequisitionDetails.Where(x=> x.DisbursementId == disbursementId).Select(x => x.Requisition).Distinct().ToList();
-
         }
 
         public List<IGrouping<int, RequisitionDetail>> GetUnfulfilledRequisitionDetailsGroupedByDept()
         {
             return Context.RequisitionDetails.Where(x => x.Status.Equals("COLLECTED")).GroupBy(x => x.Requisition.Employee.DepartmentId).ToList();
-        }
-
-        
+        }        
 
         public List<RequisitionDetail> GetRequisitionDetailsByClerkDisbursementId(int EmployeeId)
         {
@@ -102,7 +99,6 @@ namespace LUSSIS.Repositories
                          join c in Context.Categories on s.CategoryId equals c.Id
                          where d.Id == DepartmentId && c.Id == CategoryId && s.Id == StationeryId
                          select rd;
-
             return result.ToList();
         }
     }

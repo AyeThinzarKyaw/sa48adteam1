@@ -14,6 +14,5 @@ namespace LUSSIS.Services.Interfaces
         List<Requisition> GetPendingDepartmentRequisitions(int deptHeadEmployeeId);
 
         void ApproveRejectPendingRequisition(int requisitionId, string action, string remarks);
-
     }
 }

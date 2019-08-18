@@ -31,7 +31,5 @@ namespace LUSSIS.Services.Interfaces
         List<AdjustmentVoucherDTO> getTotalAmountDTO();
 
         void AutoAdjustmentsForRetrieval (int clerkEmployeeId, List<RetrievalItemDTO> retrievalList);
-
-        //void AutoAdjustmentsForDisbursement(int clerkEmployeeId, List<> disbursementList);
     }
 }

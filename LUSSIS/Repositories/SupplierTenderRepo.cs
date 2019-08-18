@@ -10,10 +10,10 @@ namespace LUSSIS.Repositories
 {
     public class SupplierTenderRepo : GenericRepo<SupplierTender, int>, ISupplierTenderRepo
     {
-
         private SupplierTenderRepo() { }
 
         private static SupplierTenderRepo instance = new SupplierTenderRepo();
+
         public static ISupplierTenderRepo Instance
         {
             get { return instance; }

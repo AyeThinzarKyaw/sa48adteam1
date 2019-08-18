@@ -11,14 +11,19 @@ namespace LUSSIS.Services.Interfaces
     public interface IPurchaseOrderService
     {
         IEnumerable<PurchaseOrder> getAllPurchaseOrders();
+
         PurchaseOrder getPurchaseOrderById(int poId);
+
         IEnumerable<PO_getPOCatalogue_Result> RetrievePurchaseOrderCatalogue();
+
         void CreatePO(PurchaseOrder po);
+
         void UpdatePO(PurchaseOrder po);
+
         void CreatePODetail(PurchaseOrderDetail pod);
+
         void UpdatePODetail(PurchaseOrderDetail pod);
 
         void RaisePO(POCreateDTO poCreateDTO,int createdBy);
-
     }
 }

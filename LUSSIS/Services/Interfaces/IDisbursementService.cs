@@ -11,10 +11,15 @@ namespace LUSSIS.Services.Interfaces
     public interface IDisbursementService
     {
         List<DisbursementDetailsDTO> GetDepRepDisbursementsDetails(int EmployeeId);
+
         List<DisbursementDetailsDTO> GetClerkDisbursementsDetails(int EmployeeId);
+
         Models.MobileDTOs.DisbursementListDTO GetDeptRepDisbursements(int EmployeeId);
+
         Models.MobileDTOs.DisbursementListDTO GetClerkDisbursements(int EmployeeId);
+
         void CompleteDisbursementProcess(Models.MobileDTOs.DisbursementDTO disbursement);
+
         void SetDisbursementOnRoute(int disbursementId);
     }
 }

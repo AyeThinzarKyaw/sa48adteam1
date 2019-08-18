@@ -13,6 +13,7 @@ namespace LUSSIS.Repositories
         private EmployeeRepo() { }
 
         private static EmployeeRepo instance = new EmployeeRepo();
+
         public static IEmployeeRepo Instance
         {
             get { return instance; }
@@ -28,7 +29,6 @@ namespace LUSSIS.Repositories
             return result.ToList();
         }
 
-
         public Employee GetCoverStaffByDepartmentIdAndDate(int depId, DateTime date)
         {
             var result = from e in Context.Employees
@@ -37,28 +37,24 @@ namespace LUSSIS.Repositories
                          where date >= c.FromDate
                          where date <= c.ToDate
                          select e;
-
             return result.SingleOrDefault<Employee>();
         }
+
         public IEnumerable<Employee> GetAllClerks()
         {
             var result = from e in Context.Employees
                          where e.RoleId == 7
                          select e;
-
             return result.ToList();
-
         }
 
         public IEnumerable<Employee> GetAllStaffAndRepInDept(int dId)
         {
-
             var result = from e in Context.Employees
                          join d in Context.Departments on e.DepartmentId equals d.Id
                          where d.Id == dId
                          where e.RoleId == 2 || e.RoleId == 3
                          select e;
-
             return result.ToList();
         }
 
@@ -69,7 +65,6 @@ namespace LUSSIS.Repositories
                          where e.RoleId == 7
                          where cp.Id == cpId
                          select e;
-
             return result.SingleOrDefault();
         }
 
@@ -79,23 +74,16 @@ namespace LUSSIS.Repositories
                          where e.RoleId == 3
                          where e.DepartmentId == dId
                          select e;
-
             return result.SingleOrDefault();
-
         }
 
         public IEnumerable<Employee> GetAllStaffAndCoverHeadInDept(int dId)
         {
-
             var result = from e in Context.Employees
                          where e.DepartmentId == dId
                          where e.RoleId == 2 || e.RoleId == 4
                          select e;
-
             return result.ToList();
         }
-
-
-
     }
 }

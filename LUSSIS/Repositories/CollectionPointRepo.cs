@@ -12,10 +12,12 @@ namespace LUSSIS.Repositories
         private CollectionPointRepo() { }
 
         private static CollectionPointRepo instance = new CollectionPointRepo();
+
         public static ICollectionPointRepo Instance
         {
             get { return instance; }
         }
+
         public CollectionPoint GetDepartmentCollectionPointByEmployeeId(int id)
         {
             var result = from cp in Context.CollectionPoints
@@ -23,9 +25,7 @@ namespace LUSSIS.Repositories
                          join e in Context.Employees on d.Id equals e.DepartmentId
                          where e.Id == id
                          select cp;
-
             return result.SingleOrDefault();
         }
     }
-    
 }

@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
         private SessionRepo() { }
 
         private static SessionRepo instance = new SessionRepo();
+
         public static ISessionRepo Instance
         {
             get { return instance; }

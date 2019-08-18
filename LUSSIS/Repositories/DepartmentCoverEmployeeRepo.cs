@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
         private DepartmentCoverEmployeeRepo() { }
 
         private static DepartmentCoverEmployeeRepo instance = new DepartmentCoverEmployeeRepo();
+
         public static IDepartmentCoverEmployeeRepo Instance
         {
             get { return instance; }
@@ -36,6 +37,7 @@ namespace LUSSIS.Repositories
                          select d;
             return result.ToList();
         }
+
         public IEnumerable<DepartmentCoverEmployee> GetCurrentDepartmentCoverEmployeesByDepartmentId(int departmentId, DateTime date)
         {
             var result = from d in Context.DepartmentCoverEmployees
@@ -46,12 +48,10 @@ namespace LUSSIS.Repositories
                          select d;
             return result.ToList();
         }
-        
 
         public IEnumerable<DepartmentCoverEmployee> GetExistingDepartmentCoverEmployeesWithinDateRange(DateTime From, DateTime To)
         {
             var result = from d in Context.DepartmentCoverEmployees
-                             //where (From >= d.FromDate && To <= d.ToDate) || (From >= d.FromDate && From <= d.ToDate && To >= d.ToDate) || (From <= d.FromDate && To <= d.ToDate && To >= d.FromDate)
                          where (d.FromDate <= From && d.ToDate <= To && d.ToDate >= From) || (d.FromDate >= From && d.ToDate <= To) || (d.FromDate >= From && d.FromDate <= To && d.ToDate >= To || (From >= d.FromDate && To <= d.ToDate))
                          where d.Status.Equals("ACTIVE")
                          select d;

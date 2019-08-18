@@ -9,7 +9,6 @@ namespace LUSSIS.Services.Interfaces
 {
     public interface ICollectionPointService
     {
-
         Employee GetClerkByCollectionPointId(int cpId);
 
         IEnumerable<Employee> GetAllClerks();

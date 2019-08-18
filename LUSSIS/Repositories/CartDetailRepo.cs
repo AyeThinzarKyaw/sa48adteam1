@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
         private CartDetailRepo() { }
 
         private static CartDetailRepo instance = new CartDetailRepo();
+
         public static ICartDetailRepo Instance
         {
             get { return instance; }
@@ -29,8 +30,7 @@ namespace LUSSIS.Repositories
             else
             {
                 return 0;
-            }
-                   
+            }     
         }
 
         public int GetFrontOfQueueCartCountForStationery(int stationeryId, DateTime datetime)
@@ -47,7 +47,6 @@ namespace LUSSIS.Repositories
             {
                 return 0;
             }
-
         }
 
         public bool AnyItemInCartByEmployeeId(int employeeId)

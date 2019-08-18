@@ -9,6 +9,7 @@ namespace LUSSIS.Services.Interfaces
     public interface ISupplierService
     {
         IEnumerable<Supplier> getAllSupplier();
+
         Supplier getSupplierById(int sId);
 
         void CreateSupplier(Supplier supplier);
