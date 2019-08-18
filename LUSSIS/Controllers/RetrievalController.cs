@@ -15,7 +15,6 @@ namespace LUSSIS.Controllers
     {
         IRetrievalService retrievalService;
 
-
         public RetrievalController()
         {
             retrievalService = RetrievalService.Instance;
@@ -31,7 +30,6 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 RetrievalDTO model = retrievalService.constructRetrievalDTO(currentUser);
                 TempData["RetrievalModel"] = model;
                 return View(model);
@@ -39,16 +37,12 @@ namespace LUSSIS.Controllers
             return RedirectToAction("Index", "Login");
         }
 
-
         [Authorizer]
         public JsonResult UpdateRetrievalQuantity(int stationeryId, int quantity)
         {
             RetrievalDTO model = (RetrievalDTO)TempData["RetrievalModel"];
-
             model.RetrievalItem.Single(x => x.StationeryId == stationeryId).RetrievedQty = quantity;
-
             TempData["RetrievalModel"] = model;
-
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -66,12 +60,10 @@ namespace LUSSIS.Controllers
                 RetrievalDTO retrieval = (RetrievalDTO)TempData["RetrievalModel"];
                 LoginDTO loginDTO = currentUser;
                 retrievalService.completeRetrievalProcess(retrieval,currentUser.EmployeeId);
-
                 return RedirectToAction("ViewRetrieval");
             }
             return RedirectToAction("Index", "Login");
         }
-
 
         [Authorizer]
         public ActionResult ViewAdHocRetrievalMenu()
@@ -83,11 +75,8 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 AdHocRetrievalMenuDTO model = retrievalService.generateAdHocRetrievalMenuDTO();
-
                 TempData["AdHocRetrievalMenuModel"] = model;
-
                 return View(model);
             }
             return RedirectToAction("Index", "Login");
@@ -98,14 +87,10 @@ namespace LUSSIS.Controllers
         public JsonResult SelectRetrievalId(int requisitionId)
         {
             AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
-
             model.RequisitionId = requisitionId;
-
             TempData["AdHocRetrievalMenuModel"] = model;
-
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
 
         [Authorizer]
         [HttpGet]
@@ -119,16 +104,11 @@ namespace LUSSIS.Controllers
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 AdHocRetrievalMenuDTO model = (AdHocRetrievalMenuDTO)TempData["AdHocRetrievalMenuModel"];
-
                 RetrievalDTO rtM = new RetrievalDTO() { AdHocRetrievalId = model.RequisitionId };
-                //TempData["rtM"] = rtM;
-
                 return RedirectToAction("ViewSelectedAdHocRetrieval", new { @requisitionId = model.RequisitionId });
             }
             return RedirectToAction("Index", "Login");
         }
-
-        // to code
 
         [Authorizer]
         public ActionResult ViewSelectedAdHocRetrieval(int requisitionId)
@@ -140,20 +120,11 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-                //RetrievalDTO rtM = (RetrievalDTO)TempData["rtM"];
-
-                //int requisitionId = requisitionId;
-
                 RetrievalDTO model = retrievalService.constructAdHocRetrievalDTO(currentUser, requisitionId);
-                
                 TempData["RetrievalModel"] = model;
-
                 return View(model);
             }
             return RedirectToAction("Index", "Login");
         }
-
-
-
     }
 }

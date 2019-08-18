@@ -13,7 +13,6 @@ namespace LUSSIS.Controllers
 {
     public class PurchaseOrderController : Controller
     {
-
         // GET: All PurchaseOrder
         //By ATZK
         [Authorizer]
@@ -28,7 +27,6 @@ namespace LUSSIS.Controllers
                 }
                 PurchaseOrderListDTO purchaseOrders = new PurchaseOrderListDTO();
                 purchaseOrders.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders();
-
                 return View(purchaseOrders);
             }
             return RedirectToAction("Index", "Login");
@@ -47,7 +45,6 @@ namespace LUSSIS.Controllers
                 {
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
-
                 if (purchaseOrderListDTO.FromDate != null && purchaseOrderListDTO.ToDate != null)
                 {
                     purchaseOrderListDTO.PurchaseOrders = PurchaseOrderService.Instance.getAllPurchaseOrders()
@@ -63,17 +60,13 @@ namespace LUSSIS.Controllers
                 return View(purchaseOrderListDTO);
             }
             return RedirectToAction("Index", "Login");
-
         }
-
-
 
         // cancelPOStatus as cancelled
         //By ATZK
         [Authorizer]
         public JsonResult CancelPO(int poId)
         {
-
             if (Session["existinguser"] != null)
             {
                 LoginDTO currentUser = (LoginDTO)Session["existinguser"];
@@ -110,7 +103,6 @@ namespace LUSSIS.Controllers
                     return RedirectToAction("RedirectToClerkOrDepartmentView", "Login");
                 }
                 PurchaseOrder purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
-
                 return View(purchaseOrder);
             }
             return RedirectToAction("Index", "Login");
@@ -127,8 +119,6 @@ namespace LUSSIS.Controllers
                 if (currentUser.RoleId == (int)Enums.Roles.StoreSupervisor || currentUser.RoleId == (int)Enums.Roles.StoreManager)
                 {
                     PurchaseOrder purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
-
-
                     if (purchaseOrder != null)
                     {
                         if (purchaseOrder.Status == Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.PENDING))
@@ -158,8 +148,6 @@ namespace LUSSIS.Controllers
                 }
                 ReceiveDoDTO receiveDO = new ReceiveDoDTO();
                 receiveDO.purchaseOrder = PurchaseOrderService.Instance.getPurchaseOrderById(poId);
-
-
                 if (receiveDO.purchaseOrder.PurchaseOrderDetails.Count > 0)
                 {
                     receiveDO.DOReceivedList = new int[receiveDO.purchaseOrder.PurchaseOrderDetails.Count];
@@ -192,7 +180,6 @@ namespace LUSSIS.Controllers
                     {
                         receiveDO.Error.HasError = true;
                         receiveDO.Error.Message = "Each attachment cannot be bigger than 10MB.";
-
                     }
                     else
                     {
@@ -215,14 +202,12 @@ namespace LUSSIS.Controllers
                         receiveDO.purchaseOrder.DO = filename;
                         receivedQtyDTO.DO = filename;
                         attachments.Add(path);
-
                         filename = "Invoice_" + receiveDO.purchaseOrder.Id + "_" + DateTime.Now.ToString("ddMMyyyy_hhmm") + Path.GetExtension(receiveDO.Invoice.FileName);
                         path = Path.Combine(Server.MapPath("~/Images/DeliveryOrders/"), filename);
                         receiveDO.Invoice.SaveAs(path);
                         receiveDO.purchaseOrder.Invoice = filename;
                         receivedQtyDTO.Invoice = filename;
                         attachments.Add(path);
-
                         receivedQtyDTO.Status = Enum.GetName(typeof(Enums.POStatus), Enums.POStatus.CLOSED);
 
                         //save updatedPO
@@ -236,28 +221,15 @@ namespace LUSSIS.Controllers
                             //update stationery qty
                             Stationery s = StationeryService.Instance.GetStationeryById(detail.StationeryId);
                             s.Quantity += detail.QuantityDelivered == null ? 0 : (int)detail.QuantityDelivered;
-                            StationeryService.Instance.UpdateStationery(s);
-
-                            //check whether to raise AdjVoucher (eg: gift, extra)
-                            //if (detail.QuantityOrdered < detail.QuantityDelivered)
-                            //{
-                            //    //raise adjustment voucher
-                            //    AdjustmentVoucherDetail adjustmentItem = new AdjustmentVoucherDetail();
-                            //    adjustmentItem.DateTime = DateTime.Now;
-                            //    adjustmentItem.Quantity = (int)(detail.QuantityDelivered - detail.QuantityOrdered);
-                            //    adjustmentItem.Reason = "Received extra (eg: gift) on Delivery Order Receive";
-                            //    //AdjustmentVoucherService.Instance.CreateAdjustmentVoucher(adjustmentItem);
-                            //}                            
+                            StationeryService.Instance.UpdateStationery(s);                            
                         }
                         //Check to move waitlistApproved to Preparing
                         RequisitionCatalogueService.Instance.CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(receivedQtyDTO.Id);
-
                         EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "(Stationery Store) Delivery Order and Invoice for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Dear Bursar Department,\n\nDelivery Order and Invoices for Delivery Orders of Stationery Store are attached.", attachments: attachments.AsEnumerable());
                         TempData["DOReceivedQty"] = null;
                         return RedirectToAction("Index");
                     }
                 }
-
                 PurchaseOrder po = PurchaseOrderService.Instance.getPurchaseOrderById(receiveDO.purchaseOrder.Id);
                 po.Remark = receiveDO.purchaseOrder.Remark;
                 po.DO = receiveDO.purchaseOrder.DO;
@@ -266,6 +238,7 @@ namespace LUSSIS.Controllers
             }
             return RedirectToAction("Index", "Login");
         }
+
         // GET: update received qty in DO
         //By ATZK
         [Authorizer]
@@ -289,17 +262,13 @@ namespace LUSSIS.Controllers
                     if (po.Id == poId)
                     {
                         po.PurchaseOrderDetails.Single(x => x.Id == podId).QuantityDelivered = qty;
-
                         TempData["DOReceivedQty"] = po;
                     }
-
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-
-
 
         // GET: View PurchaseOrder Catalogue to select items
         //By ATZK
@@ -323,7 +292,6 @@ namespace LUSSIS.Controllers
                 {
                     poCreateDTO.Catalogue = PurchaseOrderService.Instance.RetrievePurchaseOrderCatalogue().ToList();
                 }
-
                 return View(poCreateDTO);
             }
             return RedirectToAction("Index", "Login");
