@@ -329,7 +329,8 @@ namespace LUSSIS.Services
                 RequisitionFormId = requisition.Id,
                 RequisitionStatus = requisition.Status,
                 Remarks = requisition.Remarks,
-                RequisitionDetails = requisitionDetails
+                RequisitionDetails = requisitionDetails,
+                Requisition = requisition,
             };
         }
 

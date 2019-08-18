@@ -23,6 +23,7 @@ namespace LUSSIS.Repositories
 
         public List<Stationery> getAllStationeries()
         {
+            
             List<Stationery> stationeries = Context.Stationeries.ToList();
             return stationeries;
         }

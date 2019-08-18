@@ -16,7 +16,6 @@
             x => x.QuantityDelivered),
             SumOutstandingQty = s.Sum(x => x.QuantityOrdered - x.QuantityDelivered)
         });
-    LoginDTO loginDto = (LoginDTO)Session["existinguser"];
 }
 
 <section class="content-header">
@@ -24,7 +23,8 @@
         Disbursement Details
     </h1>
 </section>
-
+@{LoginDTO loginDto = (LoginDTO)Session["existinguser"];}
+<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -45,6 +45,7 @@
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Collection Date</td>
@@ -52,6 +53,7 @@
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Collection Point</td>
@@ -59,6 +61,7 @@
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Collection Status</td>
@@ -68,11 +71,14 @@
                                     }
                                 </table>
                             </div>
+
+
                             <div class="col-md-6">
                                 <table>
                                     @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
                                     {
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Dept Name</td>
@@ -80,6 +86,7 @@
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Dept Code</td>
@@ -87,13 +94,15 @@
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Dept Representative</td>
-                                                <td>:@dl.DepartmentContactName</td>
+                                                <td>:@dl.EmployeeName</td>
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Contact No.</td>
@@ -106,9 +115,12 @@
                                                 <td>
                                                     @using (Html.BeginForm("Detail"))
                                                     {
+
+
                                                         <input type="button" class="btn btn-sm btn-primary" value="Send E-mail"
                                                                onclick="location.href='@Url.Action("Detail", "Disbursement", new {  @DisbursementId = dl.DisbursementId, @DisbursementStatus = dl.Status })'" data-form-method="post" />
                                                     }
+
                                                 </td>
                                             }
                                             else if (dl.DisbursementId == Model.DisbursementId && dl.Status != "PENDING_COLLECTION")
@@ -116,6 +128,7 @@
                                                 <td>
                                                     <input type="button" disabled class="btn btn-sm btn-danger" value="E-mailed" />
                                                 </td>
+
                                             }
                                         </tr>
                                     }
@@ -135,6 +148,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                                 @foreach (var dl in ClerkItemDetails)
                                 {
                                     if (dl.DisbursementId == Model.DisbursementId)
@@ -167,6 +181,7 @@
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Collection Date</td>
@@ -174,6 +189,7 @@
                                             }
                                         </tr>
                                         <tr>
+
                                             @if (dl.DisbursementId == Model.DisbursementId)
                                             {
                                                 <td>Collection Point</td>
@@ -183,6 +199,7 @@
                                     }
                                 </table>
                             </div>
+
                             <div class="col-md-6">
                                 <table>
                                     @foreach (var dl in Model.DisbursementDetailsDTOList.GroupBy(x => x.DisbursementId).Select(s => s.First()))
@@ -202,15 +219,19 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+
                                     <th>Item Name</th>
                                     <th>Unit of Measure</th>
                                     <th>Requested Qty</th>
                                     <th>Action</th>
+
                                 </tr>
                             </thead>
                             <tbody>
+
                                 @foreach (var dl in ClerkItemDetails)
                                 {
+
                                     if (dl.DisbursementId == Model.DisbursementId)
                                     {
                                         <tr>
@@ -225,49 +246,50 @@
                                         </tr>
                                         <tr class="collapse" id="collapseExample@{@dl.StationeryId}">
                                             <td colspan="4" style="padding: 0;">
-                                                <div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Requisition Form</th>
-                                                                <th>Requested Date</th>
-                                                                <th>Employee Name</th>
-                                                                <th>Disbursed Qty</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach (var dlpi in Model.DisbursementDetailsDTOList)
+                                                <table id="example2" class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Requisition Form</th>
+                                                            <th>Requested Date</th>
+                                                            <th>Employee Name</th>
+                                                            <th>Disbursed Qty</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var dlpi in Model.DisbursementDetailsDTOList)
+                                                        {
+                                                            if (dlpi.ItemCode == dl.ItemCode && dlpi.DisbursementId == dl.DisbursementId)
                                                             {
-                                                                if (dlpi.ItemCode == dl.ItemCode)
-                                                                {
-                                                                    <tr>
-                                                                        <td>@dlpi.RequisitionID</td>
-                                                                        <td>@dlpi.RequisitionDateTime</td>
-                                                                        <td>@dlpi.EmployeeName</td>
-                                                                        <td>@dlpi.QuantityDelivered</td>
-                                                                    </tr>
-                                                                }
+                                                                <tr>
+                                                                    <td>@dlpi.RequisitionID</td>
+                                                                    <td>@dlpi.RequisitionDateTime</td>
+                                                                    <td>@dlpi.EmployeeName</td>
+                                                                    <td>@dlpi.QuantityDelivered</td>
+                                                                </tr>
                                                             }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                        }
+                                                    </tbody>
+                                                </table>
                                             </td>
                                         </tr>
                                     }
+
                                 }
                             </tbody>
                         </table>
                     }
                 </div>
+                <!-- /.box-body -->
             </div>
+            <!-- /.box -->
         </div>
+        <!-- /.col -->
     </div>
+    <!-- /.row -->
 </section>
 
-@section scripts {
-    <script>
-        function toggle(id) {
-            $("#" + id).toggleClass("fa fa-chevron-down fa fa-chevron-up");
-        };
-    </script>
-}
+<script>
+    function toggle(id) {
+        //alert(id);
+        $("#" + id).toggleClass("fa fa-chevron-down fa fa-chevron-up");
+    };</script>
