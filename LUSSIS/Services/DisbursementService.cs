@@ -87,6 +87,11 @@ namespace LUSSIS.Services
                     RequisitionID = rd.RequisitionId,
                     RequisitionDateTime = rd.Requisition.DateTime,
                     DeliveryDateTime = (DateTime)rd.Disbursement.DeliveryDateTime,
+                    ReceivedEmployeedName = rd.Disbursement.Employee1.Name,
+                    DeliveredEmployeeName = rd.Disbursement.Employee.Name,
+                    ReceivedEmployeedDepName = rd.Disbursement.Employee1.Department.DepartmentName,
+                    DeliveredEmployeeDepName = rd.Disbursement.Employee.Department.DepartmentName,
+                    
 
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
@@ -130,6 +135,10 @@ namespace LUSSIS.Services
                     RequisitionID = rd.RequisitionId,
                     RequisitionDateTime = rd.Requisition.DateTime,
                     DeliveryDateTime = (DateTime)rd.Disbursement.DeliveryDateTime,
+                    ReceivedEmployeedName = rd.Disbursement.Employee1.Name,
+                    DeliveredEmployeeName = rd.Disbursement.Employee.Name,
+                    ReceivedEmployeedDepName = rd.Disbursement.Employee1.Department.DepartmentName,
+                    DeliveredEmployeeDepName = rd.Disbursement.Employee.Department.DepartmentName,
 
                 };
                 DisplayDisbursementDetailsList.Add(disbursementDTO);
