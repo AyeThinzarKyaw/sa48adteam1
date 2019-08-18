@@ -12,10 +12,10 @@ namespace LUSSIS.Repositories
         private SupplierRepo() { }
 
         private static SupplierRepo instance = new SupplierRepo();
+
         public static ISupplierRepo Instance
         {
             get { return instance; }
         }
-
     }
 }

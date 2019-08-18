@@ -13,6 +13,7 @@ namespace LUSSIS.Repositories
         private RequisitionRepo() { }
 
         private static RequisitionRepo instance = new RequisitionRepo();
+
         public static IRequisitionRepo Instance
         {
             get { return instance; }
@@ -21,13 +22,11 @@ namespace LUSSIS.Repositories
         public List<Requisition> DepartmentRequisitionsEagerLoadEmployee(int deptId)
         {
             return Context.Requisitions.Include(r => r.Employee).Where(x => x.Employee.DepartmentId == deptId).ToList();
-
         }
 
         public List<Requisition> DepartmentPendingRequisitionsEagerLoadEmployee(int deptId)
         {
             return Context.Requisitions.Include(r => r.Employee).Where(x => x.Employee.DepartmentId == deptId && x.Status.Equals("PENDING")).ToList();
-
         }
 
         public List<Requisition> SchoolRequisitionsEagerLoadEmployeeIncDepartment()

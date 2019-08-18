@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
         private PurchaseOrderRepo() { }
 
         private static PurchaseOrderRepo instance = new PurchaseOrderRepo();
+
         public static IPurchaseOrderRepo Instance
         {
             get { return instance; }
@@ -26,18 +27,17 @@ namespace LUSSIS.Repositories
                         select po;
             return result.ToList();
         }
+
         public IEnumerable<PO_getPOCatalogue_Result> GetPOCatalogue()
         {
             return Context.PO_getPOCatalogue();
         }
 
-        //Edwin - need to change test to Acknowledged
         public List<int> getPurchaseOrderIdsWithClosedStatus()
         {
             var purOrders = from a in Context.PurchaseOrders
                               where a.Status.Equals("Closed")
                               select a.Id;
-
             List<int> purOrdersList = purOrders.ToList();
             return purOrdersList;
         }

@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
         private AdjustmentVoucherRepo() { }
 
         private static AdjustmentVoucherRepo instance = new AdjustmentVoucherRepo();
+
         public static IAdjustmentVoucherRepo Instance
         {
             get { return instance; }
@@ -31,20 +32,19 @@ namespace LUSSIS.Repositories
             var adjustments = from a in Context.AdjustmentVouchers
                               where a.Status.Equals("Acknowledged")
                               select a.Id;
-
             List<int> adjustmentsList = adjustments.ToList();
             return adjustmentsList;
         }
 
         public float GetTotalAmount(int adjId)
         {
-            float total = (float) (from avd in Context.AdjustmentVoucherDetails
-                    join s in Context.Stationeries on avd.StationeryId equals s.Id
-                    join st in Context.SupplierTenders on s.Id equals st.StationeryId
-                    where avd.AdjustmentVoucherId == adjId
-                    where st.Rank == 1
-                    select st.Price * avd.Quantity).Sum();
-                return total;
+            float total = (float)(from avd in Context.AdjustmentVoucherDetails
+                                  join s in Context.Stationeries on avd.StationeryId equals s.Id
+                                  join st in Context.SupplierTenders on s.Id equals st.StationeryId
+                                  where avd.AdjustmentVoucherId == adjId
+                                  where st.Rank == 1
+                                  select st.Price * avd.Quantity).Sum();
+            return total;
         }
     }
 }

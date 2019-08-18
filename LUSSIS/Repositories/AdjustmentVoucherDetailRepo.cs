@@ -12,6 +12,7 @@ namespace LUSSIS.Repositories
         private AdjustmentVoucherDetailRepo() { }
 
         private static AdjustmentVoucherDetailRepo instance = new AdjustmentVoucherDetailRepo();
+
         public static IAdjustmentVoucherDetailRepo Instance
         {
             get { return instance; }

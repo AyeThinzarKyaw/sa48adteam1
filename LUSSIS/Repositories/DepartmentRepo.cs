@@ -12,20 +12,19 @@ namespace LUSSIS.Repositories
         private DepartmentRepo() { }
 
         private static DepartmentRepo instance = new DepartmentRepo();
+
         public static IDepartmentRepo Instance
         {
             get { return instance; }
         }
+
         public Department GetDepartmentByEmployeeId(int employeeId)
         {
             var result = from d in Context.Departments
                          join e in Context.Employees on d.Id equals e.DepartmentId
                          where e.Id == employeeId
                          select d;
-
             return result.SingleOrDefault();
-
-
         }
     }
 }

@@ -12,10 +12,10 @@ namespace LUSSIS.Repositories
         private PublicHolidayRepo() { }
 
         private static PublicHolidayRepo instance = new PublicHolidayRepo();
+
         public static IPublicHolidayRepo Instance
         {
             get { return instance; }
         }
-
     }
 }
