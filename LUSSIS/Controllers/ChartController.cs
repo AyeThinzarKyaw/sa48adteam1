@@ -17,6 +17,9 @@ using iText.Kernel.Font;
 using iText.IO.Font.Constants;
 using iText.IO.Image;
 using LUSSIS.Filters;
+using LUSSIS.Repositories.Interfaces;
+using LUSSIS.Repositories;
+using LUSSIS.Models;
 
 namespace LUSSIS.Controllers
 {
@@ -24,6 +27,14 @@ namespace LUSSIS.Controllers
     {
 
         ChartService chartService;
+        ISupplierRepo supplierRepo;
+        IDepartmentRepo departmentRepo;
+
+        public ChartController()
+        {
+            supplierRepo = SupplierRepo.Instance;
+            departmentRepo = DepartmentRepo.Instance;
+        }
 
         // GET: Chart
         [Authorizer]
@@ -91,6 +102,7 @@ namespace LUSSIS.Controllers
         private Document CreatePDF(ChartFilteringDTO model, PdfDocument pdfDoc)
         {
             Document doc = new Document(pdfDoc);
+            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
 
             List<int> SupplierIds = model.supplier;
             int CategoryId = model.category;
@@ -161,7 +173,10 @@ namespace LUSSIS.Controllers
                                     name: BarChartInfo.FirstOrDefault().SupplierName);
                                 }//add series to chart
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Monthly Volume Comparison");
                             chart.SetYAxis("Volume");
@@ -171,7 +186,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -213,7 +227,10 @@ namespace LUSSIS.Controllers
                                     name: SuNames.First());
                                 }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Monthly Volume Comparison");
                             chart.SetYAxis("Volume");
@@ -223,7 +240,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -269,8 +285,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: BarChartInfo.FirstOrDefault().SupplierName);
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
 
                             };
                             chart.AddTitle("Monthly Price Comparison");
@@ -281,7 +300,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -325,8 +343,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Monthly Price Comparison");
                             chart.SetYAxis("Price");
@@ -336,7 +357,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -379,7 +399,10 @@ namespace LUSSIS.Controllers
                                     name: BarChartInfo.FirstOrDefault().SupplierName);
                                 }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Monthly Volume Comparison");
                             chart.SetYAxis("Volume");
@@ -389,7 +412,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -431,7 +453,10 @@ namespace LUSSIS.Controllers
                                     name: SuNames.First());
                                 }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
 
                             };
                             chart.AddTitle("Monthly Volume Comparison");
@@ -442,7 +467,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -488,8 +512,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: BarChartInfo.FirstOrDefault().SupplierName);
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
 
                             };
                             chart.AddTitle("Monthly Price Comparison");
@@ -500,7 +527,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -544,8 +570,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Supplier supplier = supplierRepo.FindById(s);
+                                doc.Add(new Paragraph(supplier.Name).SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Monthly Price Comparison");
                             chart.SetYAxis("Price");
@@ -555,7 +584,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
                             return doc;
                         }
@@ -605,7 +633,10 @@ namespace LUSSIS.Controllers
                                     name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
                                 }//add series to chart
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Department Monthly Volume Comparison");
                             chart.SetYAxis("Volume");
@@ -615,7 +646,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -657,7 +687,10 @@ namespace LUSSIS.Controllers
                                     name: SuNames.First());
                                 }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Department Monthly Volume Comparison");
                             chart.SetYAxis("Volume");
@@ -667,7 +700,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -713,8 +745,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
 
                             };
                             chart.AddTitle("Monthly Price Comparison");
@@ -725,7 +760,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
                             return doc;
                         }
@@ -768,8 +802,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Department Monthly Price Comparison");
                             chart.SetYAxis("Price");
@@ -779,7 +816,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
                             return doc;
                         }
@@ -821,7 +857,10 @@ namespace LUSSIS.Controllers
                                     name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
                                 }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Department Monthly Volume Comparison");
                             chart.SetYAxis("Volume");
@@ -831,7 +870,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -873,7 +911,10 @@ namespace LUSSIS.Controllers
                                     name: SuNames.First());
                                 }
                                 Table t = GenerateVolumeTable(ThreeMonthRange, ItemQtyArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
 
                             };
                             chart.AddTitle("Department Monthly Volume Comparison");
@@ -884,7 +925,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
 
                             return doc;
@@ -931,8 +971,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: BarChartInfo.FirstOrDefault().RequisitionEmployeeDepartmentName);
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
 
                             };
                             chart.AddTitle("Department Monthly Price Comparison");
@@ -943,7 +986,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
                             return doc;
                         }
@@ -986,8 +1028,11 @@ namespace LUSSIS.Controllers
                                     yValues: ItemPriceArray,
                                     name: SuNames.First());
                                 }
-                                Table t = GeneratePriceTable(ThreeMonthRange, ItemPriceArray);
+                                Table t = GenerateVolumeTable(ThreeMonthRange, ItemPriceArray);
+                                Department dep = departmentRepo.FindById(s);
+                                doc.Add(new Paragraph(dep.DepartmentName + " Department").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                                 doc.Add(t);
+                                doc.Add(new Paragraph("\n"));
                             };
                             chart.AddTitle("Department Monthly Price Comparison");
                             chart.SetYAxis("Price");
@@ -997,7 +1042,6 @@ namespace LUSSIS.Controllers
                             ImageData imgData = ImageDataFactory.Create(chartByteArr);
                             Image chartImage = new Image(imgData);
 
-                            doc.Add(new Paragraph("Auto Generated Report").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)).SetHorizontalAlignment(HorizontalAlignment.CENTER));
                             doc.Add(chartImage);
                             return doc;
                         }
@@ -1007,8 +1051,24 @@ namespace LUSSIS.Controllers
                 }
             }
         }
-        #endregion
 
+        private Table GenerateVolumeTable(string[] ThreeMonthRange, decimal[] ItemPriceArray)
+        {
+            Table table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
+            var monthHeading = new Paragraph("Month").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
+            var qtyHeading = new Paragraph("Item Quantity").SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD));
+            table.AddCell(monthHeading);
+            table.AddCell(qtyHeading);
+            for (int i = 0; i < 3; i++)
+            {
+                table.AddCell(ThreeMonthRange[i]);
+                table.AddCell(ItemPriceArray[i].ToString());
+            }
+
+            return table;
+        }
+        #endregion
+    
         [Authorizer]
         #region VolumeTable
         private Table GenerateVolumeTable(string[] TwelveMonthRange, int[] ItemQtyArray)

@@ -18,6 +18,7 @@ namespace LUSSIS.Models.DTOs
         public int category { get; set; }
         public int stationery { get; set; }
         public DateTime selectedDateTime { get; set; }
+       
 
 
         public List<int> department { get; set; }
@@ -25,5 +26,6 @@ namespace LUSSIS.Models.DTOs
         public int categoryDep { get; set; }
         public int stationeryDep { get; set; }
         public DateTime selectedDateTimeDep { get; set; }
+      
     }
 }
