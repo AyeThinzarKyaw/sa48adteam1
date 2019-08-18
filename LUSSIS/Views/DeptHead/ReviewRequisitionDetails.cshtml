@@ -1,16 +1,9 @@
 ﻿@model LUSSIS.Models.DTOs.RequisitionDetailsDTO
-
 @{
     ViewBag.Title = "ReviewRequisitionDetails";
 }
 
 <section class="content-header">
-    <!-- If Supervisor -->
-    <!-- <h1>
-        Requested Requisition Details
-    </h1> -->
-    <!-- If Supervisor -->
-
     <h1>
         Requested Requisition Details
     </h1>
@@ -56,7 +49,6 @@
                             {
                                 <td>: <span class="text-grey">Completed</span></td>
                             }
-
                         </tr>
                         @if (Model.RequisitionStatus.Equals("APPROVED") || Model.RequisitionStatus.Equals("REJECTED"))
                         {
@@ -116,25 +108,21 @@
                                         {
                                             <td class="text-blue">Reserved Pending</td>
                                         }
-
                                     </tr>
                                 }
                             }
                     </table>
                     <br />
-
                     @if (Model.RequisitionStatus.Equals("PENDING"))
                     {
                         using (Html.BeginForm("ApproveRejectPendingRequisition", "DeptHead", FormMethod.Post))
                         {
-                            
                             @Html.HiddenFor(m => m.RequisitionFormId);
                             <div class="form-group">
                                 <label>Remark(Optional)</label>
                                 @Html.TextAreaFor(m => m.Remarks, new { placeplaceholder = "Enter...", @class = "form-control", @rows = 3, @cols = 80 })
                                 <!--<textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>-->
                             </div>
-
                             <div class="box-footer">
                                 <button id="btnApprove" name="button" value="approve" class="btn btn-success pull-right">Approve</button>
                                 <button id="btnReject" name="button" value="reject" class="btn btn-danger pull-right" style="margin-right: 20px;">Reject</button>
@@ -151,17 +139,9 @@
                                 <button class="btn btn-sm btn-primary pull-right">Back</button>
                             </div>
                         }
-
-                        /**/
                     }
                 </div>
             </div>
-
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
-
-

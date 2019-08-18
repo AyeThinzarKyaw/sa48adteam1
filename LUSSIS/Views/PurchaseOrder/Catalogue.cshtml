@@ -1,5 +1,4 @@
 ﻿@model LUSSIS.Models.DTOs.POCreateDTO
-
 @{
     ViewBag.Title = "Select PO Item";
 }
@@ -10,15 +9,11 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box" style="height:550px; overflow-y:scroll; overflow-x:hidden;">
                 <div class="box-header">
-                    @*<div class="col-md-6 box-tools " style="position: relative;">
-                        <input id="showConfirmed" type="checkbox"  class="minimal"/>Show all confirmed items
-                    </div>*@
                     <div class="col-md-6 box-tools pull-right" style="position: relative;">
                         @Html.ActionLink("Select Supplier", "SelectSupplier", null, new { @class = "btn btn-success pull-right", @role = "button" })
                     </div>
@@ -27,12 +22,8 @@
                     <table id="table" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th width="5%">
-                                    Stationery Code
-                                </th>
-                                <th width="15%">
-                                    Description
-                                </th>
+                                <th width="5%">Stationery Code</th>
+                                <th width="15%">Description</th>
                                 <th width="5%">Available Qty</th>
                                 <th width="5%">Waitlist Qty</th>
                                 <th width="10%">Order Qty</th>
@@ -42,58 +33,47 @@
                             </tr>
                         </thead>
                         <tbody id="partial">
-                            
                             @Html.Partial("Catalogue_Partial")
-                            
-                            
-
                         </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {
     <script>
-        //iCheck for checkbox and radio inputs
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
 
         $('.minimal').on('ifChecked', function (event) {
-            debugger;
             var aa = $(this).attr('id');
-            if ($(this).attr('id')!='showConfirmed') {
+            if ($(this).attr('id') != 'showConfirmed') {
                 var stationeryId = $(this).attr('id');
                 document.getElementById("txtQty" + stationeryId).disabled = true;
                 var updatedQty = document.getElementById("txtQty" + stationeryId).value;
                 updateSelectList(stationeryId, updatedQty, true, false);
-                
             }
             else {
-                updateSelectList(0, 0, false,true);
+                updateSelectList(0, 0, false, true);
             }
-            
         });
+
         $('.minimal').on('ifUnchecked', function (event) {
             if ($(this).attr('id') != 'showConfirmed') {
                 var stationeryId = $(this).attr('id');
-                //$("#txtQty" + stationeryId).attr("disabled", true);
                 document.getElementById("txtQty" + stationeryId).disabled = false;
                 var updatedQty = document.getElementById("txtQty" + stationeryId).value;
                 updateSelectList(stationeryId, updatedQty, false, false);
-            } 
+            }
             else {
                 updateSelectList(0, 0, false, false);
             }
         });
+
         function updateSelectList(stationeryId, qty, selectOrNot, selectAllSelected) {
             var data = JSON.stringify({
                 'stationeryId': stationeryId,
@@ -101,6 +81,7 @@
                 'selectOrNot': selectOrNot,
                 'selectAllSelected': selectAllSelected
             });
+
             $.ajax({
                 type: "POST",
                 url: "/PurchaseOrder/updateSelectList",
@@ -114,17 +95,14 @@
                     else if (data != true) {
                         $("#partial").html(data);
                     }
-                    
                 }
             });
         }
 
-       
-
         $(function () {
             $('#table').DataTable({
                 'columnDefs': [
-                    { 'orderable': false, 'targets': 7}
+                    { 'orderable': false, 'targets': 7 }
                 ],
                 'paging': false,
                 'lengthChange': false,
@@ -134,24 +112,5 @@
                 'autoWidth': false
             })
         })
-
-        //function confirm() {
-            
-        //    var url = "/PurchaseOrder/updateSelectList"//?sid=" + sid + "&qty=" + reply ;
-        //    $.ajax({
-        //        url: url,
-        //        type: "GET",
-        //        async: true,
-        //        success: function (data) {
-        //            //if (data != null) {
-        //            debugger;
-        //            //$("#partial").load('Catalogue_Partial');
-        //                $("#partial").html(data);
-        //            //}
-                    
-        //        },
-        //        error: function (data) { }
-        //    });
-        //}
     </script>
 }

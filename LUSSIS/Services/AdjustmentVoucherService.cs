@@ -89,6 +89,7 @@ namespace LUSSIS.Services
         {
             List<AdjustmentVoucherDTO> voucherDTO = new List<AdjustmentVoucherDTO>();
             IEnumerable<AdjustmentVoucher> adjs = adjustmentVoucherRepo.FindAll();
+
             foreach (var adj in adjs)
             {
                 AdjustmentVoucherDTO newVoucher = new AdjustmentVoucherDTO();

@@ -2,21 +2,19 @@
 @using LUSSIS.Enums;
 @{
     ViewBag.Title = "Detail";
-}
-@{
     int role = 0;
     if (Session["role"] != null)
     {
         role = (int)Session["role"];
     }
 }
+
 <section class="content-header">
     <h1>
         Purchase Order Detail
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -48,7 +46,7 @@
                                 }
                                 else
                                 {
-                                    string estDate = ((DateTime)Model.EstDeliveryDate).ToString("dd/MM/yyyy");
+                                    string estDate = ((DateTime)Model.EstDeliveryDate).ToString("yyyy-MM-dd");
                                     <td>: @estDate</td>
                                 }
                             }
@@ -103,41 +101,27 @@
                     <br />
                     @if (Model.Status == Enum.GetName(typeof(POStatus), POStatus.PENDING) && (role == (int)LUSSIS.Enums.Roles.StoreSupervisor || role == (int)LUSSIS.Enums.Roles.StoreManager))
                     {
-                        <!-- If Supervisor -->
                         <form>
                             <div class="form-group">
                                 <label>Remark</label>
                                 @Html.TextAreaFor(x => x.Remark, new { @id = "txtRemark", @class = "form-control", @style = "max-width:100% !important;", @placeholder = "Enter ..." })
-                                @*<textarea id="txtRemark" class="form-control" style="width:100%;" rows="3" placeholder="Enter ..."></textarea>*@
                                 <label id="errRemark" class="text-danger"></label>
                             </div>
                         </form>
-                        <!-- If Supervisor -->
-                        <!-- /.box-body -->
-                        <!-- If Supervisor -->
                         <div class="box-footer">
-
                             @Html.ActionLink("Approve", null, null, new { @href = "#", @onclick = "if (confirm('Are you sure you want to approve this PO?')) { return confirmPO('" + Model.Id + "','" + Enum.GetName(typeof(POStatus), POStatus.APPROVED) + "'); }", @id = "btnApprove", @class = "btn btn-success pull-right", @style = "margin-left: 20px;", @role = "button" })
                             @Html.ActionLink("Reject", null, null, new { @href = "#", @onclick = "if (confirm('Are you sure you want to reject this PO?')) { return confirmPO('" + Model.Id + "','" + Enum.GetName(typeof(POStatus), POStatus.REJECTED) + "'); }", @id = "btnReject", @class = "btn btn-danger pull-right", @role = "button" })
-                            @*<button class="btn btn-success pull-right" style="margin-left: 20px;">Approve</button>*@
-                            @*<a class="btn btn-danger pull-right" href="product.html">Reject</a>*@
                         </div>
-                        <!-- If Supervisor -->
                     }
-
-
                 </div>
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
+
 @section scripts {
     <script>
         function confirmPO(id, reply) {
-            debugger;
             var remark = document.getElementById("txtRemark").value;
             if (reply == "REJECTED" && remark == "") {
                 document.getElementById("errRemark").innerHTML = "Please enter the remark before rejecting!";

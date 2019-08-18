@@ -53,15 +53,15 @@
                                 }
                                 else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                                 {
-                                    <span class="hidden-xs">Staff</span>
+                                    <span class="hidden-xs">Department Staff</span>
                                 }
                                 else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                                 {
-                                    <span class="hidden-xs">Department Representative</span>
+                                    <span class="hidden-xs">Department Rep</span>
                                 }
                                 else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                                 {
-                                    <span class="hidden-xs">Cover Staff</span>
+                                    <span class="hidden-xs">Department Cover Head</span>
                                 }
                                 else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                                 {
@@ -75,7 +75,6 @@
                                 {
                                     <span class="hidden-xs">Store Clerk</span>
                                 }
-
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -84,52 +83,52 @@
 
                                     @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead)
                                     {
-                                    <p>
-                                        Department Head<br />
-                                        (@dept)
-                                    </p>
+                                        <p>
+                                            Department Head<br />
+                                            (@dept)
+                                        </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentStaff)
                                     {
-                                    <p>
-                                        Department Staff<br />
-                                        (@dept)
-                                    </p>
+                                        <p>
+                                            Department Staff<br />
+                                            (@dept)
+                                        </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentRepresentative)
                                     {
-                                    <p>
-                                        Department Rep<br />
-                                        (@dept)
-                                    </p>
+                                        <p>
+                                            Department Rep<br />
+                                            (@dept)
+                                        </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                                     {
-                                    <p>
-                                        Department Cover Head<br />
-                                        (@dept)
-                                    </p>
+                                        <p>
+                                            Department Cover Head<br />
+                                            (@dept)
+                                        </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreManager)
                                     {
-                                    <p>
-                                        Store Manager<br />
-                                        (@dept)
-                                    </p>
+                                        <p>
+                                            Store Manager<br />
+                                            (@dept)
+                                        </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
                                     {
-                                    <p>
-                                        Store Supervisor<br />
-                                        (@dept)
-                                    </p>
+                                        <p>
+                                            Store Supervisor<br />
+                                            (@dept)
+                                        </p>
                                     }
                                     else if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                                     {
-                                    <p>
-                                        Store Clerk<br />
-                                        (@dept)
-                                    </p>
+                                        <p>
+                                            Store Clerk<br />
+                                            (@dept)
+                                        </p>
                                     }
                                 </li>
                                 <!-- Menu Footer-->
@@ -189,7 +188,6 @@
                             <p>Store Clerk</p>
                             <p style="font-size: 12px;">@dept</p>
                         }
-
                     </div>
                 </div>
                 <br>
@@ -218,7 +216,6 @@
                             </a>
                         </li>
                     }
-
                     @if (role == (int)LUSSIS.Enums.Roles.DepartmentHead || role == (int)LUSSIS.Enums.Roles.DepartmentCoverHead)
                     {
                         <li class="header">ADMINISTRATION</li>

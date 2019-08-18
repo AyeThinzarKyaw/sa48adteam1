@@ -2,32 +2,18 @@
 @using LUSSIS.Models.DTOs;
 @{
     ViewBag.Title = "Home Page";
-}
-
-@section styles {
-    <style type="text/css">
-        input[type="text"] {
-            border: 1px solid #d2d6de;
-        }
-
-        .box {
-            margin: 0;
-        }
-    </style>
+    LoginDTO loginDto = (LoginDTO)Session["existinguser"];
 }
 
 <section class="content-header">
     <h1>Catalogue</h1>
 </section>
-@{LoginDTO loginDto = (LoginDTO)Session["existinguser"];}
 
-<!-- Main content -->
-<input type="hidden" id="employeeId" name="employeeId" value=@loginDto.EmployeeId>
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
+            <input type="hidden" id="employeeId" name="employeeId" value=@loginDto.EmployeeId>
             <div class="box">
-                <!-- /.box-body -->
                 <div class="box-body" style="height: 465px; overflow: hidden; overflow-y: auto;">
                     <table id="table" class="table table-bordered table-hover">
                         <thead>
@@ -44,13 +30,11 @@
                         <tbody>
                             @foreach (var catalogueItem in Model.CatalogueItems)
                             {
-
                                 <tr>
                                     <td>@catalogueItem.Item</td>
                                     <td>@catalogueItem.UnitOfMeasure</td>
                                     @{
                                         string availStatusId = "availStatus" + catalogueItem.StationeryId;
-
                                     }
                                     @if (catalogueItem.StockAvailability == LUSSIS.Enums.StockAvailabilityEnum.InStock)
                                     {
@@ -73,41 +57,32 @@
                                     <td id=@waitlistBoxId class="text-orange text-center">@catalogueItem.WaitlistCount</td>
                                     @{
                                         string inputBoxId = "inputBox" + catalogueItem.StationeryId;
-
                                     }
                                     @if (catalogueItem.Confirmation == true)
                                     {
-                                        <td><input id=@inputBoxId type="text" onkeypress="return isNumber(event)" style="width: 80px;" value=@catalogueItem.OrderQtyInput disabled/></td>
+                                        <td><input id=@inputBoxId type="text" onkeypress="return isNumber(event)" style="width: 80px;" value=@catalogueItem.OrderQtyInput disabled class="form-control"/></td>
                                         <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal" checked></td>
                                     }
                                     else
                                     {
-                                        <td><input id=@inputBoxId type="text" onkeypress="return isNumber(event)" style="width: 80px;" /></td>
+                                        <td><input id=@inputBoxId type="text" onkeypress="return isNumber(event)" style="width: 80px;" class="form-control"/></td>
                                         <td class="text-center"><input id=@catalogueItem.StationeryId type="checkbox" class="minimal"></td>
                                     }
-
                                 </tr>
                             }
-
                         </tbody>
                     </table>
                 </div>
                 <div class="box-footer">
                     <input type="button" class="btn btn-success pull-right" value="Submit!" onclick="location.href='@Url.Action("SubmitRequisitionForm", "Requisition")'" />
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
-
 
 @section scripts {
     <script>
-
         function isNumber(event) {
             var keycode = event.keyCode;
             if (keycode >= 48 && keycode <= 57) {
@@ -116,15 +91,12 @@
             return false;
         }
 
-
         $('.minimal').on('ifUnchecked', function (event) {
             var stationeryId = $(this).attr('id');
             $("#inputBox" + stationeryId).attr("disabled", false);
             var input = document.getElementById("inputBox" + stationeryId).value;
             input = parseFloat(input);
-            //alert(typeof input);
             if (input > 0) {
-                //alert("unchecked valid number");
                 var employeeId = document.getElementById("employeeId").value;
                 var data = JSON.stringify({
                     'employeeId': employeeId,
@@ -139,22 +111,17 @@
                     contentType: 'application/json',
                     success: function (r) {
                         UpdateAvailability(r, "availStatus" + stationeryId);
-                        
                     }
                 });
             }
-            //set inputBox to no value
             $("#inputBox" + stationeryId).val('');
-            //set reserved qty and waiylist qty to 0
             document.getElementById("reservedBox" + stationeryId).innerHTML = '0';
             document.getElementById("waitlistBox" + stationeryId).innerHTML = '0';
         });
 
         function UpdateAvailability(r, elementId) {
             var availstatus = r.availstatus;
-            console.log(availstatus);
             if (availstatus === 'LowStock') {
-
                 document.getElementById(elementId).setAttribute('class', "text-orange");
                 var lowStockCount = r.lowstockcount;
                 document.getElementById(elementId).innerHTML = "Low stock(" + lowStockCount + ")";
@@ -173,11 +140,8 @@
             var stationeryId = $(this).attr('id');
             $("#inputBox" + stationeryId).attr("disabled", true);
             var input = document.getElementById("inputBox" + stationeryId).value;
-            //alert(typeof input);
             input = parseFloat(input);
-            //alert(input);
-           
-            if (input > 0) {              
+            if (input > 0) {
                 var employeeId = document.getElementById("employeeId").value;
                 var data = JSON.stringify({
                     'employeeId': employeeId,
@@ -201,11 +165,8 @@
             else {
                 alert("Please input a number greater than 0");
             }
-
         });
 
-
-        //iCheck for checkbox and radio inputs
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
@@ -224,7 +185,6 @@
                 'info': false,
                 'autoWidth': false
             })
-        })
+        });
     </script>
 }
-

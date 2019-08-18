@@ -9,7 +9,6 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     @using (Html.BeginForm("SubmitRetrieval", "Retrieval", FormMethod.Post))
     {
@@ -25,10 +24,6 @@
                     </div>
                     <div class="box-body">
                         <table>
-                            <!-- <tr>
-                            <td>Retrieval Form Id</td>
-                            <td>: @Model.</td>
-                            </tr> -->
                             <tr>
                                 <td>Retrival Date</td>
                                 <td>: @Model.RetrievalDate</td>
@@ -41,7 +36,6 @@
                         <br /><br />
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
-                                <!--VLR001-->
                                 <tr>
                                     <th>Stationery Description</th>
                                     <th>Bin</th>
@@ -57,48 +51,32 @@
                                         <td>@item.Location</td>
                                         <td>@item.NeededQuantity</td>
                                         <td><input type="number" min="1" pattern="[0-9]*" class="form-control" max="@item.NeededQuantity" required value=@item.RetrievedQty style="width: 100px" onfocusout="updateRetrievalQuantity('@item.StationeryId', this);" /></td>
-
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.box-body -->
                     @if (Model.RetrievalItem.Count > 0)
                     {
                         <div class="box-footer">
                             <input type="submit" class="btn btn-success pull-right" value="Submit!" />
                         </div>
                     }
-
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
         </div>
     }
-    <!-- /.row -->
 </section>
-
 
 @section scripts {
     <script>
         function updateRetrievalQuantity(sId, e) {
-
-            //alert(e.value);
             var url = "/Retrieval/UpdateRetrievalQuantity?stationeryId=" + sId + "&quantity=" + e.value;
             $.ajax({
                 url: url,
                 type: "GET",
                 async: true,
-                success: function (data) {
-                    //if (data[0] == true) {
-                    //    window.location.href = '/PurchaseOrder/Index'
-                    //}
-                    //else {
-                    //    document.getElementById("errRemark").innerHTML = data[1];
-                    //}
-                },
+                success: function (data) { },
                 error: function (data) { }
             });
         }

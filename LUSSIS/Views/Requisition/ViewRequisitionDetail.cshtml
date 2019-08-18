@@ -1,22 +1,14 @@
 ﻿@model LUSSIS.Models.DTOs.RequisitionDetailsDTO
-
 @{
     ViewBag.Title = "ViewRequisitionDetail";
-}
-@{
     int role = 0;
     if (Session["role"] != null)
     {
         role = (int)Session["role"];
     }
 }
-<section class="content-header">
-    <!-- If Supervisor -->
-    <!-- <h1>
-        Requested Requisition Details
-    </h1> -->
-    <!-- If Supervisor -->
 
+<section class="content-header">
     <h1>
         Requisition Details
     </h1>
@@ -65,7 +57,6 @@
                             {
                                 <td>: <span class="text-grey">Completed</span></td>
                             }
-
                         </tr>
                         @if (Model.RequisitionStatus.Equals("APPROVED") || Model.RequisitionStatus.Equals("REJECTED"))
                         {
@@ -74,7 +65,6 @@
                                 <td>: @Model.Remarks </td>
                             </tr>
                         }
-
                     </table>
                     <br /><br />
                     <table class="table table-bordered table-hover">
@@ -86,9 +76,7 @@
                                 <th>Status</th>
                                 @if (Model.RequisitionStatus.Equals("APPROVED"))
                                 {
-                                    <!-- If status = Approved -->
                                     <th>Action</th>
-                                    <!-- If status = Approved -->
                                 }
                             </tr>
                         </thead>
@@ -109,10 +97,7 @@
                                             <td class="text-orange">WaitListed</td>
                                             <td>
                                                 <input type="button" class="btn btn-sm btn-danger" value="Cancel"
-                                                       onclick="location.href='@Url.Action("CancelWaitlistedRequisitionDetail",
-                                                                              "Requisition",
-                                                                              new {@requisitionDetailId = rd.Id,
-                                                                                  @requisitionId = Model.RequisitionFormId})'" />
+                                                       onclick="location.href='@Url.Action("CancelWaitlistedRequisitionDetail", "Requisition", new {@requisitionDetailId = rd.Id, @requisitionId = Model.RequisitionFormId})'" />
                                             </td>
                                         }
                                         else if (rd.Status.Equals("PENDING_COLLECTION"))
@@ -139,29 +124,18 @@
                                         {
                                             <td class="text-blue">Reserved Pending</td>
                                         }
-
                                     </tr>
                                 }
                             }
                     </table>
                 </div>
-
-                <!-- /.box-body -->
-                <!-- /.For Staff if Status = Pending -->
                 @if (Model.RequisitionStatus.Equals("PENDING"))
                 {
                     <div class="box-footer">
-                        <input type="button" class="btn btn-sm btn-danger pull-right" value="Cancel"
-                               onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new {@requisitionId = Model.RequisitionFormId})'" />
+                        <input type="button" class="btn btn-sm btn-danger pull-right" value="Cancel" onclick="location.href='@Url.Action("CancelPendingRequisition", "Requisition", new {@requisitionId = Model.RequisitionFormId})'" />
                     </div>
-                    <!-- /.For Staff if Status = Pending -->
                 }
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
-
-

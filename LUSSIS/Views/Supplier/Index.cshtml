@@ -10,7 +10,6 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -23,7 +22,6 @@
                 <div class="box-body">
                     <table id="table" class="table table-bordered table-hover">
                         <thead>
-                            <!--VLR001-->
                             <tr>
                                 <th>Supplier Code</th>
                                 <th>GST Reg No</th>
@@ -50,17 +48,16 @@
 
                                         @if (supplier.Active == Convert.ToBoolean(ActiveStatus.INACTIVE))
                                         {
-                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default@{@supplier.Id}">
-                                            Active
-                                        </button>
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default@{@supplier.Id}">
+                                                Active
+                                            </button>
                                         }
                                         else
                                         {
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-default@{@supplier.Id}">
-                                            Inactive
-                                        </button>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-default@{@supplier.Id}">
+                                                Inactive
+                                            </button>
                                         }
-                                        
                                         <div class="modal fade" id="modal-default@{@supplier.Id}">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -85,11 +82,8 @@
                                                         }
                                                     </div>
                                                 </div>
-                                                <!-- /.modal-content -->
                                             </div>
-                                            <!-- /.modal-dialog -->
                                         </div>
-                                        <!-- /.modal -->
                                     </td>
                                 </tr>
                             }
@@ -97,11 +91,8 @@
                     </table>
                 </div>
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {
@@ -118,7 +109,6 @@
                 'info': true,
                 'autoWidth': false
             })
-        })
+        });
     </script>
 }
-

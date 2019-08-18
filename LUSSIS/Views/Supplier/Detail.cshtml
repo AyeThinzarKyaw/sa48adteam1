@@ -10,7 +10,6 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -54,9 +53,7 @@
                         </tr>
                     </table>
                 </div>
-                <!-- /.box-body -->
                 <div class="box-footer">
-
                     @Html.ActionLink("Update", "Update", new { supplierId = Model.Id }, new { @class = "btn btn-sm btn-warning pull-right", @role = "button" })
 
                     @if (Model.Active == Convert.ToBoolean(ActiveStatus.INACTIVE))
@@ -69,10 +66,6 @@
                     }
                 </div>
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
-

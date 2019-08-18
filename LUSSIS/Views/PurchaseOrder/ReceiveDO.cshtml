@@ -1,9 +1,7 @@
 ﻿@model LUSSIS.Models.DTOs.ReceiveDoDTO
 @using LUSSIS.Enums;
 @{
-                /**/
-
-                ViewBag.Title = "ReceiveDO";
+    ViewBag.Title = "ReceiveDO";
 }
 
 <section class="content-header">
@@ -12,10 +10,8 @@
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
-
         @if (Model.Error != null && Model.Error.HasError == true && Model.Error.Message != null)
         {
             <div class="row">
@@ -66,24 +62,20 @@
                                     <th>Receive Qty</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @{int i = 0;}
-
                                 @foreach (var pod in Model.purchaseOrder.PurchaseOrderDetails)
                                 {
                                     <tr>
                                         <td>@pod.Stationery.Code</td>
                                         <td>@pod.Stationery.Description</td>
                                         <td>@pod.QuantityOrdered</td>
-                                       
-                                        <td>                                            
+                                        <td>
                                             <input type="number" min="1" pattern="[0-9]*" class="form-control" required value=@pod.QuantityDelivered onfocusout="updateQtyReceive(this,'@pod.Id','@pod.PurchaseOrderId');" />
                                         </td>
                                     </tr>
                                     i++;
                                 }
-
                             </tbody>
                         </table>
                         <br />
@@ -107,38 +99,32 @@
                             </div>
                         </form>
                     </div>
-                    <!-- /.box-body -->
                 </div>
             }
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
-<script>
-    function updateQtyReceive(e, pod, po) {
-        debugger;
-        if (e.value != "") {
 
-
-            //alert(e.value);
-            var url = "/PurchaseOrder/UpdateReceivedQty?podId=" + pod + "&qty=" + e.value + "&poId=" + po;
-            $.ajax({
-                url: url,
-                type: "GET",
-                async: true,
-                success: function (data) {
-                    if (data == false) {
-                        document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
-                    }
-                    else {
-                        document.getElementById("errMsg").innerHTML = "";
-                    }
-                },
-                error: function (data) { }
-            });
+@section scripts {
+    <script>
+        function updateQtyReceive(e, pod, po) {
+            if (e.value != "") {
+                var url = "/PurchaseOrder/UpdateReceivedQty?podId=" + pod + "&qty=" + e.value + "&poId=" + po;
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    async: true,
+                    success: function (data) {
+                        if (data == false) {
+                            document.getElementById("errMsg").innerHTML = "Oops.. Something went wrong.";
+                        }
+                        else {
+                            document.getElementById("errMsg").innerHTML = "";
+                        }
+                    },
+                    error: function (data) { }
+                });
+            }
         }
-    }
-</script>
-
+    </script>
+}

@@ -2,31 +2,23 @@
 @using LUSSIS.Enums;
 @{
     ViewBag.Title = "Index";
-}
-@{
     int role = 0;
     if (Session["role"] != null)
     {
         role = (int)Session["role"];
     }
 }
+
 <section class="content-header">
-
-    <!-- If Clerk -->
-    <!-- <h1>My Adjustment Vouchers</h1> -->
-
     <h1>
         Adjustment Vouchers
     </h1>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-
-                <!-- If Clerk -->
                 @if (role == (int)LUSSIS.Enums.Roles.StoreClerk)
                 {
                     <div class="box-header">
@@ -35,8 +27,6 @@
                         </div>
                     </div>
                 }
-                <!-- If Clerk -->
-
                 <div class="box-body">
                     <table id="table" class="table table-bordered table-hover">
                         <thead>
@@ -55,41 +45,37 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <td>@item.adjustmentVoucher.Id</td>
-                                <td>@item.adjustmentVoucher.Date.ToString("yyyy-MM-dd")</td>
-                                <td>$ @item.TotalAmount</td>
-                                @if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
-                                {
-                                    <td>@item.adjustmentVoucher.Employee.Name</td>
-                                }
-                                @if (item.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
-                                {
-                                    <td class="text-blue">@item.adjustmentVoucher.Status</td>
-                                }
-                                else if (item.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Submitted))
-                                {
-                                    <td class="text-green">@item.adjustmentVoucher.Status</td>
-                                }
-                                else
-                                {
-                                    <td>@item.adjustmentVoucher.Status</td>
-                                }
-                                <td>
-                                    @Html.ActionLink("Detail", "Detail", new { adjId = item.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>@item.adjustmentVoucher.Id</td>
+                                    <td>@item.adjustmentVoucher.Date.ToString("yyyy-MM-dd")</td>
+                                    <td>$ @item.TotalAmount</td>
+                                    @if (role == (int)LUSSIS.Enums.Roles.StoreSupervisor)
+                                    {
+                                        <td>@item.adjustmentVoucher.Employee.Name</td>
+                                    }
+                                    @if (item.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Open))
+                                    {
+                                        <td class="text-blue">@item.adjustmentVoucher.Status</td>
+                                    }
+                                    else if (item.adjustmentVoucher.Status == Enum.GetName(typeof(AdjustmentVoucherStatus), AdjustmentVoucherStatus.Submitted))
+                                    {
+                                        <td class="text-green">@item.adjustmentVoucher.Status</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.adjustmentVoucher.Status</td>
+                                    }
+                                    <td>
+                                        @Html.ActionLink("Detail", "Detail", new { adjId = item.adjustmentVoucher.Id }, new { @class = "btn btn-sm btn-primary", @role = "button" })
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
 </section>
 
 @section scripts {
