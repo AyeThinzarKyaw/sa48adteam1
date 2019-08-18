@@ -340,7 +340,6 @@ namespace LUSSIS.Controllers
                                     item.CategoryId = 0;
                                     poCreateDTO.SelectedItems.Add(item);
                                 }
-
                             }
                             else
                             {
@@ -348,13 +347,10 @@ namespace LUSSIS.Controllers
                                 {
                                     poCreateDTO.SelectedItems.Remove(poCreateDTO.SelectedItems.Single(x => x.Id == stationeryId));
                                 }
-
                             }
                             TempData["PO"] = poCreateDTO;
-
                             return Json(true, JsonRequestBehavior.AllowGet);
                         }
-
                     }
                     else
                     {
@@ -411,8 +407,6 @@ namespace LUSSIS.Controllers
             return RedirectToAction("Index", "Login");
         }
 
-
-
         //By ATZK
         [Authorizer]
         [HttpPost]
@@ -431,7 +425,6 @@ namespace LUSSIS.Controllers
                     {
                         return Json(new object[] { true, "Currently, there are some stationery of Order Quantity fills as 0. Stationery with Order Quantity 0 will not raise PO. Click OK to continue raising PO for other stationeries. Click CANCEL to edit." }, JsonRequestBehavior.AllowGet);
                     }
-
                     if (poCreateDTO.SelectedItems.Where(s => s.CategoryId != 0 && s.Status == "confirmed").Count() > 0)
                     {
                         PurchaseOrderService.Instance.RaisePO(poCreateDTO, currentUser.EmployeeId);
@@ -445,10 +438,7 @@ namespace LUSSIS.Controllers
                 }
             }
             return Json(new object[] { false, "You don't have permission." }, JsonRequestBehavior.AllowGet);
-
-
         }
-
 
         //By ATZK
         [Authorizer]
@@ -473,16 +463,12 @@ namespace LUSSIS.Controllers
                             poCreateDTO.EstimatedDates.Remove(poCreateDTO.EstimatedDates.Single(x => x.Key == oldSupplierId));
                         }
                     }
-
                     TempData["PO"] = poCreateDTO;
-                    
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
-
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-
 
         //By ATZK
         [Authorizer]
@@ -501,15 +487,12 @@ namespace LUSSIS.Controllers
                         poCreateDTO.EstimatedDates.Remove(poCreateDTO.EstimatedDates.Single(x => x.Key == supplierId));
                     }
                     poCreateDTO.EstimatedDates.Add(new KeyValuePair<int, DateTime>(supplierId, estDate));
-
                     TempData["PO"] = poCreateDTO;
-
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-
 
         //By ATZK
         [Authorizer]
@@ -536,14 +519,12 @@ namespace LUSSIS.Controllers
                         }
                     }
                     TempData["PO"] = poCreateDTO;
-
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-
-
+        
         //By ATZK
         [Authorizer]
         [HttpPost]
@@ -567,6 +548,5 @@ namespace LUSSIS.Controllers
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-
     }
 }

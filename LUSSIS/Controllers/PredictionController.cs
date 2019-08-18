@@ -27,7 +27,6 @@ namespace LUSSIS.Controllers
         {
             using (var client = new HttpClient())
             {
-
                 //http POST
 
                 // send a POST request to the server uri with the data and get the response as HttpResponseMessage object
@@ -43,8 +42,6 @@ namespace LUSSIS.Controllers
 
                     List<Stationery> stationeries = StationeryService.Instance.GetAllStationeries().ToList();
                     List<Stationery> updatedStationeries = new List<Stationery>();
-
-
                     JArray jsonArray = JArray.Parse(res.Content.ReadAsStringAsync().Result);
                     int i;
                     foreach (JArray ja in jsonArray)
@@ -69,7 +66,6 @@ namespace LUSSIS.Controllers
 
                             i = i + 1;
                         }
-
                     }
                     TempData["updatedStationeryQty"] = updatedStationeries;
                     ViewBag.data = updatedStationeries;
@@ -79,9 +75,7 @@ namespace LUSSIS.Controllers
                 {
                     return View("Error");
                 }
-
             }
-
         }
 
         public ActionResult UpdateReorderQuantity(DateTime predictDate)
