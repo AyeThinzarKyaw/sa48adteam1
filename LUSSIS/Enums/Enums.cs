@@ -38,12 +38,6 @@ namespace LUSSIS.Enums
         CLOSED 
     }
 
-    public enum AdjustmentVoucherStatusEnum
-    {
-        OPEN,
-        CLOSED
-    }
-
     public enum AdjustmentVoucherDefaultReasons
     {
         RETRIEVAL_SHORTAGE,
@@ -71,20 +65,6 @@ namespace LUSSIS.Enums
         REJECTED,
         CANCELLED
     }
-
-    //public enum RequisitionStatus
-    //{
-    //    Created,
-    //    ReservedPending,
-    //    Preparing,
-    //    WaitlistPending,
-    //    WaitlistApproved,
-    //    RetrievedandPendingDisbursement,
-    //    Collected,
-    //    Rejected,
-    //    Cancelled
-
-    //}
 
     public enum AdjustmentVoucherStatus
     {
