@@ -10,6 +10,5 @@ namespace LUSSIS.Repositories.Interfaces
     public interface ICollectionPointRepo : IGenericRepo<CollectionPoint, int>
     {
         CollectionPoint GetDepartmentCollectionPointByEmployeeId(int id);
-
     }
 }

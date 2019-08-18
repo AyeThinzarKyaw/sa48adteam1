@@ -10,6 +10,5 @@ namespace LUSSIS.Repositories.Interfaces
     public interface IDepartmentRepo : IGenericRepo<Department, int>
     {
         Department GetDepartmentByEmployeeId(int employeeId);
-
     }
 }

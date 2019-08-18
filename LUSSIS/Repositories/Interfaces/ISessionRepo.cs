@@ -9,6 +9,5 @@ namespace LUSSIS.Repositories.Interfaces
 {
     public interface ISessionRepo : IGenericRepo<Session, int>
     {
-
     }
 }

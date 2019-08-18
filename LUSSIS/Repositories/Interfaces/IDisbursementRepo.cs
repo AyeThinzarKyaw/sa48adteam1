@@ -12,6 +12,5 @@ namespace LUSSIS.Repositories.Interfaces
         IEnumerable<Disbursement> GetDisbursementsByDepartmentId(int depId);
         IEnumerable<Disbursement> GetDisbursementsByDeptRepId(int deptRepId);
         IEnumerable<Disbursement> GetDisbursementsByClerkId(int clerkId);
-
     }
 }
