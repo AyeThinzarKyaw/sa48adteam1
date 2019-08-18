@@ -1,7 +1,7 @@
 ﻿@model LUSSIS.Models.DTOs.MachineLearningDTO
 @using LUSSIS.Models;
 @{
-    ViewBag.Title = "MachineLearning";
+    ViewBag.Title = "GenerateReorderInfo";
 }
 
 <section class="content-header">
@@ -17,15 +17,15 @@
             <div class="box">
                 @using (Html.BeginForm(FormMethod.Post))
                 {
-                    <div class="box-header">
-                        <div class="col-md-2 form-group">
+                    <div class="box-body">
+                        @*<div class="col-md-2 form-group">
                             <label>Choose a date : </label>
                         </div>
                         <div class="col-md-4 form-group">
                             @Html.TextBoxFor(x => x.chosenDate, new { @type = "date", @class = "form-control" })
-                        </div>
+                        </div>*@
                         <div class="col-md-4 form-group">
-                            <input value="Check" type="submit" class="btn btn-primary" />
+                            <input value="Predict Current Month Reorder Levels" type="submit" class="btn btn-primary" />
 
                         </div>
 

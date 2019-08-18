@@ -35,5 +35,9 @@ namespace LUSSIS.Models.DTOs
         public int RequisitionID { get; set; }
         public DateTime RequisitionDateTime { get; set; }
         public List<RequisitionDetail> RequisitionDetails { get; set; }
+        public string ReceivedEmployeedName { get; set; }
+        public string DeliveredEmployeeName { get; set; }
+        public string ReceivedEmployeedDepName { get; set; }
+        public string DeliveredEmployeeDepName { get; set; }
     }
 }

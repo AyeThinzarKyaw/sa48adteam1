@@ -233,7 +233,6 @@ namespace LUSSIS.Controllers
 
                         foreach (var detail in receivedQtyDTO.PurchaseOrderDetails)
                         {
-
                             //update stationery qty
                             Stationery s = StationeryService.Instance.GetStationeryById(detail.StationeryId);
                             s.Quantity += detail.QuantityDelivered == null ? 0 : (int)detail.QuantityDelivered;
@@ -248,9 +247,7 @@ namespace LUSSIS.Controllers
                             //    adjustmentItem.Quantity = (int)(detail.QuantityDelivered - detail.QuantityOrdered);
                             //    adjustmentItem.Reason = "Received extra (eg: gift) on Delivery Order Receive";
                             //    //AdjustmentVoucherService.Instance.CreateAdjustmentVoucher(adjustmentItem);
-                            //}
-
-
+                            //}                            
                         }
                         //Check to move waitlistApproved to Preparing
                         RequisitionCatalogueService.Instance.CheckStockAndUpdateStatusForWaitlistApprovedRequisitionDetails(receivedQtyDTO.Id);
@@ -258,9 +255,7 @@ namespace LUSSIS.Controllers
                         EmailNotificationService.Instance.SendNotificationEmail(receipient: "sa48team1@gmail.com", subject: "(Stationery Store) Delivery Order and Invoice for " + DateTime.Now.ToString("dd/MM/yyyy"), body: "Dear Bursar Department,\n\nDelivery Order and Invoices for Delivery Orders of Stationery Store are attached.", attachments: attachments.AsEnumerable());
                         TempData["DOReceivedQty"] = null;
                         return RedirectToAction("Index");
-
                     }
-
                 }
 
                 PurchaseOrder po = PurchaseOrderService.Instance.getPurchaseOrderById(receiveDO.purchaseOrder.Id);

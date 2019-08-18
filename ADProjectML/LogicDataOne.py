@@ -27,7 +27,7 @@ from sklearn.linear_model import LinearRegression
 
 
 #loading data
-df = pd.read_csv('MockDataV2.csv')
+df = pd.read_csv('MockDataLUSSIS.csv')
 df.head()
 
 
@@ -40,19 +40,12 @@ df.dtypes
 
 # ### Data Pre-processing
 
-# In[4]:
-
-
-#adding a new column(TotalPrice_new) for converting TotalPrice into datatype float64.
-df['TotalPrice_new'] = df['TotalPrice'].apply(lambda x: x.replace('$','')).apply(lambda x: x.replace(',','')).astype(np.float64)
-df
-
 
 # In[5]:
 
 
 #extract the necessary columns
-df_extracted = df.iloc[:,[1,2,3,4,9,10,12,13,14]]
+df_extracted = df.iloc[:,[0,1,2,3,8,9,10,11]]
 df_extracted.head()
 
 
@@ -91,7 +84,7 @@ df_extracted.head()
 
 
 #groupby Stationery Name & Type & Supplier and sum the quantity and total price
-df_new = df_extracted.groupby(['StationeryName','StationeryType','SupplierName']).agg({'RequisitionQuantity':'sum','TotalPrice_new':'sum'}) 
+df_new = df_extracted.groupby(['StationeryName','StationeryType','SupplierName']).agg({'RequisitionQuantity':'sum','TotalPrice':'sum'}) 
 df_new
 
 
@@ -217,16 +210,11 @@ class LRTraining:
                 requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
                 requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
                 requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
-#                 quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
-#                 one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+29]])
-#                 one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+
                 one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
                 requisition_msg_1 = '0'
 
-#                 if(quantity_difference > 0):
-#                     itemSelectDateRQ_list.append(str(int(quantity_difference)))
-#                 else:
-#                     itemSelectDateRQ_list.append(requisition_msg_1)
+
                 if(one_Month_RQ_difference > 0):
                     itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
                 else:
@@ -248,16 +236,11 @@ class LRTraining:
                 requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
                 requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
                 requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
-#                 quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
-#                 one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+30]])
-#                 one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+
                 one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
                 requisition_msg_1 = '0'
 
-#                 if(quantity_difference > 0):
-#                     itemSelectDateRQ_list.append(str(int(quantity_difference)))
-#                 else:
-#                     itemSelectDateRQ_list.append(requisition_msg_1)
+
                 if(one_Month_RQ_difference > 0):
                     itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
                 else:
@@ -280,16 +263,11 @@ class LRTraining:
                     requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
                     requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
                     requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
-#                     quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
-#                     one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+28]])
-#                     one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+
                     one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
                     requisition_msg_1 = '0'
 
-#                     if(quantity_difference > 0):
-#                         itemSelectDateRQ_list.append(str(int(quantity_difference)))
-#                     else:
-#                         itemSelectDateRQ_list.append(requisition_msg_1)
+
                     if(one_Month_RQ_difference > 0):
                         itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
                     else:
@@ -311,16 +289,10 @@ class LRTraining:
                     requisition_quantity_prediction = linReg.predict([[input_date_ordinal]])
                     requisition_quantity_prediction_on_firstdayofmonth = linReg.predict([[final_firstdayofmonth_ordinal]])
                     requisition_quantity_prediction_on_lastdayofmonth = linReg.predict([[final_lastdayofmonth_ordinal]])
-#                     quantity_difference = requisition_quantity_prediction - df_filterByValue.iloc[-1,8]
-#                     one_Month_RQprediction = linReg.predict([[df_filterByValue.iloc[-1,9]+27]])
-#                     one_Month_RQ_difference = one_Month_RQprediction - df_filterByValue.iloc[-1,8]
+            
                     one_Month_RQ_difference = requisition_quantity_prediction_on_lastdayofmonth - requisition_quantity_prediction_on_firstdayofmonth
                     requisition_msg_1 = '0'
-
-#                     if(quantity_difference > 0):
-#                         itemSelectDateRQ_list.append(str(int(quantity_difference)))
-#                     else:
-#                         itemSelectDateRQ_list.append(requisition_msg_1)
+                    
                     if(one_Month_RQ_difference > 0):
                         itemOneMonthRQ_list.append(str(int(one_Month_RQ_difference)))
                     else:
@@ -335,12 +307,7 @@ class LRTraining:
         itemMonthEndDate_array = np.asarray(itemMonthEndDate_list)
         itemSelectedDate_array = np.asarray(itemSelectedDate_list)
         df_AllRQ = pd.DataFrame({'Id':itemId_array,'Reorder level and quantity': itemOneMonthRQ_array})
- #       df_AllRQ['Reorder level and quantity'] = itemOneMonthRQ_array
-#        df_AllRQ['Last day of the Month'] = itemMonthEndDate_array
-#        df_AllRQ['1st Day of the Moneth'] = itemDate_array
-#        df_AllRQ['Estimated One Day Requisition Quantity'] = itemOneMonthRQ_array
-#         df_AllRQ['Selected Requisition day'] = itemSelectedDate_array
-#         df_AllRQ['Estimated Requisition Quantity'] = itemRQ_array
+        df_AllRQ = df_AllRQ.sort_values(by='Id')
         df_AllRQ_json = df_AllRQ.to_json(orient = 'values')
         return df_AllRQ_json
 
