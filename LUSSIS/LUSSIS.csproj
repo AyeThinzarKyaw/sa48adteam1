@@ -595,7 +595,7 @@
     <Content Include="Views\AssignStaff\AssignDeptRep.cshtml" />
     <Content Include="Views\CollectionPoint\AssignClerk.cshtml" />
     <Content Include="Views\CollectionPoint\AssignCollectionPoint.cshtml" />
-    <Content Include="Views\MachineLearning\MachineLearning.cshtml" />
+    <Content Include="Views\Prediction\GenerateReorderInfo.cshtml" />
     <Content Include="Views\Chart\PurchaseOrderTrend.cshtml" />
     <Content Include="Views\Chart\StationeryRequisitionTrend.cshtml" />
   </ItemGroup>
