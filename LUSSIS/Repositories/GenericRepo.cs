@@ -17,7 +17,7 @@ namespace LUSSIS.Repositories
         public T Create(T entity)
         {
             context = new LUSSISContext();
-            T newEntity =  context.Set<T>().Add(entity);
+            T newEntity = context.Set<T>().Add(entity);
             Save();
             return newEntity;
         }
@@ -31,11 +31,11 @@ namespace LUSSIS.Repositories
         public IEnumerable<T> FindAll()
         {
             context = new LUSSISContext();
-            if (typeof(T)==typeof(CartDetail))
+            if (typeof(T) == typeof(CartDetail))
             {
                 context.CartDetail_releaseCartData();//Note:release cart detail which are more than 1hour existed by last item of an employee
                 context = new LUSSISContext();
-            }            
+            }
             return context.Set<T>().ToList<T>();
         }
 
@@ -49,7 +49,7 @@ namespace LUSSIS.Repositories
             }
 
             return context.Set<T>().Find(id);
-           
+
         }
 
         public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
@@ -71,9 +71,18 @@ namespace LUSSIS.Repositories
         public void Update(T entity)
         {
             //is this line necessary?
-            context.Set<T>().Attach(entity);
-            context.Entry(entity).State = EntityState.Modified;
-            Save();
+            try
+            {
+                context.Set<T>().Attach(entity);
+                context.Entry(entity).State = EntityState.Modified;
+                Save();
+            }
+            catch
+            {
+
+            }
+
+
         }
 
         public T FindOneBy(Expression<Func<T, bool>> predicate)
