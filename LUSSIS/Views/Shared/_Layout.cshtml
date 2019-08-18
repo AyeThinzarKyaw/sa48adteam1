@@ -9,8 +9,18 @@
     <link rel="icon" href="../images/logic.jpg" sizes="16x16">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/admin-lte/css/AdminLTE.css" rel="stylesheet" />
+    <link href="~/admin-lte/css/skins/_all-skins.min.css" rel="stylesheet" />
+    <link href="~/admin-lte/css/skins/skin-blue.css" rel="stylesheet" />
+    <link href="~/admin-lte/plugins/AdminLTE/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/admin-lte/plugins/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/admin-lte/plugins/AdminLTE/plugins/iCheck/all.css" rel="stylesheet" />
+    <link href="~/admin-lte/plugins/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Scripts/modernizr-2.8.3.js" rel="stylesheet" />
     @RenderSection("styles", required: false)
 </head>
 @{
@@ -345,10 +355,19 @@
         <!-- /.content -->
     </div>
     <!-- ./wrapper -->
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/admin-lte/js")
+    <script src="~/admin-lte/js/adminlte.min.js"></script>
+    <script src="~/admin-lte/plugins/AdminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/admin-lte/plugins/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/admin-lte/plugins/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+    <script src="~/admin-lte/plugins/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+    <script src="~/admin-lte/plugins/AdminLTE/bower_components/fastclick/lib/fastclick.js"></script>
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/admin-lte/js")*@
     @RenderSection("scripts", required: false)
 </body>
 </html>
