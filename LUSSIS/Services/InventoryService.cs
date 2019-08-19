@@ -191,7 +191,8 @@ namespace LUSSIS.Services
                 stockMovementBalance.Add(stockMovBalList);
             }
 
-            stockMovementBalance.Reverse();
+            stockMovement.Reverse();
+            //stockMovementBalance.Reverse();
 
             // set StockMovementBalanceDTO into StockAndSupplierDTO
             StockAndSupplierDTO stockAndSuppliers = new StockAndSupplierDTO();

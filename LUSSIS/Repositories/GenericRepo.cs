@@ -69,14 +69,16 @@ namespace LUSSIS.Repositories
 
         public void Update(T entity)
         {
-            try
-            {
-                context.Set<T>().Attach(entity);
-                context.Entry(entity).State = EntityState.Modified;
-                Save();
-            }
-            catch
-            { }
+            //try
+            //{
+                
+            //}
+            //catch
+            //{ }
+
+            context.Set<T>().Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+            Save();
         }
 
         public T FindOneBy(Expression<Func<T, bool>> predicate)

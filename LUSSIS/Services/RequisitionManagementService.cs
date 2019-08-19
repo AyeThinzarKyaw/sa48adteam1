@@ -87,11 +87,15 @@ namespace LUSSIS.Services
             {
                 foreach (RequisitionDetail rd in rds)
                 {
+                    int rdId = rd.Id;
+                    RequisitionDetail reqDet = requisitionDetailRepo.FindById(rdId);
                     if (rd.Status.Equals(RequisitionDetailStatusEnum.RESERVED_PENDING.ToString()))
                     {
                         //change from reserved pending to preparing
-                        rd.Status = RequisitionDetailStatusEnum.PREPARING.ToString();
-                        requisitionDetailRepo.Update(rd);
+                        //rd.Status = RequisitionDetailStatusEnum.PREPARING.ToString();
+                        
+                        reqDet.Status = RequisitionDetailStatusEnum.PREPARING.ToString();
+                        requisitionDetailRepo.Update(reqDet);
                     }
                     else if(rd.Status.Equals(RequisitionDetailStatusEnum.WAITLIST_PENDING.ToString()))
                     {
@@ -99,8 +103,8 @@ namespace LUSSIS.Services
                         //int availStock = GetAvailableStockForWaitlistApprovedItems(rd.StationeryId);
 
                         //change waitlist pending to waitlist approved
-                        rd.Status = RequisitionDetailStatusEnum.WAITLIST_APPROVED.ToString();
-                        requisitionDetailRepo.Update(rd);
+                        reqDet.Status = RequisitionDetailStatusEnum.WAITLIST_APPROVED.ToString();
+                        requisitionDetailRepo.Update(reqDet);
 
                         NotifyClerkAboutAnyShortFallInWaitlistApprovedStationery(rd.StationeryId, (int)rd.Requisition.Employee.Department.CollectionPoint.EmployeeId);
                     }
@@ -144,7 +148,7 @@ namespace LUSSIS.Services
                 foreach(PurchaseOrder po in pendingPOs)
                 {
                     //get podetails with the same stationeryid
-                    PurchaseOrderDetail pod = purchaseOrderDetailRepo.FindOneBy(x => x.StationeryId == stationeryId);
+                    PurchaseOrderDetail pod = purchaseOrderDetailRepo.FindOneBy(x => x.StationeryId == stationeryId && x.PurchaseOrderId == po.Id);
                     if ( pod != null)
                     {
                         sumIncomingStationery += pod.QuantityOrdered;

@@ -306,8 +306,9 @@ namespace LUSSIS.Services
                 List<RequisitionDetail> rds = (List<RequisitionDetail>)requisitionDetailRepo.FindBy(x => x.RequisitionId == requisitionId);
                 foreach (RequisitionDetail rd in rds)
                 {
-                    rd.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
-                    requisitionDetailRepo.Update(rd);
+                    RequisitionDetail reqDet = requisitionDetailRepo.FindById(rd.Id);
+                    reqDet.Status = RequisitionDetailStatusEnum.CANCELLED.ToString();
+                    requisitionDetailRepo.Update(reqDet);
                 }
             }
         }
@@ -390,7 +391,7 @@ namespace LUSSIS.Services
                     Requisition req = requisitionRepo.FindById(r.Id);
                     req.Status = RequisitionStatusEnum.COMPLETED.ToString();
                     requisitionRepo.Update(req);
-                    emailNotificationService.NotifyEmployeeCompletedRequisition(r, r.Employee);
+                    emailNotificationService.NotifyEmployeeCompletedRequisition(req, req.Employee);
                 }
             }
             Disbursement d = disbursementRepo.FindById(disbursementId);
@@ -421,28 +422,29 @@ namespace LUSSIS.Services
             int qtyDisbursed = qtyCollected;
             foreach (RequisitionDetail rd in requisitionDetails)
             {
-                if (qtyDisbursed >= rd.QuantityOrdered)
+                RequisitionDetail reqDet = requisitionDetailRepo.FindById(rd.Id);                
+                if (qtyDisbursed >= reqDet.QuantityOrdered)
                 {
                     //can give all
-                    rd.QuantityDelivered = rd.QuantityOrdered;
-                    qtyDisbursed = qtyDisbursed - rd.QuantityOrdered;
+                    reqDet.QuantityDelivered = reqDet.QuantityOrdered;
+                    qtyDisbursed = qtyDisbursed - reqDet.QuantityOrdered;
                 }
-                else if (qtyDisbursed > 0 && qtyDisbursed < rd.QuantityOrdered)
+                else if (qtyDisbursed > 0 && qtyDisbursed < reqDet.QuantityOrdered)
                 {
                     //can give some
-                    rd.QuantityDelivered = qtyDisbursed;
+                    reqDet.QuantityDelivered = qtyDisbursed;
                     qtyDisbursed = 0;
-                    unfulfilledRds.Add(rd);
+                    unfulfilledRds.Add(reqDet);
                 }
                 else
                 {
                     //can give 0
                     rd.QuantityDelivered = 0;
-                    unfulfilledRds.Add(rd);
+                    unfulfilledRds.Add(reqDet);
                 }
                 //update status to collected and update db
-                rd.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
-                requisitionDetailRepo.Update(rd);
+                reqDet.Status = RequisitionDetailStatusEnum.COLLECTED.ToString();
+                requisitionDetailRepo.Update(reqDet);
             }
             //generate new rd for unfulfilled items
             GenerateNewRequisitionDetailsForUnfulfilledRds(unfulfilledRds);
